@@ -2,7 +2,7 @@ import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
 import {
   PILOT_TRACE_KIND, PILOT_TRACE_LIMIT, createPilotTrace,
-  appendPilotTrace, serializePilotTrace,
+  appendPilotTrace, serializePilotTrace, validatePilotTrace,
 } from '../pilot-trace.mjs';
 
 describe('C0: reproduzierbarer technischer Navigationsbericht', () => {
@@ -69,6 +69,52 @@ describe('C0: reproduzierbarer technischer Navigationsbericht', () => {
     assert.throws(() => serializePilotTrace({ kind: PILOT_TRACE_KIND, steps: [] }));
     assert.throws(() => appendPilotTrace({ steps: [], kind: PILOT_TRACE_KIND }, 'SCREEN-001', 'to-map'));
   });
+  it('verweigert manipulierte Bildschirmfolgen vor JEDEM JSON-Export', () => {
+    const good = appendPilotTrace(createPilotTrace('0.1.0-alpha.8'), 'SCREEN-001', 'to-map');
+    assert.equal(validatePilotTrace(good), true);
+    const forgeries = [
+      t => { t.steps[1].to = 'SCREEN-003'; },
+      t => { t.steps[1].action = 'to-claims'; },
+      t => { t.steps[1].from = 'SCREEN-003'; },
+      t => { t.steps[1].sequence = 7; },
+      t => { t.omitted_steps = 4; },
+      t => { t.steps[0].to = 'SCREEN-003'; },
+      t => { t.steps[0].action = 'fake-start'; },
+      t => { t.steps.push({ ...t.steps[1] }); },
+      t => { t.steps = Array.from({ length: 201 }, () => ({ ...t.steps[0] })); },
+      t => { t.preview_version = '0.1.0'; },
+      t => { t.schema_version = 2; },
+    ];
+    for (const mutate of forgeries) {
+      const candidate = structuredClone(good);
+      mutate(candidate);
+      assert.throws(() => validatePilotTrace(candidate), TypeError);
+      assert.throws(() => serializePilotTrace(candidate), TypeError);
+      assert.throws(() => appendPilotTrace(candidate, 'SCREEN-002', 'to-office'), TypeError);
+    }
+    assert.equal(good.steps[1].to, 'SCREEN-002');
+  });
+
+  it('prüft auch abgeschnittene Protokolle vollständig und kontinuierlich', () => {
+    let trace = createPilotTrace('0.1.0-alpha.8');
+    for (let i = 0; i < 255; i++) {
+      trace = appendPilotTrace(trace,
+        i % 2 === 0 ? 'SCREEN-001' : 'SCREEN-002',
+        i % 2 === 0 ? 'to-map' : 'to-office');
+    }
+    assert.ok(trace.omitted_steps > 0);
+    assert.equal(validatePilotTrace(trace), true);
+    const skipped = structuredClone(trace);
+    skipped.steps[42].sequence += 1;
+    assert.throws(() => serializePilotTrace(skipped), TypeError);
+    const link = structuredClone(trace);
+    link.steps[42].from = 'SCREEN-003';
+    assert.throws(() => serializePilotTrace(link), TypeError);
+    const count = structuredClone(trace);
+    count.omitted_steps += 1;
+    assert.throws(() => validatePilotTrace(count), TypeError);
+  });
+
   it('gibt keine Schlüssel oder Forschungsdaten im Protokoll aus', () => {
     const body = serializePilotTrace(createPilotTrace('0.1.0-alpha.4'));
     assert.ok(!body.includes('sources'));
