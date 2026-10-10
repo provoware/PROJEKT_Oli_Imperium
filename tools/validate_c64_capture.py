@@ -155,7 +155,7 @@ def inspect_capture(document):
     errors, missing = validate_capture(document)
     return {
         "structure_valid": not errors,
-        "complete_for_independent_review": not errors and not missing and document.get("reference_status") == "captured",
+        "complete_for_independent_review": isinstance(document, dict) and not errors and not missing and document.get("reference_status") == "captured",
         "scientifically_verified": False,
         "original_tests_approved": 0,
         "errors": errors,
