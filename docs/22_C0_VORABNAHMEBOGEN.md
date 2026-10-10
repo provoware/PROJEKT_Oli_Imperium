@@ -7,7 +7,8 @@
 
 | Prüfpunkt | Nachweis bei jeder Version | Ausfall führt zu |
 |---|---|---|
-| Technischer Funktionsumfang | `release/c0-scope.json` stimmt mit der Version und allen neun Implementierungsdateien überein; neue Spielfunktionen und automatische Freigaben bleiben ausgeschlossen | Paketbau stoppen |\n| Versions- und Freigabevertrag | `release/c0-version.json` / `release/approvals.json` stimmen überein | Paketbau stoppen |
+| Technischer Funktionsumfang | `release/c0-scope.json` stimmt mit der Version und allen neun Implementierungsdateien überein; neue Spielfunktionen und automatische Freigaben bleiben ausgeschlossen | Paketbau stoppen |
+| Versions- und Freigabevertrag | `release/c0-version.json` / `release/approvals.json` stimmen überein | Paketbau stoppen |
 | Forschungsdatenintegrität | `tools/validate_project.py`, Datenwächter, Verknüpfungstests | Paketbau stoppen |
 | Reine Navigation | Modultests, keine Veränderung von Forschungs-/Wirtschaftszuständen | Prüfung fehlgeschlagen |
 | Sitzungs- und Vergleichsprotokoll | begrenztes JSON, TEST-001/002/003, Originalbelege bleiben null | Prüfung fehlgeschlagen |
@@ -56,4 +57,5 @@
 ## E. Geplanter gemeinsamer Abnahmezeitpunkt
 
 Erst wenn der technische C0-Umfang stabil, alle tatsächlich geforderten automatischen Kontrollen erfolgreich, die Screenshots gesichtet und die ausstehenden Entscheidungen klar erfasst sind, einen neuen `0.1.0-beta.N`- oder `0.1.0-rc.N`-Kandidaten eröffnen. Änderungen danach nur als eigene nachvollziehbare Korrekturen mit erneuten Prüfläufen. **Kein automatisches Merge und kein öffentliches GitHub-Release.**
-\n**Fixierte C0-Grenze:** [24_C0_TECHNISCHER_UMFANG.md](24_C0_TECHNISCHER_UMFANG.md). Ein grüner Prüfstatus ist keine Nutzer- oder Originalfreigabe.\n
+
+**Fixierte C0-Grenze:** [24_C0_TECHNISCHER_UMFANG.md](24_C0_TECHNISCHER_UMFANG.md). Ein grüner Prüfstatus ist keine Nutzer- oder Originalfreigabe.
