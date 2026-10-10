@@ -29,11 +29,15 @@ function pageTitle(doc) {
   return doc.querySelector('#pilot-view h2')?.textContent ?? '';
 }
 async function run() {
-  await until(() => iframe.contentDocument?.readyState === 'complete', 'HTML-Rahmen laden');
+  // Ein iframe besitzt zunächst ein leeres about:blank-Dokument, das bereits
+  // readyState=complete hat. Auf die tatsächliche Zieladresse warten.
+  await until(() => iframe.contentDocument?.URL?.endsWith('/prototype/index.html') &&
+    iframe.contentDocument?.readyState === 'complete', 'HTML-Zieldokument laden');
   const page = iframe.contentDocument;
   const win = iframe.contentWindow;
   await until(() => page.querySelector('#pilot-status')?.textContent?.includes('Testbasis bereit'),
-    'gültigen Datenvertrag und Versionskennung laden');
+    'gültigen Datenvertrag und Versionskennung laden (Status: ' +
+      page.querySelector('#pilot-status')?.textContent + ')');
   const configResponse = await fetch(new URL('../../release/c0-version.json', import.meta.url));
   check(configResponse.ok, 'Versionsdatei aus dem Projektstamm erreichbar');
   const config = await configResponse.json();
