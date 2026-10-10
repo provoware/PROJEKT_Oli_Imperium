@@ -1,6 +1,6 @@
 # 22 · C0-Vorabnahmebogen (technisches Forschungslabor)
 
-**Zielkandidat:** 0.1.0-alpha.5, noch **KEIN** Beta-, RC- oder öffentlicher Release.  
+**Aktueller technischer Stand:** 0.1.0-alpha.6, noch **KEIN** Beta-, RC- oder öffentlicher Release.  
 **Geltungsbereich:** HTML-Technik, Testbarkeit und Forschungsdaten-Anzeige; nicht der originale Spielnachbau.
 
 ## A. Automatisch nachprüfbare technische Voraussetzungen
@@ -14,9 +14,13 @@
 | Bedienung und Sicherheit | Tastaturfokus, 320/390 Pixel, 200 %, sichere Quellen und Skripte | Prüfung fehlgeschlagen |
 | Mobiler Erstkontakt | Schaltflächen vor der langen Forschungsseitenleiste, ohne horizontales Überlaufen | Prüfung fehlgeschlagen |
 | Laden, Fehler und Wiederanlauf | Ladezustand, erneutes Laden, altes Protokoll gesperrt | Prüfung fehlgeschlagen |
-| Browserbeleg | wirkliche HTML-Ausgabe, zwei Screenshotgrößen plus längere Mobilansicht | Prüfung fehlgeschlagen |
+| Browserbeleg | wirkliche HTML-Ausgabe, zwei Screenshotgrößen plus längere Mobilansicht und DOM-/Fokusprüfung bei 150/200 % | Prüfung fehlgeschlagen |
+| Originalaufnahme als Vorlage | private leere Aufnahmeakte, Pflichtfelder für zwei G64-Seiten, VICE/PAL, TEST-001 bis TEST-003 | Struktur-Fehler stoppt Paketbau; offene Belege bleiben offen |
+| Review-Segmentierung | jede Datei genau einmal in einer der vier Gruppen A–D | Paketbau stoppen |
 | Reproduzierbarkeit | gleiches Quellpaket ergibt dasselbe ZIP; SHA-256 alle Dateien geprüft | Paketbau stoppen |
 | Abnahmebericht | `REVIEW_STATUS.json`, Manifest und konkrete offene Freigaben im ZIP | Paketbau stoppen |
+
+**Neue verbindliche Gruppierung:** [23_C0_REVIEW_SEGMENTIERUNG.md](23_C0_REVIEW_SEGMENTIERUNG.md) und die maschinenlesbare Datei `release/review-segments.json`. Vier separate Prüfabschnitte, aber weiterhin eine gemeinsame formelle Gesamtfreigabe.
 
 **Regel:** Jede Aufgabe wird nur dann als technisch bestanden bezeichnet, wenn der konkrete Lauf für genau denselben Commit erfolgreich war. Frühere grüne Läufe ersetzen keine Prüfung nach neuem Commit.
 
