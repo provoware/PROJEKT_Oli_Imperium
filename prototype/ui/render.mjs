@@ -94,3 +94,20 @@ export function renderLoadFailure(document) {
 export function renderLoadingState(document) {
   return element(document, 'p', UI_TEXT.loadingDetail);
 }
+
+/** Nur die letzten acht Schritte sichtbar, kompletter Puffer bleibt exportierbar. */
+export function renderPilotTraceSteps(document, trace) {
+  const fragment = document.createDocumentFragment();
+  if (trace.omitted_steps > 0) {
+    fragment.append(element(document, 'li', UI_TEXT.traceOmitted + ' ' + trace.omitted_steps));
+  }
+  for (const step of trace.steps.slice(-8)) {
+    const description = step.sequence === 0 ? UI_TEXT.traceStart :
+      (UI_TEXT.actions[step.action] ?? step.action);
+    fragment.append(element(document, 'li',
+      UI_TEXT.traceStep + ' ' + step.sequence + ': ' +
+      (step.from === null ? '' : step.from + ' → ') + step.to +
+      ' · ' + description));
+  }
+  return fragment;
+}
