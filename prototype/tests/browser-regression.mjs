@@ -125,11 +125,13 @@ async function run() {
     win.URL.createObjectURL = originalObjectUrl;
   }
 
-  // CSS-Zoom simuliert Vergrößerung; echter Tastatur- und Sichtreview bleibt offen.
+  // Browser-Zoom verkleinert den nutzbaren CSS-Viewport: 1024/200% => 512px.
+  // Test der Reflow-/Layoutbreite, keine Behauptung über einen echten Tastendruck.
   for (const [width, zoom] of [[320, 1], [390, 1], [640, 1.5],
                                 [800, 1.5], [1024, 1.5], [640, 2], [1024, 2]]) {
-    iframe.style.width = width + 'px';
-    page.documentElement.style.zoom = String(zoom);
+    const logicalWidth = Math.round(width / zoom);
+    iframe.style.width = logicalWidth + 'px';
+    page.documentElement.style.zoom = '';
     await sleep(120);
     const docWidth = page.documentElement.clientWidth;
     const scrollWidth = page.documentElement.scrollWidth;
@@ -148,9 +150,12 @@ async function run() {
     check(page.activeElement === focusTarget,
       'Navigationsknopf bei ' + (zoom * 100) + '% programmatisch fokussierbar');
 
-    if (width >= 800) {
+    if (logicalWidth > 750) {
       check(sidebarRegion.getBoundingClientRect().left < mainRegion.getBoundingClientRect().left,
-        'Desktop-Reihenfolge zeigt Forschungsinfobereich weiterhin links');
+        'Breites Desktoplayout zeigt den Forschungsinfobereich links');
+    } else {
+      check(mainRegion.getBoundingClientRect().top < sidebarRegion.getBoundingClientRect().top,
+        'Vergrößerter/mobiler Reflow zeigt zuerst den bedienbaren Pilot');
     }
     if (width <= 390) {
       const main = page.querySelector('.main-panel').getBoundingClientRect();
