@@ -7,6 +7,8 @@
 **SRC-002:** Lemon64, https://www.lemon64.com/game/oil-imperium : C64/Joystick Port 2, **kein** Beleg für Menüpfade.  
 **SRC-003:** https://frgcb.blogspot.com/2025/03/oil-imperium-relinerainbow-arts-1989.html : Plattformbilder sind unterschiedlich.  
 
+**SRC-004 / Preservation64:** https://preservation64.de/index.php?title=Oil_Imperium – deutscher PAL-Archivkandidat Source 3, ungeprüft; Details in [Referenzkandidat](18_REFERENZKANDIDAT_C64_PAL.md).
+
 **Regel-IDs:** REGEL-001 Büro = Zentrale, REGEL-002 Büro→Weltkarte, REGEL-003 Gebiet→Claim-Information, REGEL-004 Port-2-Eingabe. Alle Status **offen**, nur sekundär beschrieben.
 
 ## 2. Auftrag an Arbeit B (konzeptionell, noch kein Programmcode)
