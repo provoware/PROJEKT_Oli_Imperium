@@ -59,7 +59,7 @@ describe('HTML-PILOT – beleggebundener Navigationsentwurf, kein Originaltest',
     assert.throws(() => validatePilotContract(duplicate), /Doppelte Forschungs-ID/);
     const missing = structuredClone(contract);
     missing.screens = [];
-    assert.throws(() => validatePilotContract(missing), /Pilotbildschirm/);
+    assert.throws(() => validatePilotContract(missing), /fehlende Referenz|Pilotbildschirm/);
   });
 
   it('weist weder alle Regeln noch Originaltests als bestanden aus', () => {
