@@ -55,9 +55,12 @@ describe('HTML-Ansicht: Trennung von Forschungsdaten, Texten und DOM', () => {
   });
 
   it('übernimmt nur https-Quellen und verwirft gefährliche Verknüpfungen', () => {
-    const data = structuredClone(contract);
-    data.sources[0].url = 'javascript:alert(1)';
-    const screen = renderPilotScreen(fakeDocument, getPilotCard(data, 'SCREEN-001'));
+    // Rendererschutz isoliert prüfen: Der vorgeschaltete Datenwächter
+    // blockiert solche Quelllinks bereits beim Laden.
+    const card = getPilotCard(contract, 'SCREEN-001');
+    card.sources = card.sources.map((source, index) => index === 0
+      ? { ...source, url: 'javascript:alert(1)' } : source);
+    const screen = renderPilotScreen(fakeDocument, card);
     const anchors = findByTag(screen, 'a');
     assert.ok(anchors.length > 0);
     assert.ok(anchors.every((item) => item.href.startsWith('https://')));
