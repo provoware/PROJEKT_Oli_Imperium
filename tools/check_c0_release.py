@@ -57,6 +57,7 @@ ARCHIVE_FILES = (
     "prototype/ui/texts.de.mjs",
     "release/review-segments.json",
     "tools/check_c0_release.py",
+    "tools/chrome_keyboard_probe.mjs",
     "tools/check_review_segments.py",
     "tools/validate_c64_capture.py",
     "tools/validate_project.py",
