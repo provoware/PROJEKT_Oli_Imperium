@@ -6,6 +6,8 @@ on:
       - 'data/contract.json'
       - 'docs/19_HTML_TESTBASIS_REGELWERK.md'
       - 'docs/20_GEBUENDELTE_VORABNAHME.md'
+      - 'docs/21_C0_ORIGINALVERGLEICH.md'
+      - 'docs/22_C0_VORABNAHMEBOGEN.md'
       - 'release/**'
       - 'tools/**'
       - 'tests/**'
@@ -31,6 +33,8 @@ jobs:
       - name: JavaScript-Syntax prüfen
         run: |
           node --check prototype/navigation.mjs
+          node --check prototype/pilot-trace.mjs
+          node --check prototype/reference-comparison.mjs
           node --check prototype/contract-guard.mjs
           node --check prototype/tests/browser-regression.mjs
           node --check prototype/app.mjs
@@ -46,6 +50,8 @@ jobs:
           sleep 2
           curl --fail --silent --show-error --output /dev/null http://127.0.0.1:8765/prototype/
           curl --fail --silent --show-error --output /dev/null http://127.0.0.1:8765/prototype/navigation.mjs
+          curl --fail --silent --show-error --output /dev/null http://127.0.0.1:8765/prototype/pilot-trace.mjs
+          curl --fail --silent --show-error --output /dev/null http://127.0.0.1:8765/prototype/reference-comparison.mjs
           curl --fail --silent --show-error --output /dev/null http://127.0.0.1:8765/prototype/contract-guard.mjs
           curl --fail --silent --show-error --output /dev/null http://127.0.0.1:8765/prototype/app.mjs
           curl --fail --silent --show-error --output /dev/null http://127.0.0.1:8765/prototype/styles.css
@@ -78,6 +84,9 @@ jobs:
           "$browser" --headless --no-sandbox --disable-gpu --disable-dev-shm-usage \
             --window-size=390,844 --screenshot=dist/browser-mobile.png \
             --virtual-time-budget=6000 http://127.0.0.1:8766/prototype/
+          "$browser" --headless --no-sandbox --disable-gpu --disable-dev-shm-usage \
+            --window-size=390,2200 --screenshot=dist/browser-mobile-extended.png \
+            --virtual-time-budget=6000 http://127.0.0.1:8766/prototype/
       - name: Tatsächliche Navigation und Fehlerwiederherstellung im Browser testen
         run: |
           python3 -m http.server 8767 --bind 127.0.0.1 > /tmp/oli-browser-interaction-http.log 2>&1 &
@@ -104,6 +113,7 @@ jobs:
             dist/browser-interactions.html
             dist/browser-desktop.png
             dist/browser-mobile.png
+            dist/browser-mobile-extended.png
           if-no-files-found: error
           retention-days: 14
       - name: C0-Version und Vorabnahme-Vertrag prüfen
