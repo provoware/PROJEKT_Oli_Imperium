@@ -50,6 +50,40 @@ jobs:
           curl --fail --silent --show-error --output /dev/null http://127.0.0.1:8765/prototype/ui/texts.de.mjs
           curl --fail --silent --show-error --output /dev/null http://127.0.0.1:8765/release/c0-version.json
           curl --fail --silent --show-error --output /dev/null http://127.0.0.1:8765/data/contract.json
+      - name: Reale HTML-Ausgabe im Browser prüfen (kein C64-Originalvergleich)
+        run: |
+          browser="$(command -v google-chrome || command -v chromium || true)"
+          if [ -z "$browser" ]; then
+            echo "Chrome/Chromium für den Browser-Smoke-Test fehlt."
+            exit 1
+          fi
+          python3 -m http.server 8766 --bind 127.0.0.1 > /tmp/oli-c0-browser-http.log 2>&1 &
+          pid=$!
+          trap 'kill "$pid" 2>/dev/null || true' EXIT
+          sleep 2
+          mkdir -p dist
+          "$browser" --headless --no-sandbox --disable-gpu --disable-dev-shm-usage \
+            --virtual-time-budget=6000 --dump-dom http://127.0.0.1:8766/prototype/ \
+            > dist/browser-rendered.html
+          grep -q 'C0-Testfassung 0.1.0-alpha.1' dist/browser-rendered.html
+          grep -q 'REGEL-002' dist/browser-rendered.html
+          grep -q 'Q-001' dist/browser-rendered.html
+          "$browser" --headless --no-sandbox --disable-gpu --disable-dev-shm-usage \
+            --window-size=1280,800 --screenshot=dist/browser-desktop.png \
+            --virtual-time-budget=6000 http://127.0.0.1:8766/prototype/
+          "$browser" --headless --no-sandbox --disable-gpu --disable-dev-shm-usage \
+            --window-size=390,844 --screenshot=dist/browser-mobile.png \
+            --virtual-time-budget=6000 http://127.0.0.1:8766/prototype/
+      - name: Browser-Belege als CI-Artefakt hinterlegen
+        uses: actions/upload-artifact@v4
+        with:
+          name: oli-imperium-c0-browser-preview
+          path: |
+            dist/browser-rendered.html
+            dist/browser-desktop.png
+            dist/browser-mobile.png
+          if-no-files-found: error
+          retention-days: 14
       - name: C0-Version und Vorabnahme-Vertrag prüfen
         run: python3 tools/check_c0_release.py
       - name: Reproduzierbares internes Review-Paket erzeugen und prüfen
