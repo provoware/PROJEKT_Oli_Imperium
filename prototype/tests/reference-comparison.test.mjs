@@ -76,6 +76,19 @@ describe('C0 Vergleichsvorlage – technischer Entwurf gegenüber noch fehlenden
     assert.throws(() => createReferenceComparisonPlan({ kind: 'original', steps: [] }, contract), TypeError);
     assert.throws(() => createReferenceComparisonPlan({ ...trace, reference_verified: true }, contract), TypeError);
   });
+  it('nutzt denselben Integritätscheck und übernimmt keine erfundenen Schrittnummern', () => {
+    const valid = completeTrace();
+    const counterfeit = structuredClone(valid);
+    counterfeit.steps[1].to = 'SCREEN-003';
+    assert.throws(() => createReferenceComparisonPlan(counterfeit, contract), TypeError);
+    assert.throws(() => serializeReferenceComparisonPlan(counterfeit, contract), TypeError);
+    const alteredNumber = structuredClone(valid);
+    alteredNumber.steps[2].sequence = 999;
+    assert.throws(() => createReferenceComparisonPlan(alteredNumber, contract), TypeError);
+    assert.deepEqual(createReferenceComparisonPlan(valid, contract).tests
+      .map(test => test.draft_step_numbers), [[1], [2], [4]]);
+  });
+
   it('kennzeichnet abgeschnittene technische Schritte und bleibt unabhängig von ihnen', () => {
     let trace = createPilotTrace(version);
     for (let i = 0; i < 260; i++) {
