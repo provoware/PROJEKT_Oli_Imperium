@@ -69,6 +69,10 @@ async function press(key) {
   const virtualKey = key === 'Tab' ? 9 : 13;
   const args = { type: 'keyDown', key, code, windowsVirtualKeyCode: virtualKey,
     nativeVirtualKeyCode: virtualKey };
+  if (key === 'Enter') {
+    args.text = '\\r';
+    args.unmodifiedText = '\\r';
+  }
   await command('Input.dispatchKeyEvent', args);
   await command('Input.dispatchKeyEvent', { ...args, type: 'keyUp' });
   await sleep(45);
@@ -170,8 +174,11 @@ async function main() {
   }
   assert(returned, 'Umschalt+Tab führt zum Navigationsknopf zurück');
   await press('Enter');
-  assert(await evaluate("document.querySelector('#pilot-view h2')?.textContent.includes('Weltkarte')"),
-    'Eingabetaste aktiviert echte Navigation zur Weltkarte');
+  await sleep(180);
+  const actualTitle = await evaluate("document.querySelector('#pilot-view h2')?.textContent ?? ''");
+  const keyboardState = await evaluate("JSON.stringify({focus: document.activeElement?.outerHTML.slice(0,180), status: document.querySelector('#pilot-status')?.textContent})");
+  assert(actualTitle.includes('Weltkarte'),
+    'Eingabetaste aktiviert Navigation zur Weltkarte (aktuell: ' + actualTitle + '; ' + keyboardState + ')');
   assert(await evaluate("document.activeElement === document.querySelector('#pilot-view h2')"),
     'Nach Enter Fokus auf neuer Bildschirmüberschrift');
   assert(await evaluate("document.querySelector('#pilot-trace-list')?.textContent.includes('Schritt 1')"),
