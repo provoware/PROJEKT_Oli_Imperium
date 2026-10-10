@@ -35,7 +35,7 @@ class TestC0ReviewGate(unittest.TestCase):
     def test_contract_is_valid_but_never_authorizes_public_release(self):
         result = inspect(self.root)
         self.assertTrue(result["technical_structure_ok"], result["errors"])
-        self.assertEqual(result["version"], "0.1.0-alpha.8")
+        self.assertEqual(result["version"], "0.1.0-alpha.9"
         self.assertFalse(result["historical_reference_verified"])
         self.assertFalse(result["public_release_allowed"])
         self.assertFalse(result["manual_approval_complete"])
