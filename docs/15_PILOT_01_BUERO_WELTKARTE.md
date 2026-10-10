@@ -1,6 +1,6 @@
 # PILOT-01: C64-Büro → Weltkarte → Gebiet und Ölfelder
 
-**Stand:** 10.10.2026 · **Facharbeit A** · **Evidenz:** Sekundärquellen ausgewertet, Originaltest ausstehend.  
+**Stand:** 10.10.2026 · **Facharbeit A** · **Evidenz:** Sekundärquellen ausgewertet, Archivkandidat R-01 katalogisiert, Originaltest ausstehend.  
 **Abgrenzung:** Ausschließlich Commodore 64 (*Oil Imperium*, reLINE, 1989). **Nicht** das andere Online-Spiel unter oilimperium.de/oil-empire.com.
 
 ## 1. Ziel / Zweck
@@ -10,6 +10,8 @@ Die historische Büro-Navigation, Karten- und Gebietsauswahl für die anschließ
 - **SRC-001 / C64-Wiki:** https://www.c64-wiki.de/wiki/Oil_Imperium – Vom Büro aus führt die Weltkarte in die Gebietsübersicht; ein gewähltes Gebiet zeigt Claims/Ölfelder und vorhandene Besitzer. Navigation mit Joystick Port 2 und Feuerknopf; Darstellung des Bürobildes. **Status:** Sekundärquelle, kein eigener Emulatorversuch.
 - **SRC-002 / Lemon64:** https://www.lemon64.com/game/oil-imperium – C64-Version und Joystick Port 2 als unabhängige Spielmetadaten. **Begrenzt:** bestätigt nicht die Kartenübergänge.
 - **SRC-003 / FRGCB:** https://frgcb.blogspot.com/2025/03/oil-imperium-relinerainbow-arts-1989.html – Bildschirme und Kartenansichten unterscheiden sich zwischen Plattformen; keine Übernahme von Amiga-/DOS-Ansichten als C64-Vorlage.
+
+- **SRC-004 / Preservation64:** https://preservation64.de/index.php?title=Oil_Imperium – Source 3 beschreibt ein deutsches C64-PAL-Exemplar; `Working? Yes` ist die Archivaussage, **kein eigener Originaltest**. Konkretes Verfahren: [Referenzkandidat](18_REFERENZKANDIDAT_C64_PAL.md).
 
 ## 3. Analytischer Navigationsentwurf (nicht als Originalcode ausgeben)
 ```text
@@ -46,7 +48,7 @@ Die historische Büro-Navigation, Karten- und Gebietsauswahl für die anschließ
 Offen: `Q-001` exakte Karten-Hitbox; `Q-002` Screens/Teilansichten; `Q-003` Rückweg; `Q-004` Datenfelder.
 
 ## 6. Ergebnisstand
-- Quellen: **3/3** als Rechercheansätze erfasst, nicht als Primärbelege.
+- Quellen: **4/4** als Recherche-/Archivhinweise erfasst, nicht als eigener Originalbeweis.
 - Regeln: **0/4** fachlich freigegeben.
 - Module: **0/2** technisch freigegeben.
 - Originalvergleich: **0/3** Pflichtfälle durchgeführt, bestätigte Originaltreue in diesem begrenzten Pilot **0/8 gewichteten Punkten**; **gesamtspielbezogene Originaltreue nicht messbar**.
