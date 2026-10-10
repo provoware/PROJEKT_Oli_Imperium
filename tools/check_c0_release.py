@@ -15,21 +15,29 @@ import zipfile
 from pathlib import Path
 
 from validate_project import validate
+from validate_c64_capture import inspect_capture
+from check_review_segments import inspect_review_segments
 
 ROOT = Path(__file__).resolve().parents[1]
 VERSION_FILE = "release/c0-version.json"
 APPROVALS_FILE = "release/approvals.json"
 ARCHIVE_FILES = (
     ".github/workflows/html-pilot.yml",
+    ".github/workflows/validate.yml",
     "AGENTS.md",
     "CHANGELOG.md",
     "CONTRIBUTING.md",
     "README.md",
     "data/contract.json",
+    "data/original-session.template.json",
+    "docs/03_UEBERGABE_A_B.md",
+    "docs/05_TESTS_FORTSCHRITT.md",
+    "docs/18_REFERENZKANDIDAT_C64_PAL.md",
     "docs/19_HTML_TESTBASIS_REGELWERK.md",
     "docs/20_GEBUENDELTE_VORABNAHME.md",
     "docs/21_C0_ORIGINALVERGLEICH.md",
     "docs/22_C0_VORABNAHMEBOGEN.md",
+    "docs/23_C0_REVIEW_SEGMENTIERUNG.md",
     "prototype/app.mjs",
     "prototype/contract-guard.mjs",
     "prototype/pilot-trace.mjs",
@@ -47,6 +55,15 @@ ARCHIVE_FILES = (
     "prototype/tests/render.test.mjs",
     "prototype/ui/render.mjs",
     "prototype/ui/texts.de.mjs",
+    "release/review-segments.json",
+    "tools/check_c0_release.py",
+    "tools/check_review_segments.py",
+    "tools/validate_c64_capture.py",
+    "tools/validate_project.py",
+    "tests/test_c0_release.py",
+    "tests/test_review_segments.py",
+    "tests/test_validate_c64_capture.py",
+    "tests/test_validate_project.py",
     VERSION_FILE,
     APPROVALS_FILE,
 )
@@ -98,6 +115,29 @@ def inspect(root: Path = ROOT) -> dict:
         if type(approvals.get(field)) is not bool:
             errors.append("Freigabefeld benötigt true/false: " + field)
 
+    # Vollständige, exakt einmal zugewiesene Prüfgruppen verhindern
+    # unbemerkt wachsende, unprüfbare Vorabnahme-Pakete.
+    try:
+        segments = load_json(root / "release/review-segments.json")
+    except (OSError, ValueError) as exc:
+        segments = {}
+        errors.append("Prüfgruppen nicht lesbar: " + str(exc))
+    review_groups = inspect_review_segments(segments, ARCHIVE_FILES, version_name)
+    errors.extend("Prüfgruppen: " + item for item in review_groups["errors"])
+
+    # Die Originalvorlage darf keine echte Emulatorfreigabe vortäuschen.
+    try:
+        capture = load_json(root / "data/original-session.template.json")
+        capture_status = inspect_capture(capture)
+        if not capture_status["structure_valid"]:
+            errors.extend("C64-Aufnahmevorlage: " + item for item in capture_status["errors"])
+        if (capture_status["complete_for_independent_review"]
+                or capture_status["scientifically_verified"]
+                or capture_status["original_tests_approved"] != 0):
+            errors.append("Original-Aufnahmevorlage darf keine Bestätigung enthalten.")
+    except (OSError, ValueError) as exc:
+        errors.append("C64-Aufnahmevorlage nicht lesbar: " + str(exc))
+
     try:
         contract = load_json(root / "data/contract.json")
         if not isinstance(contract, dict):
@@ -134,6 +174,8 @@ def inspect(root: Path = ROOT) -> dict:
         "passed_original_tests": original_passed,
         "approvals": {field: approvals.get(field) for field in APPROVAL_FIELDS},
         "manual_approval_complete": all(approvals.get(field) is True for field in APPROVAL_FIELDS),
+        "review_groups": review_groups,
+        "original_capture_template": "empty_unverified",
         "browser_visual_review": "nicht automatisiert bestätigt",
         "public_release_allowed": False,
         "note": "Prüfarchiv nur für interne Vorabnahme; CI, Rechte und fachliche Reviews zusätzlich extern prüfen.",
@@ -195,7 +237,9 @@ def verify_review_archive(path: Path) -> None:
         if (status.get("version") != manifest.get("version")
                 or status.get("technical_structure_ok") is not True
                 or status.get("public_release_allowed") is not False
-                or status.get("manual_approval_complete") is not False):
+                or status.get("manual_approval_complete") is not False
+                or status.get("review_groups", {}).get("valid") is not True
+                or len(status.get("review_groups", {}).get("groups", [])) != 4):
             raise ValueError("Das Archiv gibt einen falschen oder freigegebenen Prüfumfang an.")
         expected = {prefix + entry["path"] for entry in manifest["files"]} | {manifest_path}
         if set(names) != expected:
