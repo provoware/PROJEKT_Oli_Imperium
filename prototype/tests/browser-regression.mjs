@@ -48,9 +48,11 @@ async function run() {
     securityPolicy.includes("object-src 'none'"), 'CSP sperrt externe/inline Skripte und Objekte');
   const traceList = page.querySelector('#pilot-trace-list');
   const download = page.querySelector('#download-trace');
+  const comparisonDownload = page.querySelector('#download-comparison');
   check(traceList?.children.length === 1 && traceList.textContent.includes('Schritt 0'),
     'Neue Testsitzung beginnt mit einer dokumentierten Startansicht');
   check(download?.disabled === false, 'Expliziter Export ist nach dem Laden zugänglich');
+  check(comparisonDownload?.disabled === false, 'Vergleichsvorlage ist getrennt exportierbar');
   check(page.querySelector('.trace-note')?.textContent.includes('Kein Nachweis'),
     'Testprotokoll behauptet keine historische Originaltreue');
   check(pageTitle(page).includes('Büro'), 'Büroansicht sichtbar');
@@ -99,6 +101,21 @@ async function run() {
       'Export ist strukturiert, vollständig und ausdrücklich kein Originalbeleg');
     check(page.querySelector('#pilot-status').textContent.includes('vorbereitet'),
       'Benutzer erhält verständliche Export-Rückmeldung');
+
+    exported = null;
+    comparisonDownload.click();
+    await until(() => exported !== null, 'Vergleichsvorlage erzeugen');
+    const plan = JSON.parse(await exported.text());
+    check(plan.kind === 'c0-reference-comparison-plan' && plan.tests.length === 3,
+      'Vorlage verknüpft die drei Originaltest-IDs');
+    check(plan.original_verified === false && plan.scientific_approval === false &&
+      plan.tests.every(entry => entry.original_observation === null &&
+        entry.original_evidence_id === null && entry.comparison_status === 'not_compared'),
+      'Keine fingierten Originalbelege, Vergleichsergebnisse oder Freigaben');
+    check(plan.tests[0].draft_step_numbers.includes(1) &&
+      plan.tests[1].draft_step_numbers.includes(2) &&
+      plan.tests[2].draft_step_numbers.includes(4),
+      'Vergleichsvorlage enthält die tatsächlichen technischen Schrittkennungen');
   } finally {
     win.URL.createObjectURL = originalObjectUrl;
   }
@@ -111,6 +128,14 @@ async function run() {
     const scrollWidth = page.documentElement.scrollWidth;
     check(scrollWidth <= docWidth + 2,
       'Darstellung ohne horizontales Überlaufen bei ' + width + 'px / ' + (zoom * 100) + '%');
+    if (width <= 390) {
+      const main = page.querySelector('.main-panel').getBoundingClientRect();
+      const sidebar = page.querySelector('.side-panel').getBoundingClientRect();
+      const firstButton = page.querySelector('#pilot-controls button').getBoundingClientRect();
+      check(main.top < sidebar.top, 'Auf schmalem Bildschirm steht Bedienung vor der Forschungsinformation');
+      check(firstButton.top > 0 && firstButton.top < 844,
+        'Erster Navigationsknopf bei mobiler Bildschirmhöhe ohne tiefes Scrollen sichtbar');
+    }
   }
   page.documentElement.style.zoom = '';
   iframe.style.width = '390px';
@@ -131,8 +156,9 @@ async function run() {
       'Veraltete Forschungsinhalte während des Ladens verborgen');
     check(page.querySelector('#pilot-controls').children.length === 0,
       'Keine alten Bedienaktionen während des Ladens sichtbar');
-    check(traceList.children.length === 0 && download.disabled === true,
-      'Alter Testverlauf und Export während des erneuten Ladens gesperrt');
+    check(traceList.children.length === 0 && download.disabled === true &&
+      comparisonDownload.disabled === true,
+      'Alte technische Exporte und Vergleichsvorlage beim Nachladen gesperrt');
     check(page.querySelector('#c0-version').textContent.includes('Version wird geprüft'),
       'Versionsanzeige ist während des Ladens nicht veraltet');
     for (const resolve of requests) resolve({ ok: false, status: 503 });
@@ -153,7 +179,8 @@ async function run() {
     'Wiederherstellung nach Ladefehler');
   check(pageTitle(page).includes('Büro'), 'Nach erfolgreichem Wiederladen Büroansicht wiederhergestellt');
   check(traceList.children.length === 1 &&
-    traceList.textContent.includes('Schritt 0') && download.disabled === false,
+    traceList.textContent.includes('Schritt 0') && download.disabled === false &&
+    comparisonDownload.disabled === false,
     'Neues Laden beginnt eine klar abgegrenzte technische Testsitzung');
   check(page.querySelector('#pilot-view').getAttribute('aria-busy') === 'false',
     'Ladestatus wird nach erfolgreichem Wiederanlauf zurückgenommen');
