@@ -47,6 +47,13 @@ button:disabled { cursor: not-allowed; opacity: 0.55; }
 dt { color: var(--muted); } dd { margin: 0; font-weight: 600; }
 .detail-group { padding-top: 0.6rem; border-top: 1px dashed var(--line); }
 li { margin-bottom: 0.3rem; }
+
+.trace-panel { margin-top: 1.2rem; padding: 1rem; border: 1px solid var(--line);
+  border-radius: 0.5rem; background: var(--panel-strong); }
+.trace-panel h3 { margin: 0; }
+.trace-note { margin: 0.7rem 0; color: var(--muted); }
+#pilot-trace-list { margin: 0; padding-left: 1.8rem; overflow-wrap: anywhere; }
+#pilot-trace-list li { margin: 0.4rem 0; padding: 0.15rem 0; }
 footer { padding: 1rem 0; color: var(--muted); }
 @media (max-width: 750px) {
   .layout { grid-template-columns: 1fr; }
