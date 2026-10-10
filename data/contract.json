@@ -8,10 +8,228 @@
     "emulator_version": null,
     "verified_run": false
   },
-  "sources": [],
-  "rules": [],
-  "screens": [],
-  "modules": [],
-  "tests": [],
-  "questions": []
+  "sources": [
+    {
+      "id": "SRC-001",
+      "title": "C64-Wiki Oil Imperium",
+      "url": "https://www.c64-wiki.de/wiki/Oil_Imperium",
+      "type": "secondary",
+      "note": "C64-Büro, Weltkarte, Gebiete, Claims, Joystick; sekundär, kein eigener Originaltest."
+    },
+    {
+      "id": "SRC-002",
+      "title": "Lemon64 Oil Imperium",
+      "url": "https://www.lemon64.com/game/oil-imperium",
+      "type": "secondary",
+      "note": "C64-Erscheinungsjahr und Joystick Port 2, nicht die konkreten Bildschirmpfade."
+    },
+    {
+      "id": "SRC-003",
+      "title": "FRGCB Versionsvergleich Oil Imperium",
+      "url": "https://frgcb.blogspot.com/2025/03/oil-imperium-relinerainbow-arts-1989.html",
+      "type": "secondary",
+      "note": "Vergleich der C64-Grafik mit anderen Plattformen; keine eigene Originalausführung."
+    }
+  ],
+  "rules": [
+    {
+      "id": "REGEL-001",
+      "title": "Büro als zentrale Spielnavigation",
+      "status": "open",
+      "source_ids": [
+        "SRC-001"
+      ],
+      "screen_ids": [
+        "SCREEN-001"
+      ]
+    },
+    {
+      "id": "REGEL-002",
+      "title": "Weltkarte vom Büro aufrufen",
+      "status": "open",
+      "source_ids": [
+        "SRC-001"
+      ],
+      "screen_ids": [
+        "SCREEN-001",
+        "SCREEN-002"
+      ]
+    },
+    {
+      "id": "REGEL-003",
+      "title": "Gebietsauswahl zeigt Claims und Eigentum",
+      "status": "open",
+      "source_ids": [
+        "SRC-001"
+      ],
+      "screen_ids": [
+        "SCREEN-002",
+        "SCREEN-003"
+      ]
+    },
+    {
+      "id": "REGEL-004",
+      "title": "Joystick Port 2 und Feuerknopf zur Auswahl",
+      "status": "open",
+      "source_ids": [
+        "SRC-001",
+        "SRC-002"
+      ],
+      "screen_ids": [
+        "SCREEN-001"
+      ]
+    }
+  ],
+  "screens": [
+    {
+      "id": "SCREEN-001",
+      "title": "Büro (analytische Referenzansicht)",
+      "status": "open",
+      "source_ids": [
+        "SRC-001"
+      ]
+    },
+    {
+      "id": "SCREEN-002",
+      "title": "Weltkarte (C64; Bild noch nicht selbst erfasst)",
+      "status": "open",
+      "source_ids": [
+        "SRC-001",
+        "SRC-003"
+      ]
+    },
+    {
+      "id": "SCREEN-003",
+      "title": "Gebiet/Claim-Information (eigenständiger Bildschirm unbestätigt)",
+      "status": "open",
+      "source_ids": [
+        "SRC-001"
+      ]
+    }
+  ],
+  "modules": [
+    {
+      "id": "MOD-001",
+      "title": "Geplanter Navigationszustandsautomat (Entwurf B)",
+      "status": "planned",
+      "rule_ids": [
+        "REGEL-001",
+        "REGEL-002",
+        "REGEL-003"
+      ]
+    },
+    {
+      "id": "MOD-002",
+      "title": "Geplanter Joystick-Menüeingabeadapter (Entwurf B)",
+      "status": "planned",
+      "rule_ids": [
+        "REGEL-004"
+      ]
+    }
+  ],
+  "tests": [
+    {
+      "id": "TEST-001",
+      "title": "C64-Original: Büro zur Weltkarte",
+      "kind": "original",
+      "mandatory": true,
+      "weight": 3,
+      "status": "not_run",
+      "rule_ids": [
+        "REGEL-001",
+        "REGEL-002",
+        "REGEL-004"
+      ]
+    },
+    {
+      "id": "TEST-002",
+      "title": "C64-Original: Gebiet zur Claim-Anzeige",
+      "kind": "original",
+      "mandatory": true,
+      "weight": 3,
+      "status": "not_run",
+      "rule_ids": [
+        "REGEL-003"
+      ]
+    },
+    {
+      "id": "TEST-003",
+      "title": "C64-Original: Rückweg zur Büroansicht",
+      "kind": "original",
+      "mandatory": true,
+      "weight": 2,
+      "status": "not_run",
+      "rule_ids": [
+        "REGEL-001",
+        "REGEL-002"
+      ]
+    },
+    {
+      "id": "TEST-004",
+      "title": "Entwurfsprüfung: Navigation ohne Wirtschaftszustandsänderung",
+      "kind": "structure",
+      "mandatory": true,
+      "weight": 1,
+      "status": "not_run",
+      "rule_ids": [
+        "REGEL-001",
+        "REGEL-002",
+        "REGEL-003"
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "id": "Q-001",
+      "text": "Wie wird das Weltkartenobjekt im C64-Büro exakt angewählt?",
+      "owner": "A",
+      "status": "open",
+      "blocks": [
+        "TEST-001"
+      ],
+      "related_ids": [
+        "REGEL-002",
+        "SCREEN-001"
+      ]
+    },
+    {
+      "id": "Q-002",
+      "text": "Ist die Claims-Anzeige ein eigener Bildschirm oder Teilansicht?",
+      "owner": "A",
+      "status": "open",
+      "blocks": [
+        "TEST-002"
+      ],
+      "related_ids": [
+        "REGEL-003",
+        "SCREEN-003"
+      ]
+    },
+    {
+      "id": "Q-003",
+      "text": "Welche konkrete Eingabefolge führt zurück ins C64-Büro?",
+      "owner": "A",
+      "status": "open",
+      "blocks": [
+        "TEST-003"
+      ],
+      "related_ids": [
+        "SCREEN-001",
+        "SCREEN-002"
+      ]
+    },
+    {
+      "id": "Q-004",
+      "text": "Welche Region-/Claim-Daten benötigt der technische Navigationsentwurf?",
+      "owner": "B",
+      "status": "open",
+      "blocks": [
+        "MOD-001"
+      ],
+      "related_ids": [
+        "REGEL-003",
+        "MOD-001"
+      ]
+    }
+  ]
 }
