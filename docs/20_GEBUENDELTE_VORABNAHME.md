@@ -45,6 +45,7 @@ Nach Veröffentlichung darf derselbe Versionstag niemals auf andere Dateien umge
 data/contract.json                  ← EIN verbindlicher Forschungsstand
 docs/                               ← Forschungsprotokolle, Architektur, Entscheidungen
 prototype/navigation.mjs            ← reine logische Navigation
+prototype/contract-guard.mjs        ← Browser-Konsistenzschutz, keine Fachfreigabe
 prototype/app.mjs                   ← Steuerung: Laden, Status und Benutzeraktionen
 prototype/ui/render.mjs             ← nur zugängliche HTML-/DOM-Darstellung
 prototype/ui/texts.de.mjs           ← deutsche Oberflächentexte, keine Fachregeln
@@ -82,9 +83,10 @@ Pflicht vor einer technischen C0-Vorschau:
 
 1. Python-Vertragsvalidator `python3 tools/validate_project.py`.
 2. Python-Unittests `python3 -m unittest discover -s tests -v`.
-3. JavaScript-Syntax- und Navigations-/Negativtests mit Node.js.
+3. JavaScript-Syntax- und Navigations-/Negativtests mit Node.js; Datenwächter für Referenzen/Prüfstatus sowie automatisierte WCAG-AA-Kontraste, Fokusmarkierung und Schaltflächengrößen.
 4. Lokale HTTP-Auslieferung aller HTML-, CSS-, JS- und Vertragsdateien.
    Zusätzlich einen echten Headless-Chrome-Start prüfen: Versionskennung, Regel-IDs, Frage-IDs; Desktop- und Mobilbilder als CI-Belege erfassen (das ist noch keine manuelle Sichtabnahme).
+   Ein zweiter echter Chrome-Test bedient die gesamte Pilotnavigation, kontrolliert Fokus und 390-Pixel-Breite und simuliert einen Ladefehler mit erfolgreichem Wiederanlauf.
 5. C0-Versions- und Konsistenzprüfung `python3 tools/check_c0_release.py`.
 6. Reproduzierbare ZIP-Erzeugung `python3 tools/check_c0_release.py --package dist/c0-review.zip`.
 7. SHA-256-Abgleich aller ZIP-Einträge `python3 tools/check_c0_release.py --verify dist/c0-review.zip`.
