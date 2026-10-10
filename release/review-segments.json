@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "kind": "c0-review-segments",
-  "version": "0.1.0-alpha.7",
+  "version": "0.1.0-alpha.8",
   "purpose": "INTERNAL_STAGED_TECHNICAL_REVIEW",
   "overall_approval": "not_granted",
   "groups": [
@@ -80,7 +80,8 @@
         "tools/check_c0_release.py",
         "tools/check_review_segments.py",
         "tests/test_c0_release.py",
-        "tests/test_review_segments.py"
+        "tests/test_review_segments.py",
+        "docs/24_*"
       ],
       "technical_checks": [
         "Vollständige Dateiabdeckung ohne Dopplung",
