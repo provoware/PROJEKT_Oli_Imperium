@@ -141,6 +141,17 @@ def inspect(root: Path = ROOT) -> dict:
             or scope.get("purpose") != "INTERNAL_RESEARCH_PREVIEW_ONLY"
             or scope.get("frozen_implementation_paths") != expected_paths):
         errors.append("C0-Funktionsumfang fehlt, ist verändert oder passt nicht zum Dateikatalog.")
+    # Nicht nur die fest vorgegebene ZIP-Liste prüfen: auch tatsächlich neu
+    # angelegte Prototyp-Dateien auf dem Datenträger müssen auffallen.
+    actual_paths = sorted(
+        file.relative_to(root).as_posix()
+        for file in (root / "prototype").rglob("*")
+        if (file.is_file() or file.is_symlink())
+        and file.relative_to(root / "prototype").parts[0] != "tests"
+    )
+    if actual_paths != expected_paths:
+        errors.append("C0-Funktionsumfang: neue oder fehlende Prototyp-Datei außerhalb der Fixierung.")
+
     for label in ("features", "excluded_features", "allowed_post_freeze_changes"):
         items = scope.get(label)
         if (not isinstance(items, list) or not items
