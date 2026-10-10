@@ -31,6 +31,8 @@ Die Ergebnisse beruhen auf dem **vorigen, konkret nachgewiesenen technischen Sta
 
 Zur Originalprüfung sind ausschließlich eine rechtmäßig bereitgestellte konkrete C64-PAL-Fassung, echte Datenträgerprüfsummen, ein unabhängig reproduzierbarer VICE-Lauf mit Originaleingaben und unveränderten Bildbelegen zulässig. Screenshots oder Code des HTML-Entwurfs sind kein Ersatz. Es wurden **keine** urheberrechtlich ungeprüften Originalabbilder oder vermeintlichen Hashes ins Repository eingebracht.
 
+**Zusätzlicher externer Archivabgleich (nur Kataloginformation):** Die öffentlich zugängliche [Preservation64-Seite zu *Oil Imperium*](https://preservation64.de/index.php?title=Oil_Imperium&oldid=66363) benennt unter **Source 3** ausdrücklich `OilImperiumDE parser s0.g64` und `OilImperiumDE parser s1.g64`, die Plattform C64, Deutschland, Deutsch, PAL, Jahr 1989 und den Archivvermerk `Working? Yes`. Es werden außerdem separate `fromNib`-Varianten angeboten, deren Byteinhalt nicht ohne Vergleich als identisch behandelt werden darf. **Dieses Ergebnis verifiziert nur die Existenz der Archiveinträge;** der dort genannte Funktionsstatus ist eine Aussage des Archivs und ersetzt **keinen** eigenen VICE-Lauf. Es wurden keine Diskettenabbilder oder Originalgrafiken abgerufen, gespeichert oder in das Repository übernommen.
+
 **Vor Freigabe offen:** tatsächliche Provenienz, Nutzungsrechte, Emulatorbeobachtungen, Fachprüfung; **0/3** Originaltests und **0/4** Originalregeln bestätigt.
 
 ## 3. B – HTML-Architektur und wartbare Trennung
