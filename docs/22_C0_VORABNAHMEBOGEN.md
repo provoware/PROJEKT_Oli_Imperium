@@ -1,6 +1,6 @@
 # 22 · C0-Vorabnahmebogen (technisches Forschungslabor)
 
-**Aktueller technischer Stand:** 0.1.0-alpha.6, noch **KEIN** Beta-, RC- oder öffentlicher Release.  
+**Aktueller technischer Stand:** 0.1.0-alpha.7, noch **KEIN** Beta-, RC- oder öffentlicher Release.  
 **Geltungsbereich:** HTML-Technik, Testbarkeit und Forschungsdaten-Anzeige; nicht der originale Spielnachbau.
 
 ## A. Automatisch nachprüfbare technische Voraussetzungen
@@ -18,6 +18,8 @@
 | Originalaufnahme als Vorlage | private leere Aufnahmeakte, Pflichtfelder für zwei G64-Seiten, VICE/PAL, TEST-001 bis TEST-003 | Struktur-Fehler stoppt Paketbau; offene Belege bleiben offen |
 | Review-Segmentierung | jede Datei genau einmal in einer der vier Gruppen A–D | Paketbau stoppen |
 | Reproduzierbarkeit | gleiches Quellpaket ergibt dasselbe ZIP; SHA-256 alle Dateien geprüft | Paketbau stoppen |
+| Echte Tastaturbedienung | Chrome-Diagnoseschnittstelle sendet Tab, Umschalt+Tab und Eingabetaste; Fokusreihenfolge und Bildschirmwechsel werden geprüft | Prüfung fehlgeschlagen |
+| Entpacktes Vorabnahme-Paket | Alle Python- und JavaScript-Tests laufen nochmals aus dem entpackten ZIP; lokale HTML-Verweise sind enthalten | Prüfung fehlgeschlagen |
 | Abnahmebericht | `REVIEW_STATUS.json`, Manifest und konkrete offene Freigaben im ZIP | Paketbau stoppen |
 
 **Neue verbindliche Gruppierung:** [23_C0_REVIEW_SEGMENTIERUNG.md](23_C0_REVIEW_SEGMENTIERUNG.md) und die maschinenlesbare Datei `release/review-segments.json`. Vier separate Prüfabschnitte, aber weiterhin eine gemeinsame formelle Gesamtfreigabe.
@@ -33,7 +35,7 @@
 - [ ] Exportdateien wirklich herunterladen und mit der Dokumentation vergleichen.
 - [ ] Prüfen, dass alle nicht belegten Originalaussagen weiterhin deutlich als Entwurf erkennbar sind.
 
-**Wichtig:** Automatisch erzeugte Screenshots sind *Bildbelege einer Browserausführung*, aber noch keine unterschriebene menschliche Sichtabnahme.
+**Wichtig:** Automatisierte Tastaturbefehle sind ein eigenständiger technischer Nachweis, aber kein vollständiger manueller Barrierefreiheitsnachweis. Automatisch erzeugte Screenshots sind *Bildbelege einer Browserausführung*, aber noch keine unterschriebene menschliche Sichtabnahme.
 
 ## C. Fachliche, rechtliche und organisatorische Freigaben – vorerst offen
 
