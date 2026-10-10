@@ -18,7 +18,9 @@ data/contract.json  (einziger Forschungsvertrag; Quelle/Wahrheitsstatus)
 prototype/navigation.mjs    reine Navigation / Entwurfszustände
        │
        ▼
-prototype/app.mjs           DOM-Anzeige + verständliche Bedienhinweise
+prototype/app.mjs           Datenladen + Klick-/Fehlersteuerung
+prototype/ui/render.mjs     DOM-Darstellung, keine Fachentscheidungen
+prototype/ui/texts.de.mjs   ausschließlich deutsche Oberflächentexte
        │
        ▼
 prototype/index.html        semantische Grundstruktur
@@ -94,6 +96,8 @@ node --test prototype/tests/*.test.mjs
 ```
 
 Node.js wird **nur für automatische JavaScript-Tests**, nicht zum Starten der Oberfläche benötigt.
+
+**Versions- und Sammelabnahme-Regelwerk:** [20_GEBUENDELTE_VORABNAHME.md](20_GEBUENDELTE_VORABNAHME.md). Die automatisierte Prüfkette ergänzt die reinen Strukturtests um reproduzierbare ZIP-Pakete und einen Headless-Chrome-Start auf Desktop- und Mobilformat; die fachliche Entscheidung bleibt gesondert.
 
 ## 8. Grenzen und nächste Entscheidung
 
