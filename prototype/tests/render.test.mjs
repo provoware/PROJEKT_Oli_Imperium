@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
 import { getPilotCard } from '../navigation.mjs';
-import { renderLoadFailure, renderPilotControls, renderPilotScreen } from '../ui/render.mjs';
+import { renderLoadFailure, renderLoadingState, renderPilotControls, renderPilotScreen } from '../ui/render.mjs';
 
 const contract = JSON.parse(readFileSync(new URL('../../data/contract.json', import.meta.url), 'utf8'));
 
@@ -79,6 +79,12 @@ describe('HTML-Ansicht: Trennung von Forschungsdaten, Texten und DOM', () => {
     assert.deepEqual(selected, ['to-map', 'to-office']);
   });
 
+  it('zeigt beim Laden ausschließlich einen nicht-interaktiven Status an', () => {
+    const loading = renderLoadingState(fakeDocument);
+    assert.equal(loading.tagName, 'p');
+    assert.match(loading.textContent, /nicht verfügbar/);
+    assert.equal(findByTag(loading, 'button').length, 0);
+  });
   it('zeigt bei fehlenden Daten verständlichen Text an', () => {
     const message = renderLoadFailure(fakeDocument);
     assert.equal(message.tagName, 'p');
