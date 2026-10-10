@@ -62,6 +62,8 @@ def validate(data: dict) -> list[str]:
                 errors.append(f"{ident}: title/text fehlt.")
             if kind in STATUSES and item.get("status") not in STATUSES[kind]:
                 errors.append(f"{ident}: unbekannter Status.")
+            if kind == "rules" and item.get("status") == "approved" and not item.get("source_ids"):
+                errors.append(f"{ident}: freigegebene Regel benötigt source_ids.")
             if kind == "sources":
                 if item.get("type") not in SOURCE_TYPES: errors.append(f"{ident}: unzulässiger Quellentyp.")
                 if not isinstance(item.get("url"), str) or not item["url"].startswith("https://"):
@@ -74,6 +76,8 @@ def validate(data: dict) -> list[str]:
                     if ref.get("status") != "verified":
                         errors.append(f"{ident}: Originaltest kann ohne verifizierte Referenz nicht bestanden sein.")
                     if not item.get("evidence"): errors.append(f"{ident}: bestandener Originaltest benötigt evidence.")
+                    if not item.get("rule_ids"):
+                        errors.append(f"{ident}: bestandener Originaltest benötigt verknüpfte rule_ids.")
             if kind == "questions" and item.get("owner") not in {"A", "B"}:
                 errors.append(f"{ident}: owner muss A oder B sein.")
     expected_refs = {

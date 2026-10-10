@@ -42,14 +42,30 @@ class TestContract(unittest.TestCase):
         d = base()
         d["reference"].update({"status": "verified", "verified_run": True,
                                 "image_sha256": "a" * 64, "emulator_version": "VICE-Test"})
+        d["sources"] = [{"id": "SRC-1", "title": "Versuch", "type": "emulator", "url": "https://example.org/test"}]
+        d["rules"] = [{"id": "REGEL-1", "title": "Getestete Regel", "status": "approved", "source_ids": ["SRC-1"]}]
         d["tests"] = [
             {"id": "TEST-1", "title": "Eins", "kind": "original", "mandatory": True,
-             "weight": 3, "status": "passed", "evidence": "Versuch-1"},
+             "weight": 3, "status": "passed", "evidence": "Versuch-1", "rule_ids": ["REGEL-1"]},
             {"id": "TEST-2", "title": "Zwei", "kind": "original", "mandatory": True,
-             "weight": 1, "status": "not_run"}
+             "weight": 1, "status": "not_run", "rule_ids": ["REGEL-1"]}
         ]
         self.assertEqual(validate(d), [])
         self.assertEqual(progress(d)["Bestätigte gewichtete Originaltreue"], "75.0% (3/4)")
+
+    def test_approved_rule_needs_source(self):
+        d = base()
+        d["rules"] = [{"id": "REGEL-1", "title": "Ohne Quelle", "status": "approved"}]
+        self.assertTrue(any("benötigt source_ids" in e for e in validate(d)))
+
+    def test_passed_original_needs_rule_link(self):
+        d = base()
+        d["reference"].update({"status": "verified", "verified_run": True,
+                               "image_sha256": "a" * 64, "emulator_version": "VICE-Test"})
+        d["tests"] = [{"id": "TEST-1", "title": "Ohne Regel", "kind": "original",
+                       "mandatory": True, "weight": 1, "status": "passed",
+                       "evidence": "Versuch-1"}]
+        self.assertTrue(any("verknüpfte rule_ids" in e for e in validate(d)))
 
     def test_bad_reference_hash(self):
         d = base()
