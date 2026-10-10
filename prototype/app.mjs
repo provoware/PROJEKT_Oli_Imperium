@@ -1,5 +1,6 @@
 import { INITIAL_SCREEN, availablePilotActions, getPilotCard, navigatePilot } from './navigation.mjs';
-import { renderLoadFailure, renderLoadingState, renderPilotControls, renderPilotScreen } from './ui/render.mjs';
+import { renderLoadFailure, renderLoadingState, renderPilotControls, renderPilotScreen, renderPilotTraceSteps } from './ui/render.mjs';
+import { appendPilotTrace, createPilotTrace, serializePilotTrace } from './pilot-trace.mjs';
 import { UI_TEXT } from './ui/texts.de.mjs';
 
 /**
@@ -11,13 +12,29 @@ const view = document.querySelector('#pilot-view');
 const status = document.querySelector('#pilot-status');
 const retry = document.querySelector('#reload-contract');
 const versionLabel = document.querySelector('#c0-version');
+const traceList = document.querySelector('#pilot-trace-list');
+const traceDownload = document.querySelector('#download-trace');
+const traceTitle = document.querySelector('#trace-title');
+const traceDescription = document.querySelector('.trace-note');
 
-if (!controls || !view || !status || !retry || !versionLabel) {
+if (!controls || !view || !status || !retry || !versionLabel ||
+    !traceList || !traceDownload || !traceTitle || !traceDescription) {
   throw new Error('HTML-Testbasis: erforderliche Oberflächenelemente fehlen.');
 }
 
 let contract = null;
 let currentScreen = INITIAL_SCREEN;
+let pilotTrace = null;
+traceTitle.textContent = UI_TEXT.traceTitle;
+traceDescription.textContent = UI_TEXT.traceDescription;
+traceDownload.textContent = UI_TEXT.traceDownload;
+
+function showTrace() {
+  traceList.replaceChildren();
+  traceDownload.disabled = !pilotTrace;
+  if (pilotTrace) traceList.append(renderPilotTraceSteps(document, pilotTrace));
+}
+
 
 function showScreen() {
   const card = getPilotCard(contract, currentScreen);
@@ -28,8 +45,10 @@ function showScreen() {
       status.textContent = result.error;
       return;
     }
+    pilotTrace = appendPilotTrace(pilotTrace, currentScreen, action);
     currentScreen = result.screen;
     showScreen();
+    showTrace();
     status.textContent = UI_TEXT.navigationPrefix + currentScreen + UI_TEXT.navigationSuffix;
     view.querySelector('h2')?.focus();
   }));
@@ -43,6 +62,8 @@ async function readJson(relativeUrl) {
 
 async function reload() {
   retry.disabled = true;
+  pilotTrace = null;
+  showTrace();
   controls.replaceChildren();
   // Niemals den Inhalt einer alten Datenversion als neue Ansicht ausgeben.
   view.setAttribute('aria-busy', 'true');
@@ -60,10 +81,13 @@ async function reload() {
       throw new Error('C0-Versions- oder Datenvertrag stimmt nicht überein.');
     }
     getPilotCard(candidate, INITIAL_SCREEN);
+    const newTrace = createPilotTrace(config.version);
     contract = candidate;
     currentScreen = INITIAL_SCREEN;
+    pilotTrace = newTrace;
     versionLabel.textContent = UI_TEXT.versionPrefix + config.version;
     showScreen();
+    showTrace();
     status.textContent = UI_TEXT.ready;
   } catch (error) {
     contract = null;
@@ -75,6 +99,28 @@ async function reload() {
     retry.disabled = false;
   }
 }
+
+
+/** Export erst durch ausdrücklichen Klick, niemals in Browser-Speicher. */
+function downloadTrace() {
+  if (!pilotTrace) return;
+  try {
+    const text = serializePilotTrace(pilotTrace);
+    const payload = new Blob([text], { type: 'application/json;charset=utf-8' });
+    const linkUrl = URL.createObjectURL(payload);
+    const link = document.createElement('a');
+    link.href = linkUrl;
+    link.download = 'oli-imperium-c0-' + pilotTrace.preview_version + '-navigationstest.json';
+    link.click();
+    // Einige Browser lesen die Datei nach Ende des Click-Handlers aus.
+    setTimeout(() => URL.revokeObjectURL(linkUrl), 1000);
+    status.textContent = UI_TEXT.traceExported;
+  } catch {
+    status.textContent = UI_TEXT.traceExportError;
+  }
+}
+
+traceDownload.addEventListener('click', downloadTrace);
 
 retry.addEventListener('click', () => { void reload(); });
 void reload();
