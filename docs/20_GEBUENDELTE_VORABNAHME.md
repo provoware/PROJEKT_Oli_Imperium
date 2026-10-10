@@ -26,7 +26,7 @@ Ein Operator darf schreiben, Forschende/Prüfer kontrollieren getrennt. Die offe
 
 1. **Wissenschaftliche Dokumentation**: derzeit `3.0` (kann sich ändern, ohne Softwareversion zu erhöhen).
 2. **Forschungsdatenvertrag**: `data/contract.json.schema_version = 1.0` (strukturelle Inkompatibilität benötigt ausdrücklich dokumentierte Migration).
-3. **HTML-Testbasis C0**: `release/c0-version.json.version = 0.1.0-alpha.7`.
+3. **HTML-Testbasis C0**: `release/c0-version.json.version = 0.1.0-alpha.8`.
 
 C0 verwendet das Schema `HAUPT.NEBEN.KORREKTUR-STUFE.NUMMER` (SemVer für Vorabversionen).
 
@@ -37,7 +37,7 @@ C0 verwendet das Schema `HAUPT.NEBEN.KORREKTUR-STUFE.NUMMER` (SemVer für Vorabv
 - `0.1.0-alpha.5`: TEST-ID-basierte Original-Vergleichsvorlage (ohne Originalbelege), mobiler Pilot vor Forschungsseitenleiste, erweiterte Browsernachweise und eigenständiger Prüfstatus im ZIP.
 - `0.1.0-alpha.6`: geprüfte, leere C64-Aufnahmeakte und Validator, vier dateivollständige PR-Review-Gruppen, erweiterte 150–200-%-Chrome-/Fokusmatrix und vollständige Python-Prüfdateien im ZIP.
 - `0.1.0-alpha.7`: Browser-Tastaturprüfung mit echten Tasten, separat erneut getestetes ZIP, vollständig mitgelieferte HTML-Verweise und verlässliche Fehlerweitergabe.
-- `0.1.0-beta.1`: gewünschter Umfang ist technisch weitgehend fertig; Schwerpunkt liegt auf Fehlerbehebung und Testfällen.
+- `0.1.0-alpha.8`: technischer C0-Funktionsumfang maschinenlesbar eingefroren, vollständige Protokollintegrität für beide JSON-Ausgaben und doppelten Exportcode konsolidiert; **keine** Fachfreigabe.\n- `0.1.0-beta.1`: gewünschter Umfang ist technisch weitgehend fertig; Schwerpunkt liegt auf Fehlerbehebung und Testfällen.
 - `0.1.0-rc.1`: **Kandidat zur gesammelten Abnahme**; keine ungeprüften Erweiterungen mehr, nur Fehlerbehebungen.
 - `0.1.0`: nur wenn technische, rechtliche, fachliche und organisatorische Freigaben vorliegen; eine technische Forschungsvorschau ist deshalb **keine** Freigabe einer echten Spielrekonstruktion.
 - `1.0.0`: **nicht** aus rein technischer Testquote ableiten; Bedarf vollständiger, gesonderter Produktdefinition für Spielnachbau C.
@@ -61,7 +61,7 @@ prototype/index.html                ← semantische HTML-Grundstruktur
 prototype/styles.css                ← Farben, Raster, responsive Darstellung
 prototype/tests/                    ← technische Tests, kein Originalbeweis
 release/c0-version.json             ← eigenständige Softwareversion
-release/approvals.json              ← sichtbare, zunächst NICHT erteilte Freigaben
+release/approvals.json              ← sichtbare, zunächst NICHT erteilte Freigaben\nrelease/c0-scope.json               ← verbindlicher technischer Funktionsumfang, keine Freigabe
 tools/check_c0_release.py           ← Paket-/Version-/Integritätsprüfung
 ```
 
@@ -103,7 +103,7 @@ Pflicht vor einer technischen C0-Vorschau:
 10. Die CI-Mobilbilder anhand realer Screenshots prüfen; auf schmalen Bildschirmen müssen der Pilot und sein erster Bedienknopf vor der langen Forschungsseitenleiste sichtbar sein. 
 11. Der interne Vorabnahmebericht `REVIEW_STATUS.json` muss die Freigaben als offen ausweisen. Korrekte Test-IDs in der Vergleichsvorlage ersetzen keine Emulatorbeobachtungen.
 
-**Verbindliche Begleitdokumente:** [21_C0_ORIGINALVERGLEICH.md](21_C0_ORIGINALVERGLEICH.md) und [22_C0_VORABNAHMEBOGEN.md](22_C0_VORABNAHMEBOGEN.md).
+**Fixierter technischer C0-Umfang:** [24_C0_TECHNISCHER_UMFANG.md](24_C0_TECHNISCHER_UMFANG.md). Erlaubt bleiben nur Fehlerbehebung, Sicherheit, Barrierefreiheit, Tests und Dokumentation.\n\n**Verbindliche Begleitdokumente:** [21_C0_ORIGINALVERGLEICH.md](21_C0_ORIGINALVERGLEICH.md) und [22_C0_VORABNAHMEBOGEN.md](22_C0_VORABNAHMEBOGEN.md).
 
 Die GitHub-Automatik darf erfolgreiches Paketbauen als **„technische Struktur geprüft“** melden, niemals als „historische Wahrheit bestätigt“ oder „veröffentlichungsbereit“. Das Ergebnis der menschlichen Sichtprüfung darf nicht fingiert werden.
 
