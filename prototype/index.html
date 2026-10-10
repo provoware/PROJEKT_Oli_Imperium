@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="description" content="Wissenschaftliches HTML-Testlabor für den unbestätigten Navigationsentwurf zu Oil Imperium auf dem C64.">
+  <title>Oli Imperium · Forschungs- und HTML-Testbasis</title>
+  <link rel="stylesheet" href="./styles.css">
+  <script type="module" src="./app.mjs"></script>
+</head>
+<body>
+  <a class="skip-link" href="#pilot-view">Direkt zur Testansicht springen</a>
+  <div class="page">
+    <header class="site-header">
+      <div class="brandline">
+        <p class="eyebrow">PROVOWARE · PROJEKT OLI IMPERIUM</p>
+        <p class="stage">FORSCHUNGS-PROTOTYP · KEIN SPIELNACHBAU</p>
+      </div>
+      <h1>Vom C64-Büro zur Weltkarte</h1>
+      <p class="lead">Interaktive Testbasis für die Arbeiten A und B. Die gewählten Übergänge sind Architekturvorschläge – nicht die bestätigte Bedienung des Originals.</p>
+    </header>
+    <div class="layout">
+      <aside class="side-panel" aria-label="Projektstatus und Erklärung">
+        <h2>Forschungsstand</h2>
+        <p class="warning">⚠️ Originalreferenz noch nicht im Emulator bestätigt.</p>
+        <p>Die vorhandene Navigation beruht auf offenen Regelkarten und Sekundärquellen. Das Original könnte sich anders verhalten.</p>
+        <h3>Was kann ich hier testen?</h3>
+        <ul>
+          <li>Logische Bildschirmwechsel (MOD-001)</li>
+          <li>Darstellung von Regel- und Quellen-IDs</li>
+          <li>Verständliche Hinweise bei offenen Fragen</li>
+          <li>Bedienung per Tastatur und Smartphone</li>
+        </ul>
+        <h3>Was ist ausdrücklich nicht enthalten?</h3>
+        <p>Kein authentisches C64-Bild, keine Joystick-Simulation, keine Ölproduktion und kein wirtschaftliches Spielmodell.</p>
+        <p><a href="../docs/15_PILOT_01_BUERO_WELTKARTE.md">Wissenschaftlicher Pilotplan</a></p>
+        <p><a href="../docs/16_PILOT_01_UEBERGABE_A_B.md">Übergabevertrag A → B</a></p>
+      </aside>
+      <main class="main-panel">
+        <div class="panel-heading">
+          <h2>Technischer Navigationspilot</h2>
+          <button id="reload-contract" type="button">Forschungsdaten neu laden</button>
+        </div>
+        <p id="pilot-status" class="status" role="status" aria-live="polite">Forschungsdaten werden geladen …</p>
+        <nav id="pilot-controls" class="controls" aria-label="Entwurfsnavigation"></nav>
+        <article id="pilot-view" tabindex="-1" aria-label="Aktuelle Forschungsansicht">
+          <p>Die Ansicht wird aus <code>data/contract.json</code> aufgebaut.</p>
+        </article>
+      </main>
+    </div>
+    <footer>
+      <p>Stand: technische Testoberfläche · <strong>keine Aussage über historische Originaltreue</strong> · keine externen Bibliotheken.</p>
+    </footer>
+  </div>
+</body>
+</html>
