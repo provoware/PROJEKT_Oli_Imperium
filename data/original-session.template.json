@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "kind": "c64-original-session-record",
+  "reference_status": "not_recorded",
+  "source_id": "SRC-004",
+  "edition_description": null,
+  "original_files": [
+    {
+      "disk_side": "s0",
+      "format": "g64",
+      "sha256": null,
+      "bytes": null
+    },
+    {
+      "disk_side": "s1",
+      "format": "g64",
+      "sha256": null,
+      "bytes": null
+    }
+  ],
+  "emulator": {
+    "name": "VICE",
+    "version": null,
+    "model": "C64",
+    "video_standard": "PAL"
+  },
+  "legal_use_basis": null,
+  "test_observations": [
+    {
+      "test_id": "TEST-001",
+      "status": "not_run",
+      "observed_navigation": [],
+      "screen_captures": [],
+      "description": null
+    },
+    {
+      "test_id": "TEST-002",
+      "status": "not_run",
+      "observed_navigation": [],
+      "screen_captures": [],
+      "description": null
+    },
+    {
+      "test_id": "TEST-003",
+      "status": "not_run",
+      "observed_navigation": [],
+      "screen_captures": [],
+      "description": null
+    }
+  ],
+  "research_notes": "Leere, noch nicht überprüfte Aufnahmeakte. Keine originalen Programmdaten, keine Screenshots und keine personenbezogenen Angaben enthalten."
+}
