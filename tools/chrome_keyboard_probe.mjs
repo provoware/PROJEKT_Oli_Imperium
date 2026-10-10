@@ -70,8 +70,8 @@ async function press(key) {
   const args = { type: 'keyDown', key, code, windowsVirtualKeyCode: virtualKey,
     nativeVirtualKeyCode: virtualKey };
   if (key === 'Enter') {
-    args.text = '\\r';
-    args.unmodifiedText = '\\r';
+    args.text = String.fromCharCode(13);
+    args.unmodifiedText = String.fromCharCode(13);
   }
   await command('Input.dispatchKeyEvent', args);
   await command('Input.dispatchKeyEvent', { ...args, type: 'keyUp' });
