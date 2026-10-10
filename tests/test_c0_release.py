@@ -49,6 +49,21 @@ class TestC0ReviewGate(unittest.TestCase):
         self.assertFalse(result["technical_structure_ok"])
         self.assertTrue(any("rights_review" in error for error in result["errors"]))
 
+    def test_partially_filled_original_template_is_never_published(self):
+        self.modify_json("data/original-session.template.json",
+                         lambda d: d["original_files"][0].update(sha256="a" * 64))
+        report = inspect(self.root)
+        self.assertFalse(report["technical_structure_ok"])
+        self.assertTrue(any("vollständig unbelegt" in item for item in report["errors"]))
+
+    def test_malformed_original_capture_template_fails_with_report(self):
+        (self.root / "data/original-session.template.json").write_text(
+            "[]", encoding="utf-8",
+        )
+        report = inspect(self.root)
+        self.assertFalse(report["technical_structure_ok"])
+        self.assertTrue(report["errors"])
+
     def test_missing_required_file_stops_packaging(self):
         (self.root / "prototype/app.mjs").unlink()
         self.assertFalse(inspect(self.root)["technical_structure_ok"])
