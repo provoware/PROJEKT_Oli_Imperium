@@ -13,6 +13,8 @@
         "CONTRIBUTING.md",
         "data/**",
         "docs/03_*",
+        "docs/15_*",
+        "docs/16_*",
         "docs/05_*",
         "docs/18_*",
         "docs/21_*",
