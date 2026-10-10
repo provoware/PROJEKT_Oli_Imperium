@@ -36,7 +36,7 @@ class ReviewSegmentsTests(unittest.TestCase):
         self.assertTrue(any("Mehrfach" in error for error in report["errors"]))
 
     def test_missing_and_duplicate_file_block_review_bundle(self):
-        self.assertFalse(inspect_review_segments(SEGMENTS, ARCHIVE_FILES[:-1], VERSION)["valid"])
+        self.assertFalse(inspect_review_segments(SEGMENTS, tuple(path for path in ARCHIVE_FILES if path != "README.md"), VERSION)["valid"])
         self.assertFalse(inspect_review_segments(SEGMENTS, (*ARCHIVE_FILES, ARCHIVE_FILES[0]), VERSION)["valid"])
 
     def test_incorrect_version_and_fake_approval_are_rejected(self):
