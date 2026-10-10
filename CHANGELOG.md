@@ -1,5 +1,15 @@
 # Änderungsprotokoll
 
+## C0 0.1.0-alpha.4 – reproduzierbare technische Navigationsprotokolle (unveröffentlicht)
+
+- Eigenständiges `prototype/pilot-trace.mjs`: unveränderliche, deterministische Schrittfolge für den technischen HTML-Entwurf, ohne Browserabhängigkeit oder Forschungsdatenänderung.
+- Begrenzung auf 200 protokollierte Schritte, fortlaufende Schrittzählung und transparente Kennzeichnung ausgelassener älterer Schritte.
+- Sichtbares Protokoll mit Bildschirm-IDs und rein technischen Aktionen sowie bewusst auslösbarer JSON-Export; weder automatische Datenspeicherung noch historische Originalbehauptung.
+- Neue Positiv- und Negativtests für identische Protokolle, unzulässige Übergänge, veränderte Vorgängerzustände, Prototyp-Eigenschaften und lange Sitzungen.
+- Browser-Ablauftest prüft echten JSON-Export, Sitzungsneustart und Unterdrückung veralteter Protokolle bei Ladefehlern.
+- Navigation lehnt nun auch vererbte JavaScript-Objekteigenschaften als ungültige Aktionsnamen ab.
+- Versions- und Abnahmedateien auf `0.1.0-alpha.4` aktualisiert; vier Freigaben bleiben ausstehend.
+
 ## C0 0.1.0-alpha.3 – Schutz beim Datenladen und vergrößerter Darstellung (unveröffentlicht)
 
 - Inhaltssicherheitsrichtlinie im HTML-Prototyp: Seitenskripte, Formatvorlagen und Forschungsdatenzugriffe nur aus derselben Herkunft, keine eingebetteten Fremdobjekte; technisch gegen unerwartete Skriptausführung abgesichert (keine Garantie gegen alle Sicherheitsprobleme).
