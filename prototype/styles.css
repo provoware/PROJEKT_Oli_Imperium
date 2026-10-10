@@ -57,6 +57,18 @@ li { margin-bottom: 0.3rem; }
 footer { padding: 1rem 0; color: var(--muted); }
 @media (max-width: 750px) {
   .layout { grid-template-columns: 1fr; }
+  .page { padding: 0.75rem; }
+  .site-header { padding: 0.4rem 0 0.7rem; }
+  .brandline { gap: 0.2rem 0.6rem; }
+  .brandline p { margin: 0.15rem 0; }
+  .site-header h1 { font-size: clamp(1.65rem, 7vw, 2.15rem); margin: 0.35rem 0; }
+  .site-header .lead { font-size: 0.92rem; line-height: 1.45; margin: 0.35rem 0; }
+  .layout { gap: 0.75rem; padding-top: 0.65rem; }
+  .main-panel { padding: 0.85rem; }
+  .main-panel .panel-heading { gap: 0.4rem; }
+  .main-panel .panel-heading h2 { font-size: 1.15rem; }
+  .main-panel .status { padding: 0.55rem 0.7rem; margin: 0.6rem 0; }
+  .controls { margin: 0.55rem 0; }
   /* Mobil zuerst die bedienbare Testoberfläche, Forschungserklärung danach. */
   .main-panel { order: -1; }
   .data-row { grid-template-columns: 1fr; gap: 0; }
