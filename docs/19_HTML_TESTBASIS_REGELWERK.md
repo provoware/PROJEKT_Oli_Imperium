@@ -16,6 +16,7 @@ data/contract.json  (einziger Forschungsvertrag; Quelle/Wahrheitsstatus)
        │ lesender Zugriff
        ▼
 prototype/navigation.mjs    reine Navigation / Entwurfszustände
+prototype/pilot-trace.mjs   begrenzte, reproduzierbare Testprotokolle
        │
        ▼
 prototype/app.mjs           Datenladen + Klick-/Fehlersteuerung
@@ -29,10 +30,11 @@ prototype/styles.css        Erscheinungsbild und Barrierefreiheit
 
 - **Kein dupliziertes Datenmodell:** Screens, Regeln, Quellen, Fragen und Status kommen stets aus `data/contract.json`.
 - **Keine Wirtschaftssimulation:** Navigation verändert keine Preise, Reserven, Besitzer oder Spielzüge.
+- **Protokollierung ohne Scheingenauigkeit:** Schritte werden ausschließlich als technische Entwurfsübergänge mit fortlaufenden Nummern erfasst; höchstens 200 Schritte bleiben im Speicher. Kein Zeitstempel, keine personenbezogenen Daten oder automatische Veröffentlichung.
 - **Keine angeblichen Originalsteuerungen:** Klickschaltflächen sind technische Testeingaben von B, **keine C64-Tastenbehauptungen**.
 - **Kein Originalmaterial eingebaut:** Keine ROMs, Disketten, Original-Screenshots, Texte oder Musik ohne geklärte Nutzungsrechte.
 - **Keine externe Laufzeitabhängigkeit:** HTML, CSS und JavaScript liegen lokal; externe Quellen öffnen sich erst beim bewussten Anklicken.
-- **Keine Speicherung:** Der Pilot schreibt weder Forschungsdaten noch Spielstände, Cookies oder lokale Speicherdaten.
+- **Keine automatische Speicherung:** Der Pilot schreibt weder Forschungsdaten noch Spielstände, Cookies oder lokale Speicherdaten. Ein Navigationsprotokoll kann durch bewussten Klick als JSON-Datei auf dem eigenen Rechner exportiert werden; es ist kein historischer Originalbeleg.
 - **Kein Eingabe-HTML:** Dynamische Inhalte werden als Text in DOM-Knoten eingesetzt (`textContent`), nicht als `innerHTML`.
 - **Kein zweites Spielsystem:** Nach Freigabe einzelner Regelpakete kann ein späteres Modul entstehen; der Pilot zeigt dieses über eine schmale Schnittstelle, statt Regeln neu zu implementieren.
 
@@ -50,7 +52,7 @@ prototype/styles.css        Erscheinungsbild und Barrierefreiheit
 
 Erste logische Zustände: `SCREEN-001` Büro, `SCREEN-002` Weltkarte, `SCREEN-003` Claim-Information. Die drei Schritte sowie Rückschritte sind ein **von B vorgeschlagener Navigationsautomat**. Besonders `SCREEN-003` könnte im Original eine Teilansicht sein (`Q-002`); die Rückbedienung ist ungeklärt (`Q-003`). Alle Schaltflächen tragen deshalb das Wort **Entwurf**.
 
-Die Anzeige nennt bei jedem Zustand **Bildschirm-ID, Regel-IDs, Quellen-IDs, Status, offene Fragen**. Fehlt eine erforderliche Datei oder ist der Vertrag beschädigt, stoppt der Pilot mit einer verständlichen Fehlermeldung. Keine Ersatzfakten.
+Die Anzeige nennt bei jedem Zustand **Bildschirm-ID, Regel-IDs, Quellen-IDs, Status, offene Fragen**. Daneben erscheint die nachvollziehbare technische Testfolge, die als JSON exportiert werden kann; eine neue Datenladung beginnt eine neue Testsitzung. Fehlt eine erforderliche Datei oder ist der Vertrag beschädigt, stoppt der Pilot mit einer verständlichen Fehlermeldung. Keine Ersatzfakten.
 
 ## 5. Entwicklungsprozess – parallel, aber ohne gegenseitige Blockade
 
