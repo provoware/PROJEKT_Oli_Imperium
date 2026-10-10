@@ -1,0 +1,12 @@
+# Q-[Nummer] – [konkrete Frage]
+- Sender: A / B
+- Empfänger: A / B
+- Regel-/Modul-/Screen-/Test-IDs:
+- Exakt unbekannte Information:
+- Warum wird die Antwort benötigt?
+- Minimal nötiger Beleg / technische Vorentscheidung:
+- Priorität: P0 / P1 / P2 / P3
+- Blockiert **nur**:
+- Parallel sinnvoll weiterführbar:
+- Antwort mit Beleg / Begründung:
+- Verbindliche Revision / Entscheidung:

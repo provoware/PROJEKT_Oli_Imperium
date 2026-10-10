@@ -1,0 +1,12 @@
+# TEST-[Nummer] – [Fall]
+- Zweck / welche Unsicherheit soll verschwinden?
+- Originalversion / Imagehash / Emulatorversion:
+- Regel- und Quellen-IDs:
+- Ausgangsdaten inkl. zufallsrelevanter Lage:
+- Genaue Eingaben und Reihenfolge:
+- Erwartung vor Ausführung:
+- Beobachtete Ergebnisse und Screens:
+- Toleranz / Messschwelle / Grenzfall:
+- Urteil: nicht ausgeführt / bestanden / abgewichen / offen
+- Nachweis / Datum / Ausführender:
+- Muss dieser Test wegen Änderung erneut laufen? Begründung:

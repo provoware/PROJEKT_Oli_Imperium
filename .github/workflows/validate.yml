@@ -1,0 +1,23 @@
+name: Projektkonsistenz
+on:
+  pull_request:
+    paths:
+      - 'data/**'
+      - 'tools/**'
+      - 'tests/**'
+      - '.github/workflows/validate.yml'
+  workflow_dispatch:
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Datenkontrakt prüfen
+        run: python3 tools/validate_project.py
+      - name: Negativ- und Grenztests
+        run: python3 -m unittest discover -s tests -v
