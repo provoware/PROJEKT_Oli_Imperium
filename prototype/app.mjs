@@ -66,6 +66,8 @@ async function readJson(relativeUrl) {
 
 async function reload() {
   retry.disabled = true;
+  // Keine alten Vertragsobjekte in einer neuen Sitzung weiterverwenden.
+  contract = null;
   pilotTrace = null;
   showTrace();
   controls.replaceChildren();
@@ -105,45 +107,46 @@ async function reload() {
 }
 
 
-/** Export erst durch ausdrücklichen Klick, niemals in Browser-Speicher. */
-function downloadTrace() {
+/**
+ * Ein gemeinsamer, bewusster JSON-Download statt zweier fast identischer Pfade.
+ * Der Inhalt wird vor dem Erstellen des Blob jeweils vollständig validiert.
+ */
+function exportJson(buildContent, suffix, successText, errorText) {
   if (!pilotTrace) return;
   try {
-    const text = serializePilotTrace(pilotTrace);
-    const payload = new Blob([text], { type: 'application/json;charset=utf-8' });
-    const linkUrl = URL.createObjectURL(payload);
-    const link = document.createElement('a');
-    link.href = linkUrl;
-    link.download = 'oli-imperium-c0-' + pilotTrace.preview_version + '-navigationstest.json';
-    link.click();
-    // Einige Browser lesen die Datei nach Ende des Click-Handlers aus.
-    setTimeout(() => URL.revokeObjectURL(linkUrl), 1000);
-    status.textContent = UI_TEXT.traceExported;
-  } catch {
-    status.textContent = UI_TEXT.traceExportError;
-  }
-}
-
-traceDownload.addEventListener('click', downloadTrace);
-function downloadComparisonPlan() {
-  if (!pilotTrace || !contract) return;
-  try {
-    const body = serializeReferenceComparisonPlan(pilotTrace, contract);
-    const blob = new Blob([body], { type: 'application/json;charset=utf-8' });
+    const content = buildContent();
+    const blob = new Blob([content], { type: 'application/json;charset=utf-8' });
     const address = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = address;
-    link.download = 'oli-imperium-c0-' + pilotTrace.preview_version + '-vergleichsvorlage.json';
-    link.click();
-    setTimeout(() => URL.revokeObjectURL(address), 1000);
-    status.textContent = UI_TEXT.comparisonExported;
+    try {
+      const link = document.createElement('a');
+      link.href = address;
+      link.download = 'oli-imperium-c0-' + pilotTrace.preview_version + '-' + suffix + '.json';
+      link.click();
+      // Datei wird u. U. erst nach Ende des Click-Handlers ausgelesen.
+      setTimeout(() => URL.revokeObjectURL(address), 1000);
+    } catch (error) {
+      URL.revokeObjectURL(address);
+      throw error;
+    }
+    status.textContent = successText;
   } catch {
-    status.textContent = UI_TEXT.comparisonExportError;
+    status.textContent = errorText;
   }
 }
 
-comparisonDownload.addEventListener('click', downloadComparisonPlan);
-
+traceDownload.addEventListener('click', () => {
+  exportJson(
+    () => serializePilotTrace(pilotTrace),
+    'navigationstest', UI_TEXT.traceExported, UI_TEXT.traceExportError,
+  );
+});
+comparisonDownload.addEventListener('click', () => {
+  if (!contract) return;
+  exportJson(
+    () => serializeReferenceComparisonPlan(pilotTrace, contract),
+    'vergleichsvorlage', UI_TEXT.comparisonExported, UI_TEXT.comparisonExportError,
+  );
+});
 
 retry.addEventListener('click', () => { void reload(); });
 void reload();
