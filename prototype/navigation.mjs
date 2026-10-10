@@ -1,3 +1,6 @@
+import { validatePilotContract } from './contract-guard.mjs';
+export { validatePilotContract } from './contract-guard.mjs';
+
 /**
  * PILOT-01 – Navigationsmodell der wissenschaftlichen HTML-Testbasis.
  * Ein Entwurf für Arbeit B, KEINE verifizierte C64-Eingabe- oder Spielregel.
@@ -31,45 +34,6 @@ export function getPilotCard(contract, screenId) {
   const questions = contract.questions.filter((q) => q.related_ids.includes(screenId) ||
     q.related_ids.some((id) => rules.some((rule) => rule.id === id)));
   return { screen, rules, sources, questions, reference: contract.reference };
-}
-
-export function validatePilotContract(value) {
-  if (!value || typeof value !== 'object' || value.schema_version !== '1.0' ||
-    !value.reference || typeof value.reference.status !== 'string') {
-    throw new Error('Unpassende oder fehlende Version des Forschungsdatenvertrags.');
-  }
-  for (const kind of ['screens', 'rules', 'sources', 'questions']) {
-    if (!Array.isArray(value[kind]) || value[kind].some((item) =>
-      !item || typeof item.id !== 'string' ||
-      typeof (item.title ?? item.text) !== 'string' ||
-      (kind !== 'sources' && typeof item.status !== 'string'))) {
-      throw new Error('Ungültige Forschungsdaten: ' + kind);
-    }
-  }
-  for (const screen of value.screens) {
-    if (!Array.isArray(screen.source_ids)) throw new Error('Bildschirm ohne Quellverweise.');
-  }
-  for (const rule of value.rules) {
-    if (!Array.isArray(rule.screen_ids) || !Array.isArray(rule.source_ids)) {
-      throw new Error('Regel ohne Bildschirm-/Quellverweise.');
-    }
-  }
-  for (const question of value.questions) {
-    if (!Array.isArray(question.related_ids)) throw new Error('Frage ohne Referenzverweise.');
-  }
-  const ids = new Set();
-  for (const kind of ['screens', 'rules', 'sources', 'questions']) {
-    for (const item of value[kind]) {
-      if (ids.has(item.id)) throw new Error('Doppelte Forschungs-ID: ' + item.id);
-      ids.add(item.id);
-    }
-  }
-  for (const screen of Object.keys(TRANSITIONS)) {
-    if (!value.screens.some((item) => item.id === screen)) {
-      throw new Error('Pilotbildschirm nicht im Datenvertrag vorhanden: ' + screen);
-    }
-  }
-  return true;
 }
 
 /** Erst die technikseitige Test-Navigation; das Original-Rückwegverhalten ist offen. */
