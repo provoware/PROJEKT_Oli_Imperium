@@ -36,7 +36,7 @@ ARCHIVE_FILES = (
     VERSION_FILE,
     APPROVALS_FILE,
 )
-SEMVER = re.compile(r"^0\\.(?:0|[1-9]\\d*)\\.(?:0|[1-9]\\d*)-(?:alpha|beta|rc)\\.(?:0|[1-9]\\d*)$")
+SEMVER = re.compile(r"^0\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)-(?:alpha|beta|rc)\.(?:0|[1-9]\d*)$")
 APPROVAL_FIELDS = ("technical_review", "scientific_scope_review", "rights_review", "maintainer_approval")
 
 
