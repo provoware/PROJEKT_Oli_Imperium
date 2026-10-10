@@ -22,15 +22,55 @@ export function createPilotTrace(version) {
 }
 
 /**
+ * Gemeinsamer Integritätscheck für Schreibpfad, JSON-Export und Vergleich.
+ * Validiert auch abgeschnittene Protokolle: Nach dem Abschneiden muss der
+ * erste noch vorhandene Schritt genau die Nummer omitted_steps besitzen.
+ * Dies bestätigt nur die technische Konsistenz, KEINE C64-Originaltreue.
+ */
+export function validatePilotTrace(trace) {
+  if (!trace || typeof trace !== 'object' || Array.isArray(trace) ||
+      trace.schema_version !== 1 || trace.kind !== PILOT_TRACE_KIND ||
+      trace.reference_verified !== false ||
+      typeof trace.preview_version !== 'string' ||
+      !/^0\\.\\d+\\.\\d+-(?:alpha|beta|rc)\\.\\d+$/.test(trace.preview_version) ||
+      !Number.isSafeInteger(trace.omitted_steps) || trace.omitted_steps < 0 ||
+      !Array.isArray(trace.steps) || trace.steps.length < 1 ||
+      trace.steps.length > PILOT_TRACE_LIMIT) {
+    throw new TypeError('Testprotokoll ist beschädigt oder nicht unterstützt.');
+  }
+  for (let index = 0; index < trace.steps.length; index += 1) {
+    const step = trace.steps[index];
+    if (!step || typeof step !== 'object' || Array.isArray(step) ||
+        !Number.isSafeInteger(step.sequence) ||
+        step.sequence !== trace.omitted_steps + index ||
+        typeof step.to !== 'string') {
+      throw new TypeError('Testprotokoll enthält ungültige Schritt- oder Zählerdaten.');
+    }
+    if (index === 0 && trace.omitted_steps === 0) {
+      if (step.from !== null || step.action !== 'start' ||
+          step.to !== INITIAL_SCREEN) {
+        throw new TypeError('Testprotokoll beginnt nicht mit der festgelegten Startansicht.');
+      }
+    } else {
+      if (typeof step.from !== 'string' || typeof step.action !== 'string' ||
+          (index > 0 && trace.steps[index - 1].to !== step.from)) {
+        throw new TypeError('Testprotokoll enthält eine unterbrochene Bildschirmfolge.');
+      }
+      const transition = navigatePilot(step.from, step.action);
+      if (!transition.ok || transition.screen !== step.to) {
+        throw new TypeError('Testprotokoll enthält einen nicht vorgesehenen Übergang.');
+      }
+    }
+  }
+  return true;
+}
+
+/**
  * Leitet einen neuen, unabhängigen Zustand ab. Nur erlaubte Pilotaktionen
  * können in das Protokoll aufgenommen werden, selbst bei fehlerhaften Aufrufen.
  */
 export function appendPilotTrace(trace, from, action) {
-  if (!trace || trace.kind !== PILOT_TRACE_KIND || !Array.isArray(trace.steps) ||
-    trace.steps.length === 0 || trace.reference_verified !== false ||
-    !Number.isSafeInteger(trace.omitted_steps) || trace.omitted_steps < 0) {
-    throw new TypeError('Testprotokoll ist beschädigt oder nicht unterstützt.');
-  }
+  validatePilotTrace(trace);
   const previous = trace.steps[trace.steps.length - 1];
   if (!previous || previous.to !== from) {
     throw new Error('Der Ausgangsbildschirm stimmt nicht mit dem Testprotokoll überein.');
@@ -51,12 +91,7 @@ export function appendPilotTrace(trace, from, action) {
 
 /** Export enthält nur den nachvollziehbaren Entwurfsweg, keine Originalaussage. */
 export function serializePilotTrace(trace) {
-  if (!trace || trace.kind !== PILOT_TRACE_KIND || trace.reference_verified !== false ||
-    !Array.isArray(trace.steps) || trace.steps.length === 0 ||
-    !trace.steps.every((step) => Number.isSafeInteger(step.sequence) &&
-      typeof step.to === 'string' && typeof step.action === 'string')) {
-    throw new TypeError('Testprotokoll kann nicht sicher ausgegeben werden.');
-  }
+  validatePilotTrace(trace);
   return JSON.stringify({
     schema_version: 1,
     kind: PILOT_TRACE_KIND,
