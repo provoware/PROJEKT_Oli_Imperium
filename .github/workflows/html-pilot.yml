@@ -3,11 +3,13 @@ on:
   pull_request:
     paths:
       - 'prototype/**'
-      - 'data/contract.json'
+      - 'data/**'
       - 'docs/19_HTML_TESTBASIS_REGELWERK.md'
       - 'docs/20_GEBUENDELTE_VORABNAHME.md'
       - 'docs/21_C0_ORIGINALVERGLEICH.md'
       - 'docs/22_C0_VORABNAHMEBOGEN.md'
+      - 'docs/23_C0_REVIEW_SEGMENTIERUNG.md'
+      - 'docs/18_REFERENZKANDIDAT_C64_PAL.md'
       - 'release/**'
       - 'tools/**'
       - 'tests/**'
@@ -30,6 +32,11 @@ jobs:
         run: |
           python3 tools/validate_project.py
           python3 -m unittest discover -s tests -v
+      - name: Leere Originalaufnahme und vier Reviewgruppen nachweisbar prüfen
+        run: |
+          mkdir -p dist
+          python3 tools/validate_c64_capture.py > dist/c64-template-check.json
+          python3 tools/check_review_segments.py > dist/review-segments-check.json
       - name: JavaScript-Syntax prüfen
         run: |
           node --check prototype/navigation.mjs
@@ -126,6 +133,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: oli-imperium-c0-review
-          path: dist/c0-review.zip
+          path: |
+            dist/c0-review.zip
+            dist/c64-template-check.json
+            dist/review-segments-check.json
           if-no-files-found: error
           retention-days: 14
