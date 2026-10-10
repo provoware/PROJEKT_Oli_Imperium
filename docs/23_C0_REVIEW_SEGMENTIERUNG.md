@@ -1,6 +1,6 @@
 # 23 · C0-Review in vier verbindliche, getrennte Prüfabschnitte
 
-**Gültig ab:** C0 0.1.0-alpha.7 · **Status:** technischer Entwurf, keine Freigabe.  
+**Gültig ab:** C0 0.1.0-alpha.8 · **Status:** technischer Entwurf, keine Freigabe.  
 **Zweck:** Der inzwischen große PR #7 bleibt prüfbar, ohne die bereits versionierte Entwicklung in unverbundene Spielnachbauzweige zu zerlegen.
 
 ## Verfahren
@@ -51,7 +51,7 @@ Das interne ZIP enthält die ausführbare HTML-Testbasis, **alle im Paket benutz
 
 Das Review-Verzeichnis ist **kein** GitHub-Release; dafür fehlen bestätigte Nutzungsrechte, Originalvergleiche und formelle Genehmigungen. Erst nach kontrolliertem Fachreview kann aus `0.1.0-alpha.N` ein klar abgegrenzter `beta`- oder `rc`-Kandidat entstehen. Eigene Versionsnummer für C0, unabhängig von Forschungs-Datenvertrag 1.0 und Dokumentation 3.0.
 
-## Regel für neue Features
+**Verbindliche Funktionsfixierung:** [24_C0_TECHNISCHER_UMFANG.md](24_C0_TECHNISCHER_UMFANG.md) mit maschinenlesbarer Liste in `release/c0-scope.json`. Technisch eingefroren bedeutet nur, dass keine weiteren Spielfunktionen in C0 hinzugefügt werden. Die vier verantwortlichen Personen-/Fachfreigaben bleiben ausstehend.\n\n## Regel für neue Features
 
 Betroffene Gruppe, Regel-/TEST-ID, bereits bekannte Unsicherheit, konkrete negative und positive Testfälle **vor jeder neuen Arbeit benennen**. Kleine Commits sind gut; eine unstrukturierte PR-Abnahme ist es nicht. Änderungen an mindestens zwei Gruppen benötigen ausdrücklich beide Prüfvermerke. Auch ein vollständig grüner Techniklauf erteilt **keine** Freigabe.
 
