@@ -25,6 +25,8 @@ Start im Repository-Hauptordner: `python3 -m http.server 8000 --bind 127.0.0.1`,
 
 **Neu in C0 `0.1.0-alpha.7`:** Echte Chrome-Tastensteuerung mit Tab/Umschalt+Tab/Enter wird ohne zusätzliche npm-Pakete geprüft. Außerdem enthält das interne ZIP nun die beiden vom HTML direkt verlinkten wissenschaftlichen Dokumente. Nach dem Packen werden die Python- und JavaScript-Tests aus dem **entpackten** ZIP erneut ausgeführt; fehlende lokale HTML-Dateien verhindern die Paketfreigabe. Dies bleibt ein technischer Test, keine historische Original- oder menschliche Gesamtfreigabe.
 
+**C0 `0.1.0-alpha.8` – technischer Funktionsumfang für die gebündelte Vorabnahme eingefroren:** [Verbindliche Umfangsgrenze](docs/24_C0_TECHNISCHER_UMFANG.md) und [maschinenlesbarer Umfang](release/c0-scope.json). **Keine zusätzlichen Spielmerkmale** in C0. Die Protokollprüfung kontrolliert jetzt vor jedem Export sowie vor der Vergleichsvorlage vollständige, nummerierte technische Übergänge; beide JSON-Downloads nutzen denselben gesicherten Dateiausgabeweg. Die C64-Originalbeobachtungen und sämtliche wissenschaftlichen/rechtlichen Freigaben bleiben offen. „Eingefroren“ bedeutet **keine** Veröffentlichung oder Spieloriginaltreue.
+
 [Vergleichsvorlage und Originalbelege](docs/21_C0_ORIGINALVERGLEICH.md) · [Gesammelter Vorabnahmebogen](docs/22_C0_VORABNAHMEBOGEN.md).
 
 **Verbindlich:** [Regelwerk der parallelen HTML-Entwicklung](docs/19_HTML_TESTBASIS_REGELWERK.md) und [gebündelte Vorabnahme samt Versionierung](docs/20_GEBUENDELTE_VORABNAHME.md). Die HTML-Testbasis verwendet eine eigenständige Vorabversionskennung aus [`release/c0-version.json`](release/c0-version.json), getrennt von der wissenschaftlichen Dokumentationsversion 3.0.
