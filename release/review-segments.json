@@ -32,7 +32,11 @@
       "id": "B",
       "title": "HTML-Navigation, Darstellung und technische Protokolle",
       "patterns": [
-        "prototype/*.mjs",
+        "prototype/app.mjs",
+        "prototype/contract-guard.mjs",
+        "prototype/navigation.mjs",
+        "prototype/pilot-trace.mjs",
+        "prototype/reference-comparison.mjs",
         "prototype/*.html",
         "prototype/*.css",
         "prototype/ui/**"
