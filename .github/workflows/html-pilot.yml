@@ -111,6 +111,16 @@ jobs:
             exit 1
           fi
           grep -q 'BROWSER_C0_PASS' dist/browser-interactions.html
+      - name: Reale Tastatureingaben, Fokus und Mobilverhalten in Chrome prüfen
+        run: |
+          python3 -m http.server 8768 --bind 127.0.0.1 > /tmp/oli-c0-keyboard-http.log 2>&1 &
+          pid=$!
+          trap 'kill "$pid" 2>/dev/null || true' EXIT
+          sleep 2
+          browser="$(command -v google-chrome || command -v chromium || true)"
+          if [ -z "$browser" ]; then exit 1; fi
+          OLI_CHROME="$browser" OLI_C0_URL="http://127.0.0.1:8768/prototype/" \
+            node tools/chrome_keyboard_probe.mjs | tee dist/chrome-keyboard-check.txt
       - name: Browser-Belege als CI-Artefakt hinterlegen
         uses: actions/upload-artifact@v4
         with:
@@ -118,6 +128,7 @@ jobs:
           path: |
             dist/browser-rendered.html
             dist/browser-interactions.html
+            dist/chrome-keyboard-check.txt
             dist/browser-desktop.png
             dist/browser-mobile.png
             dist/browser-mobile-extended.png
@@ -129,12 +140,26 @@ jobs:
         run: |
           python3 tools/check_c0_release.py --package dist/c0-review.zip
           python3 tools/check_c0_release.py --verify dist/c0-review.zip
+          sha256sum dist/c0-review.zip | tee dist/c0-review.zip.sha256
+      - name: Entpacktes Prüfarchiv eigenständig und offline erneut testen
+        run: |
+          mkdir -p dist/unpacked
+          unzip -q dist/c0-review.zip -d dist/unpacked
+          version="$(python3 -c 'import json; print(json.load(open("release/c0-version.json"))["version"])')"
+          cd "dist/unpacked/oli-imperium-c0-${version}"
+          python3 tools/validate_project.py
+          python3 tools/validate_c64_capture.py
+          python3 tools/check_review_segments.py
+          python3 -m unittest discover -s tests -v
+          node --test prototype/tests/*.test.mjs
+          python3 tools/check_c0_release.py --verify "../../../c0-review.zip"
       - name: Internes Review-Paket als CI-Artefakt hinterlegen
         uses: actions/upload-artifact@v4
         with:
           name: oli-imperium-c0-review
           path: |
             dist/c0-review.zip
+            dist/c0-review.zip.sha256
             dist/c64-template-check.json
             dist/review-segments-check.json
           if-no-files-found: error
