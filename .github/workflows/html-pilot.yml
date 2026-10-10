@@ -113,6 +113,7 @@ jobs:
           grep -q 'BROWSER_C0_PASS' dist/browser-interactions.html
       - name: Reale Tastatureingaben, Fokus und Mobilverhalten in Chrome prüfen
         run: |
+          set -o pipefail
           python3 -m http.server 8768 --bind 127.0.0.1 > /tmp/oli-c0-keyboard-http.log 2>&1 &
           pid=$!
           trap 'kill "$pid" 2>/dev/null || true' EXIT
