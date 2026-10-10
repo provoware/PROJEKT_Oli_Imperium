@@ -5,6 +5,10 @@ on:
       - 'prototype/**'
       - 'data/contract.json'
       - 'docs/19_HTML_TESTBASIS_REGELWERK.md'
+      - 'docs/20_GEBUENDELTE_VORABNAHME.md'
+      - 'release/**'
+      - 'tools/**'
+      - 'tests/**'
       - '.github/workflows/html-pilot.yml'
   workflow_dispatch:
 jobs:
@@ -41,3 +45,16 @@ jobs:
           curl --fail --silent --show-error --output /dev/null http://127.0.0.1:8765/prototype/app.mjs
           curl --fail --silent --show-error --output /dev/null http://127.0.0.1:8765/prototype/styles.css
           curl --fail --silent --show-error --output /dev/null http://127.0.0.1:8765/data/contract.json
+      - name: C0-Version und Vorabnahme-Vertrag prüfen
+        run: python3 tools/check_c0_release.py
+      - name: Reproduzierbares internes Review-Paket erzeugen und prüfen
+        run: |
+          python3 tools/check_c0_release.py --package dist/c0-review.zip
+          python3 tools/check_c0_release.py --verify dist/c0-review.zip
+      - name: Internes Review-Paket als CI-Artefakt hinterlegen
+        uses: actions/upload-artifact@v4
+        with:
+          name: oli-imperium-c0-review
+          path: dist/c0-review.zip
+          if-no-files-found: error
+          retention-days: 14
