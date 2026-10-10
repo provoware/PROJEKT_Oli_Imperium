@@ -1,5 +1,5 @@
 import { validatePilotContract } from './contract-guard.mjs';
-import { PILOT_TRACE_KIND } from './pilot-trace.mjs';
+import { PILOT_TRACE_KIND, validatePilotTrace } from './pilot-trace.mjs';
 
 /**
  * Ausschließlich Hypothesen der HTML-Navigation; KEINE C64-Originaldaten.
@@ -21,12 +21,7 @@ export const COMPARISON_KIND = 'c0-reference-comparison-plan';
  */
 export function createReferenceComparisonPlan(trace, contract) {
   validatePilotContract(contract);
-  if (!trace || trace.kind !== PILOT_TRACE_KIND || trace.reference_verified !== false ||
-      !Array.isArray(trace.steps) || trace.steps.length === 0 ||
-      !Number.isSafeInteger(trace.omitted_steps) || trace.omitted_steps < 0 ||
-      typeof trace.preview_version !== 'string') {
-    throw new TypeError('Ungültiges technisches Navigationsprotokoll.');
-  }
+  validatePilotTrace(trace);
   const tests = Object.entries(DRAFT_PATHS).map(([testId, path]) => {
     const test = contract.tests.find(item => item.id === testId && item.kind === 'original');
     if (!test) throw new Error('Pflicht-Originaltest im Forschungsvertrag fehlt: ' + testId);
