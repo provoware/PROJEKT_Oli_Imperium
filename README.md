@@ -17,7 +17,11 @@ Ein kleiner **interaktiver Navigationsentwurf** liegt unter [`prototype/`](proto
 
 Start im Repository-Hauptordner: `python3 -m http.server 8000 --bind 127.0.0.1`, dann [http://127.0.0.1:8000/prototype/](http://127.0.0.1:8000/prototype/) öffnen. Forschungsstatus, Quellen und offene Fragen bleiben sichtbar; die Schaltflächen sind **nur Entwurfsnavigation**.
 
-**Verbindlich:** [Regelwerk der parallelen HTML-Entwicklung](docs/19_HTML_TESTBASIS_REGELWERK.md). Tests: `node --test prototype/tests/*.test.mjs` neben den bestehenden Python-Prüfungen. Der vollständige Spielnachbau benötigt weiterhin eine gesonderte fachliche Entscheidung.
+**Verbindlich:** [Regelwerk der parallelen HTML-Entwicklung](docs/19_HTML_TESTBASIS_REGELWERK.md) und [gebündelte Vorabnahme samt Versionierung](docs/20_GEBUENDELTE_VORABNAHME.md). Die HTML-Testbasis verwendet eine eigenständige Vorabversionskennung aus [`release/c0-version.json`](release/c0-version.json), getrennt von der wissenschaftlichen Dokumentationsversion 3.0.
+
+**Technische Schnellprüfungen:** `python3 tools/validate_project.py`, `python3 -m unittest discover -s tests -v` und `node --test prototype/tests/*.test.mjs`. **Interne Vorabnahme:** `python3 tools/check_c0_release.py --package dist/c0-review.zip`; anschließend `python3 tools/check_c0_release.py --verify dist/c0-review.zip`. Ein ZIP ist ausdrücklich noch **kein** freigegebener öffentlicher Release. Die GitHub-Prüfung erzeugt ergänzend Desktop-/Mobilvorschauen in Chrome; eine eigene fachliche und visuelle Prüfung bleibt erforderlich.
+
+**Wartbare Trennung:** `prototype/navigation.mjs` enthält das reine Entwurfsmodell; `prototype/app.mjs` lädt Daten und verwaltet Interaktionen; `prototype/ui/render.mjs` erzeugt die HTML-Ansicht; `prototype/ui/texts.de.mjs` hält deutsche Oberflächentexte. Der vollständige Spielnachbau benötigt weiterhin eine gesonderte fachliche Entscheidung.
 
 ## Sofortiger Einstieg
 1. [Projektcharta / Forschungsfragen](docs/00_PROJEKTCHARTA.md) lesen.
@@ -56,7 +60,8 @@ Start im Repository-Hauptordner: `python3 -m http.server 8000 --bind 127.0.0.1`,
 | Vollständiges Regelinventar | offen |
 | Historische Screenshotserie aus eigener Originalausführung | offen |
 | Formelle A→B-Übergabe | offen |
-| Eigentliche HTML-Implementierung | nicht Teil dieser Etappe |
+| HTML-Forschungsprototyp C0 | in PR #7 technisch in Entwicklung, separat zu prüfen |
+| Originalgetreuer Spielnachbau C | nicht freigegeben, nicht Teil dieser Etappe |
 | Originaltreue-Prozentwert | nicht messbar ohne verifizierte Testbasis |
 
 **Wichtig:** Das Repository ist öffentlich. Urheberrechtlich geschützte Original-Diskettenabbilder, Codesheets, Scans, Musik und unfreigegebene Hochschulunterlagen nicht einchecken.
