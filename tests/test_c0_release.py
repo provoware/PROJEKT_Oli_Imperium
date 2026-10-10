@@ -64,6 +64,14 @@ class TestC0ReviewGate(unittest.TestCase):
         self.assertFalse(report["technical_structure_ok"])
         self.assertTrue(any("Funktionsumfang" in e for e in report["errors"]))
 
+    def test_new_unlisted_prototype_code_blocks_frozen_scope(self):
+        new_module = self.root / "prototype" / "unapproved-feature.mjs"
+        new_module.write_text("export const unexpected = true;\n", encoding="utf-8")
+        report = inspect(self.root)
+        self.assertFalse(report["technical_structure_ok"])
+        self.assertTrue(any("außerhalb der Fixierung" in error
+                            for error in report["errors"]))
+
     def test_scope_cannot_claim_a_release_or_changed_version(self):
         for flag in ("public_release_allowed", "historical_reference_verified",
                      "new_gameplay_features_allowed"):
