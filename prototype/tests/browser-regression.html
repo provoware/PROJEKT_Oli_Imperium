@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Automatischer C0-Browsertest – nicht zur öffentlichen Nutzung</title>
+  <style>
+    body { margin: 1rem; background: #09131b; color: #eef9fb; font: 16px system-ui; }
+    iframe { display: block; width: 100%; max-width: 100%; min-height: 700px; border: 2px solid #6ae2d9; }
+    #result { white-space: pre-wrap; font: 15px/1.4 monospace; }
+  </style>
+  <script type="module" src="./browser-regression.mjs"></script>
+</head>
+<body>
+  <h1>Automatischer Browser-Regressionstest für C0</h1>
+  <p>Testet den realen Pilot in einem gleichadressigen Rahmen, einschließlich Navigation, Fehlerzuständen und schmaler Darstellung.</p>
+  <output id="result" role="status" aria-live="polite">Prüfung läuft …</output>
+  <iframe id="pilot-frame" title="Technische HTML-Testbasis unter Prüfung" src="../index.html"></iframe>
+</body>
+</html>
