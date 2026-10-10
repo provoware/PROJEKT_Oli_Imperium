@@ -29,6 +29,8 @@ h2 { font-size: 1.35rem; }
 h3 { font-size: 1.05rem; }
 .lead { max-width: 78ch; color: var(--muted); font-size: 1.08rem; }
 .layout { display: grid; grid-template-columns: minmax(235px, 0.8fr) minmax(0, 2fr); gap: 1.2rem; padding-top: 1.4rem; }
+/* DOM: Pilot zuerst für Tastatur und Vorleseprogramme; Desktop: Info links. */
+.side-panel { order: -1; }
 .side-panel, .main-panel { min-width: 0; padding: clamp(1rem, 2vw, 1.5rem); background: var(--panel); border: 1px solid var(--line); border-radius: 0.75rem; }
 .side-panel p, .side-panel li { color: var(--muted); }
 .warning, .evidence-warning { color: var(--warning) !important; font-weight: 700; }
@@ -70,7 +72,8 @@ footer { padding: 1rem 0; color: var(--muted); }
   .main-panel .status { padding: 0.55rem 0.7rem; margin: 0.6rem 0; }
   .controls { margin: 0.55rem 0; }
   /* Mobil zuerst die bedienbare Testoberfläche, Forschungserklärung danach. */
-  .main-panel { order: -1; }
+  .main-panel { order: 0; }
+  .side-panel { order: 0; }
   .data-row { grid-template-columns: 1fr; gap: 0; }
   button { width: 100%; }
   .controls { flex-direction: column; }
