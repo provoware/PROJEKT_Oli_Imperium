@@ -153,7 +153,7 @@ def create_review_archive(root: Path, destination: Path) -> dict:
     # Keine übernommene Zustimmung, keine pauschale Originaltreue.
     files["REVIEW_STATUS.json"] = (json.dumps(
         report, ensure_ascii=False, indent=2, sort_keys=True,
-    ) + "\\n").encode("utf-8")
+    ) + "\n").encode("utf-8")
     manifest = {
         "schema_version": 1,
         "version": report["version"],
