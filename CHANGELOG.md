@@ -1,5 +1,15 @@
 # Änderungsprotokoll
 
+## C0 0.1.0-alpha.5 – C64-Vergleichsvorbereitung, Mobilnavigation und Vorabnahme (unveröffentlicht)
+
+- Technisch nachvollziehbare **Vergleichsvorlage** mit den drei Originaltest-IDs TEST-001/002/003, Quellen-/Regelverweisen und technischen Schrittkennungen; Originalbeobachtungen und fachliche Freigaben bleiben bewusst leer.
+- Reines `prototype/reference-comparison.mjs` samt Negativtests; JSON-Download nur nach bewusstem Nutzerklick, unabhängig vom Navigationsprotokoll.
+- Nach echter Sichtung der alpha.4-CI-Screenshots Mobilansicht verbessert: Navigationspilot erscheint auf 320/390 Pixel vor der langen Forschungsseitenleiste.
+- Echte Chrome-Browsertests kontrollieren Vergleichs-JS-Export, unbestätigten Referenzstatus, Reihenfolge der Mobiloberfläche und sichtbaren ersten Navigationsknopf; zusätzliche lange Mobil-Vorschau als CI-Artefakt.
+- `REVIEW_STATUS.json` ergänzt das reproduzierbare interne Prüf-ZIP: Version, offene Freigaben und unverifizierter C64-Stand; Manipulations-/Freigabenegativtests hinzugefügt.
+- `docs/21_C0_ORIGINALVERGLEICH.md` und `docs/22_C0_VORABNAHMEBOGEN.md` dokumentieren technische/fachliche Abgrenzung und gebündelte Abschlusskontrolle.
+- Versionsdateien auf `0.1.0-alpha.5` fortgeschrieben. **Kein Originaltest automatisch bestanden, kein Merge, kein öffentlicher Release.**
+
 ## C0 0.1.0-alpha.4 – reproduzierbare technische Navigationsprotokolle (unveröffentlicht)
 
 - Eigenständiges `prototype/pilot-trace.mjs`: unveränderliche, deterministische Schrittfolge für den technischen HTML-Entwurf, ohne Browserabhängigkeit oder Forschungsdatenänderung.
