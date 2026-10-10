@@ -1,5 +1,13 @@
 # Änderungsprotokoll
 
+## C0 0.1.0-alpha.9 – eigenständige A–D-Prüfdokumentation und Abnahmevorbereitung (unveröffentlicht)
+
+- Das tatsächlich erzeugte alpha.8-Prüfarchiv wurde **unabhängig von der GitHub-Ausführung erneut entpackt** und geprüft: 41 Python-, 52 JavaScript-Tests sowie SHA-256-ZIP-Verifikation erfolgreich.
+- `docs/25_C0_AUDIT_A_B_C_D.md` dokumentiert vier technische Prüfergebnisse, konkrete fehlende Originalnachweise, Grenzen automatischer Tests, und alle weiterhin nicht erteilten wissenschaftlichen, rechtlichen und GitHub-Freigaben.
+- Versionsabweichung in der Originalvergleichsanleitung korrigiert (noch alpha.6 statt aktuellem C0-Schnappschuss). Abnahmebogen, Umfangsregister, README und Prüfdokumentation auf alpha.9 synchronisiert.
+- Neues Prüfberichts-Dokument ist einer einzigen Review-Gruppe D zugeordnet und gehört zum reproduzierbaren ZIP-Prüfarchiv. Die eingefrorenen neun HTML-Implementierungsdateien bleiben unverändert.
+- **Keine** neuen Spielmerkmale, nicht bestätigten Originalversuche, menschlichen Freigaben, Beta-/RC-Entscheidung, Übernahme nach `main` oder öffentliche Veröffentlichung.
+
 ## C0 0.1.0-alpha.8 – Wartbarkeitskonsolidierung und technische Umfangsfixierung (unveröffentlicht)
 
 - Vorher identifizierte Schwachstelle beseitigt: Erzeugte Navigationsprotokolle werden vor Speichern, Weiterbearbeiten und dem C64-Vergleich erneut auf vollständige und fortlaufende technische Übergänge geprüft. Unzulässige Bildschirme, falsche Nummern und manipulierte abgeschnittene Verläufe werden zurückgewiesen.
