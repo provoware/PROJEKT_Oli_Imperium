@@ -1,12 +1,16 @@
 {
   "schema_version": "1.0",
   "reference": {
-    "status": "not_selected",
+    "status": "candidate",
     "platform": "C64",
     "region": "DE-PAL",
     "image_sha256": null,
     "emulator_version": null,
-    "verified_run": false
+    "verified_run": false,
+    "archive_url": "https://preservation64.de/index.php?title=Oil_Imperium",
+    "archive_source": "Source 3, DE-PAL, parser, archiviert 17.04.2021; 'Working? Yes' laut Archiv, noch nicht selbst geprüft",
+    "side_count_expected": 2,
+    "candidate_note": "Prüfsummen beider G64-Seiten, rechtliche Nutzbarkeit, Versionsabgleich und VICE-Originalstart fehlen. Kein bestätigter Originaldatenträger."
   },
   "sources": [
     {
@@ -29,6 +33,13 @@
       "url": "https://frgcb.blogspot.com/2025/03/oil-imperium-relinerainbow-arts-1989.html",
       "type": "secondary",
       "note": "Vergleich der C64-Grafik mit anderen Plattformen; keine eigene Originalausführung."
+    },
+    {
+      "id": "SRC-004",
+      "title": "Preservation64 – Oil Imperium, Archiveintrag Source 3 (deutsches PAL-Exemplar)",
+      "url": "https://preservation64.de/index.php?title=Oil_Imperium",
+      "type": "secondary",
+      "note": "Bestandskatalog: Source 3, reLINE 1989, deutsch, PAL, 2 G64-Seiten, 'Working? Yes', 17.04.2021 parser. Katalog-Aussage ≠ eigener Emulator- oder Authentizitätstest."
     }
   ],
   "rules": [
