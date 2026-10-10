@@ -32,6 +32,8 @@ ARCHIVE_FILES = (
     "data/original-session.template.json",
     "docs/03_UEBERGABE_A_B.md",
     "docs/05_TESTS_FORTSCHRITT.md",
+    "docs/15_PILOT_01_BUERO_WELTKARTE.md",
+    "docs/16_PILOT_01_UEBERGABE_A_B.md",
     "docs/18_REFERENZKANDIDAT_C64_PAL.md",
     "docs/19_HTML_TESTBASIS_REGELWERK.md",
     "docs/20_GEBUENDELTE_VORABNAHME.md",
