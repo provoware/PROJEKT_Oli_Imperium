@@ -89,3 +89,8 @@ export function renderPilotControls(document, actions, onAction) {
 export function renderLoadFailure(document) {
   return element(document, 'p', UI_TEXT.loadFailed);
 }
+
+/** Ruhiger, nicht interaktiver Wartezustand: kein alter Bildschirm. */
+export function renderLoadingState(document) {
+  return element(document, 'p', UI_TEXT.loadingDetail);
+}
