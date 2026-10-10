@@ -35,7 +35,7 @@ class TestC0ReviewGate(unittest.TestCase):
     def test_contract_is_valid_but_never_authorizes_public_release(self):
         result = inspect(self.root)
         self.assertTrue(result["technical_structure_ok"], result["errors"])
-        self.assertEqual(result["version"], "0.1.0-alpha.7")
+        self.assertEqual(result["version"], "0.1.0-alpha.8")
         self.assertFalse(result["historical_reference_verified"])
         self.assertFalse(result["public_release_allowed"])
         self.assertFalse(result["manual_approval_complete"])
@@ -45,6 +45,39 @@ class TestC0ReviewGate(unittest.TestCase):
         result = inspect(self.root)
         self.assertFalse(result["technical_structure_ok"])
         self.assertTrue(any("Versionsvertrag" in error for error in result["errors"]))
+
+    def test_scope_is_frozen_but_never_grants_public_or_scientific_release(self):
+        report = inspect(self.root)
+        self.assertTrue(report["technical_structure_ok"], report["errors"])
+        self.assertEqual(report["feature_scope_status"], "technical_feature_scope_frozen")
+        scope = json.loads((self.root / "release/c0-scope.json").read_text(encoding="utf-8"))
+        self.assertFalse(scope["new_gameplay_features_allowed"])
+        self.assertFalse(scope["historical_reference_verified"])
+        self.assertFalse(scope["original_rules_approved"])
+        self.assertFalse(scope["manual_review_complete"])
+        self.assertFalse(scope["public_release_allowed"])
+
+    def test_scope_cannot_hide_new_implementation_module(self):
+        self.modify_json("release/c0-scope.json",
+                         lambda data: data["frozen_implementation_paths"].pop())
+        report = inspect(self.root)
+        self.assertFalse(report["technical_structure_ok"])
+        self.assertTrue(any("Funktionsumfang" in e for e in report["errors"]))
+
+    def test_scope_cannot_claim_a_release_or_changed_version(self):
+        for flag in ("public_release_allowed", "historical_reference_verified",
+                     "new_gameplay_features_allowed"):
+            with self.subTest(flag=flag):
+                self.modify_json("release/c0-scope.json",
+                                 lambda data, key=flag: data.update({key: True}))
+                report = inspect(self.root)
+                self.assertFalse(report["technical_structure_ok"])
+                self.assertTrue(any(key in e for e in report["errors"]))
+                self.modify_json("release/c0-scope.json",
+                                 lambda data, key=flag: data.update({key: False}))
+        self.modify_json("release/c0-scope.json",
+                         lambda data: data.update(version="0.1.0-alpha.7"))
+        self.assertFalse(inspect(self.root)["technical_structure_ok"])
 
     def test_unknown_approval_value_is_rejected(self):
         self.modify_json("release/approvals.json", lambda d: d.update(rights_review="gruen"))
