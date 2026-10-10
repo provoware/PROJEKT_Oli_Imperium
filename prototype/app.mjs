@@ -1,5 +1,5 @@
 import { INITIAL_SCREEN, availablePilotActions, getPilotCard, navigatePilot } from './navigation.mjs';
-import { renderLoadFailure, renderPilotControls, renderPilotScreen } from './ui/render.mjs';
+import { renderLoadFailure, renderLoadingState, renderPilotControls, renderPilotScreen } from './ui/render.mjs';
 import { UI_TEXT } from './ui/texts.de.mjs';
 
 /**
@@ -44,6 +44,10 @@ async function readJson(relativeUrl) {
 async function reload() {
   retry.disabled = true;
   controls.replaceChildren();
+  // Niemals den Inhalt einer alten Datenversion als neue Ansicht ausgeben.
+  view.setAttribute('aria-busy', 'true');
+  view.replaceChildren(renderLoadingState(document));
+  versionLabel.textContent = UI_TEXT.versionLoading;
   status.textContent = UI_TEXT.loading;
   try {
     const [candidate, config] = await Promise.all([
@@ -67,6 +71,7 @@ async function reload() {
     view.replaceChildren(renderLoadFailure(document));
     status.textContent = UI_TEXT.loadingErrorPrefix + (error instanceof Error ? error.message : 'unbekannt');
   } finally {
+    view.setAttribute('aria-busy', 'false');
     retry.disabled = false;
   }
 }
