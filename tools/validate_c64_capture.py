@@ -52,9 +52,10 @@ def validate_capture(document):
             errors.append("Ungültiger oder überlanger Wert: " + field)
 
     disks = document.get("original_files")
-    if not isinstance(disks, list) or len(disks) != 2 or {
-        row.get("disk_side") for row in disks if isinstance(row, dict)
-    } != {"s0", "s1"}:
+    if (not isinstance(disks, list) or len(disks) != 2
+            or not all(isinstance(row, dict) and
+                       isinstance(row.get("disk_side"), str) for row in disks)
+            or {row["disk_side"] for row in disks} != {"s0", "s1"}):
         errors.append("Genau die zwei Diskettenseiten s0 und s1 werden erwartet.")
     else:
         for disk in disks:
@@ -92,7 +93,8 @@ def validate_capture(document):
         not isinstance(t, dict) for t in tests
     ):
         errors.append("Die drei Testkarten müssen vorhanden sein.")
-    elif {t.get("test_id") for t in tests} != set(TEST_IDS):
+    elif (not all(isinstance(t.get("test_id"), str) for t in tests)
+          or {t["test_id"] for t in tests} != set(TEST_IDS)):
         errors.append("Originaltests fehlen oder sind doppelt.")
     else:
         for entry in tests:
