@@ -19,11 +19,15 @@ Start im Repository-Hauptordner: `python3 -m http.server 8000 --bind 127.0.0.1`,
 
 **Neu in C0 `0.1.0-alpha.4`:** Die Schaltflächen erzeugen ein nummeriertes **technisches Navigationsprotokoll**, das sich über „Testprotokoll als JSON speichern“ bewusst als Datei exportieren lässt. Es wird nicht automatisch im Browser oder in den Forschungsdaten gespeichert. Das Protokoll ist ausdrücklich **kein Nachweis für die Bedienung des C64-Originals**; es enthält höchstens 200 Schritte, frühere Schritte werden als ausgelassen gezählt. Bei „Forschungsdaten neu laden“ beginnt ein neues Protokoll.
 
+**Neu in C0 `0.1.0-alpha.5`:** Der zweite Knopf „Vergleichsvorlage für C64-Prüfungen als JSON speichern“ erzeugt ein vorbereitetes Dokument für **TEST-001/002/003** mit technischen Schritten und leeren Originalbeobachtungen. Das ist **keine erfolgte Emulatorprüfung**; alle Originaltests und vier Freigaben bleiben offen. Auf Mobilgeräten erscheint jetzt der bedienbare Navigationspilot **vor** dem längeren Forschungsinfobereich. Der interne ZIP-Abnahmebericht enthält zusätzlich den maschinenlesbaren Freigabestatus `REVIEW_STATUS.json`.
+
+[Vergleichsvorlage und Originalbelege](docs/21_C0_ORIGINALVERGLEICH.md) · [Gesammelter Vorabnahmebogen](docs/22_C0_VORABNAHMEBOGEN.md).
+
 **Verbindlich:** [Regelwerk der parallelen HTML-Entwicklung](docs/19_HTML_TESTBASIS_REGELWERK.md) und [gebündelte Vorabnahme samt Versionierung](docs/20_GEBUENDELTE_VORABNAHME.md). Die HTML-Testbasis verwendet eine eigenständige Vorabversionskennung aus [`release/c0-version.json`](release/c0-version.json), getrennt von der wissenschaftlichen Dokumentationsversion 3.0.
 
 **Technische Schnellprüfungen:** `python3 tools/validate_project.py`, `python3 -m unittest discover -s tests -v` und `node --test prototype/tests/*.test.mjs`. **Interne Vorabnahme:** `python3 tools/check_c0_release.py --package dist/c0-review.zip`; anschließend `python3 tools/check_c0_release.py --verify dist/c0-review.zip`. Ein ZIP ist ausdrücklich noch **kein** freigegebener öffentlicher Release. Die GitHub-Prüfung erzeugt ergänzend Desktop-/Mobilvorschauen in Chrome; eine eigene fachliche und visuelle Prüfung bleibt erforderlich.
 
-**Wartbare Trennung:** `prototype/navigation.mjs` enthält das reine Entwurfsmodell; `prototype/pilot-trace.mjs` erstellt prüfbare Navigationsprotokolle ohne Browserzugriff; `prototype/app.mjs` lädt Daten und verwaltet Interaktionen; `prototype/ui/render.mjs` erzeugt die HTML-Ansicht; `prototype/ui/texts.de.mjs` hält deutsche Oberflächentexte. Der vollständige Spielnachbau benötigt weiterhin eine gesonderte fachliche Entscheidung.
+**Wartbare Trennung:** `prototype/navigation.mjs` enthält das reine Entwurfsmodell; `prototype/pilot-trace.mjs` erstellt prüfbare Navigationsprotokolle ohne Browserzugriff; `prototype/reference-comparison.mjs` erzeugt ausschließlich offene TEST-ID-Vergleichsvorlagen; `prototype/app.mjs` lädt Daten und verwaltet Interaktionen; `prototype/ui/render.mjs` erzeugt die HTML-Ansicht; `prototype/ui/texts.de.mjs` hält deutsche Oberflächentexte. Der vollständige Spielnachbau benötigt weiterhin eine gesonderte fachliche Entscheidung.
 
 ## Sofortiger Einstieg
 1. [Projektcharta / Forschungsfragen](docs/00_PROJEKTCHARTA.md) lesen.
