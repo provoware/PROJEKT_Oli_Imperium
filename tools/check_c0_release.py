@@ -33,6 +33,9 @@ ARCHIVE_FILES = (
     "prototype/navigation.mjs",
     "prototype/styles.css",
     "prototype/tests/navigation.test.mjs",
+    "prototype/tests/render.test.mjs",
+    "prototype/ui/render.mjs",
+    "prototype/ui/texts.de.mjs",
     VERSION_FILE,
     APPROVALS_FILE,
 )
