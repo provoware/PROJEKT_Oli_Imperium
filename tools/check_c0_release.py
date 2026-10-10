@@ -35,6 +35,7 @@ ARCHIVE_FILES = (
     "prototype/styles.css",
     "prototype/tests/navigation.test.mjs",
     "prototype/tests/contract-guard.test.mjs",
+    "prototype/tests/accessibility.test.mjs",
     "prototype/tests/browser-regression.html",
     "prototype/tests/browser-regression.mjs",
     "prototype/tests/render.test.mjs",
