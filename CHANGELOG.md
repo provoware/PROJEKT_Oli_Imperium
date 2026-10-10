@@ -7,6 +7,11 @@
 - Kein bestätigter Originalbildschirm, keine Spielsimulation, keine vorgezogene Freigabe für Projekt C.
 - Acht deterministische Navigations- und Konsistenztests mit Node-Standardbibliothek; separate CI mit Python-Vertragscheck und lokalem HTTP-Smoke-Test.
 - Verbindliches Vorgehens- und Freigaberegelwerk in `docs/19_HTML_TESTBASIS_REGELWERK.md`.
+- C0-SemVer `0.1.0-alpha.1` getrennt von der Forschungs-Dokumentationsversion; vier zunächst gesperrte fachliche Freigaben.
+- Deterministisches internes ZIP-Prüfarchiv mit SHA-256-Manifest, Manipulations-/Negativtests und automatischem GitHub-Artefakt.
+- HTML-Aufteilung in Navigationsmodell, Controller, reine DOM-Darstellung und deutsche Oberflächentexte.
+- Zusätzliche Browser-Sichtproben für Desktop und Mobilgerät in Headless Chrome; kein Emulator-Originalvergleich.
+- Begleitender Prozess für gebündelte Vorabnahme: `docs/20_GEBUENDELTE_VORABNAHME.md`.
 
 ## 3.0 – 2026-10-10 (Projektgrundstruktur)
 - Gemeinsamer Forschungs- und Architekturauftrag mit zwei eigenständigen Abschlussarbeiten.
