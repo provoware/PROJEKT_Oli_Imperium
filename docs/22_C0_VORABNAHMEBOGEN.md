@@ -1,6 +1,6 @@
 # 22 · C0-Vorabnahmebogen (technisches Forschungslabor)
 
-**Aktueller technischer Stand:** 0.1.0-alpha.8, noch **KEIN** Beta-, RC- oder öffentlicher Release.  
+**Aktueller technischer Stand:** 0.1.0-alpha.9, noch **KEIN** Beta-, RC- oder öffentlicher Release.  
 **Geltungsbereich:** HTML-Technik, Testbarkeit und Forschungsdaten-Anzeige; nicht der originale Spielnachbau.
 
 ## A. Automatisch nachprüfbare technische Voraussetzungen
@@ -23,7 +23,7 @@
 | Entpacktes Vorabnahme-Paket | Alle Python- und JavaScript-Tests laufen nochmals aus dem entpackten ZIP; lokale HTML-Verweise sind enthalten | Prüfung fehlgeschlagen |
 | Abnahmebericht | `REVIEW_STATUS.json`, Manifest und konkrete offene Freigaben im ZIP | Paketbau stoppen |
 
-**Neue verbindliche Gruppierung:** [23_C0_REVIEW_SEGMENTIERUNG.md](23_C0_REVIEW_SEGMENTIERUNG.md) und die maschinenlesbare Datei `release/review-segments.json`. Vier separate Prüfabschnitte, aber weiterhin eine gemeinsame formelle Gesamtfreigabe.
+**Ergänzte technische A–D-Akte:** [25_C0_AUDIT_A_B_C_D.md](25_C0_AUDIT_A_B_C_D.md), technisch nachgeprüft, aber keine menschliche Teil- oder Gesamtfreigabe.\n\n**Neue verbindliche Gruppierung:** [23_C0_REVIEW_SEGMENTIERUNG.md](23_C0_REVIEW_SEGMENTIERUNG.md) und die maschinenlesbare Datei `release/review-segments.json`. Vier separate Prüfabschnitte, aber weiterhin eine gemeinsame formelle Gesamtfreigabe.
 
 **Regel:** Jede Aufgabe wird nur dann als technisch bestanden bezeichnet, wenn der konkrete Lauf für genau denselben Commit erfolgreich war. Frühere grüne Läufe ersetzen keine Prüfung nach neuem Commit.
 
