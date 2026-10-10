@@ -117,34 +117,58 @@ async function main() {
   ), 'HTML-Testbasis geladen');
   assert(await evaluate("document.activeElement?.tagName === 'BODY'"),
     'Erster Tastaturfokus beginnt vor den Bedienelementen');
-  const order = [
+  // Die Quellenverweise IN der Ansicht liegen zwischen Navigation und
+  // Export: ihre Anzahl kann sich mit der Forschung ändern. Keine starren
+  // Tab-Indizes für diese Links annehmen.
+  const first = [
     "document.activeElement?.matches('a.skip-link')",
     "document.activeElement?.id === 'reload-contract'",
     "document.activeElement?.closest('#pilot-controls') !== null",
-    "document.activeElement?.id === 'download-trace'",
-    "document.activeElement?.id === 'download-comparison'",
-    "document.activeElement?.closest('aside.side-panel') !== null",
   ];
-  for (const [index, expected] of order.entries()) {
+  for (const [index, expected] of first.entries()) {
     await press('Tab');
-    assert(await evaluate(expected), 'Echter TAB-Schritt ' + (index + 1) +
-      ' beachtet Bedien- und Lesereihenfolge');
+    assert(await evaluate(expected),
+      'Echter TAB-Schritt ' + (index + 1) + ' erreicht die erwartete Stelle');
     assert(await evaluate("getComputedStyle(document.activeElement).outlineStyle !== 'none'"),
       'Sichtbarer Fokusrahmen bei TAB ' + (index + 1));
   }
-  // Shift+Tab zurück bis zum technischen Navigationsbutton.
-  for (let i = 0; i < 3; i += 1) {
-    await command('Input.dispatchKeyEvent', {
-      type: 'keyDown', key: 'Tab', code: 'Tab',
-      windowsVirtualKeyCode: 9, nativeVirtualKeyCode: 9, modifiers: 8,
-    });
-    await command('Input.dispatchKeyEvent', {
-      type: 'keyUp', key: 'Tab', code: 'Tab',
-      windowsVirtualKeyCode: 9, nativeVirtualKeyCode: 9, modifiers: 8,
-    });
+  const visited = [];
+  for (let n = 0; n < 24; n += 1) {
+    await press('Tab');
+    const position = await evaluate(`(() => {
+      const node = document.activeElement;
+      if (node?.closest('#pilot-view')) return 'source-link';
+      if (node?.id === 'download-trace') return 'trace';
+      if (node?.id === 'download-comparison') return 'comparison';
+      if (node?.closest('aside.side-panel')) return 'sidebar';
+      return 'other';
+    })()`);
+    visited.push(position);
+    assert(await evaluate("getComputedStyle(document.activeElement).outlineStyle !== 'none'"),
+      'Fokusmarkierung bei jedem TAB-Schritt sichtbar');
+    if (position === 'sidebar') break;
   }
-  assert(await evaluate("document.activeElement?.closest('#pilot-controls') !== null"),
-    'Umschalt+Tab führt zum Navigationsbutton zurück');
+  const traceIndex = visited.indexOf('trace');
+  const comparisonIndex = visited.indexOf('comparison');
+  const sidebarIndex = visited.indexOf('sidebar');
+  assert(visited.includes('source-link'),
+    'Quellenlinks bleiben über echte Tabtaste erreichbar');
+  assert(traceIndex >= 0 && comparisonIndex > traceIndex && sidebarIndex > comparisonIndex,
+    'Quellen → Protokoll → Vergleich → Forschungslinks in nachvollziehbarer Tabfolge');
+
+  // Mit echter Shift+Tab-Bedienung zum technischen Navigationsknopf zurück.
+  let returned = false;
+  for (let i = 0; i < 24; i += 1) {
+    const args = { key: 'Tab', code: 'Tab', windowsVirtualKeyCode: 9,
+      nativeVirtualKeyCode: 9, modifiers: 8 };
+    await command('Input.dispatchKeyEvent', { ...args, type: 'keyDown' });
+    await command('Input.dispatchKeyEvent', { ...args, type: 'keyUp' });
+    if (await evaluate("document.activeElement?.closest('#pilot-controls') !== null")) {
+      returned = true;
+      break;
+    }
+  }
+  assert(returned, 'Umschalt+Tab führt zum Navigationsknopf zurück');
   await press('Enter');
   assert(await evaluate("document.querySelector('#pilot-view h2')?.textContent.includes('Weltkarte')"),
     'Eingabetaste aktiviert echte Navigation zur Weltkarte');
