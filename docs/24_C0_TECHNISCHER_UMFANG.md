@@ -1,6 +1,6 @@
 # 24 · C0 – Technischer Funktionsumfang eingefroren (keine Freigabe)
 
-**Stand:** 10.10.2026 · **Version:** `0.1.0-alpha.8` · **Status:** `technical_feature_scope_frozen` · **PR:** #7 (Entwurf)
+**Stand:** 10.10.2026 · **Aktuelle Paketversion:** `0.1.0-alpha.9` · **Funktionsumfang unverändert seit:** `0.1.0-alpha.8` · **Status:** `technical_feature_scope_frozen` · **PR:** #7 (Entwurf)
 
 ## Was genau eingefroren wurde
 
