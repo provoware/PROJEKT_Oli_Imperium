@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.0",
+  "reference": {
+    "status": "not_selected",
+    "platform": "C64",
+    "region": "DE-PAL",
+    "image_sha256": null,
+    "emulator_version": null,
+    "verified_run": false
+  },
+  "sources": [],
+  "rules": [],
+  "screens": [],
+  "modules": [],
+  "tests": [],
+  "questions": []
+}
