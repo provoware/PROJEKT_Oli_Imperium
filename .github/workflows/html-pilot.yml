@@ -32,6 +32,8 @@ jobs:
         run: |
           node --check prototype/navigation.mjs
           node --check prototype/app.mjs
+          node --check prototype/ui/render.mjs
+          node --check prototype/ui/texts.de.mjs
       - name: Navigationsmodell und Forschungsstatus testen
         run: node --test prototype/tests/*.test.mjs
       - name: Lokale HTML-Auslieferung prüfen (kein Browser-Originalvergleich)
@@ -44,6 +46,9 @@ jobs:
           curl --fail --silent --show-error --output /dev/null http://127.0.0.1:8765/prototype/navigation.mjs
           curl --fail --silent --show-error --output /dev/null http://127.0.0.1:8765/prototype/app.mjs
           curl --fail --silent --show-error --output /dev/null http://127.0.0.1:8765/prototype/styles.css
+          curl --fail --silent --show-error --output /dev/null http://127.0.0.1:8765/prototype/ui/render.mjs
+          curl --fail --silent --show-error --output /dev/null http://127.0.0.1:8765/prototype/ui/texts.de.mjs
+          curl --fail --silent --show-error --output /dev/null http://127.0.0.1:8765/release/c0-version.json
           curl --fail --silent --show-error --output /dev/null http://127.0.0.1:8765/data/contract.json
       - name: C0-Version und Vorabnahme-Vertrag prüfen
         run: python3 tools/check_c0_release.py
