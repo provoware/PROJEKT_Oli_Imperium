@@ -1,6 +1,6 @@
 # 21 · C64-Vergleichsvorlage für den technischen Navigationspiloten
 
-**Stand:** 10.10.2026 · **C0-Version:** 0.1.0-alpha.5 · **Wissenschaftlicher Status:** nicht verifiziert.
+**Stand:** 10.10.2026 · **C0-Version:** 0.1.0-alpha.6 · **Wissenschaftlicher Status:** nicht verifiziert.
 
 ## Ziel
 
@@ -34,6 +34,8 @@ Die Zuordnung ist **kein bestätigter C64-Eingabebefehl**. Bei TEST-003 umfasst 
 3. **Originaltest fachlich prüfen:** Aussagekraft des Belegs, eventuelle Plattformabweichung und Vollständigkeit prüfen; erst dann Forschungskarten gemäß A→B-Übergabevertrag ändern.
 4. **Zwei getrennte Ergebnisse:** Der technische Abgleich darf „strukturell gleich“ oder „abweichend“ melden; die fachliche Aussage „originalgetreu“ erfordert weiterhin einen unabhängigen Originaltest mit Belegen.
 5. **Abweichungen zuerst beheben:** Änderungen an `SCREEN-003` oder am Rückweg erst auf dokumentierte Originalbeobachtungen stützen; passende Regressionstests ergänzen.
+
+**Neu mit alpha.6:** Die leere, versionierte Forschungs-Aufnahmevorlage unter `data/original-session.template.json` wird mit `tools/validate_c64_capture.py` auf Dateihashes, VICE-Version, PAL-Einstellungen, Eingabeabfolge und PNG-Belege vorbereitet und getestet. Vollständige Metadaten bedeuten nur „bereit zur unabhängigen Prüfung“, niemals `passed`. Das ausführliche Verfahren steht in [23_C0_REVIEW_SEGMENTIERUNG.md](23_C0_REVIEW_SEGMENTIERUNG.md).
 
 Ein erfolgreicher Node- oder Browser-Test darf `data/contract.json.tests[].status` **niemals** automatisch von `not_run` auf `passed` setzen.
 
