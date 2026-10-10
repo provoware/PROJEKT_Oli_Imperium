@@ -1,0 +1,27 @@
+name: Agentenrichtlinie
+on:
+  pull_request:
+    paths:
+      - 'AGENTS.md'
+      - '.codex/**'
+      - 'tools/check_agent_policy.py'
+      - 'tests/test_agent_policy.py'
+      - '.github/workflows/agent_policy.yml'
+  workflow_dispatch:
+concurrency:
+  group: agent-policy-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+permissions:
+  contents: read
+jobs:
+  policy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Einzelne Schreibrolle und gültiges TOML prüfen
+        run: python3 tools/check_agent_policy.py
+      - name: Agentenrichtlinien-Negativtests
+        run: python3 -m unittest discover -s tests -p 'test_agent_policy.py' -v

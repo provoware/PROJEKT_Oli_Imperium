@@ -1,25 +1,33 @@
-# Arbeitsregeln für Codex und andere Entwicklungsassistenten
+# Codex-Arbeitsvertrag · Oil Imperium C64
 
-## Geltungsbereich und Ziel
-Dieses Repository dient zuerst der C64-Forschung (A) und der technischen Planung (B); ein vollwertiger Nachbau ist ein **späteres, getrennt freizugebendes Projekt**.
+**Ziel:** Zwei eigenständige Abschlussarbeiten (A historische Forschung, B technische Architektur) und erst später ein HTML-Nachbau (C). C64-Original und Deutschland-/PPPOPPI-Adaption nie vermischen.
 
-1. **Zuerst lesen:** `README.md`, `docs/03_UEBERGABE_A_B.md`, `docs/04_ORIGINAL_QUELLEN.md`, `docs/05_TESTS_FORTSCHRITT.md`, `CONTRIBUTING.md`.
-2. **Kein Faktenraten:** Nicht verifizierte C64-Regeln, Originalalgorithmen, Startwerte, Grafikdetails oder Entwicklerangaben niemals als bestätigt ausgeben.
-3. **Belegpflicht:** Maßgeblich sind freigegebene ID-Datensätze in `data/contract.json`, mit Quellen und Prüfstatus. Diskussionsnotizen sind nicht verbindlich.
-4. **Effizienz:** Nur die konkrete angeforderte Änderung umsetzen, nicht ganze Verzeichnisse refaktorisieren. Zuerst Risiken und Abhängigkeiten bestimmen, dann klein ändern, anschließend nur betroffene Tests; vor Freigabe vollständigen schnellen Basischeck.
-5. **Kleine Änderungen:** Jede Änderung mit Zweck, betroffenen IDs, Nachweis und nötigen Tests erläutern. Dokumentation im selben Änderungsvorgang synchronisieren.
-6. **Sicherheit:** Keine Original-ROMs/Disks/Scans/Musik ohne Rechte, keine personenbezogenen Teilnehmerdaten, keine Tokens, Passwörter oder Zugangsdaten einchecken.
-7. **Trennung:** Historischer Originalkern und Deutschland-/PPPOPPI-Variante gehören in unterschiedliche Konfigurationen, Quellen und Freigaben. Die spätere Adaption darf Referenztests nicht ersetzen.
-8. **Keine Pseudo-Erfolge:** Leerer Testkatalog ergibt 'nicht messbar', niemals 100 %. Tests nur als bestanden deklarieren, wenn sie ausgeführt wurden.
-9. **Unklarheit:** Eine offene Regel als Rückfrage dokumentieren; nur abhängige Arbeiten warten. Architektur darf Schnittstellen skizzieren, jedoch keine unbelegten Werte festschreiben.
-10. **Git-Arbeit:** Eigener Zweig, nachvollziehbarer Änderungsantrag, kurze begründete Änderungen; `main` nicht ungeprüft überschreiben.
-11. **Berichtsstil:** kurze Fakten, Fortschritt mit Nenner, offene Blockaden, genau drei nächste Schritte plus eine weiterführende Empfehlung. Deutsch, verständlich, kein künstliches Aufblasen.
-12. **Vorwärts + rückwärts planen:** Quelle→Regel→Modul→Test **und** geforderter Test→Daten→Regel→Quelle. Nur Lücken bearbeiten, die Konsequenzen haben.
+## Unveränderliche Regeln
+1. **Eine Schreibinstanz:** Nur der benannte `operator` darf Dateien erstellen, verändern oder entfernen – einschließlich Code, Tests, Dokumentation und Git-Aktionen. Koordinator, `forscher`, `planer`, `pruefer` und `doku_pruefer` liefern ausschließlich textuelle Befunde und Vorschläge.
+2. **Ein belegter Fachvertrag:** `data/contract.json` ist für Quellen-/Regel-/Screen-/Modul-/Test-IDs maßgeblich. Nie erfundene C64-Regeln, Schwellen, Algorithmen oder „Originaltreue“ behaupten; offenes als offen markieren.
+3. **Sparsame Delegation:** Einfache Aufgabe → Koordinator + Operator. Nur bei nachgewiesenem Erkenntnisbedarf einen spezialisierten Agenten aktivieren. Maximal zwei beratende Agenten gleichzeitig; keine Ketten aus Agenten, die sich nur gegenseitig prüfen.
+4. **Auftragskarte vor Änderung:** Der Operator braucht Ziel, Anlass, erlaubte Pfade, betroffene IDs, Quelle/Status, Akzeptanzkriterium und den kleinsten notwendigen Test; für reine Tippfehler genügt eine Kurzkarte.
+5. **Lokal weiterarbeiten:** Fehlender Originalbeleg sperrt nur abhängige Originalregel, nicht ganze Forschung oder Architektur. Fachrückfragen A↔B gezielt sammeln.
+6. **Nach Prüfung nicht blind reparieren:** Prüfer meldet Befund + Reproduktion + Risiko. Koordinator entscheidet. Nur Operator setzt angenommene Korrekturen um. Keine selbständige Endlosschleife.
+7. **Minimale Tests:** Markdown → lokale Verweise; `data/` → `python3 tools/validate_project.py`; Agentenkonfig → `python3 tools/check_agent_policy.py`; Prüfwerkzeuge → passende Unittests. Große Regression nur bei Risiko oder Release.
+8. **Dokumentation gleichzeitig:** Nur tatsächlich betroffene Quellen, Daten, Verlauf und Architektur verknüpfen; keine Duplikatpflege. Arbeitsberichte mit überprüfbaren Prozent-Nennern.
+9. **GitHub:** Kleiner Zweig/PR, keine eigenmächtige Übernahme oder Veröffentlichung. Originalabbilder, fremde Bilder, private Daten, Tokens und Schlüssel nicht hochladen.
+10. **Statusbericht:** Tatsächlicher Stand in %, Nenner und Kurzdetails; genau drei nächste Schritte und eine weiterführende Empfehlung.
 
-## Fachlicher Freigabe-Gate
-Regel nur als Originalregel verwenden, wenn Herkunft und Status dokumentiert sind; 'forum', 'Sekundärquelle' oder 'Hypothese' allein legitimieren keine Behauptung über interne Originalimplementierung.
+## Delegationsregeln
+- Original-C64-Beleg unklar → `forscher`.
+- Modulgrenzen, Schnittstellen, komplexer Eingriff → `planer`.
+- Freigegebener Arbeitsauftrag mit Änderungen → `operator`.
+- Nach Implementierung oder bei hohem Risiko → `pruefer`.
+- Umfangreiche/inhaltlich betroffene Dokumentation → `doku_pruefer`.
+- Keine Delegation für triviale Umbenennung, schon bekannte Sachfrage oder reine Statusabfrage.
 
-## Technischer Gate
-`python3 tools/validate_project.py` und `python3 -m unittest discover -s tests -v`. Bei Änderungen nur an Fließtext ist kein C64-Emulatortest erforderlich; bei geänderten Spielregeln schon, sobald Referenz vorhanden.
+**Ausführlicher Ablauf:** [Agentenmodell](docs/13_AGENTEN_BETRIEBSMODELL.md) · [Trigger-Matrix](docs/14_TRIGGER_MATRIX.md) · [Auftragskarte](vorlagen/OPERATOR_AUFTRAG.md). Vor jeder größeren Aufgabe nur die **relevanten** Fachdateien lesen, nicht das ganze Repository.
 
-**Keine automatische Veröffentlichungs- oder Merge-Erlaubnis für künftige Änderungen.**
+## Code Review Rules
+- Als originale C64-Regel eingeführte Änderung ohne bezeugte Quelle/Version und Prüffall beanstanden. Sicherer Weg: als Forschungsfrage markieren oder belegte Regel verwenden.
+- Eingriffe in `data/contract.json` müssen ID-Bezüge konsistent halten. Sicherer Weg: gezielter Validator und betroffene Referenzen.
+- Der Analysemodus darf den späteren Original-Spielzustand nicht verändern. Sicherer Weg: ausschließlich lesender Ereignisstrom.
+- Veröffentlichung von Original-C64-Medien oder persönlicher Heimstudien-Daten ohne Rechte/Aufklärung beanstanden.
+
+**Hinweis:** Diese Datei ist eine verbindliche *Arbeitsanweisung*, kein Betriebssystem-Zugriffsschutz. `sandbox_mode`, GitHub-Zugriffsrechte und menschliche Freigaben müssen separat geprüft werden.
