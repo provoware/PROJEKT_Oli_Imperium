@@ -1,6 +1,6 @@
 # 23 · C0-Review in vier verbindliche, getrennte Prüfabschnitte
 
-**Gültig ab:** C0 0.1.0-alpha.9 · **Status:** technischer Entwurf, keine Freigabe.  
+**Gültig ab:** C0 0.1.0-alpha.10 · **Status:** technischer Entwurf, keine Freigabe.  
 **Zweck:** Der inzwischen große PR #7 bleibt prüfbar, ohne die bereits versionierte Entwicklung in unverbundene Spielnachbauzweige zu zerlegen.
 
 ## Verfahren

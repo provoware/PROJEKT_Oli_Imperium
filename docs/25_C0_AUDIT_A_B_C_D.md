@@ -1,6 +1,6 @@
 # 25 · Getrennte A–D-Prüfung und Übergabe zur gebündelten Vorabnahme
 
-**Prüfstand:** 10.10.2026 · **Paketversion:** `0.1.0-alpha.9` · **PR:** #7, Entwurf · **C0-Funktionsumfang:** seit alpha.8 unverändert eingefroren.
+**Prüfstand:** 10.10.2026 · **Technisch geprüfter Ausgangsstand:** `0.1.0-alpha.9`; **aktuelle reine Prüfunterlagen-Version:** `0.1.0-alpha.10` · **PR:** #7, Entwurf · **C0-Funktionsumfang:** seit alpha.8 unverändert eingefroren.
 
 **Wichtige Unterscheidung:** Diese Akte dokumentiert einen **zusätzlich durchgeführten technischen Prüfdurchgang**. Es handelt sich weder um eine unabhängige menschliche Freigabe noch um eine rechtliche oder wissenschaftliche Abnahme. **Alle vier Felder in `release/approvals.json` bleiben `false`.** Die Einträge hier sind technische Befunde, keine Unterschriften.
 

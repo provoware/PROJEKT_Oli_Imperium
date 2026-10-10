@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "component": "c0-html-research-prototype",
-  "version": "0.1.0-alpha.9",
+  "version": "0.1.0-alpha.10",
   "status": "technical_feature_scope_frozen",
   "purpose": "INTERNAL_RESEARCH_PREVIEW_ONLY",
   "features": [

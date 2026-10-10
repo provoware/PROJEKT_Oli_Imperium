@@ -1,6 +1,6 @@
 # 21 · C64-Vergleichsvorlage für den technischen Navigationspiloten
 
-**Stand:** 10.10.2026 · **C0-Version:** 0.1.0-alpha.9 · **Wissenschaftlicher Status:** nicht verifiziert.
+**Stand:** 10.10.2026 · **C0-Version:** 0.1.0-alpha.10 · **Wissenschaftlicher Status:** nicht verifiziert.
 
 ## Ziel
 

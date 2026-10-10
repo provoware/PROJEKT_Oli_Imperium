@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "kind": "c0-review-segments",
-  "version": "0.1.0-alpha.9",
+  "version": "0.1.0-alpha.10",
   "purpose": "INTERNAL_STAGED_TECHNICAL_REVIEW",
   "overall_approval": "not_granted",
   "groups": [
@@ -21,7 +21,8 @@
         "tools/validate_project.py",
         "tools/validate_c64_capture.py",
         "tests/test_validate_project.py",
-        "tests/test_validate_c64_capture.py"
+        "tests/test_validate_c64_capture.py",
+        "docs/27_*"
       ],
       "technical_checks": [
         "Forschungsdaten-Validator",
@@ -82,7 +83,8 @@
         "tests/test_c0_release.py",
         "tests/test_review_segments.py",
         "docs/24_*",
-        "docs/25_*"
+        "docs/25_*",
+        "docs/26_*"
       ],
       "technical_checks": [
         "Vollständige Dateiabdeckung ohne Dopplung",

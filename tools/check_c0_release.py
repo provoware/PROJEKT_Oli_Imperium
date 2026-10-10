@@ -43,6 +43,8 @@ ARCHIVE_FILES = (
     "docs/23_C0_REVIEW_SEGMENTIERUNG.md",
     "docs/24_C0_TECHNISCHER_UMFANG.md",
     "docs/25_C0_AUDIT_A_B_C_D.md",
+    "docs/26_C0_UNABHAENGIGE_ABNAHMEVORLAGE.md",
+    "docs/27_C0_ORIGINALPRUEFUNG_ANLEITUNG.md",
     "prototype/app.mjs",
     "prototype/contract-guard.mjs",
     "prototype/pilot-trace.mjs",

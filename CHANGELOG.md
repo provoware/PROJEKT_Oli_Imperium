@@ -1,5 +1,12 @@
 # Änderungsprotokoll
 
+## C0 0.1.0-alpha.10 – original- und bedienungsbezogene Abnahmeunterlagen (unveröffentlicht)
+
+- Verbindliche private Aufnahme-Anleitung mit konkreten Prüfkommandos für zwei rechtmäßig bereitgestellte G64-Seiten, VICE/PAL und vollständigen Navigationsweg TEST-001 bis TEST-003. **Kein Originalabbild, keine Hashes und keine Originalbeobachtungen als tatsächlich vorhanden behauptet.**
+- Eigenständige unabhängige Bedienungsvorlage: echte Browser-Zoomstufen 100/150/200 %, Tastatur, mobile Fenster, Fehlermeldungen, getrennte A–D-Gates und eindeutige offene Freigaben. **Keine menschliche Prüfung als erfolgt ausgegeben.**
+- Beide Dokumente im reproduzierbaren internen Prüfpaket und genau je einer Review-Gruppe zugeordnet; technische Scope-Liste der neun HTML-Dateien unverändert.
+- Alle vier menschlichen Freigaben weiterhin false. Kein Merge, Beta, RC oder öffentlicher Release.
+
 ## C0 0.1.0-alpha.9 – eigenständige A–D-Prüfdokumentation und Abnahmevorbereitung (unveröffentlicht)
 
 - Das tatsächlich erzeugte alpha.8-Prüfarchiv wurde **unabhängig von der GitHub-Ausführung erneut entpackt** und geprüft: 41 Python-, 52 JavaScript-Tests sowie SHA-256-ZIP-Verifikation erfolgreich.
