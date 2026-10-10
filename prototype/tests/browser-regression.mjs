@@ -46,6 +46,11 @@ async function run() {
   const securityPolicy = page.querySelector('meta[http-equiv="Content-Security-Policy"]')?.content;
   check(typeof securityPolicy === 'string' && securityPolicy.includes("script-src 'self'") &&
     securityPolicy.includes("object-src 'none'"), 'CSP sperrt externe/inline Skripte und Objekte');
+  const mainRegion = page.querySelector('main.main-panel');
+  const sidebarRegion = page.querySelector('aside.side-panel');
+  check(Boolean(mainRegion.compareDocumentPosition(sidebarRegion) &
+    win.Node.DOCUMENT_POSITION_FOLLOWING),
+    'Interaktiver Pilot steht vor Forschungs-Links in DOM-/Tab-Reihenfolge');
   const traceList = page.querySelector('#pilot-trace-list');
   const download = page.querySelector('#download-trace');
   const comparisonDownload = page.querySelector('#download-comparison');
@@ -120,7 +125,9 @@ async function run() {
     win.URL.createObjectURL = originalObjectUrl;
   }
 
-  for (const [width, zoom] of [[320, 1], [390, 1], [640, 2]]) {
+  // CSS-Zoom simuliert Vergrößerung; echter Tastatur- und Sichtreview bleibt offen.
+  for (const [width, zoom] of [[320, 1], [390, 1], [640, 1.5],
+                                [800, 1.5], [1024, 1.5], [640, 2], [1024, 2]]) {
     iframe.style.width = width + 'px';
     page.documentElement.style.zoom = String(zoom);
     await sleep(120);
@@ -128,6 +135,23 @@ async function run() {
     const scrollWidth = page.documentElement.scrollWidth;
     check(scrollWidth <= docWidth + 2,
       'Darstellung ohne horizontales Überlaufen bei ' + width + 'px / ' + (zoom * 100) + '%');
+    const availableButtons = [...page.querySelectorAll('button:not([disabled])')];
+    check(availableButtons.length >= 4, 'Aktive Schaltflächen bei Vergrößerung vorhanden');
+    for (const button of availableButtons) {
+      const rect = button.getBoundingClientRect();
+      check(rect.height >= 44, 'Schaltfläche mindestens 44 Pixel hoch bei Zoom ' + (zoom * 100) + '%');
+      check(rect.width > 0 && rect.right <= docWidth + 3,
+        'Schaltfläche ohne abgeschnittene rechte Kante bei ' + width + 'px / ' + (zoom * 100) + '%');
+    }
+    const focusTarget = page.querySelector('#pilot-controls button');
+    focusTarget.focus();
+    check(page.activeElement === focusTarget,
+      'Navigationsknopf bei ' + (zoom * 100) + '% programmatisch fokussierbar');
+
+    if (width >= 800) {
+      check(sidebarRegion.getBoundingClientRect().left < mainRegion.getBoundingClientRect().left,
+        'Desktop-Reihenfolge zeigt Forschungsinfobereich weiterhin links');
+    }
     if (width <= 390) {
       const main = page.querySelector('.main-panel').getBoundingClientRect();
       const sidebar = page.querySelector('.side-panel').getBoundingClientRect();
