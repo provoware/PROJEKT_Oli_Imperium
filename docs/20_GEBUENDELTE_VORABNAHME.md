@@ -26,7 +26,7 @@ Ein Operator darf schreiben, Forschende/Prüfer kontrollieren getrennt. Die offe
 
 1. **Wissenschaftliche Dokumentation**: derzeit `3.0` (kann sich ändern, ohne Softwareversion zu erhöhen).
 2. **Forschungsdatenvertrag**: `data/contract.json.schema_version = 1.0` (strukturelle Inkompatibilität benötigt ausdrücklich dokumentierte Migration).
-3. **HTML-Testbasis C0**: `release/c0-version.json.version = 0.1.0-alpha.8`.
+3. **HTML-Testbasis C0**: `release/c0-version.json.version = 0.1.0-alpha.9`.
 
 C0 verwendet das Schema `HAUPT.NEBEN.KORREKTUR-STUFE.NUMMER` (SemVer für Vorabversionen).
 
@@ -38,7 +38,7 @@ C0 verwendet das Schema `HAUPT.NEBEN.KORREKTUR-STUFE.NUMMER` (SemVer für Vorabv
 - `0.1.0-alpha.6`: geprüfte, leere C64-Aufnahmeakte und Validator, vier dateivollständige PR-Review-Gruppen, erweiterte 150–200-%-Chrome-/Fokusmatrix und vollständige Python-Prüfdateien im ZIP.
 - `0.1.0-alpha.7`: Browser-Tastaturprüfung mit echten Tasten, separat erneut getestetes ZIP, vollständig mitgelieferte HTML-Verweise und verlässliche Fehlerweitergabe.
 - `0.1.0-alpha.8`: technischer C0-Funktionsumfang maschinenlesbar eingefroren, vollständige Protokollintegrität für beide JSON-Ausgaben und doppelten Exportcode konsolidiert; **keine** Fachfreigabe.
-- `0.1.0-beta.1`: gewünschter Umfang ist technisch weitgehend fertig; Schwerpunkt liegt auf Fehlerbehebung und Testfällen.
+- `0.1.0-alpha.9`: eigenständiger A–D-Prüfbericht anhand tatsächlich entpackter alpha.8-CI-Artefakte; alle Freigaben bleiben offen, HTML-Quellimplementierung unverändert.\n- `0.1.0-beta.1`: gewünschter Umfang ist technisch weitgehend fertig; Schwerpunkt liegt auf Fehlerbehebung und Testfällen.
 - `0.1.0-rc.1`: **Kandidat zur gesammelten Abnahme**; keine ungeprüften Erweiterungen mehr, nur Fehlerbehebungen.
 - `0.1.0`: nur wenn technische, rechtliche, fachliche und organisatorische Freigaben vorliegen; eine technische Forschungsvorschau ist deshalb **keine** Freigabe einer echten Spielrekonstruktion.
 - `1.0.0`: **nicht** aus rein technischer Testquote ableiten; Bedarf vollständiger, gesonderter Produktdefinition für Spielnachbau C.
