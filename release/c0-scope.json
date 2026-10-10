@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "component": "c0-html-research-prototype",
+  "version": "0.1.0-alpha.8",
+  "status": "technical_feature_scope_frozen",
+  "purpose": "INTERNAL_RESEARCH_PREVIEW_ONLY",
+  "features": [
+    "read_only_contract_display",
+    "three_screen_navigation_draft",
+    "technical_navigation_trace_export",
+    "unverified_c64_comparison_plan_export",
+    "german_responsive_keyboard_accessible_ui",
+    "offline_local_http_preview",
+    "clear_loading_error_and_retry",
+    "deterministic_review_archive_and_test_checks"
+  ],
+  "frozen_implementation_paths": [
+    "prototype/app.mjs",
+    "prototype/contract-guard.mjs",
+    "prototype/index.html",
+    "prototype/navigation.mjs",
+    "prototype/pilot-trace.mjs",
+    "prototype/reference-comparison.mjs",
+    "prototype/styles.css",
+    "prototype/ui/render.mjs",
+    "prototype/ui/texts.de.mjs"
+  ],
+  "excluded_features": [
+    "original_c64_game_rules_as_facts",
+    "original_c64_rom_disk_media",
+    "original_game_graphics_or_sound",
+    "economic_or_oil_production_simulation",
+    "game_savegames_and_campaign_logic",
+    "automatic_historical_scientific_approval",
+    "automatic_main_merge_or_public_release"
+  ],
+  "allowed_post_freeze_changes": [
+    "defect_correction",
+    "security_hardening",
+    "accessibility_correction",
+    "regression_tests",
+    "documentation_and_release_evidence"
+  ],
+  "new_gameplay_features_allowed": false,
+  "historical_reference_verified": false,
+  "original_rules_approved": false,
+  "manual_review_complete": false,
+  "public_release_allowed": false,
+  "note": "Die Fixierung betrifft allein den technischen C0-Funktionsumfang. Sie ersetzt weder eine C64-Originalprüfung noch Fach-, Rechte- oder GitHub-Freigaben."
+}
