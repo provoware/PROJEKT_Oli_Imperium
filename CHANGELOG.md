@@ -1,5 +1,14 @@
 # Änderungsprotokoll
 
+## C0 0.1.0-alpha.8 – Wartbarkeitskonsolidierung und technische Umfangsfixierung (unveröffentlicht)
+
+- Vorher identifizierte Schwachstelle beseitigt: Erzeugte Navigationsprotokolle werden vor Speichern, Weiterbearbeiten und dem C64-Vergleich erneut auf vollständige und fortlaufende technische Übergänge geprüft. Unzulässige Bildschirme, falsche Nummern und manipulierte abgeschnittene Verläufe werden zurückgewiesen.
+- Einheitliche `validatePilotTrace`-Funktion in der Modellschicht statt unterschiedlicher Teilprüfungen in Protokoll und Vergleichsvorlage. Zusätzliche gezielte Negativtests.
+- Duplizierten Browsercode für beide JSON-Downloads in einem zentralen Exportablauf zusammengefasst. Temporäre Browserdatei-Adressen werden auch bei Fehlern bereinigt. Beim Nachladen wird der bisherige Forschungsdatenvertrag zurückgesetzt.
+- Technischer C0-Funktionsumfang für die anstehende gebündelte Prüfung fixiert: `release/c0-scope.json` mit neun erlaubten Implementierungsdateien, ausdrücklichem Verbot neuer Spielmerkmale und klaren Ausschlüssen.
+- `tools/check_c0_release.py` und Negativtests kontrollieren Versionsgleichheit, unveränderte Implementierungsdateiliste und weiterhin gesperrte fachliche/öffentliche Freigaben.
+- `docs/24_C0_TECHNISCHER_UMFANG.md` dokumentiert verbindlich, was als technischer Forschungsentwurf geprüft wird und was nicht. **Keine** neue Spielsimulation, Originalfreigabe, Beta-/RC-Einstufung, Übernahme nach `main` oder Veröffentlichung.
+
 ## C0 0.1.0-alpha.7 – echte Tastaturprüfungen und eigenständig erneut getestetes Vorabnahme-Paket (unveröffentlicht)
 
 - Neuer Chrome-Test ohne zusätzliche Pakete: echte Tab-, Umschalt+Tab- und Eingabetasten prüfen die Fokusreihenfolge, sichtbare Fokusmarkierungen, Navigation und Mobilansicht.
