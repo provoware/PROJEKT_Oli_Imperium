@@ -1,5 +1,14 @@
 # Änderungsprotokoll
 
+## C0 0.1.0-alpha.7 – echte Tastaturprüfungen und eigenständig erneut getestetes Vorabnahme-Paket (unveröffentlicht)
+
+- Neuer Chrome-Test ohne zusätzliche Pakete: echte Tab-, Umschalt+Tab- und Eingabetasten prüfen die Fokusreihenfolge, sichtbare Fokusmarkierungen, Navigation und Mobilansicht.
+- GitHub-Prüfläufe brechen bei einem fehlgeschlagenen Tastaturtest korrekt ab; zuvor wurde der Fehler durch die Protokollweitergabe verdeckt.
+- Das C0-ZIP wird separat entpackt und mit den enthaltenen Python-/JavaScript-Tests erneut geprüft, einschließlich Forschungsdaten-, Aufnahmevorlagen- und Reviewgruppenprüfung.
+- Direkt aus der HTML-Testbasis verlinkte wissenschaftliche Dateien sind nun im Prüfarchiv enthalten. Ein Negativtest schützt vor fehlenden lokalen HTML-Verweisen.
+- Vorabnahme-Prüfsummen werden für das gesamte ZIP zusätzlich ausgewiesen. Die SHA-256-Integrität ist kein unabhängiger Echtheits- oder Freigabenachweis.
+- Originalreferenz, TEST-001 bis TEST-003 und alle vier Freigaben weiterhin offen. Kein Merge, keine Beta- oder RC-Freigabe, keine Veröffentlichung.
+
 ## C0 0.1.0-alpha.6 – Originalaufnahme-Vorlage, echtes Zoom-Review und vierfacher Qualitätscheck (unveröffentlicht)
 
 - **Originalreferenz weiterhin offen:** `data/original-session.template.json` enthält ausschließlich leere Testkarten für TEST-001 bis TEST-003, zwei G64-Seiten, VICE/PAL-Angaben und PNG-Belege. Keine Spieldateien, erfundenen Hashes oder Eingaben hinzugefügt.
