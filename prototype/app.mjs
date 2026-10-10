@@ -1,6 +1,7 @@
 import { INITIAL_SCREEN, availablePilotActions, getPilotCard, navigatePilot } from './navigation.mjs';
 import { renderLoadFailure, renderLoadingState, renderPilotControls, renderPilotScreen, renderPilotTraceSteps } from './ui/render.mjs';
 import { appendPilotTrace, createPilotTrace, serializePilotTrace } from './pilot-trace.mjs';
+import { serializeReferenceComparisonPlan } from './reference-comparison.mjs';
 import { UI_TEXT } from './ui/texts.de.mjs';
 
 /**
@@ -14,11 +15,12 @@ const retry = document.querySelector('#reload-contract');
 const versionLabel = document.querySelector('#c0-version');
 const traceList = document.querySelector('#pilot-trace-list');
 const traceDownload = document.querySelector('#download-trace');
+const comparisonDownload = document.querySelector('#download-comparison');
 const traceTitle = document.querySelector('#trace-title');
 const traceDescription = document.querySelector('.trace-note');
 
 if (!controls || !view || !status || !retry || !versionLabel ||
-    !traceList || !traceDownload || !traceTitle || !traceDescription) {
+    !traceList || !traceDownload || !comparisonDownload || !traceTitle || !traceDescription) {
   throw new Error('HTML-Testbasis: erforderliche Oberflächenelemente fehlen.');
 }
 
@@ -28,10 +30,12 @@ let pilotTrace = null;
 traceTitle.textContent = UI_TEXT.traceTitle;
 traceDescription.textContent = UI_TEXT.traceDescription;
 traceDownload.textContent = UI_TEXT.traceDownload;
+comparisonDownload.textContent = UI_TEXT.comparisonDownload;
 
 function showTrace() {
   traceList.replaceChildren();
   traceDownload.disabled = !pilotTrace;
+  comparisonDownload.disabled = !pilotTrace || !contract;
   if (pilotTrace) traceList.append(renderPilotTraceSteps(document, pilotTrace));
 }
 
@@ -121,6 +125,25 @@ function downloadTrace() {
 }
 
 traceDownload.addEventListener('click', downloadTrace);
+function downloadComparisonPlan() {
+  if (!pilotTrace || !contract) return;
+  try {
+    const body = serializeReferenceComparisonPlan(pilotTrace, contract);
+    const blob = new Blob([body], { type: 'application/json;charset=utf-8' });
+    const address = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = address;
+    link.download = 'oli-imperium-c0-' + pilotTrace.preview_version + '-vergleichsvorlage.json';
+    link.click();
+    setTimeout(() => URL.revokeObjectURL(address), 1000);
+    status.textContent = UI_TEXT.comparisonExported;
+  } catch {
+    status.textContent = UI_TEXT.comparisonExportError;
+  }
+}
+
+comparisonDownload.addEventListener('click', downloadComparisonPlan);
+
 
 retry.addEventListener('click', () => { void reload(); });
 void reload();
