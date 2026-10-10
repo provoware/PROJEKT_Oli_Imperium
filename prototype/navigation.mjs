@@ -15,8 +15,8 @@ const TRANSITIONS = Object.freeze({
 });
 
 export function navigatePilot(currentScreen, action) {
-  const next = Object.hasOwn(TRANSITIONS, currentScreen)
-    ? TRANSITIONS[currentScreen][action] : undefined;
+  const choices = Object.hasOwn(TRANSITIONS, currentScreen) ? TRANSITIONS[currentScreen] : null;
+  const next = choices && Object.hasOwn(choices, action) ? choices[action] : undefined;
   if (next === undefined) {
     return { ok: false, screen: currentScreen, error: 'Dieser Übergang ist im Entwurf nicht vorgesehen.' };
   }
