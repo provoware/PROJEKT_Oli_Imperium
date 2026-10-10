@@ -32,7 +32,7 @@ export function validatePilotTrace(trace) {
       trace.schema_version !== 1 || trace.kind !== PILOT_TRACE_KIND ||
       trace.reference_verified !== false ||
       typeof trace.preview_version !== 'string' ||
-      !/^0\\.\\d+\\.\\d+-(?:alpha|beta|rc)\\.\\d+$/.test(trace.preview_version) ||
+      !/^0\.\d+\.\d+-(?:alpha|beta|rc)\.\d+$/.test(trace.preview_version) ||
       !Number.isSafeInteger(trace.omitted_steps) || trace.omitted_steps < 0 ||
       !Array.isArray(trace.steps) || trace.steps.length < 1 ||
       trace.steps.length > PILOT_TRACE_LIMIT) {
