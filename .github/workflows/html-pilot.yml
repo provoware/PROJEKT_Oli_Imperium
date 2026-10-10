@@ -31,6 +31,8 @@ jobs:
       - name: JavaScript-Syntax prüfen
         run: |
           node --check prototype/navigation.mjs
+          node --check prototype/contract-guard.mjs
+          node --check prototype/tests/browser-regression.mjs
           node --check prototype/app.mjs
           node --check prototype/ui/render.mjs
           node --check prototype/ui/texts.de.mjs
@@ -44,6 +46,7 @@ jobs:
           sleep 2
           curl --fail --silent --show-error --output /dev/null http://127.0.0.1:8765/prototype/
           curl --fail --silent --show-error --output /dev/null http://127.0.0.1:8765/prototype/navigation.mjs
+          curl --fail --silent --show-error --output /dev/null http://127.0.0.1:8765/prototype/contract-guard.mjs
           curl --fail --silent --show-error --output /dev/null http://127.0.0.1:8765/prototype/app.mjs
           curl --fail --silent --show-error --output /dev/null http://127.0.0.1:8765/prototype/styles.css
           curl --fail --silent --show-error --output /dev/null http://127.0.0.1:8765/prototype/ui/render.mjs
@@ -65,7 +68,8 @@ jobs:
           "$browser" --headless --no-sandbox --disable-gpu --disable-dev-shm-usage \
             --virtual-time-budget=6000 --dump-dom http://127.0.0.1:8766/prototype/ \
             > dist/browser-rendered.html
-          grep -q 'C0-Testfassung 0.1.0-alpha.1' dist/browser-rendered.html
+          version="$(python3 -c 'import json; print(json.load(open("release/c0-version.json"))["version"])')"
+          grep -Fq "C0-Testfassung ${version}" dist/browser-rendered.html
           grep -q 'REGEL-002' dist/browser-rendered.html
           grep -q 'Q-001' dist/browser-rendered.html
           "$browser" --headless --no-sandbox --disable-gpu --disable-dev-shm-usage \
@@ -74,12 +78,30 @@ jobs:
           "$browser" --headless --no-sandbox --disable-gpu --disable-dev-shm-usage \
             --window-size=390,844 --screenshot=dist/browser-mobile.png \
             --virtual-time-budget=6000 http://127.0.0.1:8766/prototype/
+      - name: Tatsächliche Navigation und Fehlerwiederherstellung im Browser testen
+        run: |
+          python3 -m http.server 8767 --bind 127.0.0.1 > /tmp/oli-browser-interaction-http.log 2>&1 &
+          pid=$!
+          trap 'kill "$pid" 2>/dev/null || true' EXIT
+          sleep 2
+          browser="$(command -v google-chrome || command -v chromium || true)"
+          if [ -z "$browser" ]; then exit 1; fi
+          "$browser" --headless --no-sandbox --disable-gpu --disable-dev-shm-usage \
+            --window-size=1280,800 --virtual-time-budget=18000 \
+            --dump-dom http://127.0.0.1:8767/prototype/tests/browser-regression.html \
+            > dist/browser-interactions.html
+          if grep -q 'BROWSER_C0_FAIL' dist/browser-interactions.html; then
+            cat dist/browser-interactions.html
+            exit 1
+          fi
+          grep -q 'BROWSER_C0_PASS' dist/browser-interactions.html
       - name: Browser-Belege als CI-Artefakt hinterlegen
         uses: actions/upload-artifact@v4
         with:
           name: oli-imperium-c0-browser-preview
           path: |
             dist/browser-rendered.html
+            dist/browser-interactions.html
             dist/browser-desktop.png
             dist/browser-mobile.png
           if-no-files-found: error
