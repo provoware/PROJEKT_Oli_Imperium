@@ -49,6 +49,14 @@
         <article id="pilot-view" tabindex="-1" aria-label="Aktuelle Forschungsansicht">
           <p>Die Ansicht wird aus <code>data/contract.json</code> aufgebaut.</p>
         </article>
+        <section class="trace-panel" aria-labelledby="trace-title">
+          <div class="panel-heading">
+            <h3 id="trace-title">Technisches Navigationsprotokoll</h3>
+            <button id="download-trace" type="button" disabled>Testprotokoll als JSON speichern</button>
+          </div>
+          <p class="trace-note">Nur ein Test des HTML-Entwurfs. Kein Nachweis für die Bedienung des C64-Originals. Es erfolgt keine automatische Speicherung.</p>
+          <ol id="pilot-trace-list" aria-label="Nachvollziehbare technische Bildschirmwechsel"></ol>
+        </section>
       </main>
     </div>
     <footer>
