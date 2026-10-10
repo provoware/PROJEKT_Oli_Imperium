@@ -6,6 +6,9 @@ import tempfile
 import unittest
 import zipfile
 from pathlib import Path
+from html.parser import HTMLParser
+from posixpath import normpath, join
+from urllib.parse import urlsplit
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
 from check_c0_release import (  # noqa: E402
@@ -69,6 +72,32 @@ class TestC0ReviewGate(unittest.TestCase):
         self.assertFalse(inspect(self.root)["technical_structure_ok"])
         with self.assertRaisesRegex(ValueError, "Prüfarchiv blockiert"):
             create_review_archive(self.root, self.root / "blocked.zip")
+
+    def test_standalone_preview_includes_each_local_html_link(self):
+        class Links(HTMLParser):
+            def __init__(self):
+                super().__init__()
+                self.urls = []
+
+            def handle_starttag(self, tag, attrs):
+                if tag in ("a", "script", "link"):
+                    data = dict(attrs)
+                    target = data.get("href") or data.get("src")
+                    if target:
+                        self.urls.append(target)
+
+        parser = Links()
+        parser.feed((self.root / "prototype/index.html").read_text(encoding="utf-8"))
+        local_count = 0
+        for url in parser.urls:
+            parsed = urlsplit(url)
+            if parsed.scheme or parsed.netloc or not parsed.path:
+                continue
+            destination = normpath(join("prototype", parsed.path))
+            self.assertIn(destination, ARCHIVE_FILES,
+                          "Lokaler HTML-Verweis fehlt im eigenständigen Prüf-ZIP: " + destination)
+            local_count += 1
+        self.assertGreaterEqual(local_count, 4)
 
     def test_archive_is_reproducible_and_integrity_verified(self):
         first = self.root / "first.zip"
