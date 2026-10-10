@@ -2,7 +2,8 @@ import { readFileSync } from 'node:fs';
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
 import { getPilotCard } from '../navigation.mjs';
-import { renderLoadFailure, renderLoadingState, renderPilotControls, renderPilotScreen } from '../ui/render.mjs';
+import { renderLoadFailure, renderLoadingState, renderPilotControls, renderPilotScreen, renderPilotTraceSteps } from '../ui/render.mjs';
+import { appendPilotTrace, createPilotTrace } from '../pilot-trace.mjs';
 
 const contract = JSON.parse(readFileSync(new URL('../../data/contract.json', import.meta.url), 'utf8'));
 
@@ -84,6 +85,16 @@ describe('HTML-Ansicht: Trennung von Forschungsdaten, Texten und DOM', () => {
     assert.equal(loading.tagName, 'p');
     assert.match(loading.textContent, /nicht verfügbar/);
     assert.equal(findByTag(loading, 'button').length, 0);
+  });
+  it('zeigt nummerierte technische Schritte ohne HTML-Ausführung an', () => {
+    const start = createPilotTrace('0.1.0-alpha.4');
+    const trace = appendPilotTrace(start, 'SCREEN-001', 'to-map');
+    const list = renderPilotTraceSteps(fakeDocument, trace);
+    assert.match(list.textContent, /Schritt 0/);
+    assert.match(list.textContent, /SCREEN-001 → SCREEN-002/);
+    assert.match(list.textContent, /Entwurf: zur Weltkarte/);
+    assert.equal(findByTag(list, 'script').length, 0);
+    assert.equal(findByTag(list, 'li').length, 2);
   });
   it('zeigt bei fehlenden Daten verständlichen Text an', () => {
     const message = renderLoadFailure(fakeDocument);
