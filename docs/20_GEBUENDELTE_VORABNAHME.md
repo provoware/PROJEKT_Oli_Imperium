@@ -26,7 +26,7 @@ Ein Operator darf schreiben, Forschende/Prüfer kontrollieren getrennt. Die offe
 
 1. **Wissenschaftliche Dokumentation**: derzeit `3.0` (kann sich ändern, ohne Softwareversion zu erhöhen).
 2. **Forschungsdatenvertrag**: `data/contract.json.schema_version = 1.0` (strukturelle Inkompatibilität benötigt ausdrücklich dokumentierte Migration).
-3. **HTML-Testbasis C0**: `release/c0-version.json.version = 0.1.0-alpha.4`.
+3. **HTML-Testbasis C0**: `release/c0-version.json.version = 0.1.0-alpha.5`.
 
 C0 verwendet das Schema `HAUPT.NEBEN.KORREKTUR-STUFE.NUMMER` (SemVer für Vorabversionen).
 
@@ -34,6 +34,7 @@ C0 verwendet das Schema `HAUPT.NEBEN.KORREKTUR-STUFE.NUMMER` (SemVer für Vorabv
 - `0.1.0-alpha.2`: stärkere Forschungsdatenprüfung, vollständiger Navigations- und Browser-Ablauftest.
 - `0.1.0-alpha.3`: abgesicherte Seitenrichtlinie, barrierearmer Lade- und Fehlerzustand sowie zusätzliche 200-%-Layoutprüfung.
 - `0.1.0-alpha.4`: technisch reproduzierbares Navigationsprotokoll mit bewusstem JSON-Export, begrenztem Sitzungsspeicher und eigenen Modultests; weiterhin kein historischer Beleg.
+- `0.1.0-alpha.5`: TEST-ID-basierte Original-Vergleichsvorlage (ohne Originalbelege), mobiler Pilot vor Forschungsseitenleiste, erweiterte Browsernachweise und eigenständiger Prüfstatus im ZIP.
 - `0.1.0-beta.1`: gewünschter Umfang ist technisch weitgehend fertig; Schwerpunkt liegt auf Fehlerbehebung und Testfällen.
 - `0.1.0-rc.1`: **Kandidat zur gesammelten Abnahme**; keine ungeprüften Erweiterungen mehr, nur Fehlerbehebungen.
 - `0.1.0`: nur wenn technische, rechtliche, fachliche und organisatorische Freigaben vorliegen; eine technische Forschungsvorschau ist deshalb **keine** Freigabe einer echten Spielrekonstruktion.
@@ -49,6 +50,7 @@ docs/                               ← Forschungsprotokolle, Architektur, Entsc
 prototype/navigation.mjs            ← reine logische Navigation
 prototype/contract-guard.mjs        ← Browser-Konsistenzschutz, keine Fachfreigabe
 prototype/pilot-trace.mjs            ← reines, begrenztes Testprotokoll für Entwurfsnavigation
+prototype/reference-comparison.mjs  ← nur offene TEST-ID-Vergleichsvorlage, keine Originalbewertung
 prototype/app.mjs                   ← Steuerung: Laden, Status und Benutzeraktionen
                                  ← beim Neuladen keine veralteten Ansichten anzeigen
 prototype/ui/render.mjs             ← nur zugängliche HTML-/DOM-Darstellung
@@ -96,6 +98,10 @@ Pflicht vor einer technischen C0-Vorschau:
 7. SHA-256-Abgleich aller ZIP-Einträge `python3 tools/check_c0_release.py --verify dist/c0-review.zip`.
 8. Separater **tatsächlicher** visueller Browser- und Tastaturtest (Desktop, schmale Ansicht, Fokusfolge, Kontrast, Fehlermeldungen) vor technischer UI-Abnahme; der reine HTTP-Test ersetzt diesen nicht.
 9. Bei behaupteter Originaltreue: kontrollierter, dokumentierter VICE-Vergleich mit identifizierter C64-Datei und Originalnachweisen.
+10. Die CI-Mobilbilder anhand realer Screenshots prüfen; auf schmalen Bildschirmen müssen der Pilot und sein erster Bedienknopf vor der langen Forschungsseitenleiste sichtbar sein. 
+11. Der interne Vorabnahmebericht `REVIEW_STATUS.json` muss die Freigaben als offen ausweisen. Korrekte Test-IDs in der Vergleichsvorlage ersetzen keine Emulatorbeobachtungen.
+
+**Verbindliche Begleitdokumente:** [21_C0_ORIGINALVERGLEICH.md](21_C0_ORIGINALVERGLEICH.md) und [22_C0_VORABNAHMEBOGEN.md](22_C0_VORABNAHMEBOGEN.md).
 
 Die GitHub-Automatik darf erfolgreiches Paketbauen als **„technische Struktur geprüft“** melden, niemals als „historische Wahrheit bestätigt“ oder „veröffentlichungsbereit“. Das Ergebnis der menschlichen Sichtprüfung darf nicht fingiert werden.
 
