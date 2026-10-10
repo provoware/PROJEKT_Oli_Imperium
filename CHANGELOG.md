@@ -1,5 +1,13 @@
 # Änderungsprotokoll
 
+## C0 0.1.0-alpha.3 – Schutz beim Datenladen und vergrößerter Darstellung (unveröffentlicht)
+
+- Inhaltssicherheitsrichtlinie im HTML-Prototyp: Seitenskripte, Formatvorlagen und Forschungsdatenzugriffe nur aus derselben Herkunft, keine eingebetteten Fremdobjekte; technisch gegen unerwartete Skriptausführung abgesichert (keine Garantie gegen alle Sicherheitsprobleme).
+- Beim Nachladen ausdrücklich `aria-busy` setzen, alte Forschungsdaten und Navigationsschaltflächen entfernen sowie Versionsstatus bis zur erfolgreichen Prüfung zurückhalten.
+- Netzwerkfehler sichtbar behandeln; erneuter Versuch nach Störung möglich und vollständig im echten Browser getestet.
+- HTML-Browserregressionen für 320 Pixel, 390 Pixel und eine 200-%-Darstellung ohne horizontales Überlaufen; Ladezwischenzustand und sichere Seitenrichtlinie geprüft.
+- Zusätzlicher Modultest für die getrennte Ladezustands-Darstellung; `release/approvals.json` bleibt trotz grüner Technikprüfungen ohne Freigaben.
+
 ## C0 0.1.0-alpha.2 – zusätzliche technische Sicherheits- und Bedienprüfungen (unveröffentlicht)
 
 - Strenge, eigene Laufzeitprüfung des Forschungsdatenvertrags: keine erdachten Referenzfreigaben, keine defekten IDs, Statuswerte, Testnachweise oder Quelllinks. Navigationsmodell und Datenwächter getrennt.
