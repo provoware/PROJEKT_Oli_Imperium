@@ -46,6 +46,13 @@ async function run() {
   const securityPolicy = page.querySelector('meta[http-equiv="Content-Security-Policy"]')?.content;
   check(typeof securityPolicy === 'string' && securityPolicy.includes("script-src 'self'") &&
     securityPolicy.includes("object-src 'none'"), 'CSP sperrt externe/inline Skripte und Objekte');
+  const traceList = page.querySelector('#pilot-trace-list');
+  const download = page.querySelector('#download-trace');
+  check(traceList?.children.length === 1 && traceList.textContent.includes('Schritt 0'),
+    'Neue Testsitzung beginnt mit einer dokumentierten Startansicht');
+  check(download?.disabled === false, 'Expliziter Export ist nach dem Laden zugänglich');
+  check(page.querySelector('.trace-note')?.textContent.includes('Kein Nachweis'),
+    'Testprotokoll behauptet keine historische Originaltreue');
   check(pageTitle(page).includes('Büro'), 'Büroansicht sichtbar');
   check(page.querySelector('#pilot-view')?.textContent.includes('REGEL-002'), 'Regel-IDs aus Vertrag sichtbar');
   check(page.querySelector('#pilot-view')?.textContent.includes('Q-001'), 'Forschungsfragen sichtbar');
@@ -70,6 +77,32 @@ async function run() {
       'Wechsel wird als rein technischer Entwurf beschrieben');
   }
 
+  check(traceList.children.length === 5,
+    'Vier Bildschirmwechsel ergänzen die unveränderliche Startansicht');
+  check(traceList.textContent.includes('Schritt 4') &&
+    traceList.textContent.includes('SCREEN-002 → SCREEN-001'),
+    'Protokoll dokumentiert den vollständigen technischen Rückweg');
+
+  // Echter Export über den vorhandenen Button; nur den Blob-Inhalt mitlesen.
+  const originalObjectUrl = win.URL.createObjectURL.bind(win.URL);
+  let exported = null;
+  win.URL.createObjectURL = (blob) => {
+    exported = blob;
+    return originalObjectUrl(blob);
+  };
+  try {
+    download.click();
+    await until(() => exported !== null, 'Protokolldatei erzeugen');
+    const parsed = JSON.parse(await exported.text());
+    check(parsed.kind === 'c0-technical-navigation-draft' &&
+      parsed.reference_verified === false && parsed.steps.length === 5,
+      'Export ist strukturiert, vollständig und ausdrücklich kein Originalbeleg');
+    check(page.querySelector('#pilot-status').textContent.includes('vorbereitet'),
+      'Benutzer erhält verständliche Export-Rückmeldung');
+  } finally {
+    win.URL.createObjectURL = originalObjectUrl;
+  }
+
   for (const [width, zoom] of [[320, 1], [390, 1], [640, 2]]) {
     iframe.style.width = width + 'px';
     page.documentElement.style.zoom = String(zoom);
@@ -82,6 +115,8 @@ async function run() {
   page.documentElement.style.zoom = '';
   iframe.style.width = '390px';
 
+  check(traceList.children.length === 5,
+    'Bei bloßer Layoutvergrößerung bleibt das Protokoll unverändert');
   const reload = page.querySelector('#reload-contract');
   const previousFetch = win.fetch;
   try {
@@ -96,6 +131,8 @@ async function run() {
       'Veraltete Forschungsinhalte während des Ladens verborgen');
     check(page.querySelector('#pilot-controls').children.length === 0,
       'Keine alten Bedienaktionen während des Ladens sichtbar');
+    check(traceList.children.length === 0 && download.disabled === true,
+      'Alter Testverlauf und Export während des erneuten Ladens gesperrt');
     check(page.querySelector('#c0-version').textContent.includes('Version wird geprüft'),
       'Versionsanzeige ist während des Ladens nicht veraltet');
     for (const resolve of requests) resolve({ ok: false, status: 503 });
@@ -115,6 +152,9 @@ async function run() {
   await until(() => page.querySelector('#pilot-status')?.textContent?.includes('Testbasis bereit'),
     'Wiederherstellung nach Ladefehler');
   check(pageTitle(page).includes('Büro'), 'Nach erfolgreichem Wiederladen Büroansicht wiederhergestellt');
+  check(traceList.children.length === 1 &&
+    traceList.textContent.includes('Schritt 0') && download.disabled === false,
+    'Neues Laden beginnt eine klar abgegrenzte technische Testsitzung');
   check(page.querySelector('#pilot-view').getAttribute('aria-busy') === 'false',
     'Ladestatus wird nach erfolgreichem Wiederanlauf zurückgenommen');
 
