@@ -40,5 +40,9 @@ export const UI_TEXT = Object.freeze({
   traceOmitted: 'Frühere, nicht mehr gespeicherte Schritte:',
   traceExported: 'Technisches Navigationsprotokoll zum Herunterladen vorbereitet.',
   traceExportError: 'Das Testprotokoll konnte nicht exportiert werden.',
+  comparisonDownload: 'Vergleichsvorlage für C64-Prüfungen als JSON speichern',
+  comparisonExported: 'Offene Vergleichsvorlage mit TEST-001 bis TEST-003 vorbereitet – ohne Originalbeleg.',
+  comparisonExportError: 'Die Vergleichsvorlage konnte nicht erzeugt werden.',
+
   versionError: 'Versionskennzeichnung unlesbar. Die Testbasis wurde nicht freigegeben.',
 });
