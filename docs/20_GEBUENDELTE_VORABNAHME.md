@@ -26,13 +26,14 @@ Ein Operator darf schreiben, Forschende/Prüfer kontrollieren getrennt. Die offe
 
 1. **Wissenschaftliche Dokumentation**: derzeit `3.0` (kann sich ändern, ohne Softwareversion zu erhöhen).
 2. **Forschungsdatenvertrag**: `data/contract.json.schema_version = 1.0` (strukturelle Inkompatibilität benötigt ausdrücklich dokumentierte Migration).
-3. **HTML-Testbasis C0**: `release/c0-version.json.version = 0.1.0-alpha.3`.
+3. **HTML-Testbasis C0**: `release/c0-version.json.version = 0.1.0-alpha.4`.
 
 C0 verwendet das Schema `HAUPT.NEBEN.KORREKTUR-STUFE.NUMMER` (SemVer für Vorabversionen).
 
 - `0.1.0-alpha.1`: erste interne funktionsfähige Forschungsvorschau; noch keine Nutzerabnahme.
 - `0.1.0-alpha.2`: stärkere Forschungsdatenprüfung, vollständiger Navigations- und Browser-Ablauftest.
 - `0.1.0-alpha.3`: abgesicherte Seitenrichtlinie, barrierearmer Lade- und Fehlerzustand sowie zusätzliche 200-%-Layoutprüfung.
+- `0.1.0-alpha.4`: technisch reproduzierbares Navigationsprotokoll mit bewusstem JSON-Export, begrenztem Sitzungsspeicher und eigenen Modultests; weiterhin kein historischer Beleg.
 - `0.1.0-beta.1`: gewünschter Umfang ist technisch weitgehend fertig; Schwerpunkt liegt auf Fehlerbehebung und Testfällen.
 - `0.1.0-rc.1`: **Kandidat zur gesammelten Abnahme**; keine ungeprüften Erweiterungen mehr, nur Fehlerbehebungen.
 - `0.1.0`: nur wenn technische, rechtliche, fachliche und organisatorische Freigaben vorliegen; eine technische Forschungsvorschau ist deshalb **keine** Freigabe einer echten Spielrekonstruktion.
@@ -47,6 +48,7 @@ data/contract.json                  ← EIN verbindlicher Forschungsstand
 docs/                               ← Forschungsprotokolle, Architektur, Entscheidungen
 prototype/navigation.mjs            ← reine logische Navigation
 prototype/contract-guard.mjs        ← Browser-Konsistenzschutz, keine Fachfreigabe
+prototype/pilot-trace.mjs            ← reines, begrenztes Testprotokoll für Entwurfsnavigation
 prototype/app.mjs                   ← Steuerung: Laden, Status und Benutzeraktionen
                                  ← beim Neuladen keine veralteten Ansichten anzeigen
 prototype/ui/render.mjs             ← nur zugängliche HTML-/DOM-Darstellung
@@ -85,10 +87,10 @@ Pflicht vor einer technischen C0-Vorschau:
 
 1. Python-Vertragsvalidator `python3 tools/validate_project.py`.
 2. Python-Unittests `python3 -m unittest discover -s tests -v`.
-3. JavaScript-Syntax- und Navigations-/Negativtests mit Node.js; Datenwächter für Referenzen/Prüfstatus sowie automatisierte WCAG-AA-Kontraste, Fokusmarkierung und Schaltflächengrößen.
+3. JavaScript-Syntax- und Navigations-/Negativtests mit Node.js; Datenwächter für Referenzen/Prüfstatus, reproduzierbare und auf 200 Schritte begrenzte Protokolle sowie automatisierte WCAG-AA-Kontraste, Fokusmarkierung und Schaltflächengrößen.
 4. Lokale HTTP-Auslieferung aller HTML-, CSS-, JS- und Vertragsdateien.
    Zusätzlich einen echten Headless-Chrome-Start prüfen: Versionskennung, Regel-IDs, Frage-IDs; Desktop- und Mobilbilder als CI-Belege erfassen (das ist noch keine manuelle Sichtabnahme).
-   Ein zweiter echter Chrome-Test bedient die gesamte Pilotnavigation, kontrolliert Fokus und 320-/390-Pixel-Breite sowie 200-%-Vergrößerung, prüft die Seiten-Sicherheitsrichtlinie und simuliert einen Ladefehler einschließlich sichtbaren Ladezustands, ausgeblendeter Altansicht und erfolgreichem Wiederanlauf.
+   Ein zweiter echter Chrome-Test bedient die gesamte Pilotnavigation, kontrolliert Fokus und 320-/390-Pixel-Breite sowie 200-%-Vergrößerung, prüft die Seiten-Sicherheitsrichtlinie, einen ausdrücklich angeforderten JSON-Testprotokoll-Export und simuliert einen Ladefehler einschließlich sichtbaren Ladezustands, ausgeblendeter Altansicht und erfolgreichem Wiederanlauf.
 5. C0-Versions- und Konsistenzprüfung `python3 tools/check_c0_release.py`.
 6. Reproduzierbare ZIP-Erzeugung `python3 tools/check_c0_release.py --package dist/c0-review.zip`.
 7. SHA-256-Abgleich aller ZIP-Einträge `python3 tools/check_c0_release.py --verify dist/c0-review.zip`.
@@ -107,7 +109,7 @@ Die Abnahmeunterlagen bündeln:
 - **Wissenschaft:** Quelle→Regel→Modul→Test und separate Liste unbewiesener Punkte.
 - **Rechte:** Bestätigung der Zulässigkeit öffentlich verteilter Bilder/Texte und akademischer Vorgaben.
 - **Entscheidungen:** wenige eindeutig formulierte Entscheidungen statt fortlaufender kleinteiliger Nachfragen.
-- **Reproduzierbarkeit:** Manifest, Hashes, Startanleitung, erwartete Testausgaben.
+- **Reproduzierbarkeit:** Manifest, Hashes, Startanleitung, erwartete Testausgaben und gegebenenfalls ausdrücklich exportierte C0-Navigationsprotokolle. Letztere sind technische Tests, **keine** Originalbeweise.
 
 ### Die vier manuellen Freigaben
 
