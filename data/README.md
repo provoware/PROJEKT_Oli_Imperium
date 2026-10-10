@@ -17,3 +17,6 @@
 
 ## Vorgehen
 Einmal Quellen-ID erfassen → Regelkarte zuordnen → Bildschirm-/Test-/Modul-IDs verbinden → Übergabe versionieren. Nicht dieselbe Zahl in mehreren Dateien pflegen. Änderungen mit `python3 tools/validate_project.py` prüfen.
+
+## Zusätzliche Freigabekontrollen
+Freigegebene Regeln (`status: approved`) benötigen mindestens einen gültigen `source_ids`-Verweis. Bestandene Originaltests benötigen neben verifizierter Referenz und `evidence` auch mindestens eine verknüpfte `rule_ids`-Kennung. So verhindern wir formale Scheinerfolge ohne fachlichen Rückbezug.
