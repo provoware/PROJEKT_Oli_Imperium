@@ -11,6 +11,14 @@ Zwei eigenständige, wissenschaftliche Abschlussarbeiten mit gemeinsamer, versio
 
 **Verbindlicher Grundsatz:** Das Original bestimmt die Fachregeln. Eine plausible Modellierung ist keine belegte historische Implementierung. Kein behaupteter 1:1-Nachbau ohne Originalvergleich.
 
+## Parallele HTML-Testbasis (Forschungsprototyp C0)
+
+Ein kleiner **interaktiver Navigationsentwurf** liegt unter [`prototype/`](prototype/). Er zeigt die Forschungsstände Büro → Weltkarte → Claim-Information, ohne ungeprüfte C64-Regeln als bestätigt auszugeben. Die einzige Datenquelle ist [`data/contract.json`](data/contract.json). Das ist **keine Freigabe des späteren vollständigen Nachbaus C**.
+
+Start im Repository-Hauptordner: `python3 -m http.server 8000 --bind 127.0.0.1`, dann [http://127.0.0.1:8000/prototype/](http://127.0.0.1:8000/prototype/) öffnen. Forschungsstatus, Quellen und offene Fragen bleiben sichtbar; die Schaltflächen sind **nur Entwurfsnavigation**.
+
+**Verbindlich:** [Regelwerk der parallelen HTML-Entwicklung](docs/19_HTML_TESTBASIS_REGELWERK.md). Tests: `node --test prototype/tests/*.test.mjs` neben den bestehenden Python-Prüfungen. Der vollständige Spielnachbau benötigt weiterhin eine gesonderte fachliche Entscheidung.
+
 ## Sofortiger Einstieg
 1. [Projektcharta / Forschungsfragen](docs/00_PROJEKTCHARTA.md) lesen.
 2. [Roadmap und Abnahmeprüfungen](docs/08_ROADMAP_CHECKPOINTS.md) ansehen.
