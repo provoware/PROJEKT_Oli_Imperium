@@ -71,7 +71,7 @@ describe('C0 Vergleichsvorlage – technischer Entwurf gegenüber noch fehlenden
   it('verweigert defekte Forschungsdaten, fehlende Originaltest-IDs und falsche Trace-Typen', () => {
     const trace = completeTrace();
     const broken = structuredClone(contract);
-    broken.tests = broken.tests.filter(entry => entry.id !== 'TEST-002');
+    broken.tests.find(entry => entry.id === 'TEST-002').kind = 'structure';
     assert.throws(() => createReferenceComparisonPlan(trace, broken), /Pflicht-Originaltest/);
     assert.throws(() => createReferenceComparisonPlan({ kind: 'original', steps: [] }, contract), TypeError);
     assert.throws(() => createReferenceComparisonPlan({ ...trace, reference_verified: true }, contract), TypeError);
