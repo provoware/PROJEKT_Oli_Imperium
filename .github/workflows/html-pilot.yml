@@ -10,6 +10,7 @@ on:
       - 'docs/22_C0_VORABNAHMEBOGEN.md'
       - 'docs/23_C0_REVIEW_SEGMENTIERUNG.md'
       - 'docs/24_C0_TECHNISCHER_UMFANG.md'
+      - 'docs/25_C0_AUDIT_A_B_C_D.md'
       - 'docs/18_REFERENZKANDIDAT_C64_PAL.md'
       - 'release/**'
       - 'tools/**'
