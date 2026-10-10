@@ -1,0 +1,43 @@
+name: HTML-Forschungsprototyp
+on:
+  pull_request:
+    paths:
+      - 'prototype/**'
+      - 'data/contract.json'
+      - 'docs/19_HTML_TESTBASIS_REGELWERK.md'
+      - '.github/workflows/html-pilot.yml'
+  workflow_dispatch:
+jobs:
+  html-pilot:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Forschungsdaten und Testbestand prüfen
+        run: |
+          python3 tools/validate_project.py
+          python3 -m unittest discover -s tests -v
+      - name: JavaScript-Syntax prüfen
+        run: |
+          node --check prototype/navigation.mjs
+          node --check prototype/app.mjs
+      - name: Navigationsmodell und Forschungsstatus testen
+        run: node --test prototype/tests/*.test.mjs
+      - name: Lokale HTML-Auslieferung prüfen (kein Browser-Originalvergleich)
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 > /tmp/oli-prototype-http.log 2>&1 &
+          pid=$!
+          trap 'kill "$pid" 2>/dev/null || true' EXIT
+          sleep 2
+          curl --fail --silent --show-error --output /dev/null http://127.0.0.1:8765/prototype/
+          curl --fail --silent --show-error --output /dev/null http://127.0.0.1:8765/prototype/navigation.mjs
+          curl --fail --silent --show-error --output /dev/null http://127.0.0.1:8765/prototype/app.mjs
+          curl --fail --silent --show-error --output /dev/null http://127.0.0.1:8765/prototype/styles.css
+          curl --fail --silent --show-error --output /dev/null http://127.0.0.1:8765/data/contract.json
