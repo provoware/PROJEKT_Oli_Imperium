@@ -72,7 +72,7 @@ class TestC0ReviewGate(unittest.TestCase):
                                  lambda data, key=flag: data.update({key: True}))
                 report = inspect(self.root)
                 self.assertFalse(report["technical_structure_ok"])
-                self.assertTrue(any(key in e for e in report["errors"]))
+                self.assertTrue(any(flag in e for e in report["errors"]))
                 self.modify_json("release/c0-scope.json",
                                  lambda data, key=flag: data.update({key: False}))
         self.modify_json("release/c0-scope.json",
