@@ -32,5 +32,13 @@ export const UI_TEXT = Object.freeze({
   navigationPrefix: 'Technischer Testwechsel zu ',
   navigationSuffix: '. Keine bestätigte Original-Eingabe.',
   versionPrefix: 'C0-Testfassung ',
+  traceTitle: 'Technisches Navigationsprotokoll',
+  traceDescription: 'Nur ein Test des HTML-Entwurfs. Kein Nachweis für die Bedienung des C64-Originals.',
+  traceDownload: 'Testprotokoll als JSON speichern',
+  traceStart: 'Startansicht',
+  traceStep: 'Schritt',
+  traceOmitted: 'Frühere, nicht mehr gespeicherte Schritte:',
+  traceExported: 'Technisches Navigationsprotokoll zum Herunterladen vorbereitet.',
+  traceExportError: 'Das Testprotokoll konnte nicht exportiert werden.',
   versionError: 'Versionskennzeichnung unlesbar. Die Testbasis wurde nicht freigegeben.',
 });
