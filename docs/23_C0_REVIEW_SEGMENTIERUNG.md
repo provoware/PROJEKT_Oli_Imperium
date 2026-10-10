@@ -1,6 +1,6 @@
 # 23 · C0-Review in vier verbindliche, getrennte Prüfabschnitte
 
-**Gültig ab:** C0 0.1.0-alpha.6 · **Status:** technischer Entwurf, keine Freigabe.  
+**Gültig ab:** C0 0.1.0-alpha.7 · **Status:** technischer Entwurf, keine Freigabe.  
 **Zweck:** Der inzwischen große PR #7 bleibt prüfbar, ohne die bereits versionierte Entwicklung in unverbundene Spielnachbauzweige zu zerlegen.
 
 ## Verfahren
@@ -43,11 +43,11 @@ Einmaliger Arbeitsablauf für Forschung A:
 
 ## C – Maßgebliche technische Prüfmatrix
 
-Die GitHub-Automatik muss bei **demselben Commit** diese Prüfungen bestehen: Python-Vertrag + Tests, beide Aufnahme-/Gruppenprüfer, Node-Modultests, Chrome-Start, echte Navigation/Downloads, Fokusprüfung, 320/390/640/800/1024 Pixel und die simulierten Layoutbreiten für 100/150/200 % im Browser ohne horizontales Überlaufen. Für mobile Ansichten muss der erste Knopf vor dem langen Forschungsinfobereich erreichbar sein. Chrome erzeugt zusätzlich Desktop-/Mobilbilder; die reale Sicht-, Tastatur- und Schriftprüfung durch Menschen bleibt offen.
+Die GitHub-Automatik muss bei **demselben Commit** diese Prüfungen bestehen: Python-Vertrag + Tests, beide Aufnahme-/Gruppenprüfer, Node-Modultests, Chrome-Start, echte Navigation/Downloads, Fokusprüfung, 320/390/640/800/1024 Pixel und die simulierten Layoutbreiten für 100/150/200 % im Browser ohne horizontales Überlaufen. Für mobile Ansichten muss der erste Knopf vor dem langen Forschungsinfobereich erreichbar sein. Chrome erzeugt zusätzlich Desktop-/Mobilbilder. Das neue Werkzeug `tools/chrome_keyboard_probe.mjs` sendet echte Tab-, Umschalt+Tab- und Eingabetasten und prüft den Fokus und die mobile Ansicht. Ein menschlicher Sicht-/Barrierefreiheitsreview bleibt dennoch offen.
 
 ## D – Versionierter Gesamtprüfbericht
 
-Das interne ZIP enthält die ausführbare HTML-Testbasis, **alle im Paket benutzten Python- und Node-Prüfdateien**, die Aufnahmevorlage ohne Belege, den Gruppenplan, Forschungshinweise und alle maßgeblichen Projektregeln. `REVIEW_STATUS.json` und `REVIEW_MANIFEST.json` enthalten Version, Originalstatus und einzelne SHA-256-Nachweise. Das gleiche Quellmaterial muss stets das gleiche Archiv ergeben.
+Das interne ZIP enthält die ausführbare HTML-Testbasis, **alle im Paket benutzten Python- und Node-Prüfdateien**, die Aufnahmevorlage ohne Belege, den Gruppenplan, Forschungshinweise und alle maßgeblichen Projektregeln. `REVIEW_STATUS.json` und `REVIEW_MANIFEST.json` enthalten Version, Originalstatus und einzelne SHA-256-Nachweise. Das gleiche Quellmaterial muss stets das gleiche Archiv ergeben. Danach wird das ZIP in ein eigenständiges Verzeichnis entpackt und seine Python- und JavaScript-Prüfungen werden dort erneut ausgeführt. Lokale Verweise der HTML-Startseite müssen im Paket vorhanden sein. Der SHA-256-Wert dient der Integritätsprüfung, nicht als digitaler Herkunftsnachweis.
 
 Das Review-Verzeichnis ist **kein** GitHub-Release; dafür fehlen bestätigte Nutzungsrechte, Originalvergleiche und formelle Genehmigungen. Erst nach kontrolliertem Fachreview kann aus `0.1.0-alpha.N` ein klar abgegrenzter `beta`- oder `rc`-Kandidat entstehen. Eigene Versionsnummer für C0, unabhängig von Forschungs-Datenvertrag 1.0 und Dokumentation 3.0.
 
