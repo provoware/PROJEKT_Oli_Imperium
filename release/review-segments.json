@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "kind": "c0-review-segments",
+  "version": "0.1.0-alpha.10",
+  "purpose": "INTERNAL_STAGED_TECHNICAL_REVIEW",
+  "overall_approval": "not_granted",
+  "groups": [
+    {
+      "id": "A",
+      "title": "Wissenschaftliche Quellen, Datensätze und Originalaufnahmen",
+      "patterns": [
+        "AGENTS.md",
+        "CONTRIBUTING.md",
+        "data/**",
+        "docs/03_*",
+        "docs/15_*",
+        "docs/16_*",
+        "docs/05_*",
+        "docs/18_*",
+        "docs/21_*",
+        "tools/validate_project.py",
+        "tools/validate_c64_capture.py",
+        "tests/test_validate_project.py",
+        "tests/test_validate_c64_capture.py",
+        "docs/27_*"
+      ],
+      "technical_checks": [
+        "Forschungsdaten-Validator",
+        "Aufnahmeakten-Validator und Negativtests"
+      ],
+      "scope_note": "Kein Original wird automatisch verifiziert. Beide G64-Dateien bleiben außerhalb des Repositories.",
+      "human_gate": "Wissenschaftliche Herkunft, Rechtsgrundlage und C64-Originaltests 001–003"
+    },
+    {
+      "id": "B",
+      "title": "HTML-Navigation, Darstellung und technische Protokolle",
+      "patterns": [
+        "prototype/app.mjs",
+        "prototype/contract-guard.mjs",
+        "prototype/navigation.mjs",
+        "prototype/pilot-trace.mjs",
+        "prototype/reference-comparison.mjs",
+        "prototype/index.html",
+        "prototype/styles.css",
+        "prototype/ui/**"
+      ],
+      "technical_checks": [
+        "JavaScript-Syntax",
+        "Zustands-/Darstellungstests"
+      ],
+      "scope_note": "Technische Entwurfsbedienung, keine originale C64-Steuerung.",
+      "human_gate": "Bedienung/Barrierefreiheit und fachliche UI-Interpretation"
+    },
+    {
+      "id": "C",
+      "title": "Automatische Qualitätsprüfung und Browsernachweise",
+      "patterns": [
+        "prototype/tests/**",
+        ".github/workflows/**",
+        "tools/chrome_keyboard_probe.mjs"
+      ],
+      "technical_checks": [
+        "Python- und Node-Tests",
+        "Headless-Chrome-Browserregressionen",
+        "Desktop-/Mobilvorschau"
+      ],
+      "scope_note": "Automatische Screenshots ersetzen keinen menschlichen Tastatur-/Sichttest.",
+      "human_gate": "Unabhängige Sichtprüfung und Prüfprotokoll"
+    },
+    {
+      "id": "D",
+      "title": "Versionierung, Freigaben und Vorabnahme-Paket",
+      "patterns": [
+        "README.md",
+        "CHANGELOG.md",
+        "docs/19_*",
+        "docs/20_*",
+        "docs/22_*",
+        "docs/23_*",
+        "release/**",
+        "tools/check_c0_release.py",
+        "tools/check_review_segments.py",
+        "tests/test_c0_release.py",
+        "tests/test_review_segments.py",
+        "docs/24_*",
+        "docs/25_*",
+        "docs/26_*"
+      ],
+      "technical_checks": [
+        "Vollständige Dateiabdeckung ohne Dopplung",
+        "Deterministisches ZIP und SHA-256",
+        "Freigaben explizit offen"
+      ],
+      "scope_note": "Ein ZIP und ein grüner Prüfstatus sind keine Release-Erlaubnis.",
+      "human_gate": "Verantwortlicher GitHub-Review und gesammelte Freigabe"
+    }
+  ]
+}

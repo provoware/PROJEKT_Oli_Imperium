@@ -1,0 +1,171 @@
+name: HTML-Forschungsprototyp
+on:
+  pull_request:
+    paths:
+      - 'prototype/**'
+      - 'data/**'
+      - 'docs/19_HTML_TESTBASIS_REGELWERK.md'
+      - 'docs/20_GEBUENDELTE_VORABNAHME.md'
+      - 'docs/21_C0_ORIGINALVERGLEICH.md'
+      - 'docs/22_C0_VORABNAHMEBOGEN.md'
+      - 'docs/23_C0_REVIEW_SEGMENTIERUNG.md'
+      - 'docs/24_C0_TECHNISCHER_UMFANG.md'
+      - 'docs/25_C0_AUDIT_A_B_C_D.md'
+      - 'docs/26_C0_UNABHAENGIGE_ABNAHMEVORLAGE.md'
+      - 'docs/27_C0_ORIGINALPRUEFUNG_ANLEITUNG.md'
+      - 'docs/18_REFERENZKANDIDAT_C64_PAL.md'
+      - 'release/**'
+      - 'tools/**'
+      - 'tests/**'
+      - '.github/workflows/html-pilot.yml'
+  workflow_dispatch:
+jobs:
+  html-pilot:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Forschungsdaten und Testbestand prüfen
+        run: |
+          python3 tools/validate_project.py
+          python3 -m unittest discover -s tests -v
+      - name: Leere Originalaufnahme und vier Reviewgruppen nachweisbar prüfen
+        run: |
+          mkdir -p dist
+          python3 tools/validate_c64_capture.py > dist/c64-template-check.json
+          python3 tools/check_review_segments.py > dist/review-segments-check.json
+      - name: JavaScript-Syntax prüfen
+        run: |
+          node --check prototype/navigation.mjs
+          node --check prototype/pilot-trace.mjs
+          node --check prototype/reference-comparison.mjs
+          node --check prototype/contract-guard.mjs
+          node --check prototype/tests/browser-regression.mjs
+          node --check prototype/app.mjs
+          node --check prototype/ui/render.mjs
+          node --check prototype/ui/texts.de.mjs
+      - name: Navigationsmodell und Forschungsstatus testen
+        run: node --test prototype/tests/*.test.mjs
+      - name: Lokale HTML-Auslieferung prüfen (kein Browser-Originalvergleich)
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 > /tmp/oli-prototype-http.log 2>&1 &
+          pid=$!
+          trap 'kill "$pid" 2>/dev/null || true' EXIT
+          sleep 2
+          curl --fail --silent --show-error --output /dev/null http://127.0.0.1:8765/prototype/
+          curl --fail --silent --show-error --output /dev/null http://127.0.0.1:8765/prototype/navigation.mjs
+          curl --fail --silent --show-error --output /dev/null http://127.0.0.1:8765/prototype/pilot-trace.mjs
+          curl --fail --silent --show-error --output /dev/null http://127.0.0.1:8765/prototype/reference-comparison.mjs
+          curl --fail --silent --show-error --output /dev/null http://127.0.0.1:8765/prototype/contract-guard.mjs
+          curl --fail --silent --show-error --output /dev/null http://127.0.0.1:8765/prototype/app.mjs
+          curl --fail --silent --show-error --output /dev/null http://127.0.0.1:8765/prototype/styles.css
+          curl --fail --silent --show-error --output /dev/null http://127.0.0.1:8765/prototype/ui/render.mjs
+          curl --fail --silent --show-error --output /dev/null http://127.0.0.1:8765/prototype/ui/texts.de.mjs
+          curl --fail --silent --show-error --output /dev/null http://127.0.0.1:8765/release/c0-version.json
+          curl --fail --silent --show-error --output /dev/null http://127.0.0.1:8765/data/contract.json
+      - name: Reale HTML-Ausgabe im Browser prüfen (kein C64-Originalvergleich)
+        run: |
+          browser="$(command -v google-chrome || command -v chromium || true)"
+          if [ -z "$browser" ]; then
+            echo "Chrome/Chromium für den Browser-Smoke-Test fehlt."
+            exit 1
+          fi
+          python3 -m http.server 8766 --bind 127.0.0.1 > /tmp/oli-c0-browser-http.log 2>&1 &
+          pid=$!
+          trap 'kill "$pid" 2>/dev/null || true' EXIT
+          sleep 2
+          mkdir -p dist
+          "$browser" --headless --no-sandbox --disable-gpu --disable-dev-shm-usage \
+            --virtual-time-budget=6000 --dump-dom http://127.0.0.1:8766/prototype/ \
+            > dist/browser-rendered.html
+          version="$(python3 -c 'import json; print(json.load(open("release/c0-version.json"))["version"])')"
+          grep -Fq "C0-Testfassung ${version}" dist/browser-rendered.html
+          grep -q 'REGEL-002' dist/browser-rendered.html
+          grep -q 'Q-001' dist/browser-rendered.html
+          "$browser" --headless --no-sandbox --disable-gpu --disable-dev-shm-usage \
+            --window-size=1280,800 --screenshot=dist/browser-desktop.png \
+            --virtual-time-budget=6000 http://127.0.0.1:8766/prototype/
+          "$browser" --headless --no-sandbox --disable-gpu --disable-dev-shm-usage \
+            --window-size=390,844 --screenshot=dist/browser-mobile.png \
+            --virtual-time-budget=6000 http://127.0.0.1:8766/prototype/
+          "$browser" --headless --no-sandbox --disable-gpu --disable-dev-shm-usage \
+            --window-size=390,2200 --screenshot=dist/browser-mobile-extended.png \
+            --virtual-time-budget=6000 http://127.0.0.1:8766/prototype/
+      - name: Tatsächliche Navigation und Fehlerwiederherstellung im Browser testen
+        run: |
+          python3 -m http.server 8767 --bind 127.0.0.1 > /tmp/oli-browser-interaction-http.log 2>&1 &
+          pid=$!
+          trap 'kill "$pid" 2>/dev/null || true' EXIT
+          sleep 2
+          browser="$(command -v google-chrome || command -v chromium || true)"
+          if [ -z "$browser" ]; then exit 1; fi
+          "$browser" --headless --no-sandbox --disable-gpu --disable-dev-shm-usage \
+            --window-size=1280,800 --virtual-time-budget=18000 \
+            --dump-dom http://127.0.0.1:8767/prototype/tests/browser-regression.html \
+            > dist/browser-interactions.html
+          if grep -q 'BROWSER_C0_FAIL' dist/browser-interactions.html; then
+            cat dist/browser-interactions.html
+            exit 1
+          fi
+          grep -q 'BROWSER_C0_PASS' dist/browser-interactions.html
+      - name: Reale Tastatureingaben, Fokus und Mobilverhalten in Chrome prüfen
+        run: |
+          set -o pipefail
+          python3 -m http.server 8768 --bind 127.0.0.1 > /tmp/oli-c0-keyboard-http.log 2>&1 &
+          pid=$!
+          trap 'kill "$pid" 2>/dev/null || true' EXIT
+          sleep 2
+          browser="$(command -v google-chrome || command -v chromium || true)"
+          if [ -z "$browser" ]; then exit 1; fi
+          OLI_CHROME="$browser" OLI_C0_URL="http://127.0.0.1:8768/prototype/" \
+            node tools/chrome_keyboard_probe.mjs | tee dist/chrome-keyboard-check.txt
+      - name: Browser-Belege als CI-Artefakt hinterlegen
+        uses: actions/upload-artifact@v4
+        with:
+          name: oli-imperium-c0-browser-preview
+          path: |
+            dist/browser-rendered.html
+            dist/browser-interactions.html
+            dist/chrome-keyboard-check.txt
+            dist/browser-desktop.png
+            dist/browser-mobile.png
+            dist/browser-mobile-extended.png
+          if-no-files-found: error
+          retention-days: 14
+      - name: C0-Version und Vorabnahme-Vertrag prüfen
+        run: python3 tools/check_c0_release.py
+      - name: Reproduzierbares internes Review-Paket erzeugen und prüfen
+        run: |
+          python3 tools/check_c0_release.py --package dist/c0-review.zip
+          python3 tools/check_c0_release.py --verify dist/c0-review.zip
+          sha256sum dist/c0-review.zip | tee dist/c0-review.zip.sha256
+      - name: Entpacktes Prüfarchiv eigenständig und offline erneut testen
+        run: |
+          mkdir -p dist/unpacked
+          unzip -q dist/c0-review.zip -d dist/unpacked
+          version="$(python3 -c 'import json; print(json.load(open("release/c0-version.json"))["version"])')"
+          cd "dist/unpacked/oli-imperium-c0-${version}"
+          python3 tools/validate_project.py
+          python3 tools/validate_c64_capture.py
+          python3 tools/check_review_segments.py
+          python3 -m unittest discover -s tests -v
+          node --test prototype/tests/*.test.mjs
+          python3 tools/check_c0_release.py --verify "../../c0-review.zip"
+      - name: Internes Review-Paket als CI-Artefakt hinterlegen
+        uses: actions/upload-artifact@v4
+        with:
+          name: oli-imperium-c0-review
+          path: |
+            dist/c0-review.zip
+            dist/c0-review.zip.sha256
+            dist/c64-template-check.json
+            dist/review-segments-check.json
+          if-no-files-found: error
+          retention-days: 14

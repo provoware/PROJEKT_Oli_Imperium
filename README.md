@@ -11,6 +11,32 @@ Zwei eigenständige, wissenschaftliche Abschlussarbeiten mit gemeinsamer, versio
 
 **Verbindlicher Grundsatz:** Das Original bestimmt die Fachregeln. Eine plausible Modellierung ist keine belegte historische Implementierung. Kein behaupteter 1:1-Nachbau ohne Originalvergleich.
 
+## Parallele HTML-Testbasis (Forschungsprototyp C0)
+
+Ein kleiner **interaktiver Navigationsentwurf** liegt unter [`prototype/`](prototype/). Er zeigt die Forschungsstände Büro → Weltkarte → Claim-Information, ohne ungeprüfte C64-Regeln als bestätigt auszugeben. Die einzige Datenquelle ist [`data/contract.json`](data/contract.json). Das ist **keine Freigabe des späteren vollständigen Nachbaus C**.
+
+Start im Repository-Hauptordner: `python3 -m http.server 8000 --bind 127.0.0.1`, dann [http://127.0.0.1:8000/prototype/](http://127.0.0.1:8000/prototype/) öffnen. Forschungsstatus, Quellen und offene Fragen bleiben sichtbar; die Schaltflächen sind **nur Entwurfsnavigation**.
+
+**Neu in C0 `0.1.0-alpha.4`:** Die Schaltflächen erzeugen ein nummeriertes **technisches Navigationsprotokoll**, das sich über „Testprotokoll als JSON speichern“ bewusst als Datei exportieren lässt. Es wird nicht automatisch im Browser oder in den Forschungsdaten gespeichert. Das Protokoll ist ausdrücklich **kein Nachweis für die Bedienung des C64-Originals**; es enthält höchstens 200 Schritte, frühere Schritte werden als ausgelassen gezählt. Bei „Forschungsdaten neu laden“ beginnt ein neues Protokoll.
+
+**Neu in C0 `0.1.0-alpha.5`:** Der zweite Knopf „Vergleichsvorlage für C64-Prüfungen als JSON speichern“ erzeugt ein vorbereitetes Dokument für **TEST-001/002/003** mit technischen Schritten und leeren Originalbeobachtungen. Das ist **keine erfolgte Emulatorprüfung**; alle Originaltests und vier Freigaben bleiben offen. Auf Mobilgeräten erscheint jetzt der bedienbare Navigationspilot **vor** dem längeren Forschungsinfobereich. Der interne ZIP-Abnahmebericht enthält zusätzlich den maschinenlesbaren Freigabestatus `REVIEW_STATUS.json`.
+
+**Neu in C0 `0.1.0-alpha.6`:** Für die spätere Originaluntersuchung gibt es die leere Vorlage [`data/original-session.template.json`](data/original-session.template.json) und den Prüfer `python3 tools/validate_c64_capture.py`. Beide G64-Seiten, die VICE/PAL-Version, die genauen Eingaben und Rohbild-Prüfsummen werden **erst nach einer rechtmäßig dokumentierten Originalaufnahme** lokal eingetragen. Die Vorlage selbst bleibt ohne Belege. Die Prüfung darf niemals automatisch `passed` melden. Der große PR #7 ist jetzt außerdem in vier technisch überwachte Review-Gruppen aufgeteilt: [Dokumentation](docs/23_C0_REVIEW_SEGMENTIERUNG.md), [maschinelle Zuordnung](release/review-segments.json). Der Browser prüft zusätzliche 150-%-/200-%-Darstellungen und die tatsächliche Reihenfolge der Oberfläche für Tastatur und Mobilgeräte. **Keine Beta-/RC-Freigabe.**
+
+**Neu in C0 `0.1.0-alpha.7`:** Echte Chrome-Tastensteuerung mit Tab/Umschalt+Tab/Enter wird ohne zusätzliche npm-Pakete geprüft. Außerdem enthält das interne ZIP nun die beiden vom HTML direkt verlinkten wissenschaftlichen Dokumente. Nach dem Packen werden die Python- und JavaScript-Tests aus dem **entpackten** ZIP erneut ausgeführt; fehlende lokale HTML-Dateien verhindern die Paketfreigabe. Dies bleibt ein technischer Test, keine historische Original- oder menschliche Gesamtfreigabe.
+
+**C0 `0.1.0-alpha.8` – technischer Funktionsumfang für die gebündelte Vorabnahme eingefroren:** [Verbindliche Umfangsgrenze](docs/24_C0_TECHNISCHER_UMFANG.md) und [maschinenlesbarer Umfang](release/c0-scope.json). **Keine zusätzlichen Spielmerkmale** in C0. Die Protokollprüfung kontrolliert jetzt vor jedem Export sowie vor der Vergleichsvorlage vollständige, nummerierte technische Übergänge; beide JSON-Downloads nutzen denselben gesicherten Dateiausgabeweg. Die C64-Originalbeobachtungen und sämtliche wissenschaftlichen/rechtlichen Freigaben bleiben offen. „Eingefroren“ bedeutet **keine** Veröffentlichung oder Spieloriginaltreue.
+
+**C0 `0.1.0-alpha.9` – zusätzliche A–D-Prüfakte:** Der technische HTML-Funktionsumfang bleibt unverändert eingefroren. [Dokument 25](docs/25_C0_AUDIT_A_B_C_D.md) protokolliert separat wiederholte Tests aus dem alpha.8-Prüfarchiv sowie alle ausstehenden Original-, Bedienungs-, Rechte- und GitHub-Freigaben. Die alpha.9-Version ist **eine neue dokumentarische Prüf-Paketfassung ohne neue Spielfunktionen**; auch hierfür gilt: kein Merge, keine automatische Nutzerabnahme.\n\n**C0 `0.1.0-alpha.10` – Abnahmevorbereitung ohne neue Spielfunktionen:** [Private C64-Originalprüfung](docs/27_C0_ORIGINALPRUEFUNG_ANLEITUNG.md) und [unabhängige Bedienungs-/Freigabevorlage](docs/26_C0_UNABHAENGIGE_ABNAHMEVORLAGE.md). Beide sind **ausstehend** und enthalten keine frei erfundenen Prüfbelege. Der C0-Funktionsumfang bleibt seit alpha.8 unverändert.
+
+[Vergleichsvorlage und Originalbelege](docs/21_C0_ORIGINALVERGLEICH.md) · [Gesammelter Vorabnahmebogen](docs/22_C0_VORABNAHMEBOGEN.md).
+
+**Verbindlich:** [Regelwerk der parallelen HTML-Entwicklung](docs/19_HTML_TESTBASIS_REGELWERK.md) und [gebündelte Vorabnahme samt Versionierung](docs/20_GEBUENDELTE_VORABNAHME.md). Die HTML-Testbasis verwendet eine eigenständige Vorabversionskennung aus [`release/c0-version.json`](release/c0-version.json), getrennt von der wissenschaftlichen Dokumentationsversion 3.0.
+
+**Technische Schnellprüfungen:** `python3 tools/validate_project.py`, `python3 -m unittest discover -s tests -v` und `node --test prototype/tests/*.test.mjs`. **Zusätzliche Vorprüfung:** `python3 tools/validate_c64_capture.py` (leer/unbestätigt), `python3 tools/check_review_segments.py`. **Interne Vorabnahme:** `python3 tools/check_c0_release.py --package dist/c0-review.zip`; anschließend `python3 tools/check_c0_release.py --verify dist/c0-review.zip`. Ein ZIP ist ausdrücklich noch **kein** freigegebener öffentlicher Release. Die GitHub-Prüfung erzeugt ergänzend Desktop-/Mobilvorschauen in Chrome; eine eigene fachliche und visuelle Prüfung bleibt erforderlich.
+
+**Wartbare Trennung:** `prototype/navigation.mjs` enthält das reine Entwurfsmodell; `prototype/pilot-trace.mjs` erstellt prüfbare Navigationsprotokolle ohne Browserzugriff; `prototype/reference-comparison.mjs` erzeugt ausschließlich offene TEST-ID-Vergleichsvorlagen; `prototype/app.mjs` lädt Daten und verwaltet Interaktionen; `prototype/ui/render.mjs` erzeugt die HTML-Ansicht; `prototype/ui/texts.de.mjs` hält deutsche Oberflächentexte. Der vollständige Spielnachbau benötigt weiterhin eine gesonderte fachliche Entscheidung.
+
 ## Sofortiger Einstieg
 1. [Projektcharta / Forschungsfragen](docs/00_PROJEKTCHARTA.md) lesen.
 2. [Roadmap und Abnahmeprüfungen](docs/08_ROADMAP_CHECKPOINTS.md) ansehen.
@@ -48,7 +74,8 @@ Zwei eigenständige, wissenschaftliche Abschlussarbeiten mit gemeinsamer, versio
 | Vollständiges Regelinventar | offen |
 | Historische Screenshotserie aus eigener Originalausführung | offen |
 | Formelle A→B-Übergabe | offen |
-| Eigentliche HTML-Implementierung | nicht Teil dieser Etappe |
+| HTML-Forschungsprototyp C0 | in PR #7 technisch in Entwicklung, separat zu prüfen |
+| Originalgetreuer Spielnachbau C | nicht freigegeben, nicht Teil dieser Etappe |
 | Originaltreue-Prozentwert | nicht messbar ohne verifizierte Testbasis |
 
 **Wichtig:** Das Repository ist öffentlich. Urheberrechtlich geschützte Original-Diskettenabbilder, Codesheets, Scans, Musik und unfreigegebene Hochschulunterlagen nicht einchecken.
