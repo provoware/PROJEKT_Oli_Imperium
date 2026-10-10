@@ -43,7 +43,7 @@ Einmaliger Arbeitsablauf für Forschung A:
 
 ## C – Maßgebliche technische Prüfmatrix
 
-Die GitHub-Automatik muss bei **demselben Commit** diese Prüfungen bestehen: Python-Vertrag + Tests, beide Aufnahme-/Gruppenprüfer, Node-Modultests, Chrome-Start, echte Navigation/Downloads, Fokusprüfung, 320/390/640/1024/1280 Pixel und 100/150/200 % im Browser ohne horizontales Überlaufen. Für mobile Ansichten muss der erste Knopf vor dem langen Forschungsinfobereich erreichbar sein. Chrome erzeugt zusätzlich Desktop-/Mobilbilder; die reale Sicht-, Tastatur- und Schriftprüfung durch Menschen bleibt offen.
+Die GitHub-Automatik muss bei **demselben Commit** diese Prüfungen bestehen: Python-Vertrag + Tests, beide Aufnahme-/Gruppenprüfer, Node-Modultests, Chrome-Start, echte Navigation/Downloads, Fokusprüfung, 320/390/640/800/1024 Pixel und die simulierten Layoutbreiten für 100/150/200 % im Browser ohne horizontales Überlaufen. Für mobile Ansichten muss der erste Knopf vor dem langen Forschungsinfobereich erreichbar sein. Chrome erzeugt zusätzlich Desktop-/Mobilbilder; die reale Sicht-, Tastatur- und Schriftprüfung durch Menschen bleibt offen.
 
 ## D – Versionierter Gesamtprüfbericht
 
@@ -55,4 +55,4 @@ Das Review-Verzeichnis ist **kein** GitHub-Release; dafür fehlen bestätigte Nu
 
 Betroffene Gruppe, Regel-/TEST-ID, bereits bekannte Unsicherheit, konkrete negative und positive Testfälle **vor jeder neuen Arbeit benennen**. Kleine Commits sind gut; eine unstrukturierte PR-Abnahme ist es nicht. Änderungen an mindestens zwei Gruppen benötigen ausdrücklich beide Prüfvermerke. Auch ein vollständig grüner Techniklauf erteilt **keine** Freigabe.
 
-**Nächste drei Schritte:** ① Gruppenvollständigkeit automatisch überprüfen; ② Chrome-Regressionsmatrix bis 150 % und 200 % einschließlich Fokus ausführen; ③ vollständiges internes Paket erzeugen, technisch prüfen und die offenen Original- und Freigabegates transparent ausweisen.
+**Nächste drei Schritte:** ① Gruppenvollständigkeit automatisch überprüfen; ② Chrome-Regressionsmatrix mit der bei 150 % bzw. 200 % verkleinerten **wirksamen CSS-Viewportbreite** einschließlich Fokus ausführen; einen echten Browser-Zoom über Tastenkombination und tatsächliche Bedienbarkeit später zusätzlich manuell prüfen; ③ vollständiges internes Paket erzeugen, technisch prüfen und die offenen Original- und Freigabegates transparent ausweisen.
