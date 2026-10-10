@@ -24,6 +24,8 @@ export const UI_TEXT = Object.freeze({
   noSources: 'Keine Quelle zugeordnet.',
   badSource: ' · Quellenlink ungültig',
   loading: 'Forschungsdaten werden geladen …',
+  versionLoading: 'Version wird geprüft …',
+  loadingDetail: 'Die aktuelle Ansicht ist bis zum Abschluss der Prüfung nicht verfügbar.',
   ready: 'Testbasis bereit. Originaltreue ist noch nicht nachgewiesen.',
   loadFailed: 'Die Forschungsdaten konnten nicht geladen werden. Bitte den lokalen HTTP-Server im Projektordner starten; keine Änderungen wurden vorgenommen.',
   loadingErrorPrefix: 'Fehler beim Laden: ',
