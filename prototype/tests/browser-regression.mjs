@@ -34,7 +34,9 @@ async function run() {
   const win = iframe.contentWindow;
   await until(() => page.querySelector('#pilot-status')?.textContent?.includes('Testbasis bereit'),
     'gültigen Datenvertrag und Versionskennung laden');
-  const config = await (await fetch('../release/c0-version.json')).json();
+  const configResponse = await fetch(new URL('../../release/c0-version.json', import.meta.url));
+  check(configResponse.ok, 'Versionsdatei aus dem Projektstamm erreichbar');
+  const config = await configResponse.json();
   check(page.querySelector('#c0-version')?.textContent === 'C0-Testfassung ' + config.version,
     'Version folgt der versionierten Konfigurationsdatei');
   check(pageTitle(page).includes('Büro'), 'Büroansicht sichtbar');
