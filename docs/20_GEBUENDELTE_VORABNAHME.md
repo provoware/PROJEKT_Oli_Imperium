@@ -26,7 +26,7 @@ Ein Operator darf schreiben, Forschende/Prüfer kontrollieren getrennt. Die offe
 
 1. **Wissenschaftliche Dokumentation**: derzeit `3.0` (kann sich ändern, ohne Softwareversion zu erhöhen).
 2. **Forschungsdatenvertrag**: `data/contract.json.schema_version = 1.0` (strukturelle Inkompatibilität benötigt ausdrücklich dokumentierte Migration).
-3. **HTML-Testbasis C0**: `release/c0-version.json.version = 0.1.0-alpha.1`.
+3. **HTML-Testbasis C0**: `release/c0-version.json.version = 0.1.0-alpha.2`.
 
 C0 verwendet das Schema `HAUPT.NEBEN.KORREKTUR-STUFE.NUMMER` (SemVer für Vorabversionen).
 
