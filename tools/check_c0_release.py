@@ -21,6 +21,7 @@ from check_review_segments import inspect_review_segments
 ROOT = Path(__file__).resolve().parents[1]
 VERSION_FILE = "release/c0-version.json"
 APPROVALS_FILE = "release/approvals.json"
+SCOPE_FILE = "release/c0-scope.json"
 ARCHIVE_FILES = (
     ".github/workflows/html-pilot.yml",
     ".github/workflows/validate.yml",
@@ -40,6 +41,7 @@ ARCHIVE_FILES = (
     "docs/21_C0_ORIGINALVERGLEICH.md",
     "docs/22_C0_VORABNAHMEBOGEN.md",
     "docs/23_C0_REVIEW_SEGMENTIERUNG.md",
+    "docs/24_C0_TECHNISCHER_UMFANG.md",
     "prototype/app.mjs",
     "prototype/contract-guard.mjs",
     "prototype/pilot-trace.mjs",
@@ -58,6 +60,7 @@ ARCHIVE_FILES = (
     "prototype/ui/render.mjs",
     "prototype/ui/texts.de.mjs",
     "release/review-segments.json",
+    SCOPE_FILE,
     "tools/check_c0_release.py",
     "tools/chrome_keyboard_probe.mjs",
     "tools/check_review_segments.py",
@@ -117,6 +120,38 @@ def inspect(root: Path = ROOT) -> dict:
     for field in APPROVAL_FIELDS:
         if type(approvals.get(field)) is not bool:
             errors.append("Freigabefeld benötigt true/false: " + field)
+
+    # Der technische C0-Umfang ist nur für die Vorabnahme fixiert,
+    # nicht fachlich freigegeben; alle implementierten Module sind erfasst.
+    try:
+        scope = load_json(root / SCOPE_FILE)
+    except (OSError, ValueError) as exc:
+        scope = {}
+        errors.append("C0-Umfangsvertrag nicht lesbar: " + str(exc))
+    if not isinstance(scope, dict):
+        scope = {}
+        errors.append("C0-Umfangsvertrag muss ein JSON-Objekt sein.")
+    expected_paths = sorted(path for path in ARCHIVE_FILES
+                            if path.startswith("prototype/") and
+                            not path.startswith("prototype/tests/"))
+    if (scope.get("schema_version") != 1
+            or scope.get("component") != "c0-html-research-prototype"
+            or scope.get("version") != version_name
+            or scope.get("status") != "technical_feature_scope_frozen"
+            or scope.get("purpose") != "INTERNAL_RESEARCH_PREVIEW_ONLY"
+            or scope.get("frozen_implementation_paths") != expected_paths):
+        errors.append("C0-Funktionsumfang fehlt, ist verändert oder passt nicht zum Dateikatalog.")
+    for label in ("features", "excluded_features", "allowed_post_freeze_changes"):
+        items = scope.get(label)
+        if (not isinstance(items, list) or not items
+                or any(not isinstance(item, str) or not item for item in items)
+                or len(items) != len(set(items))):
+            errors.append("C0-Funktionsumfang: ungültige oder doppelte Einträge in " + label)
+    for flag in ("new_gameplay_features_allowed", "historical_reference_verified",
+                 "original_rules_approved", "manual_review_complete",
+                 "public_release_allowed"):
+        if scope.get(flag) is not False:
+            errors.append("C0-Funktionsumfang darf keine automatische Freigabe erteilen: " + flag)
 
     # Vollständige, exakt einmal zugewiesene Prüfgruppen verhindern
     # unbemerkt wachsende, unprüfbare Vorabnahme-Pakete.
@@ -192,6 +227,7 @@ def inspect(root: Path = ROOT) -> dict:
         "passed_original_tests": original_passed,
         "approvals": {field: approvals.get(field) for field in APPROVAL_FIELDS},
         "manual_approval_complete": all(approvals.get(field) is True for field in APPROVAL_FIELDS),
+        "feature_scope_status": scope.get("status"),
         "review_groups": review_groups,
         "original_capture_template": "empty_unverified",
         "browser_visual_review": "nicht automatisiert bestätigt",
@@ -256,6 +292,7 @@ def verify_review_archive(path: Path) -> None:
                 or status.get("technical_structure_ok") is not True
                 or status.get("public_release_allowed") is not False
                 or status.get("manual_approval_complete") is not False
+                or status.get("feature_scope_status") != "technical_feature_scope_frozen"
                 or status.get("review_groups", {}).get("valid") is not True
                 or len(status.get("review_groups", {}).get("groups", [])) != 4):
             raise ValueError("Das Archiv gibt einen falschen oder freigegebenen Prüfumfang an.")
