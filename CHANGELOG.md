@@ -1,5 +1,14 @@
 # Änderungsprotokoll
 
+## C0 0.1.0-alpha.6 – Originalaufnahme-Vorlage, echtes Zoom-Review und vierfacher Qualitätscheck (unveröffentlicht)
+
+- **Originalreferenz weiterhin offen:** `data/original-session.template.json` enthält ausschließlich leere Testkarten für TEST-001 bis TEST-003, zwei G64-Seiten, VICE/PAL-Angaben und PNG-Belege. Keine Spieldateien, erfundenen Hashes oder Eingaben hinzugefügt.
+- Neues unabhängiges Werkzeug `tools/validate_c64_capture.py` mit Negativtests: private Aufnahmeakten vor späterem wissenschaftlichen Review auf Format, beide Datenträgerseiten, Hashes, Emulatorversion, lückenlose Eingaben und Bildbelege prüfen. „Strukturell vollständig“ ist **niemals „Original bestätigt“**.
+- **Barrierefreiheit:** Tatsächliche HTML-/Tastaturreihenfolge nun Pilot vor Forschungslinks; CSS hält auf großen Displays trotzdem den Infobereich links. Chrome-Regressionsmatrix erweitert um 150 % und 200 % bei mehreren Fenstergrößen sowie fokussierbare, ausreichend große Schaltflächen.
+- Der umfangreiche PR #7 erhält vier ausdrücklich getrennte, maschinenlesbare Prüfgruppen A–D (`release/review-segments.json`, `tools/check_review_segments.py`, Negativtests), jede Archivdatei muss genau einmal zugeordnet sein.
+- Internes Review-ZIP umfasst nun alle ausführbaren Python- und JavaScript-Tests, den Source-Validator, die leere Aufnahmevorlage und Forschungshinweise. Das bereits bestehende SHA-256-Manifest und `REVIEW_STATUS.json` bleiben verbindlich; keine Freigabe.
+- `docs/23_C0_REVIEW_SEGMENTIERUNG.md` beschreibt Review-Reihenfolge, offene Fachfragen und die spätere unabhängige Gesamtabnahme. **Beta-/RC-Version nicht vergeben; kein Merge und keine Veröffentlichung.**
+
 ## C0 0.1.0-alpha.5 – C64-Vergleichsvorbereitung, Mobilnavigation und Vorabnahme (unveröffentlicht)
 
 - Technisch nachvollziehbare **Vergleichsvorlage** mit den drei Originaltest-IDs TEST-001/002/003, Quellen-/Regelverweisen und technischen Schrittkennungen; Originalbeobachtungen und fachliche Freigaben bleiben bewusst leer.
