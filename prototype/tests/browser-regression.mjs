@@ -43,6 +43,9 @@ async function run() {
   const config = await configResponse.json();
   check(page.querySelector('#c0-version')?.textContent === 'C0-Testfassung ' + config.version,
     'Version folgt der versionierten Konfigurationsdatei');
+  const securityPolicy = page.querySelector('meta[http-equiv="Content-Security-Policy"]')?.content;
+  check(typeof securityPolicy === 'string' && securityPolicy.includes("script-src 'self'") &&
+    securityPolicy.includes("object-src 'none'"), 'CSP sperrt externe/inline Skripte und Objekte');
   check(pageTitle(page).includes('Büro'), 'Büroansicht sichtbar');
   check(page.querySelector('#pilot-view')?.textContent.includes('REGEL-002'), 'Regel-IDs aus Vertrag sichtbar');
   check(page.querySelector('#pilot-view')?.textContent.includes('Q-001'), 'Forschungsfragen sichtbar');
@@ -67,18 +70,35 @@ async function run() {
       'Wechsel wird als rein technischer Entwurf beschrieben');
   }
 
+  for (const [width, zoom] of [[320, 1], [390, 1], [640, 2]]) {
+    iframe.style.width = width + 'px';
+    page.documentElement.style.zoom = String(zoom);
+    await sleep(120);
+    const docWidth = page.documentElement.clientWidth;
+    const scrollWidth = page.documentElement.scrollWidth;
+    check(scrollWidth <= docWidth + 2,
+      'Darstellung ohne horizontales Überlaufen bei ' + width + 'px / ' + (zoom * 100) + '%');
+  }
+  page.documentElement.style.zoom = '';
   iframe.style.width = '390px';
-  await sleep(100);
-  const docWidth = page.documentElement.clientWidth;
-  const scrollWidth = page.documentElement.scrollWidth;
-  check(docWidth <= 400 && scrollWidth <= docWidth + 2,
-    'Schmale Darstellung (390px) ohne horizontales Überlaufen');
 
   const reload = page.querySelector('#reload-contract');
   const previousFetch = win.fetch;
   try {
-    win.fetch = async () => ({ ok: false, status: 503 });
+    const requests = [];
+    win.fetch = () => new Promise((resolve) => { requests.push(resolve); });
     reload.click();
+    await until(() => requests.length === 2, 'beide Datenanforderungen beim Nachladen gestartet');
+    check(reload.disabled === true, 'Doppeltes Laden während der Prüfung verhindert');
+    check(page.querySelector('#pilot-view').getAttribute('aria-busy') === 'true',
+      'Ladezustand für Hilfstechnologien erkennbar');
+    check(!page.querySelector('#pilot-view').textContent.includes('REGEL-002'),
+      'Veraltete Forschungsinhalte während des Ladens verborgen');
+    check(page.querySelector('#pilot-controls').children.length === 0,
+      'Keine alten Bedienaktionen während des Ladens sichtbar');
+    check(page.querySelector('#c0-version').textContent.includes('Version wird geprüft'),
+      'Versionsanzeige ist während des Ladens nicht veraltet');
+    for (const resolve of requests) resolve({ ok: false, status: 503 });
     await until(() => page.querySelector('#pilot-status')?.textContent?.includes('Fehler beim Laden'),
       'serverseitige Datenlade-Störung sichtbar melden');
     check(page.querySelector('#pilot-controls').children.length === 0,
@@ -86,6 +106,8 @@ async function run() {
     check(page.querySelector('#c0-version').textContent.includes('nicht freigegeben'),
       'Veraltete Versionsanzeige wird bei fehlerhaften Daten zurückgesetzt');
     check(reload.disabled === false, 'Erneuter Ladeversuch bleibt möglich');
+    check(page.querySelector('#pilot-view').getAttribute('aria-busy') === 'false',
+      'Ladestatus wird nach Fehler zurückgenommen');
   } finally {
     win.fetch = previousFetch;
   }
@@ -93,6 +115,8 @@ async function run() {
   await until(() => page.querySelector('#pilot-status')?.textContent?.includes('Testbasis bereit'),
     'Wiederherstellung nach Ladefehler');
   check(pageTitle(page).includes('Büro'), 'Nach erfolgreichem Wiederladen Büroansicht wiederhergestellt');
+  check(page.querySelector('#pilot-view').getAttribute('aria-busy') === 'false',
+    'Ladestatus wird nach erfolgreichem Wiederanlauf zurückgenommen');
 
   result.textContent = 'BROWSER_C0_PASS – ' + checks.length + ' technische Browserprüfungen erfolgreich.';
   result.dataset.checks = String(checks.length);
