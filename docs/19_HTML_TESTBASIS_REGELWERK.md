@@ -17,6 +17,7 @@ data/contract.json  (einziger Forschungsvertrag; Quelle/Wahrheitsstatus)
        ▼
 prototype/navigation.mjs    reine Navigation / Entwurfszustände
 prototype/pilot-trace.mjs   begrenzte, reproduzierbare Testprotokolle
+prototype/reference-comparison.mjs   noch unbestätigte TEST-ID-Vergleichsvorlage
        │
        ▼
 prototype/app.mjs           Datenladen + Klick-/Fehlersteuerung
@@ -34,7 +35,7 @@ prototype/styles.css        Erscheinungsbild und Barrierefreiheit
 - **Keine angeblichen Originalsteuerungen:** Klickschaltflächen sind technische Testeingaben von B, **keine C64-Tastenbehauptungen**.
 - **Kein Originalmaterial eingebaut:** Keine ROMs, Disketten, Original-Screenshots, Texte oder Musik ohne geklärte Nutzungsrechte.
 - **Keine externe Laufzeitabhängigkeit:** HTML, CSS und JavaScript liegen lokal; externe Quellen öffnen sich erst beim bewussten Anklicken.
-- **Keine automatische Speicherung:** Der Pilot schreibt weder Forschungsdaten noch Spielstände, Cookies oder lokale Speicherdaten. Ein Navigationsprotokoll kann durch bewussten Klick als JSON-Datei auf dem eigenen Rechner exportiert werden; es ist kein historischer Originalbeleg.
+- **Keine automatische Speicherung:** Der Pilot schreibt weder Forschungsdaten noch Spielstände, Cookies oder lokale Speicherdaten. Navigationsprotokoll und offene TEST-ID-Vergleichsvorlage können durch bewussten Klick separat als JSON-Datei exportiert werden; beide sind keine historischen Originalbelege.
 - **Kein Eingabe-HTML:** Dynamische Inhalte werden als Text in DOM-Knoten eingesetzt (`textContent`), nicht als `innerHTML`.
 - **Kein zweites Spielsystem:** Nach Freigabe einzelner Regelpakete kann ein späteres Modul entstehen; der Pilot zeigt dieses über eine schmale Schnittstelle, statt Regeln neu zu implementieren.
 
@@ -69,6 +70,7 @@ Die Anzeige nennt bei jedem Zustand **Bildschirm-ID, Regel-IDs, Quellen-IDs, Sta
 ## 6. Abnahme für jede sichtbare Funktion
 
 - Berechtigter Nutzer kann die Funktion vollständig mit Tastatur und Maus bedienen.
+- Mobile Erstansicht priorisiert bei schmalen Displays den eigentlichen Navigationspiloten; die lange Forschungsbeschreibung folgt danach.
 - Schaltflächen haben eine echte Wirkung oder existieren noch nicht; kein Attrappen-Menü.
 - Ausreichender Kontrast, sichtbarer Tastaturfokus, lesbarer Text, funktionale Smartphone-Darstellung, keine horizontale Überlappung.
 - Keine externen Schriften/Bibliotheken nötig, Offlinebetrieb über lokalen HTTP-Server.
@@ -99,7 +101,7 @@ node --test prototype/tests/*.test.mjs
 
 Node.js wird **nur für automatische JavaScript-Tests**, nicht zum Starten der Oberfläche benötigt.
 
-**Versions- und Sammelabnahme-Regelwerk:** [20_GEBUENDELTE_VORABNAHME.md](20_GEBUENDELTE_VORABNAHME.md). Die automatisierte Prüfkette ergänzt die reinen Strukturtests um reproduzierbare ZIP-Pakete und einen Headless-Chrome-Start auf Desktop- und Mobilformat; die fachliche Entscheidung bleibt gesondert.
+**Vergleich und Abnahme:** [21_C0_ORIGINALVERGLEICH.md](21_C0_ORIGINALVERGLEICH.md) beschreibt die bewusst unbestätigten Originaltestverweise; [22_C0_VORABNAHMEBOGEN.md](22_C0_VORABNAHMEBOGEN.md) die komplette Vorabnahme. **Versions- und Sammelabnahme-Regelwerk:** [20_GEBUENDELTE_VORABNAHME.md](20_GEBUENDELTE_VORABNAHME.md). Die automatisierte Prüfkette ergänzt die reinen Strukturtests um reproduzierbare ZIP-Pakete und einen Headless-Chrome-Start auf Desktop- und Mobilformat; die fachliche Entscheidung bleibt gesondert.
 
 ## 8. Grenzen und nächste Entscheidung
 
