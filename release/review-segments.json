@@ -53,7 +53,8 @@
       "title": "Automatische Qualitätsprüfung und Browsernachweise",
       "patterns": [
         "prototype/tests/**",
-        ".github/workflows/**"
+        ".github/workflows/**",
+        "tools/chrome_keyboard_probe.mjs"
       ],
       "technical_checks": [
         "Python- und Node-Tests",
