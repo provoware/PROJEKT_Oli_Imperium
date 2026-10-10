@@ -28,15 +28,19 @@ ARCHIVE_FILES = (
     "data/contract.json",
     "docs/19_HTML_TESTBASIS_REGELWERK.md",
     "docs/20_GEBUENDELTE_VORABNAHME.md",
+    "docs/21_C0_ORIGINALVERGLEICH.md",
+    "docs/22_C0_VORABNAHMEBOGEN.md",
     "prototype/app.mjs",
     "prototype/contract-guard.mjs",
     "prototype/pilot-trace.mjs",
+    "prototype/reference-comparison.mjs",
     "prototype/index.html",
     "prototype/navigation.mjs",
     "prototype/styles.css",
     "prototype/tests/navigation.test.mjs",
     "prototype/tests/contract-guard.test.mjs",
     "prototype/tests/pilot-trace.test.mjs",
+    "prototype/tests/reference-comparison.test.mjs",
     "prototype/tests/accessibility.test.mjs",
     "prototype/tests/browser-regression.html",
     "prototype/tests/browser-regression.mjs",
@@ -145,6 +149,11 @@ def create_review_archive(root: Path, destination: Path) -> dict:
     if not report["technical_structure_ok"]:
         raise ValueError("Prüfarchiv blockiert: " + "; ".join(report["errors"]))
     files = archive_members(root)
+    # Technische Momentaufnahme als eigene überprüfte ZIP-Datei.
+    # Keine übernommene Zustimmung, keine pauschale Originaltreue.
+    files["REVIEW_STATUS.json"] = (json.dumps(
+        report, ensure_ascii=False, indent=2, sort_keys=True,
+    ) + "\\n").encode("utf-8")
     manifest = {
         "schema_version": 1,
         "version": report["version"],
@@ -180,6 +189,14 @@ def verify_review_archive(path: Path) -> None:
         manifest = json.loads(archive.read(manifest_path))
         if manifest.get("purpose") != "INTERNAL_TECHNICAL_REVIEW_ONLY":
             raise ValueError("Das Archiv ist kein internes Prüfarchiv.")
+        if "REVIEW_STATUS.json" not in {item["path"] for item in manifest["files"]}:
+            raise ValueError("Technischer Freigabestatus fehlt im Prüfmanifest.")
+        status = json.loads(archive.read(prefix + "REVIEW_STATUS.json"))
+        if (status.get("version") != manifest.get("version")
+                or status.get("technical_structure_ok") is not True
+                or status.get("public_release_allowed") is not False
+                or status.get("manual_approval_complete") is not False):
+            raise ValueError("Das Archiv gibt einen falschen oder freigegebenen Prüfumfang an.")
         expected = {prefix + entry["path"] for entry in manifest["files"]} | {manifest_path}
         if set(names) != expected:
             raise ValueError("Archivinhalt stimmt nicht mit dem Manifest überein.")
