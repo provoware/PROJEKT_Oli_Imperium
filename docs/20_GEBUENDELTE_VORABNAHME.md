@@ -46,6 +46,8 @@ data/contract.json                  ← EIN verbindlicher Forschungsstand
 docs/                               ← Forschungsprotokolle, Architektur, Entscheidungen
 prototype/navigation.mjs            ← reine logische Navigation
 prototype/app.mjs                   ← Steuerung: Laden, Status und Benutzeraktionen
+prototype/ui/render.mjs             ← nur zugängliche HTML-/DOM-Darstellung
+prototype/ui/texts.de.mjs           ← deutsche Oberflächentexte, keine Fachregeln
 prototype/index.html                ← semantische HTML-Grundstruktur
 prototype/styles.css                ← Farben, Raster, responsive Darstellung
 prototype/tests/                    ← technische Tests, kein Originalbeweis
@@ -82,6 +84,7 @@ Pflicht vor einer technischen C0-Vorschau:
 2. Python-Unittests `python3 -m unittest discover -s tests -v`.
 3. JavaScript-Syntax- und Navigations-/Negativtests mit Node.js.
 4. Lokale HTTP-Auslieferung aller HTML-, CSS-, JS- und Vertragsdateien.
+   Zusätzlich einen echten Headless-Chrome-Start prüfen: Versionskennung, Regel-IDs, Frage-IDs; Desktop- und Mobilbilder als CI-Belege erfassen (das ist noch keine manuelle Sichtabnahme).
 5. C0-Versions- und Konsistenzprüfung `python3 tools/check_c0_release.py`.
 6. Reproduzierbare ZIP-Erzeugung `python3 tools/check_c0_release.py --package dist/c0-review.zip`.
 7. SHA-256-Abgleich aller ZIP-Einträge `python3 tools/check_c0_release.py --verify dist/c0-review.zip`.
