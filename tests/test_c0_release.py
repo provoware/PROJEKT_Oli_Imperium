@@ -67,6 +67,34 @@ class TestC0ReviewGate(unittest.TestCase):
         self.assertFalse(any(name.endswith(".g64") or name.endswith(".d64") for name in files))
         self.assertTrue(any(name.endswith("REVIEW_MANIFEST.json") for name in files))
 
+    def test_review_status_is_bundled_and_requires_all_four_open_approvals(self):
+        archive_path = self.root / "status.zip"
+        create_review_archive(self.root, archive_path)
+        with zipfile.ZipFile(archive_path) as archive:
+            status_name = next(item for item in archive.namelist()
+                               if item.endswith("/REVIEW_STATUS.json"))
+            status = json.loads(archive.read(status_name))
+        self.assertTrue(status["technical_structure_ok"])
+        self.assertFalse(status["public_release_allowed"])
+        self.assertFalse(status["manual_approval_complete"])
+        self.assertEqual(len(status["approvals"]), 4)
+        self.assertTrue(all(value is False for value in status["approvals"].values()))
+
+    def test_fake_approval_in_review_status_is_rejected(self):
+        source = self.root / "review-source.zip"
+        forged = self.root / "review-forged.zip"
+        create_review_archive(self.root, source)
+        with zipfile.ZipFile(source) as archive, zipfile.ZipFile(forged, "w") as destination:
+            for name in archive.namelist():
+                payload = archive.read(name)
+                if name.endswith("/REVIEW_STATUS.json"):
+                    status = json.loads(payload)
+                    status["public_release_allowed"] = True
+                    payload = json.dumps(status).encode("utf-8")
+                destination.writestr(name, payload)
+        with self.assertRaisesRegex(ValueError, "falschen|Beschädigte"):
+            verify_review_archive(forged)
+
     def test_changed_archive_entry_is_detected(self):
         original = self.root / "valid.zip"
         altered = self.root / "altered.zip"
