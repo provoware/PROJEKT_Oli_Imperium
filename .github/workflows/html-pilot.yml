@@ -152,7 +152,7 @@ jobs:
           python3 tools/check_review_segments.py
           python3 -m unittest discover -s tests -v
           node --test prototype/tests/*.test.mjs
-          python3 tools/check_c0_release.py --verify "../../../c0-review.zip"
+          python3 tools/check_c0_release.py --verify "../../c0-review.zip"
       - name: Internes Review-Paket als CI-Artefakt hinterlegen
         uses: actions/upload-artifact@v4
         with:
