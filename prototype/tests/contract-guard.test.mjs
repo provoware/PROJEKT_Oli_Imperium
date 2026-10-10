@@ -54,7 +54,7 @@ describe('C0: Browser-Datenprüfung sperrt ungeprüfte Originalaussagen', () => 
     })), /Prüfstatus/);
     assert.throws(() => validatePilotContract(changed(data => {
       data.schema_version = '2.0';
-    })), /Datenvertrag/);
+    })), /Forschungsdatenvertrag/);
   });
   it('verweigert gefährliche Quelllinks und falsche Quellenarten', () => {
     assert.throws(() => validatePilotContract(changed(data => {
