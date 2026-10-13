@@ -44,3 +44,14 @@ Eine Aufgabe gilt fertig, wenn ihr Ausgangsproblem behoben oder Erkenntnisziel e
 3. Büro→Karte→Feldinformation→Zurück als Pilotpaket erfassen und an B übergeben.
 
 **Weiterführende Empfehlung:** Erst mit einem durchgängigen Piloten die Projektmethode validieren, dann skalieren.
+
+## Durchgängiges Referenzverfahren für die spätere Entwicklung C
+**Lokal (nicht einchecken):** zwei identifizierte C64-Datenträgerseiten, rechtmäßige Nutzungsgrundlage, Prüfsummen, VICE/PAL-Konfiguration, rohe Screenshots und Bedienprotokolle. Die Originaldateien dürfen nicht in Git, CI, Browseranwendung oder öffentliche Prüf-ZIPs gelangen.
+
+**GitHub (nur eigene und veröffentlichungsfähige Ergebnisse):** sachlich beschriebene Beobachtungen, Quellen-/Versionskennungen, Status und Unsicherheiten, Regel- und Modul-IDs, eigenständiger Code sowie synthetische Negativ-, Grenz- und Regressionstests. Echte Original-Testbelege zunächst privat halten; eine Veröffentlichung konkreter Auszüge erst nach gesonderter rechtlicher Prüfung.
+
+**Arbeitsfolge pro Spielbereich:** 1. Referenz lokal beobachten. 2. Hypothesen und offene Fragen kennzeichnen. 3. Regelpaket fachlich prüfen und freigeben. 4. Funktion unabhängig nachentwickeln. 5. Reproduzierbare technische Prüfungen durchführen. 6. Getrennten echten Originalvergleich protokollieren. 7. Befund/Abweichung beurteilen und freigeben.
+
+**Reihenfolge der Kandidaten (keine vorweggenommene historische Tatsachenbehauptung):** Büro und Navigation → Weltkarte/Gebiete/Claims → Geld, Kosten und Zeit → Bohrung/Förderung/Lager → Handel und Verträge → Wettbewerb/KI → Ereignisse und Geschicklichkeitsszenen → Speicher-/Spielende-Verhalten. Jeder Bereich benötigt seine eigenen Quellen, Testfälle und Freigaben; diese Kandidatenliste behauptet keine nachgewiesenen Originalfunktionen.
+
+**Sperren:** Der technische C0-Funktionsumfang bleibt eingefroren. Originaltests TEST-001–003 bleiben `not_run`, bis sie tatsächlich ausgeführt und unabhängig geprüft wurden. Die Genehmigung zur vollständigen Umsetzung C und ein öffentlicher Release erfordern eigene Entscheidungen; das Referenzprinzip ist keine pauschale Freigabe.
