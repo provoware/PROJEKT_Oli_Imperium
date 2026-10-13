@@ -221,8 +221,22 @@ try {
   }
   pending.clear();
   if (ws && ws.readyState === WebSocket.OPEN) ws.close();
-  if (browser) browser.kill('SIGKILL');
-  // Chromium kann kurz nach SIGKILL noch Profil-Dateien anlegen oder sperren.
-  // Nur vorübergehende Dateisystemkonflikte erneut versuchen; andere Fehler bleiben sichtbar.
-  rmSync(profile, { recursive: true, force: true, maxRetries: 8, retryDelay: 150 });
+  if (browser && browser.exitCode === null && browser.signalCode === null) {
+    // Sofortiges SIGKILL kann Chromium-Unterprozesse beim Schreiben ins Profil
+    // zurücklassen. Zuerst regulär beenden und auf das Prozessende warten.
+    const exited = new Promise(resolve => browser.once('exit', () => resolve(true)));
+    browser.kill('SIGTERM');
+    const ended = await Promise.race([exited, sleep(2500).then(() => false)]);
+    if (!ended && browser.exitCode === null && browser.signalCode === null) {
+      browser.kill('SIGKILL');
+      await Promise.race([
+        new Promise(resolve => browser.once('exit', resolve)),
+        sleep(1500),
+      ]);
+    }
+  }
+  // Nach dem Ende des Hauptprozesses können Unterprozesse noch kurz schreiben.
+  // Reale Fehler nach begrenzten Versuchen bleiben weiterhin testfehlerhaft.
+  await sleep(300);
+  rmSync(profile, { recursive: true, force: true, maxRetries: 14, retryDelay: 200 });
 }
