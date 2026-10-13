@@ -51,3 +51,14 @@ Bei fachlicher Begutachtung technische Beobachtung, Interpretationsschritt und E
 - Formelle wissenschaftliche und rechtliche Freigaben: **ausstehend**.
 
 Dieses Dokument ist eine **Arbeitsanleitung**, keine Originalaufnahme.
+
+## Technische Robustheit der Aufnahmeprüfung (Wartung vom 13.10.2026)
+Der lokale Prüfer weist ungültige Datentypen in der Aufnahmeakte kontrolliert zurück.
+Insbesondere gelten `true`, `false` und Dezimalzahlen **nicht** als ganzzahlige
+Schrittnummern oder Schemaversionen. Ein Bildverweis muss entweder `null` oder
+ein Dateiname als Text sein; verschachtelte Listen oder Objekte führen zu einem
+Strukturfehler statt zu einem Programmabbruch.
+
+Dies betrifft ausschließlich die Fehlerbehandlung des vorhandenen
+Aufnahmeprüfers und synthetische Negativtests. **Es ist weder ein echter
+Emulatorlauf noch eine Original-, Rechte- oder Wissenschaftsfreigabe.**
