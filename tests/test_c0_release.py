@@ -140,6 +140,29 @@ class TestC0ReviewGate(unittest.TestCase):
             local_count += 1
         self.assertGreaterEqual(local_count, 4)
 
+    def test_private_originals_never_enter_review_archive(self):
+        """Auch vorhandene lokale Originaldateien dürfen nicht ins Prüf-ZIP."""
+        samples = {
+            "private/oil-side0.g64": b"SYNTHETIC-NOT-AN-ORIGINAL",
+            "originalmedia/oil-side1.d64": b"SYNTHETIC-NOT-AN-ORIGINAL",
+            "private/vice-original-screen.png": b"SYNTHETIC-IMAGE",
+            "private/original-manual.pdf": b"SYNTHETIC-MANUAL",
+        }
+        for name, payload in samples.items():
+            file = self.root / name
+            file.parent.mkdir(parents=True, exist_ok=True)
+            file.write_bytes(payload)
+        archive_path = self.root / "private-scope.zip"
+        create_review_archive(self.root, archive_path)
+        verify_review_archive(archive_path)
+        with zipfile.ZipFile(archive_path) as archive:
+            names = archive.namelist()
+            for private_name, payload in samples.items():
+                self.assertFalse(any(name.endswith("/" + private_name)
+                                     for name in names), private_name)
+                self.assertFalse(any(payload in archive.read(name) for name in names),
+                                 private_name)
+
     def test_archive_is_reproducible_and_integrity_verified(self):
         first = self.root / "first.zip"
         second = self.root / "second.zip"
