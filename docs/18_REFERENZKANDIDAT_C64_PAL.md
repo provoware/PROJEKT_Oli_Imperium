@@ -88,3 +88,71 @@ Keine unnötigen Massendownloads, kein erneutes Erfassen unveränderter Bilder, 
 3. Auf Grundlage der realen Befunde REGEL-001..004 und TEST-001..003 einzeln freigeben oder präzise als ungeklärt markieren.
 
 **Weiterführende Empfehlung:** Die Referenzakte als unveränderlichen wissenschaftlichen Datensatz einfrieren, sobald Provenienz, SHA-256-Werte und erfolgreicher Lauf vorliegen.
+
+
+---
+
+## 8. Öffentlicher Quellen- und Zugriffs-Audit vom 13.10.2026 (KEIN Originaltest)
+
+Dieser Abschnitt protokolliert **öffentlich lesbare Informationen**, nicht einen gestarteten C64 oder ausgelesene Spielbilder. Der Forschungsvertrag bleibt bei `reference.status=candidate`; `TEST-001` bis `TEST-003` bleiben `not_run`.
+
+### Referenzkandidaten und Zugriffsprüfung
+
+| Kandidat | Öffentlich belegte Daten | Zugriff aus der verwendeten Forschungsumgebung |
+|---|---|---|
+| Preservation64 Source 3 | 1989, DE, C64, PAL, Manual Lookup, laut Archiv lauffähig; `OilImperiumDE parser s0.g64` / `s1.g64` | Metadatenseiten erreichbar; Dateiabruf von Seite 0 mit HTTP 401, externer Datei-Download fehlgeschlagen. **Keine lokalen G64.** |
+| Preservation64 Source 4 | Deutsches PAL-Exemplar von 2022 mit G64-Seiten, Handbuch und Codetabelle | Katalog vorhanden; tatsächlicher Emulatorlauf nicht geprüft. Nicht mit Source 3 mischen. |
+| Preservation64 Source 5 | Weiteres deutsches PAL-Exemplar von 2022, eigene G64-Seiten, Codetabelle | Katalog vorhanden; tatsächlicher Emulatorlauf nicht geprüft. Nicht mit Source 3 mischen. |
+| c64games.de Spiel Nr. 122 | Disketten-, Cartridge- und Handbuch-Angebot; mehrere veröffentlichte Screenshots | Webseite erreichbar; Archiv-Download nicht in lokale Arbeitsumgebung übertragbar. Variantenidentität ungeprüft. |
+| CommodoreGames.net GB64-ID 14505 | Browser-Emulation wird angeboten; PAL ausgewiesen; Tastenbelegung veröffentlicht | Webseitenangaben geprüft, **kein interaktiver Emulatorlauf**. Zugehörigkeit zur deutschen Source-3-Version ungeprüft. |
+| Gamebase64 ID 14505 | 1989, C64, englisch, Joystick 2, 1–4 Spieler, 2 Disketten; zwei Screenshots | Nachschlagewerk erreichbar. Dort für diese ID ausdrücklich kein Spieldownload gelistet. |
+| OldGame.cz | Bezeichnet die **DOS-/PC-Version** als Freeware | Keine nachgewiesene Freeware-Lizenz für C64; diese Etikettierung ist nicht auf C64 übertragbar. |
+
+**Dateigrößen nur laut Archivdateiseite, keine lokalen Messwerte:** Source 3 Seite 0: ungefähr 273 KB; Seite 1: ungefähr 281 KB. **Beide SHA-256-Werte unbekannt.**
+
+### Bedienungs- und Bildinventar als Forschungs-Hypothesen
+
+Das C64-Wiki beschreibt folgende Bereiche, für die nach einem **echten** Emulatorlauf unabhängige C64-PNGs erfasst werden sollen. Eine Aufzählung ist kein Nachweis eines getrennten Originalbildschirms.
+
+1. Start-/Ladeansichten; Spieleranzahl und gegebenenfalls Zielauswahl.
+2. Büroansichten (Wiki unterscheidet vier Büros); Kalender, Firmensignet.
+3. Firmensignet: Laden-/Speichern-Dialoge.
+4. Weltkarte, Regionen, Gebiete, Claims und Besitzangaben.
+5. Computermenü: Kaufen, Verkaufen, Bohren, Statistik, Expertise.
+6. Computer-Unterdialoge: Claims/Tanks, Vermögen, Geologengutachten, beauftragte oder selbst ausgeführte Bohrung.
+7. Telefon und Telegramme; Verträge und Entscheidungen.
+8. Schublade: Detektei/Schutz, eigene Unternehmensübersicht, Sabotage.
+9. Koffer: Brandbekämpfung durch Fachfirma oder Selbstversuch.
+10. Zeitung, Ereignisse, Marktpreisänderungen und Ergebnisse.
+11. Aktionssequenzen: Bohrung, Pipelinebau, Ölbrandlöschung.
+12. Runden-/Monatswechsel, Spielzielerfüllung/Bankrott.
+
+**Bereits öffentlich vorhandene Bilder:** C64-Wiki zeigt u. a. Bürovarianten und Aktionssequenzen; c64games.de bietet mehrere C64-Screenshots. Die Bilder werden **nicht** als eigene Emulator-Screenshots ausgegeben, nicht in das Repository kopiert und nicht ohne Klärung der Bildrechte erneut veröffentlicht. Achtung: Fotos zu Amiga-/DOS-Versionen dürfen nicht als C64-Nachweis verwendet werden.
+
+### Sekundärquellen: fachliche Hinweise nur zur späteren Gegenprüfung
+
+Das C64-Wiki nennt als mögliche, noch nicht selbst bestätigte Originalregeln: bis zu vier abwechselnde Spieler, Startkapital 5 Mio. US-Dollar, ein monatlicher Spielzug, einzelne Aktionen mit Tageskosten, vier unterschiedliche Siegbedingungen, Joystick an Port 2, Geologengutachten und Verträge. Diese Angaben dienen ausschließlich zum Aufbau eines Testplans; ihre wirtschaftlichen Werte/Formeln und genaue Navigation werden erst nach einem echten Originaltest freigegeben.
+
+### Rechte- und Verfügbarkeitsbefund
+
+- Die **öffentliche Verfügbarkeit** eines Downloads ist **keine Freigabe** durch Urheber oder Rechteinhaber. Eine eindeutige, für die C64-Version geltende Freeware-/Open-Source-/Gemeinfrei-Erklärung wurde im Audit **nicht gefunden**.
+- CommodoreGames.net schreibt selbst: `We offer no C64 downloads due to copyright.` Gamebase64 nennt keine Download-Quelle für ID 14505.
+- Das ursprüngliche reLINE-Label gilt als seit 2002 eingestellt, doch die Einstellung einer Firma lässt Urheberrechte **nicht** automatisch entfallen; die aktuelle Rechtekette ist ungeklärt.
+- § 69d Abs. 3 UrhG kann dem zur Programmnutzung Berechtigten die Untersuchung von Ideen und Grundsätzen während berechtigter Programmausführung erlauben. Daraus folgt **keine pauschale Erlaubnis**, eine beliebige Kopie zu beschaffen oder Originalbilder öffentlich zu verteilen.
+- Keine Umgehung von Download-Zugriffssperren, keine Originaldateien in GitHub oder dessen ZIP-Artefakten, keine gefälschten Screenshots oder Prüfsummen.
+
+### Nachprüfbare Fundstellen
+
+- Preservation64: https://preservation64.de/index.php?title=Oil_Imperium
+- Metadatenseiten: https://preservation64.de/index.php?title=File:OilImperiumDE_parser_s0.g64 und https://preservation64.de/index.php?title=File:OilImperiumDE_parser_s1.g64
+- C64-Wiki: https://www.c64-wiki.de/wiki/Oil_Imperium
+- C64games.de: https://www.c64games.de/phpseiten/spieledetail.php?filnummer=122
+- Gamebase64: https://gb64.com/game.php?id=14505
+- Browser-Emulator: https://www.commodoregames.net/Commodore64/Oil-Imperium-14505.html
+- Alte DOS-Kennzeichnung (nicht als C64-Lizenz lesen): https://www.oldgame.cz/tl/oil-imperium
+- VICE: https://vice-emu.sourceforge.io/vice_2.html und https://vice-emu.sourceforge.io/vice_12.html
+- Deutsches UrhG: https://www.gesetze-im-internet.de/urhg/__69d.html
+
+### Weiterer Prüfstatus
+
+**Selbst durchgeführt:** öffentliche Metadaten-/Quellenprüfung; Downloadversuche aus isolierter Arbeitsumgebung; Prüfung, ob `x64sc` installiert ist (nein). **Nicht durchgeführt:** funktionierender G64-Download; Berechnung realer Dateihashes; Emulatorstart; eigene C64-Screenshots; Handbuchabfrage; Originaltests; Lizenzfreigabe.
