@@ -109,6 +109,28 @@ class TestC0ReviewGate(unittest.TestCase):
         self.assertFalse(report["technical_structure_ok"])
         self.assertTrue(report["errors"])
 
+    def test_malformed_nested_original_template_is_rejected_without_crash(self):
+        target = self.root / "data/original-session.template.json"
+        pristine = json.loads(target.read_text(encoding="utf-8"))
+        for field, invalid in (
+            ("emulator", []),
+            ("emulator", None),
+            ("original_files", [None]),
+            ("original_files", None),
+            ("test_observations", [None]),
+            ("test_observations", None),
+        ):
+            with self.subTest(field=field, invalid=invalid):
+                doc = json.loads(json.dumps(pristine))
+                doc[field] = invalid
+                target.write_text(json.dumps(doc), encoding="utf-8")
+                report = inspect(self.root)
+                self.assertFalse(report["technical_structure_ok"])
+                self.assertTrue(any("C64-Aufnahmevorlage" in error
+                                    for error in report["errors"]))
+                with self.assertRaisesRegex(ValueError, "Prüfarchiv blockiert"):
+                    create_review_archive(self.root, self.root / "blocked-nested.zip")
+
     def test_missing_required_file_stops_packaging(self):
         (self.root / "prototype/app.mjs").unlink()
         self.assertFalse(inspect(self.root)["technical_structure_ok"])
