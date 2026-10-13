@@ -222,5 +222,7 @@ try {
   pending.clear();
   if (ws && ws.readyState === WebSocket.OPEN) ws.close();
   if (browser) browser.kill('SIGKILL');
-  rmSync(profile, { recursive: true, force: true });
+  // Chromium kann kurz nach SIGKILL noch Profil-Dateien anlegen oder sperren.
+  // Nur vorübergehende Dateisystemkonflikte erneut versuchen; andere Fehler bleiben sichtbar.
+  rmSync(profile, { recursive: true, force: true, maxRetries: 8, retryDelay: 150 });
 }
