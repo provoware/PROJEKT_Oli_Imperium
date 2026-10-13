@@ -96,6 +96,20 @@ describe('C0: Browser-Datenprüfung sperrt ungeprüfte Originalaussagen', () => 
     });
     assert.equal(validatePilotContract(valid), true);
   });
+  it('verweigert fehlende Verweisliste beim angeblich bestandenen Originaltest kontrolliert', () => {
+    for (const mode of ['missing', 'null', 'object']) {
+      assert.throws(() => validatePilotContract(changed(data => {
+        Object.assign(data.reference, {
+          status: 'verified', verified_run: true,
+          emulator_version: 'SYNTHETISCH', image_sha256: 'a'.repeat(64),
+        });
+        data.tests[0].status = 'passed';
+        data.tests[0].evidence = 'SYNTHETISCHER TESTBELEG';
+        if (mode === 'missing') delete data.tests[0].rule_ids;
+        else data.tests[0].rule_ids = mode === 'null' ? null : {};
+      })), /Liste oder Verknüpfungen ungültig/, mode);
+    }
+  });
   it('verändert den übergebenen Forschungsvertrag nicht', () => {
     const before = JSON.stringify(original);
     validatePilotContract(original);

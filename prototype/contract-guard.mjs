@@ -115,7 +115,10 @@ export function validatePilotContract(data) {
   }
   for (const module of data.modules) links(module, 'rule_ids', idMap, 'rules');
   for (const test of data.tests) {
-    links(test, 'rule_ids', idMap, 'rules');
+    // Ein bestandener Originaltest benötigt zwingend eine echte Referenzliste.
+    // Sonst würde der spätere Zugriff auf rule_ids.length abstürzen.
+    links(test, 'rule_ids', idMap, 'rules',
+      test.kind === 'original' && test.status === 'passed');
     if (test.kind === 'original' && test.status === 'passed' && (
       ref.status !== 'verified' || !test.evidence || test.rule_ids.length === 0
     )) {

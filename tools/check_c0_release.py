@@ -189,19 +189,31 @@ def inspect(root: Path = ROOT) -> dict:
             errors.append("Original-Aufnahmevorlage darf keine Bestätigung enthalten.")
         # Auch teilweise echte Datenträgerbelege gehören ausschließlich
         # in private Forschungsakten, nicht ins öffentliche Prüfarchiv.
-        if (not isinstance(capture, dict)
-                or capture.get("reference_status") != "not_recorded"
-                or capture.get("edition_description") is not None
-                or capture.get("legal_use_basis") is not None
-                or capture.get("emulator", {}).get("version") is not None
-                or any(disk.get("sha256") is not None or disk.get("bytes") is not None
-                       for disk in capture.get("original_files", []))
-                or any(test.get("status") != "not_run"
-                       or test.get("observed_navigation")
-                       or test.get("screen_captures")
-                       or test.get("description") is not None
-                       for test in capture.get("test_observations", []))):
-            errors.append("Öffentliche Original-Aufnahmevorlage muss vollständig unbelegt bleiben.")
+        if not isinstance(capture, dict):
+            errors.append("Öffentliche Original-Aufnahmevorlage muss ein JSON-Objekt sein.")
+        else:
+            emulator = capture.get("emulator")
+            disks = capture.get("original_files")
+            test_observations = capture.get("test_observations")
+            # Beschädigte Unterstrukturen dürfen weder unkontrolliert abstürzen
+            # noch als vermeintlich unbenutzte öffentliche Vorlage gelten.
+            if (capture.get("reference_status") != "not_recorded"
+                    or capture.get("edition_description") is not None
+                    or capture.get("legal_use_basis") is not None
+                    or not isinstance(emulator, dict)
+                    or emulator.get("version") is not None
+                    or not isinstance(disks, list)
+                    or any(not isinstance(disk, dict)
+                           or disk.get("sha256") is not None
+                           or disk.get("bytes") is not None for disk in disks)
+                    or not isinstance(test_observations, list)
+                    or any(not isinstance(test, dict)
+                           or test.get("status") != "not_run"
+                           or test.get("observed_navigation")
+                           or test.get("screen_captures")
+                           or test.get("description") is not None
+                           for test in test_observations)):
+                errors.append("Öffentliche Original-Aufnahmevorlage muss vollständig unbelegt bleiben.")
     except (OSError, ValueError) as exc:
         errors.append("C64-Aufnahmevorlage nicht lesbar: " + str(exc))
 

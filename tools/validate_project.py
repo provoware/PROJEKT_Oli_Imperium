@@ -31,13 +31,19 @@ def validate(data: dict) -> list[str]:
     if not isinstance(ref, dict):
         errors.append("reference fehlt oder ist kein Objekt.")
         ref = {}
-    if ref.get("status") not in {"not_selected", "candidate", "verified"}:
+    reference_status = ref.get("status")
+    if not isinstance(reference_status, str) or reference_status not in {"not_selected", "candidate", "verified"}:
         errors.append("reference.status ungültig.")
-    if ref.get("status") == "verified":
-        if not ref.get("verified_run") or not is_sha256(ref.get("image_sha256")):
+    verified_run = ref.get("verified_run")
+    if type(verified_run) is not bool:
+        errors.append("reference.verified_run muss true/false sein.")
+    if reference_status == "verified":
+        if verified_run is not True or not is_sha256(ref.get("image_sha256")):
             errors.append("Verifizierte Referenz benötigt Emulatorstart und 64-stelligen SHA-256.")
-        if not ref.get("emulator_version"):
+        if not isinstance(ref.get("emulator_version"), str) or not ref["emulator_version"].strip():
             errors.append("Verifizierte Referenz benötigt emulator_version.")
+    elif verified_run is True:
+        errors.append("Emulatorlauf und ungeprüfter Referenzstatus widersprechen sich.")
     seen: dict[str, str] = {}
     groups = {}
     for kind, prefix in KINDS.items():
@@ -60,16 +66,16 @@ def validate(data: dict) -> list[str]:
             seen[ident] = kind
             if not isinstance(item.get("title", item.get("text")), str) or not (item.get("title") or item.get("text")):
                 errors.append(f"{ident}: title/text fehlt.")
-            if kind in STATUSES and item.get("status") not in STATUSES[kind]:
+            if kind in STATUSES and (not isinstance(item.get("status"), str) or item["status"] not in STATUSES[kind]):
                 errors.append(f"{ident}: unbekannter Status.")
             if kind == "rules" and item.get("status") == "approved" and not item.get("source_ids"):
                 errors.append(f"{ident}: freigegebene Regel benötigt source_ids.")
             if kind == "sources":
-                if item.get("type") not in SOURCE_TYPES: errors.append(f"{ident}: unzulässiger Quellentyp.")
+                if not isinstance(item.get("type"), str) or item["type"] not in SOURCE_TYPES: errors.append(f"{ident}: unzulässiger Quellentyp.")
                 if not isinstance(item.get("url"), str) or not item["url"].startswith("https://"):
                     errors.append(f"{ident}: https-URL erforderlich.")
             if kind == "tests":
-                if item.get("kind") not in TEST_KINDS: errors.append(f"{ident}: unbekannte Testart.")
+                if not isinstance(item.get("kind"), str) or item["kind"] not in TEST_KINDS: errors.append(f"{ident}: unbekannte Testart.")
                 if not isinstance(item.get("mandatory"), bool): errors.append(f"{ident}: mandatory muss boolesch sein.")
                 if type(item.get("weight")) is not int or item["weight"] < 1: errors.append(f"{ident}: weight muss positive Ganzzahl sein.")
                 if item.get("kind") == "original" and item.get("status") == "passed":
@@ -78,7 +84,7 @@ def validate(data: dict) -> list[str]:
                     if not item.get("evidence"): errors.append(f"{ident}: bestandener Originaltest benötigt evidence.")
                     if not item.get("rule_ids"):
                         errors.append(f"{ident}: bestandener Originaltest benötigt verknüpfte rule_ids.")
-            if kind == "questions" and item.get("owner") not in {"A", "B"}:
+            if kind == "questions" and item.get("owner") not in ("A", "B"):
                 errors.append(f"{ident}: owner muss A oder B sein.")
     expected_refs = {
         "rules": {"source_ids": "sources", "screen_ids": "screens"},
@@ -87,10 +93,20 @@ def validate(data: dict) -> list[str]:
         "tests": {"rule_ids": "rules"},
         "questions": {"related_ids": None, "blocks": None}
     }
+    # Die Browseransichten lesen diese Listen ohne Fallback. Python und
+    # JavaScript müssen denselben Pflichtfeldvertrag durchsetzen.
+    required_refs = {
+        "rules": {"source_ids", "screen_ids"},
+        "screens": {"source_ids"},
+        "questions": {"related_ids"},
+    }
     for kind, link_fields in expected_refs.items():
         for item in groups[kind]:
             if not isinstance(item, dict) or not isinstance(item.get("id"), str): continue
             for field, target in link_fields.items():
+                if field in required_refs.get(kind, ()) and field not in item:
+                    errors.append(f"{item['id']}.{field}: Pflichtliste fehlt.")
+                    continue
                 links = item.get(field, [])
                 if not isinstance(links, list):
                     errors.append(f"{item['id']}.{field}: erwartet Liste.")
@@ -132,12 +148,14 @@ def main(path: Path) -> int:
         return 2
     errors = validate(data)
     print("PROJEKT_Oli_Imperium | Datenvertrag und Fortschritt")
-    for key, value in progress(data).items():
-        print(f"  {key}: {value}")
+    # Ein ungültiger Vertrag darf weder abstürzende noch irreführende
+    # Fortschrittszahlen erzeugen. Erst prüfen, dann Fortschritt berechnen.
     if errors:
         for error in errors:
             print(f"FEHLER: {error}", file=sys.stderr)
         return 1
+    for key, value in progress(data).items():
+        print(f"  {key}: {value}")
     print("Strukturprüfung: OK (keine Bestätigung historischer Fakten)")
     return 0
 
