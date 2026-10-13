@@ -31,7 +31,8 @@ def validate(data: dict) -> list[str]:
     if not isinstance(ref, dict):
         errors.append("reference fehlt oder ist kein Objekt.")
         ref = {}
-    if ref.get("status") not in {"not_selected", "candidate", "verified"}:
+    reference_status = ref.get("status")
+    if not isinstance(reference_status, str) or reference_status not in {"not_selected", "candidate", "verified"}:
         errors.append("reference.status ungültig.")
     if ref.get("status") == "verified":
         if not ref.get("verified_run") or not is_sha256(ref.get("image_sha256")):
@@ -60,16 +61,16 @@ def validate(data: dict) -> list[str]:
             seen[ident] = kind
             if not isinstance(item.get("title", item.get("text")), str) or not (item.get("title") or item.get("text")):
                 errors.append(f"{ident}: title/text fehlt.")
-            if kind in STATUSES and item.get("status") not in STATUSES[kind]:
+            if kind in STATUSES and (not isinstance(item.get("status"), str) or item["status"] not in STATUSES[kind]):
                 errors.append(f"{ident}: unbekannter Status.")
             if kind == "rules" and item.get("status") == "approved" and not item.get("source_ids"):
                 errors.append(f"{ident}: freigegebene Regel benötigt source_ids.")
             if kind == "sources":
-                if item.get("type") not in SOURCE_TYPES: errors.append(f"{ident}: unzulässiger Quellentyp.")
+                if not isinstance(item.get("type"), str) or item["type"] not in SOURCE_TYPES: errors.append(f"{ident}: unzulässiger Quellentyp.")
                 if not isinstance(item.get("url"), str) or not item["url"].startswith("https://"):
                     errors.append(f"{ident}: https-URL erforderlich.")
             if kind == "tests":
-                if item.get("kind") not in TEST_KINDS: errors.append(f"{ident}: unbekannte Testart.")
+                if not isinstance(item.get("kind"), str) or item["kind"] not in TEST_KINDS: errors.append(f"{ident}: unbekannte Testart.")
                 if not isinstance(item.get("mandatory"), bool): errors.append(f"{ident}: mandatory muss boolesch sein.")
                 if type(item.get("weight")) is not int or item["weight"] < 1: errors.append(f"{ident}: weight muss positive Ganzzahl sein.")
                 if item.get("kind") == "original" and item.get("status") == "passed":
@@ -78,7 +79,7 @@ def validate(data: dict) -> list[str]:
                     if not item.get("evidence"): errors.append(f"{ident}: bestandener Originaltest benötigt evidence.")
                     if not item.get("rule_ids"):
                         errors.append(f"{ident}: bestandener Originaltest benötigt verknüpfte rule_ids.")
-            if kind == "questions" and item.get("owner") not in {"A", "B"}:
+            if kind == "questions" and item.get("owner") not in ("A", "B"):
                 errors.append(f"{ident}: owner muss A oder B sein.")
     expected_refs = {
         "rules": {"source_ids": "sources", "screen_ids": "screens"},
