@@ -34,11 +34,16 @@ def validate(data: dict) -> list[str]:
     reference_status = ref.get("status")
     if not isinstance(reference_status, str) or reference_status not in {"not_selected", "candidate", "verified"}:
         errors.append("reference.status ungültig.")
-    if ref.get("status") == "verified":
-        if not ref.get("verified_run") or not is_sha256(ref.get("image_sha256")):
+    verified_run = ref.get("verified_run")
+    if type(verified_run) is not bool:
+        errors.append("reference.verified_run muss true/false sein.")
+    if reference_status == "verified":
+        if verified_run is not True or not is_sha256(ref.get("image_sha256")):
             errors.append("Verifizierte Referenz benötigt Emulatorstart und 64-stelligen SHA-256.")
-        if not ref.get("emulator_version"):
+        if not isinstance(ref.get("emulator_version"), str) or not ref["emulator_version"].strip():
             errors.append("Verifizierte Referenz benötigt emulator_version.")
+    elif verified_run is True:
+        errors.append("Emulatorlauf und ungeprüfter Referenzstatus widersprechen sich.")
     seen: dict[str, str] = {}
     groups = {}
     for kind, prefix in KINDS.items():
@@ -133,12 +138,14 @@ def main(path: Path) -> int:
         return 2
     errors = validate(data)
     print("PROJEKT_Oli_Imperium | Datenvertrag und Fortschritt")
-    for key, value in progress(data).items():
-        print(f"  {key}: {value}")
+    # Ein ungültiger Vertrag darf weder abstürzende noch irreführende
+    # Fortschrittszahlen erzeugen. Erst prüfen, dann Fortschritt berechnen.
     if errors:
         for error in errors:
             print(f"FEHLER: {error}", file=sys.stderr)
         return 1
+    for key, value in progress(data).items():
+        print(f"  {key}: {value}")
     print("Strukturprüfung: OK (keine Bestätigung historischer Fakten)")
     return 0
 
