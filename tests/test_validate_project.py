@@ -1,10 +1,13 @@
 import json
 import sys
+import tempfile
 import unittest
+from contextlib import redirect_stderr, redirect_stdout
+from io import StringIO
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
-from validate_project import progress, validate
+from validate_project import main, progress, validate
 
 def base():
     return {
@@ -72,6 +75,47 @@ class TestContract(unittest.TestCase):
                 else:
                     contract[group].append(row)
                 self.assertTrue(validate(contract), label)
+
+    def test_reference_claims_require_strict_boolean_and_matching_status(self):
+        for status, run, expected in (
+            ("candidate", True, "widersprechen"),
+            ("not_selected", True, "widersprechen"),
+            ("verified", 1, "true/false"),
+            ("verified", "yes", "true/false"),
+            ("verified", False, "Emulatorstart"),
+            ("candidate", None, "true/false"),
+        ):
+            with self.subTest(status=status, run=run):
+                d = base()
+                d["reference"].update(status=status, verified_run=run)
+                if status == "verified":
+                    d["reference"].update(image_sha256="a" * 64,
+                                          emulator_version="VICE-Test")
+                self.assertTrue(any(expected in error for error in validate(d)),
+                                f"{status}: {run}")
+
+    def test_cli_rejects_invalid_json_structure_without_progress_or_traceback(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / "contract.json"
+            for mutate in (
+                lambda d: d.update(rules=[None]),
+                lambda d: d.update(tests={"TEST-001": "not_run"}),
+                lambda d: d["reference"].update(status=[]),
+                lambda d: d.update(tests=[
+                    {"id": "TEST-001", "title": "Fehler", "kind": "original",
+                     "status": "failed", "mandatory": True, "weight": []}]),
+            ):
+                with self.subTest(mutate=repr(mutate)):
+                    d = base()
+                    mutate(d)
+                    path.write_text(json.dumps(d), encoding="utf-8")
+                    out, err = StringIO(), StringIO()
+                    with redirect_stdout(out), redirect_stderr(err):
+                        result = main(path)
+                    self.assertEqual(result, 1, err.getvalue())
+                    self.assertIn("FEHLER", err.getvalue())
+                    self.assertNotIn("Fortschritt:", out.getvalue())
+                    self.assertNotIn("A-Regeln:", out.getvalue())
 
     def test_approved_rule_needs_source(self):
         d = base()
