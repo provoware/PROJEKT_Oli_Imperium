@@ -46,7 +46,7 @@ class TestContract(unittest.TestCase):
         d["reference"].update({"status": "verified", "verified_run": True,
                                 "image_sha256": "a" * 64, "emulator_version": "VICE-Test"})
         d["sources"] = [{"id": "SRC-1", "title": "Versuch", "type": "emulator", "url": "https://example.org/test"}]
-        d["rules"] = [{"id": "REGEL-1", "title": "Getestete Regel", "status": "approved", "source_ids": ["SRC-1"]}]
+        d["rules"] = [{"id": "REGEL-1", "title": "Getestete Regel", "status": "approved", "source_ids": ["SRC-1"], "screen_ids": []}]
         d["tests"] = [
             {"id": "TEST-1", "title": "Eins", "kind": "original", "mandatory": True,
              "weight": 3, "status": "passed", "evidence": "Versuch-1", "rule_ids": ["REGEL-1"]},
@@ -116,6 +116,31 @@ class TestContract(unittest.TestCase):
                     self.assertIn("FEHLER", err.getvalue())
                     self.assertNotIn("Fortschritt:", out.getvalue())
                     self.assertNotIn("A-Regeln:", out.getvalue())
+
+    def test_browser_and_python_enforce_same_mandatory_reference_lists(self):
+        for group, row, missing_field in (
+            ("rules", {"id": "REGEL-X", "title": "Test", "status": "open",
+                       "source_ids": [], "screen_ids": []}, "source_ids"),
+            ("rules", {"id": "REGEL-X", "title": "Test", "status": "open",
+                       "source_ids": [], "screen_ids": []}, "screen_ids"),
+            ("screens", {"id": "SCREEN-001", "title": "Test", "status": "open",
+                         "source_ids": []}, "source_ids"),
+            ("questions", {"id": "Q-001", "text": "Test", "status": "open",
+                           "owner": "A", "related_ids": []}, "related_ids"),
+        ):
+            for invalid in ("missing", None, {}):
+                with self.subTest(group=group, field=missing_field, invalid=invalid):
+                    d = base()
+                    value = dict(row)
+                    if invalid == "missing":
+                        value.pop(missing_field)
+                    else:
+                        value[missing_field] = invalid
+                    d[group] = [value]
+                    self.assertTrue(any(missing_field in error for error in validate(d)))
+            d = base()
+            d[group] = [dict(row)]
+            self.assertEqual(validate(d), [])
 
     def test_approved_rule_needs_source(self):
         d = base()
