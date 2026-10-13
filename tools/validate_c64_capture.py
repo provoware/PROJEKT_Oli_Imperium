@@ -36,7 +36,7 @@ def validate_capture(document):
     missing = []
     if not isinstance(document, dict):
         return ["Die Aufnahmeakte muss ein JSON-Objekt sein."], []
-    if document.get("schema_version") != 1 or document.get("kind") != "c64-original-session-record":
+    if type(document.get("schema_version")) is not int or document["schema_version"] != 1 or document.get("kind") != "c64-original-session-record":
         errors.append("Unbekanntes C64-Aufnahmeformat oder Schema.")
     status = document.get("reference_status")
     if status not in ("not_recorded", "captured"):
@@ -123,7 +123,7 @@ def validate_capture(document):
                 if not valid_sha256(sha) or not filled(capture.get("description")):
                     errors.append(test_id + ": PNG-Prüfsumme oder Bildbeschreibung ungültig.")
             for index, step in enumerate(steps, 1):
-                if not isinstance(step, dict) or step.get("sequence") != index:
+                if not isinstance(step, dict) or type(step.get("sequence")) is not int or step["sequence"] != index:
                     errors.append(test_id + ": Schrittfolge ist nicht lückenlos.")
                     continue
                 if not (filled(step.get("input_description")) and
@@ -135,7 +135,7 @@ def validate_capture(document):
                 ):
                     errors.append(test_id + ": unbekannte SCREEN-ID.")
                 capture_id = step.get("capture_file")
-                if capture_id is not None and capture_id not in seen:
+                if capture_id is not None and (not isinstance(capture_id, str) or capture_id not in seen):
                     errors.append(test_id + ": Schritt verweist auf fehlenden PNG-Beleg.")
             description = entry.get("description")
             if test_status == "recorded":

@@ -1,5 +1,12 @@
 # Änderungsprotokoll
 
+### C0 0.1.0-alpha.10 – Robustheitskorrektur der Browser-Datenprüfung (unveröffentlicht)
+
+- **Fehler behoben:** Vorhandene, aber unvollständige Forschungsverträge konnten eine Browserprüfung bestehen, obwohl Bildschirm-, Regel- oder Fragenansichten anschließend beim Lesen fehlender Verknüpfungslisten abstürzen konnten.
+- Die UI-Pflichtlisten `screens[].source_ids`, `rules[].source_ids`, `rules[].screen_ids` und `questions[].related_ids` werden jetzt vor dem Rendern ausdrücklich auf vorhandene Listen geprüft. Vorhandene leere Listen bleiben als offene Forschungsstände zulässig; optionale Verweise sind unverändert.
+- Gezielte Negativtests für fehlende, `null`- und falsch formatierte Pflichtlisten; weder neue Spielmechanik noch eine stillschweigende Freigabe historischer Originalinformationen.
+- **Abnahmestatus unverändert:** PR #7 bleibt Entwurf, alle Originalprüfungen und menschlichen Freigaben weiterhin offen. Diese Änderung wird als separater untergeordneter Review-Antrag geprüft und nicht direkt in `main` übernommen.
+
 ## C0 0.1.0-alpha.10 – original- und bedienungsbezogene Abnahmeunterlagen (unveröffentlicht)
 
 - Verbindliche private Aufnahme-Anleitung mit konkreten Prüfkommandos für zwei rechtmäßig bereitgestellte G64-Seiten, VICE/PAL und vollständigen Navigationsweg TEST-001 bis TEST-003. **Kein Originalabbild, keine Hashes und keine Originalbeobachtungen als tatsächlich vorhanden behauptet.**

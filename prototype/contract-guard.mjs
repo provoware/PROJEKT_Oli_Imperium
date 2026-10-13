@@ -27,8 +27,10 @@ function fail(message) {
 function object(value) {
   return value !== null && typeof value === 'object' && !Array.isArray(value);
 }
-function links(item, field, idMap, expectedGroup) {
-  const items = item[field] ?? [];
+function links(item, field, idMap, expectedGroup, required = false) {
+  // Pflichtlisten müssen vorhanden sein: Die UI liest sie ohne weiteren Fallback.
+  // Optionale Verknüpfungen bleiben für ältere Forschungsdatensätze zulässig.
+  const items = required ? item[field] : (item[field] ?? []);
   if (!Array.isArray(items) || new Set(items).size !== items.length) {
     fail(item.id + '.' + field + ': Liste oder Verknüpfungen ungültig.');
   }
@@ -103,10 +105,10 @@ export function validatePilotContract(data) {
       }
     }
   }
-  for (const screen of data.screens) links(screen, 'source_ids', idMap, 'sources');
+  for (const screen of data.screens) links(screen, 'source_ids', idMap, 'sources', true);
   for (const rule of data.rules) {
-    links(rule, 'source_ids', idMap, 'sources');
-    links(rule, 'screen_ids', idMap, 'screens');
+    links(rule, 'source_ids', idMap, 'sources', true);
+    links(rule, 'screen_ids', idMap, 'screens', true);
     if (rule.status === 'approved' && rule.source_ids.length === 0) {
       fail(rule.id + ': freigegebene Regel ohne Quelle.');
     }
@@ -121,7 +123,7 @@ export function validatePilotContract(data) {
     }
   }
   for (const question of data.questions) {
-    links(question, 'related_ids', idMap);
+    links(question, 'related_ids', idMap, undefined, true);
     links(question, 'blocks', idMap);
   }
   for (const screen of ['SCREEN-001', 'SCREEN-002', 'SCREEN-003']) {

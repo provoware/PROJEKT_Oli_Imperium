@@ -111,6 +111,26 @@ class C64CaptureTests(unittest.TestCase):
         doc["test_observations"][0]["observed_navigation"][0]["capture_file"] = "missing.png"
         self.assertTrue(validate_capture(doc)[0])
 
+    def test_boolean_schema_and_step_numbers_cannot_pass_as_integers(self):
+        doc = self.completed_fixture()
+        doc["schema_version"] = True
+        self.assertTrue(any("Schema" in e for e in validate_capture(doc)[0]))
+        doc = self.completed_fixture()
+        doc["test_observations"][0]["observed_navigation"][0]["sequence"] = True
+        self.assertTrue(any("Schrittfolge" in e for e in validate_capture(doc)[0]))
+        doc = self.completed_fixture()
+        doc["test_observations"][0]["observed_navigation"][0]["sequence"] = 1.0
+        self.assertTrue(any("Schrittfolge" in e for e in validate_capture(doc)[0]))
+
+    def test_malformed_capture_reference_returns_errors_instead_of_crashing(self):
+        for malformed in ([], {}, True, 12, ["screen_1.png"]):
+            with self.subTest(malformed=malformed):
+                doc = self.completed_fixture()
+                doc["test_observations"][0]["observed_navigation"][0]["capture_file"] = malformed
+                errors, missing = validate_capture(doc)
+                self.assertTrue(any("fehlenden PNG-Beleg" in e for e in errors))
+                self.assertEqual(missing, [])
+
     def test_not_run_does_not_accept_undocumented_observations(self):
         doc = self.completed_fixture()
         doc["reference_status"] = "not_recorded"
