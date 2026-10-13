@@ -1,4 +1,5 @@
 """Tests für die technische C0-Vorabnahme, unabhängig von Originaltreue."""
+import hashlib
 import json
 import shutil
 import sys
@@ -142,12 +143,15 @@ class TestC0ReviewGate(unittest.TestCase):
 
     def test_private_originals_never_enter_review_archive(self):
         """Auch vorhandene lokale Originaldateien dürfen nicht ins Prüf-ZIP."""
-        samples = {
-            "private/oil-side0.g64": b"SYNTHETIC-NOT-AN-ORIGINAL",
-            "originalmedia/oil-side1.d64": b"SYNTHETIC-NOT-AN-ORIGINAL",
-            "private/vice-original-screen.png": b"SYNTHETIC-IMAGE",
-            "private/original-manual.pdf": b"SYNTHETIC-MANUAL",
-        }
+        names = (
+            "private/oil-side0.g64",
+            "originalmedia/oil-side1.d64",
+            "private/vice-original-screen.png",
+            "private/original-manual.pdf",
+        )
+        # Binärdaten aus Hashes, die nicht als Klartext im gepackten Testcode stehen.
+        samples = {name: hashlib.sha256(name.encode("utf-8")).digest()
+                   for name in names}
         for name, payload in samples.items():
             file = self.root / name
             file.parent.mkdir(parents=True, exist_ok=True)
