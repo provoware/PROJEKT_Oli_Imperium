@@ -49,3 +49,52 @@ Ein erfolgreicher Node- oder Browser-Test darf `data/contract.json.tests[].statu
 - Bei Änderungen der Zuordnung immer diese Datei, die reinen Zuordnungsfunktionen und die Negativtests gemeinsam aktualisieren.
 
 **Gesamtabnahme:** Die Vergleichsvorlage ist Teil des technischen C0-Reviewpakets. Die Originalbeobachtung und alle 3 Originaltests dürfen bei C0 weiter offen bleiben, müssen aber als ausstehend ausgewiesen werden.
+
+
+---
+
+## 13.10.2026: Tatsächliche C0-Abdeckung gegenüber C64-Quellen
+
+### Was der aktuelle Code tatsächlich kann
+
+Der eingefrorene Pilot `prototype/navigation.mjs` enthält **genau drei logische, rein technische Ansichten**:
+
+| HTML-Entwurfs-ID | Codezustand und verfügbare Aktion | C64-Screenshot-Kandidat | Nachweisstatus |
+|---|---|---|---|
+| `SCREEN-001` | Büro: `to-map` | C64-006, ggf. Bürovarianten C64-007 bis -009 | Sekundärquellen / Originaltest offen |
+| `SCREEN-002` | Weltkarte: `to-claims`, `to-office` | C64-012; Gebietszwischenschritt C64-013 erst beobachten | Sekundärquellen / Originaltest offen |
+| `SCREEN-003` | Claim-Information: `to-map` | C64-014, falls tatsächlich eigenständiger Bildschirmzustand | **Hypothese**, Existenz offen |
+
+`prototype/ui/render.mjs` zeigt hierfür **strukturierte Forschungsinformationen und Quellenlinks**, nicht die originale Pixelgrafik oder eine spielbare Weltkarte. Es sind **keine** C64-Ölfelder, Verträge, Aktien, Geldwerte, Spielmonate, Computer-Untermenüs, Bohrminispiele oder KI-Gegenspieler implementiert. Die Browserprüfungen belegen **nur** diese technische Bedienbarkeit. Angesichts des zuvor eingefrorenen C0-Umfangs dürfen die fehlenden Bereiche jetzt **nicht** stillschweigend ergänzt werden.
+
+### Offene, mit Quellen belegte Funktionsgruppen
+
+| Grundlage | Im C64-Wiki beschriebene Oberfläche/Aktion | Tatsächlich in C0 | Abnahmekonsequenz |
+|---|---|---|---|
+| Büro | Bis zu vier unterschiedliche Büroansichten, Kalender, Firmensignet | **Teilweise:** logisch benannter Büro-Zustand | Keine grafische Originaltreue; Varianten und Kalender fehlen |
+| Weltkarte | Kartenbild, Gebiet/Claim, Besitzinformation | **Teilweise:** zwei logische Zustände | Selbständigkeit von `SCREEN-003`, Koordinaten, originaler Weg offen |
+| Computer | Kaufen, Verkaufen, Bohren, Statistik, Expertise | **Nein** | Als spätere Spielentwicklungsphase einplanen, nicht in C0 ausweiten |
+| Telefon | Telegramme und Lieferverträge | **Nein** | Dialog-/Zustandsforschung notwendig |
+| Schublade | Schutz, Unternehmensübersicht, Sabotage | **Nein** | Getrennte Dialog- und Wirtschaftsanforderungen |
+| Koffer | Brandaufträge und eigener Löscheinsatz | **Nein** | Bedingte Originalbeobachtung erforderlich |
+| Zeitung | Ereignisse, Ölpreise | **Nein** | Zeit-/Ereignislogik unbekannt |
+| Aktionen | Bohren, Pipelinebau, Feuerlöschen | **Nein** | Erreichbarkeit/Steuerung in echten Spielsituationen prüfen |
+| Spielsystem | 1–4 Spieler, monatliche Runden, Geld, vier Siegbedingungen | **Nein** | Frühere Textangaben sind keine geprüften Originalformeln |
+| Speichern | Firmensignet mit Diskettenauswahl | **Nein** | Originalformat/UX erst nach Beobachtung entwerfen |
+
+### Vergleichs- und Fehlerprotokoll
+
+Für jeden Versuch ist **getrennt** festzuhalten:
+`Referenzfassung (R01/R02/R03/GB5359) | konkrete Bytes/Hashes | Spielstand | Aufnahmekennung C64-XXX | beobachtete C64-Bedienung | Originalbild-Hash | zugehörige HTML-ID/Aktion | HTML-Version | strukturelle Abweichung | tatsächliche Handhabung des Rückwegs | Belegqualität | Prüferentscheidung`.
+
+**Entscheidungsstufen:**
+
+- `nicht_beobachtet`: Quelle oder HTML-Hypothese allein, kein echter Test.
+- `beobachtet`: Rohbild + reale Eingabefolge vorhanden; Rechteprüfung davon unabhängig.
+- `strukturell_ähnlich`/`abweichend`: Fachvergleich dokumentiert, aber kein automatisch bestandener Originaltest.
+- `fachlich_geprüft`: Unabhängiger Prüfer hat Belege mit konkreter Ausgabe abgeglichen; nur danach Statusänderungen in den Forschungsregeln.
+- `rechtlich_freigegeben`: Veröffentlichung von Originalmaterial separat geprüft; **keine** implizite Erlaubnis aus einem Spielstart.
+
+**Besonders wichtig:** Das separat verfügbare moderne browserbasierte Spiel unter `oilimperium.de` ist **keine** historische C64-Fassung; sein Bau-/Forschungs-/Regionssystem ist **nicht** als Quelle für C64-Regeln zulässig.
+
+**Erweiterter Erfassungsplan:** `docs/27_C0_ORIGINALPRUEFUNG_ANLEITUNG.md`, Phase 4 mit 44 geplanten C64-Bildzuständen (keine Behauptung über 44 tatsächlich vorhandene separate Bildschirme). **0 Originalaufnahmen vorhanden.**
