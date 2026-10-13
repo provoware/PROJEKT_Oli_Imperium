@@ -1,5 +1,13 @@
 # Änderungsprotokoll
 
+### C0 0.1.0-alpha.10 – Öffentlicher Originalquellen-Audit (unveröffentlicht)
+
+- Neue, streng als **Sekundärforschung** gekennzeichnete Internetrecherche: mehrere deutsche PAL-Originaldisketten aus Preservation64, zwei gemeldete G64-Dateigrößen, Screenshot- und Bedienungsquellen sowie Browser-Emulator-Fundstelle.
+- Ergebnisse direkter Zugriffsprüfungen dokumentiert: kein G64 erfolgreich lokal heruntergeladen; VICE nicht installiert, kein Emulatorlauf und keine selbst aufgenommenen Original-PNGs.
+- Lizenzlage abgegrenzt: kostenlose Bereitstellung bzw. DOS-„Freeware“-Kennzeichnung beweisen keine C64-Freigabe; rechtmäßige Kopie und Bildrechte bleiben vor Originaltests und Veröffentlichung offen.
+- Eine nicht bindende Bildschirm-/Funktionenliste aus C64-Wiki als Grundlage für spätere echte C64-Aufnahmen ergänzt.
+- Nur `docs/18_REFERENZKANDIDAT_C64_PAL.md` und dieses Änderungsprotokoll aktualisiert; kein Originalinhalt importiert, `data/contract.json` und alle vier Freigaben unangetastet. Kein Gameplay-Update, kein Merge, kein Release.
+
 ### C0 0.1.0-alpha.10 – Strenge Forschungsdatenprüfung, Prüfaudit PR #12 (unveröffentlicht)
 
 - Verschachtelte ungültige JSON-Werte werden im Python-Forschungsprüfer und im C0-Prüfarchiv kontrolliert abgewiesen, statt mit unkontrollierten Typ-/Attributfehlern abzubrechen.
