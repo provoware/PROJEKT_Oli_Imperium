@@ -30,3 +30,10 @@ Prüfungsordnung, Zulässigkeit zweier aufeinander aufbauender Arbeiten, Beteili
 
 ## 0.7 Arbeitsgrundsätze
 Keine globalen Sperren; keine unbegründeten Aufgaben; kleine Änderungen; Vor- und Nachprüfung; belegte IDs; wissenschaftliche Unsicherheit sichtbar; Fortschritt mit festem Nenner.
+
+## 0.8 Original als Forschungsreferenz – nicht als Produktbestandteil
+Die rechtmäßig zugängliche deutsche C64-PAL-Fassung ist ein **lokales Untersuchungsobjekt**. Weder ihre Datenträgerabbilder noch originale Grafiken, Klänge, Programme, Handbuchkopien oder Screenshots werden in Repository, HTML-Spiel, CI oder Prüfarchiven verbreitet. Die rechtliche Zulässigkeit der lokalen Nutzung ist separat zu klären.
+
+Die Forschung erstellt eigenständige, möglichst verhaltensgenaue Spezifikationen mit eindeutiger Unterscheidung zwischen **eigener Beobachtung**, **Interpretation**, **ungeprüfter Hypothese** und **freigegebener Regel**. Arbeit B entwirft die Architektur unabhängig vom historischen Programmcode. Die spätere Umsetzung C verwendet ausschließlich eigenständig entwickelte Software und freigegebene eigene Inhalte. Prüfergebnisse des Originals ersetzen keine Rechteprüfung.
+
+Forschung A und Planung B bearbeiten Teilpakete parallel. Das eingefrorene C0 wird dadurch nicht stillschweigend zum Gesamtspiel erweitert; spätere Gameplay-Module beginnen erst in einer gesondert genehmigten Phase C. Die ursprünglichen Qualitäts- und Freigabetore gelten weiter.
