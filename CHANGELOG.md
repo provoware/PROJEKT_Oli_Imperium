@@ -1,5 +1,14 @@
 # Änderungsprotokoll
 
+### C0 0.1.0-alpha.10 – Vertiefter C64-Varianten- und Bildschirmvergleich (unveröffentlicht)
+
+- **Wesentlicher Quellenabgleich:** Gamebase64 Nr. 5359 ist die **deutsche** D64-Fassung (als DMAgic-bearbeitet gekennzeichnet); Nr. 14505 ist **englisch**. Der frühere Online-Link 14505 darf daher nicht als deutscher Originalreferenzbeleg gelten. Preservation64 Source 3 bleibt der unverifizierte Referenzkandidat.
+- Source 2 (englisches NTSC Black Gold), Source 3/4/5 (deutsche PAL-Disketten), D64-Cracks sowie Handbücher und Online-Emulationen nach Herkunft, Sprache, Schutz und Aussagekraft getrennt. Katalogabweichung bei c64games.de (Jahr 1987 vs. 1989) ausgewiesen.
+- **Quellenschutz:** `oilimperium.de` beschreibt ein anderes, modernes Online-Spiel; seine Gebäude-/Gebiets-/Wirtschaftswerte dürfen nicht als C64-Originalregeln übernommen werden.
+- **44-zeilige, priorisierte Screenshot-Aufnahmematrix** in der bestehenden Originalprüfanleitung ergänzt; echte Startbedingungen, Eingaben und Rohbilder müssen erst unabhängig aufgenommen werden. Keine Behauptung über 44 reale Bildschirme.
+- **Lückenvergleich:** Der eingefrorene HTML-Pilot hat lediglich `SCREEN-001`, `SCREEN-002` und `SCREEN-003` mit technischer Navigation. Originalgrafik, Wirtschaft, Kalender, Computer-/Telefon-/Schubladenmenüs und Minispiele sind **nicht** implementiert; `SCREEN-003` bleibt eine Originalhypothese.
+- Keine G64/PNG eingebettet, `data/contract.json`, `release/approvals.json` und C0-Implementierung unverändert. Kein echter Emulatorlauf, kein PR-Merge und kein Release.
+
 ### C0 0.1.0-alpha.10 – Öffentlicher Originalquellen-Audit (unveröffentlicht)
 
 - Neue, streng als **Sekundärforschung** gekennzeichnete Internetrecherche: mehrere deutsche PAL-Originaldisketten aus Preservation64, zwei gemeldete G64-Dateigrößen, Screenshot- und Bedienungsquellen sowie Browser-Emulator-Fundstelle.
