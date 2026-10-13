@@ -1,5 +1,13 @@
 # Änderungsprotokoll
 
+### C0 0.1.0-alpha.10 – Strenge Forschungsdatenprüfung, Prüfaudit PR #12 (unveröffentlicht)
+
+- Verschachtelte ungültige JSON-Werte werden im Python-Forschungsprüfer und im C0-Prüfarchiv kontrolliert abgewiesen, statt mit unkontrollierten Typ-/Attributfehlern abzubrechen.
+- `reference.verified_run` ist streng boolesch; ein angeblicher Emulatorlauf bei unbestätigter Referenz sowie ein bestätigter Status ohne tatsächliches `true` werden verweigert. Python und Browser folgen derselben Sperrlogik.
+- Python prüft jetzt dieselben zwingenden Listen wie die Browseroberfläche: `screens[].source_ids`, `rules[].source_ids`, `rules[].screen_ids` und `questions[].related_ids`. Vorhandene leere Listen bleiben für offene Forschung erlaubt.
+- Ungültige Forschungsdaten erzeugen vor der Fortschrittsberechnung einen verständlichen Fehler und niemals irreführende Erfolgszahlen; synthetische Negativtests prüfen die Absturzfreiheit.
+- **Nicht freigegeben:** Kein Originalvergleich durchgeführt, C0 eingefroren, keine neuen Gameplay-Funktionen, TEST-001 bis TEST-003 offen, vier menschliche Freigaben weiter ausstehend. PR #12 bleibt Entwurf.
+
 ### C0 0.1.0-alpha.10 – Robustheitskorrektur der Browser-Datenprüfung (unveröffentlicht)
 
 - **Fehler behoben:** Vorhandene, aber unvollständige Forschungsverträge konnten eine Browserprüfung bestehen, obwohl Bildschirm-, Regel- oder Fragenansichten anschließend beim Lesen fehlender Verknüpfungslisten abstürzen konnten.
