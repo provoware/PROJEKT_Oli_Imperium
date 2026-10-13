@@ -93,10 +93,20 @@ def validate(data: dict) -> list[str]:
         "tests": {"rule_ids": "rules"},
         "questions": {"related_ids": None, "blocks": None}
     }
+    # Die Browseransichten lesen diese Listen ohne Fallback. Python und
+    # JavaScript müssen denselben Pflichtfeldvertrag durchsetzen.
+    required_refs = {
+        "rules": {"source_ids", "screen_ids"},
+        "screens": {"source_ids"},
+        "questions": {"related_ids"},
+    }
     for kind, link_fields in expected_refs.items():
         for item in groups[kind]:
             if not isinstance(item, dict) or not isinstance(item.get("id"), str): continue
             for field, target in link_fields.items():
+                if field in required_refs.get(kind, ()) and field not in item:
+                    errors.append(f"{item['id']}.{field}: Pflichtliste fehlt.")
+                    continue
                 links = item.get(field, [])
                 if not isinstance(links, list):
                     errors.append(f"{item['id']}.{field}: erwartet Liste.")
