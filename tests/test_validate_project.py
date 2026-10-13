@@ -53,6 +53,26 @@ class TestContract(unittest.TestCase):
         self.assertEqual(validate(d), [])
         self.assertEqual(progress(d)["Bestätigte gewichtete Originaltreue"], "75.0% (3/4)")
 
+    def test_unexpected_nested_json_types_report_errors_instead_of_crashing(self):
+        cases = (
+            ("Referenzstatus", "reference", {"status": []}),
+            ("Regelstatus", "rules", {"id": "REGEL-X", "title": "Test", "status": []}),
+            ("Quellentyp", "sources", {"id": "SRC-X", "title": "Test", "type": [],
+                                       "url": "https://example.org"}),
+            ("Testart", "tests", {"id": "TEST-X", "title": "Test", "kind": [],
+                                  "status": "not_run", "mandatory": True, "weight": 1}),
+            ("Fragenzuständigkeit", "questions",
+             {"id": "Q-X", "text": "Test", "status": "open", "owner": []}),
+        )
+        for label, group, row in cases:
+            with self.subTest(label=label):
+                contract = base()
+                if group == "reference":
+                    contract[group].update(row)
+                else:
+                    contract[group].append(row)
+                self.assertTrue(validate(contract), label)
+
     def test_approved_rule_needs_source(self):
         d = base()
         d["rules"] = [{"id": "REGEL-1", "title": "Ohne Quelle", "status": "approved"}]
