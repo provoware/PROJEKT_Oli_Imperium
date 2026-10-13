@@ -72,6 +72,30 @@ describe('C0: Browser-Datenprüfung sperrt ungeprüfte Originalaussagen', () => 
       data.questions[0].related_ids = ['SCREEN-999'];
     })), /fehlende Referenz/);
   });
+  it('weist fehlende Pflichtlisten für alle späteren Bildschirmansichten frühzeitig zurück', () => {
+    for (const [group, index, field] of [
+      ['screens', 0, 'source_ids'],
+      ['screens', 2, 'source_ids'],
+      ['rules', 0, 'source_ids'],
+      ['rules', 1, 'screen_ids'],
+      ['questions', 0, 'related_ids'],
+    ]) {
+      for (const mode of ['missing', 'null', 'object']) {
+        assert.throws(() => validatePilotContract(changed(data => {
+          if (mode === 'missing') delete data[group][index][field];
+          else data[group][index][field] = mode === 'null' ? null : {};
+        })), /Liste oder Verknüpfungen ungültig/, group + '[' + index + '].' + field + ':' + mode);
+      }
+    }
+  });
+  it('akzeptiert vorhandene leere Pflichtlisten ohne erfundene Quellennachweise', () => {
+    const valid = changed(data => {
+      data.screens[2].source_ids = [];
+      data.rules[1].screen_ids = [];
+      data.questions[0].related_ids = [];
+    });
+    assert.equal(validatePilotContract(valid), true);
+  });
   it('verändert den übergebenen Forschungsvertrag nicht', () => {
     const before = JSON.stringify(original);
     validatePilotContract(original);
