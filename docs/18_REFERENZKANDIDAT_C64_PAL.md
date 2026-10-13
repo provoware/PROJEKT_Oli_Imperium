@@ -156,3 +156,60 @@ Das C64-Wiki nennt als mögliche, noch nicht selbst bestätigte Originalregeln: 
 ### Weiterer Prüfstatus
 
 **Selbst durchgeführt:** öffentliche Metadaten-/Quellenprüfung; Downloadversuche aus isolierter Arbeitsumgebung; Prüfung, ob `x64sc` installiert ist (nein). **Nicht durchgeführt:** funktionierender G64-Download; Berechnung realer Dateihashes; Emulatorstart; eigene C64-Screenshots; Handbuchabfrage; Originaltests; Lizenzfreigabe.
+
+
+---
+
+## 9. Präzisierung: Varianten, Online-Emulation, Lizenz und Ausschlüsse (13.10.2026)
+
+### 9.1 C64-Fassungen dürfen nicht verwechselt werden
+
+Die Gamebase64-Datenbank identifiziert **zwei unterschiedliche** Oil-Imperium-Fassungen:
+
+| Nachweis | Sprache | Archivform laut Datenbank | Bewertung für R-01 |
+|---|---|---|---|
+| Gamebase64 **5359** | **Deutsch** | `o/OILIM-D0.D64`, zwei Disketten, Cracker/Cruncher **DMAgic**, drei Archiv-Screenshots | Geeignete **sekundäre** deutschsprachige Bedien-/Grafikreferenz; **kein** unbearbeiteter Originaldump |
+| Gamebase64 **14505** | **Englisch** | `o/OILIM-E0.D64`, zwei Disketten, Cracker/Cruncher `(None)`, zwei Archiv-Screenshots | Nur englischer Sprach-/Versionsabgleich; **kein** Beleg für deutsches Source-3-Verhalten |
+| Preservation64 **Source 3** | **Deutsch / PAL** | Source-3-G64-Seiten `parser s0/s1` und alternative `fromNib`-Seiten | **Bevorzugter** unveränderter Archivkandidat R-01 |
+| Preservation64 **Source 4** | Deutsch / PAL | `OilImperium 1989 reLINE parser s0/s1.g64`, Codesheet, Handbuch | Alternative unabhängige Originaldiskette (R-02), getrennte Herkunft und Hashes |
+| Preservation64 **Source 5** | Deutsch / PAL | `Oil Imperium stefan h s0/s1.g64`, Codetabelle, Handbuch | Alternative unabhängige Originaldiskette (R-03), getrennte Herkunft und Hashes |
+| Preservation64 **Source 2** | Englisch / **NTSC** | `BlackGold sncboom2k s0/s1.g64` | Fremde Sprach-/Videoausgabe; **nicht** stillschweigend mit R-01 mischen |
+
+**Korrektur zu älteren Vergleichen:** Der Online-Emulator für `14505` ist der **englischen** Gamebase64-Ausgabe zugeordnet. Für deutsche Sekundärbeobachtungen wäre die getrennte Seite `/Commodore64/Oil-Imperium-5359.html` naheliegender. Die Webseite erklärt nicht nachweisbar, ob die im Browser tatsächlich geladenen Bytes exakt zur Gamebase64-Version oder zu Preservation64 Source 3 gehören; ein Browserlauf mit Hash-Nachweis steht aus.
+
+- Deutsch: https://gb64.com/game.php?d=18&id=5359
+- Englisch: https://gb64.com/game.php?id=14505
+- Online Deutsch: https://www.commodoregames.net/Commodore64/Oil-Imperium-5359.html
+- Online Englisch: https://www.commodoregames.net/Commodore64/Oil-Imperium-14505.html
+- Referenzarchiv: https://preservation64.de/index.php?title=Oil_Imperium
+
+**Forschungsregel:** Auch wenn zwei Fassungen gleich aussehen: Erst Byte-Herkunft, Sprache, PAL-/NTSC-Einstellung, Manipulationskennzeichen und gegebenenfalls Kopierschutzdialog dokumentieren; Bilder niemals mit unzutreffender Versionsangabe etikettieren.
+
+### 9.2 Zusätzliche alternative Bezugs-/Informationsstellen
+
+| Angebot | Öffentlich feststellbar | Offene Einschränkung |
+|---|---|---|
+| **C64Games.de, Eintrag 122** | Vier anwählbare Screenshot-Ansichten sowie Disketten-/Cartridge- und Handbuch-Verweise | Veröffentlichungsjahr dort **1987**, im Archiv und C64-Wiki **1989**; Katalogkonflikt, kein Nachweis über Dateiversion, Einwilligung oder Lizenz |
+| **Planet Emulation** | Mehrere deutsch bezeichnete **D64-Cracks/Varianten** mit getrennten Seiten A/B (1994-Bezeichnung) | Bearbeitete 1994-Variante, nicht identisch mit Original-G64 von 1989; Download ist kein Lizenzbeleg |
+| **Project 64** (C64-Handbucharchiv) | Archivtexte/Handbücher und ausdrücklicher Urheberrechtshinweis | Die Webseite erklärt selbst, dass eine Veröffentlichung dort keine freie Weiterverwendung ermöglicht |
+| **CommodoreGames.net** | Spielseiten 5359/14505, Joystick-2-Tastenbelegung, Speicherschnappschuss- und Screenshot-Knopf laut Bedienhilfe | Betreiber schreibt ausdrücklich, dass er aus Copyright-Gründen keine C64-Dateien zum Download anbietet; keine Quell-Dateihashes |
+| **Preservation64** | Quellenabhängig Original-Diskettenabbilder und Handbücher, inkl. Handbuch-/Codeabfrage | Webseitenkatalog allein ist **keine** allgemeine Lizenz- oder Abrufberechtigung |
+
+- https://www.c64games.de/phpseiten/spieledetail.php?filnummer=122
+- https://www.planetemu.net/en/rom/commodore-c64-games-strategy-d64/oil-imperium-1994-reline-software-de-side-a-cr-oug
+- https://project64.c64.org/
+- https://www.commodoregames.net/Commodore64/Oil-Imperium-5359.html
+
+### 9.3 Quellentrennung (kritischer Schutz gegen falsche Spielregeln)
+
+**NICHT als historische C64-Quelle verwenden:** `wiki.oilimperium.de` und `forum.oilimperium.de` beziehen sich auf ein eigenständiges browserbasiertes Online-Spiel mit Gebäudeverwaltung, Forschungslabor, Aktienmarkt, Hexagon und anderen Mechaniken. Eine Namensähnlichkeit bestätigt keine Zugehörigkeit zum C64-Original von 1989. Daher **keine** dort genannten Zahlen, Regionen, Hexagonfelder, Technologien oder Oberflächen ungeprüft auf unser C64-Projekt übertragen.
+
+**Als historisches Sekundärmaterial geeignet:** `c64-wiki.de/wiki/Oil_Imperium`; hier werden unter anderem Büros, Computer-Untermenüs, Joystick Port 2, Aktionssequenzen und zwei explizit bezeichnete C64-Büro-Screenshots beschrieben. Vor allen späteren Regelübernahmen zusätzlich eine eigene Originalbeobachtung nötig.
+
+### 9.4 Juristische Belastbarkeit
+
+Aktuell **kein verifizierter Rechteinhaber-Nachweis für eine generelle kostenlose Lizenz** der C64-Ausgabe; weder das Label `Freeware` auf einer DOS-Seite noch ein Download-Link, eine eingestellte Firma oder eine Internet-Emulation reichen dafür aus. § 69d Abs. 3 UrhG betrifft unter Voraussetzungen das Beobachten und Testen beim **berechtigten** Ausführen einer Programmkopie; daraus folgt **keine** allgemeine Weitergabebefugnis für Spielcode oder Bildmaterial.
+
+Rechtsgrundlage: https://www.gesetze-im-internet.de/urhg/__69d.html
+
+**Resultat:** Kein neuer historischer Teststatus, keine private G64-Datei, keine Originalgrafik in Git oder Review-ZIP. Entscheidung zu Berechtigung und Weiterverwendung bleibt eine gesonderte menschliche Prüfung.
