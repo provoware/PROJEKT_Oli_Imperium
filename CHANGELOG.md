@@ -6,7 +6,8 @@
 - Ergebnisse direkter Zugriffsprüfungen dokumentiert: kein G64 erfolgreich lokal heruntergeladen; VICE nicht installiert, kein Emulatorlauf und keine selbst aufgenommenen Original-PNGs.
 - Lizenzlage abgegrenzt: kostenlose Bereitstellung bzw. DOS-„Freeware“-Kennzeichnung beweisen keine C64-Freigabe; rechtmäßige Kopie und Bildrechte bleiben vor Originaltests und Veröffentlichung offen.
 - Eine nicht bindende Bildschirm-/Funktionenliste aus C64-Wiki als Grundlage für spätere echte C64-Aufnahmen ergänzt.
-- Nur `docs/18_REFERENZKANDIDAT_C64_PAL.md` und dieses Änderungsprotokoll aktualisiert; kein Originalinhalt importiert, `data/contract.json` und alle vier Freigaben unangetastet. Kein Gameplay-Update, kein Merge, kein Release.
+- Begleitend eine **tatsächlich aufgetretene CI-Störung behoben**: Nach 21 bestandenen Chrome-Bedienungstests scheiterte der Lauf mit `ENOTEMPTY`, weil ein noch arbeitender Chromium-Prozess sein Profilverzeichnis erneut beschrieb. Der Test wartet jetzt nach regulärer Beendigung begrenzt auf den Browser und entfernt das temporäre Profil erst danach. Andere Fehler bleiben sichtbar.
+- Angepasst: `docs/18_REFERENZKANDIDAT_C64_PAL.md`, `tools/chrome_keyboard_probe.mjs` und dieses Änderungsprotokoll; kein Originalinhalt importiert, `data/contract.json` und alle vier Freigaben unangetastet. Kein Gameplay-Update, kein Merge, kein Release.
 
 ### C0 0.1.0-alpha.10 – Strenge Forschungsdatenprüfung, Prüfaudit PR #12 (unveröffentlicht)
 
