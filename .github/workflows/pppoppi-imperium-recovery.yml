@@ -1,0 +1,53 @@
+name: PPPOPPI IMPERIUM – GitHub-Quellnachweis
+on:
+  push:
+    branches:
+      - 'recovery/pppoppi-imperium-v194-*'
+    paths:
+      - 'project-c/pppoppi-imperium/**'
+      - '.github/workflows/pppoppi-imperium-recovery.yml'
+  pull_request:
+    paths:
+      - 'project-c/pppoppi-imperium/**'
+      - '.github/workflows/pppoppi-imperium-recovery.yml'
+  workflow_dispatch:
+jobs:
+  check-source:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Spielcode und Datei-Manifest sind in GitHub
+        run: |
+          python3 - <<'PY'
+          import json, pathlib, hashlib, sys
+          root = pathlib.Path('project-c/pppoppi-imperium')
+          manifest_path = root / 'WIEDERHERSTELLUNG_MANIFEST.json'
+          if not manifest_path.is_file():
+              sys.exit('BLOCKIERT: vollständige ZIP-Quellen sind noch nicht in GitHub')
+          m = json.loads(manifest_path.read_text(encoding='utf8'))
+          entries = m.get('files', [])
+          if len(entries) != m.get('total_files') or len(entries) < 185:
+              sys.exit('BLOCKIERT: Datei-Manifest unvollständig')
+          for item in entries:
+              f = root / item['path']
+              if not f.is_file() or hashlib.sha256(f.read_bytes()).hexdigest() != item['sha256']:
+                  sys.exit(f'BLOCKIERT: Datei fehlt oder wurde verändert: {item["path"]}')
+          for name in ['SPIEL/index.html', 'SPIEL/src/neo_bridge.js', 'SPIEL/src/strategy_logistics_v193.js']:
+              if not (root/name).is_file(): sys.exit(f'BLOCKIERT: {name} fehlt')
+          print(f'OK: alle {len(entries)} Quell-/Nachweisdateien in GitHub vorhanden')
+          PY
+      - name: Wirtschaftliche Fachprüfungen
+        working-directory: project-c/pppoppi-imperium/SPIEL
+        run: |
+          set -e
+          node test_fair_market_v161.cjs
+          node test_human_parity_v192.cjs
+          node test_logistics_ai_v193.cjs
+          node test_public_network_v171.cjs
+          node test_strategy_v192.cjs
+          node test_transport_v17.cjs
+          node evaluate_balance_v194.cjs
+          node analyze_stress_v194.cjs
