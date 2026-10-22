@@ -29,12 +29,34 @@ jobs:
               sys.exit('BLOCKIERT: vollständige ZIP-Quellen sind noch nicht in GitHub')
           m = json.loads(manifest_path.read_text(encoding='utf8'))
           entries = m.get('files', [])
-          if len(entries) != m.get('total_files') or len(entries) < 185:
-              sys.exit('BLOCKIERT: Datei-Manifest unvollständig')
+          # Source-only recovery: original ZIP has 187 entries, 77 media/report
+          # items are intentionally excluded from public GitHub publication.
+          allowed = {'.js', '.css', '.cjs', '.html', '.py', '.json', '.txt', '.md', '.sh'}
+          if (m.get('source_sha256') !=
+                  '94f41725f1d1addaa07505302a4f448e3410df0bcebe68bfb24fc07b72d433ca'
+                  or m.get('source_entries') != 187):
+              sys.exit('BLOCKIERT: die Paket-Herkunft stimmt nicht')
+          if len(entries) != m.get('total_files') or len(entries) != 110:
+              sys.exit('BLOCKIERT: 110 verifizierte Quell-/Testdateien erforderlich')
+          seen = set()
           for item in entries:
-              f = root / item['path']
-              if not f.is_file() or hashlib.sha256(f.read_bytes()).hexdigest() != item['sha256']:
-                  sys.exit(f'BLOCKIERT: Datei fehlt oder wurde verändert: {item["path"]}')
+              rel = pathlib.PurePosixPath(item['path'])
+              if (rel.is_absolute() or '..' in rel.parts or
+                      not rel.parts or rel.parts[0] != 'SPIEL' or
+                      rel.suffix not in allowed or str(rel) in seen):
+                  sys.exit('BLOCKIERT: unzulässiger oder doppelter Manifestpfad')
+              seen.add(str(rel))
+              f = root / rel
+              if (not f.is_file() or hashlib.sha256(f.read_bytes()).hexdigest()
+                      != item['sha256']):
+                  sys.exit(f'BLOCKIERT: Datei fehlt oder wurde verändert: {rel}')
+          actual = {
+              p.relative_to(root).as_posix() for p in (root / 'SPIEL').rglob('*')
+              if p.is_file()
+          }
+          if actual != seen:
+              sys.exit('BLOCKIERT: zusätzliche oder fehlende Projektdateien')
+
           for name in ['SPIEL/index.html', 'SPIEL/src/neo_bridge.js', 'SPIEL/src/strategy_logistics_v193.js']:
               if not (root/name).is_file(): sys.exit(f'BLOCKIERT: {name} fehlt')
           print(f'OK: alle {len(entries)} Quell-/Nachweisdateien in GitHub vorhanden')
