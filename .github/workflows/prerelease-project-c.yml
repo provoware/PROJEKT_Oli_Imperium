@@ -1,0 +1,33 @@
+name: Projekt C Vorrelease-Pflichten
+on:
+  pull_request:
+    paths:
+      - 'project-c/pppoppi-imperium/prerelease/**'
+      - '.github/workflows/prerelease-project-c.yml'
+  push:
+    branches:
+      - 'agent/prerelease-c-*'
+    paths:
+      - 'project-c/pppoppi-imperium/prerelease/**'
+      - '.github/workflows/prerelease-project-c.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  matrix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Matrix auf Struktur und Belegpflicht pruefen
+        run: node project-c/pppoppi-imperium/prerelease/check.mjs --schema
+      - name: Negative Regressionstests
+        run: node --test project-c/pppoppi-imperium/prerelease/test.mjs
+      - name: Technischen Vorrelease-Status ohne Freigabe ausgeben
+        run: |
+          node project-c/pppoppi-imperium/prerelease/check.mjs --technical && exit 0
+          code=$?
+          if [ "$code" -eq 1 ]; then echo 'TECHNISCH BLOCKIERT: kein Release-Kandidat'; exit 0; fi
+          exit "$code"
