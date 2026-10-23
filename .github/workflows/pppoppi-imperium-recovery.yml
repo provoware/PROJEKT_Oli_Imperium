@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - 'recovery/pppoppi-imperium-v194-*'
+      - 'agent/prerelease-recovery-*'
     paths:
       - 'project-c/pppoppi-imperium/**'
       - '.github/workflows/pppoppi-imperium-recovery.yml'
@@ -11,56 +12,21 @@ on:
       - 'project-c/pppoppi-imperium/**'
       - '.github/workflows/pppoppi-imperium-recovery.yml'
   workflow_dispatch:
+permissions:
+  contents: read
 jobs:
   check-source:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Spielcode und Datei-Manifest sind in GitHub
-        run: |
-          python3 - <<'PY'
-          import json, pathlib, hashlib, sys
-          root = pathlib.Path('project-c/pppoppi-imperium')
-          manifest_path = root / 'WIEDERHERSTELLUNG_MANIFEST.json'
-          if not manifest_path.is_file():
-              sys.exit('BLOCKIERT: vollständige ZIP-Quellen sind noch nicht in GitHub')
-          m = json.loads(manifest_path.read_text(encoding='utf8'))
-          entries = m.get('files', [])
-          # Source-only recovery: original ZIP has 187 entries, 77 media/report
-          # items are intentionally excluded from public GitHub publication.
-          allowed = {'.js', '.css', '.cjs', '.html', '.py', '.json', '.txt', '.md', '.sh'}
-          if (m.get('source_sha256') !=
-                  '94f41725f1d1addaa07505302a4f448e3410df0bcebe68bfb24fc07b72d433ca'
-                  or m.get('source_entries') != 187):
-              sys.exit('BLOCKIERT: die Paket-Herkunft stimmt nicht')
-          if len(entries) != m.get('total_files') or len(entries) != 110:
-              sys.exit('BLOCKIERT: 110 verifizierte Quell-/Testdateien erforderlich')
-          seen = set()
-          for item in entries:
-              rel = pathlib.PurePosixPath(item['path'])
-              if (rel.is_absolute() or '..' in rel.parts or
-                      not rel.parts or rel.parts[0] != 'SPIEL' or
-                      rel.suffix not in allowed or str(rel) in seen):
-                  sys.exit('BLOCKIERT: unzulässiger oder doppelter Manifestpfad')
-              seen.add(str(rel))
-              f = root / rel
-              if (not f.is_file() or hashlib.sha256(f.read_bytes()).hexdigest()
-                      != item['sha256']):
-                  sys.exit(f'BLOCKIERT: Datei fehlt oder wurde verändert: {rel}')
-          actual = {
-              p.relative_to(root).as_posix() for p in (root / 'SPIEL').rglob('*')
-              if p.is_file()
-          }
-          if actual != seen:
-              sys.exit('BLOCKIERT: zusätzliche oder fehlende Projektdateien')
-
-          for name in ['SPIEL/index.html', 'SPIEL/src/neo_bridge.js', 'SPIEL/src/strategy_logistics_v193.js']:
-              if not (root/name).is_file(): sys.exit(f'BLOCKIERT: {name} fehlt')
-          print(f'OK: alle {len(entries)} Quell-/Nachweisdateien in GitHub vorhanden')
-          PY
+      - name: Zwölf negative Sicherheits- und Wiederherstellungstests
+        run: python3 -m unittest discover -s project-c/pppoppi-imperium/recovery -p 'test_verify_sources.py' -v
+      - name: Vollständige GitHub-Quellen gegen das geprüfte Originalinventar
+        run: python3 project-c/pppoppi-imperium/recovery/verify_sources.py
       - name: Wirtschaftliche Fachprüfungen
         working-directory: project-c/pppoppi-imperium/SPIEL
         run: |
