@@ -23,3 +23,14 @@ Ein Status `pass` ist nur mit mindestens einer regulären JSON-Datei unter `proj
 3. Vollständige Partien, Grafik, 800×600, Skalierung, Tastatur, Offline-Start, Ressourcen und Dokumentation nach Matrix belegen; erst danach Release-Kandidat einfrieren. **Persönliche Sichtprüfung und Kubuntu-Endabnahme erst anschließend gesammelt. Release nur nach ausdrücklicher Nutzerfreigabe.**
 
 **Keine Überschneidung:** Diese Änderung bearbeitet ausschließlich neue Dateien im Ordner `prerelease/` und einen eigenen Workflow. Sie verändert weder die Wiederherstellung aus PR #14 noch den C64-Forschungs-/Prototypenstapel. Der neue Änderungsantrag ist auf den PR-14-Zweig zu richten (gestapelt), nicht direkt auf `main`.
+
+## Umsetzung und Nachweise vom 23.10.2026
+
+- **Änderungsantrag:** [Entwurf PR #16](https://github.com/provoware/PROJEKT_Oli_Imperium/pull/16), Entwicklungszweig `agent/prerelease-c-gate-integrity-20261023-0333` (nicht `main`).
+- **Implementierungs-Commit:** `7056024f7ede578693b68f57c93b70927de9e63a` (Prüfer und 8 neue Regressionstests); neuere Dokumentations- und Prüfketten-Commits siehe PR.
+- **GitHub-Prüfung der Implementierung:** [Actions #39912753219](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/39912753219): Struktur PASS, **20/20 Node-Tests PASS**; technische Sperre wird korrekt als BLOCKED ausgegeben, nicht als Freigabe.
+- **Korrigierter Fehler:** Eine einzelne Pflicht konnte entfernt oder einem falschen Bereich bzw. einer persönlichen Endabnahme zugeordnet werden, ohne dass die frühere Bereichsprüfung es bemerkte. Der Prüfer erzwingt jetzt alle 52 Basis-IDs, ihre Fachbereiche und ihre Stufen. Zusätzliche technische Anforderungen sind zulässig, sofern der Fachpräfix bekannt ist.
+- **Aktueller Matrixstand:** 52 Pflichten = 45 BLOCKED + 4 OPEN + 3 persönliche DEFERRED; **0 vollständig nachgewiesen**. Die 49 technischen Pflichten sind noch nicht freigegeben.
+- **Quellabhängigkeit:** Die Wiederherstellung aus dem Originalpaket ist nicht abgeschlossen. Die eigenständige Recovery-Prüfung verlangt 110 freigegebene Quell-/Testdateien aus dem ursprünglichen Paket (187 ZIP-Einträge, davon 185 Spiel-Dateien); vollständige Spielfunktion, Sicherheit, Speicherung, Balance und Grafik sind daher nicht auf dem GitHub-Stand testbar.
+- **Nächstes Pflichtpaket:** (1) Spielquellen mit verifizierten SHA-256-Prüfsummen rechtskonform wiederherstellen; (2) acht Fach- und Langzeittests und die vollständige technische CI auf demselben HEAD ausführen; (3) Spielstände, vollständige Partien, 800×600, Skalierung und Tastatur automatisiert prüfen und dokumentieren. Fehlende Teilquellen blockieren nur die davon abhängigen Prüfungen.
+- **Abnahmegrenze:** Persönliche Sichtprüfung, Kubuntu-Praxistest und Nutzerfreigabe erst nach allen technisch möglichen Prüfungen, grünen Pflichtprüfungen und eingefrorenem Kandidaten. Kein Merge und kein Release ohne ausdrückliche Freigabe.
