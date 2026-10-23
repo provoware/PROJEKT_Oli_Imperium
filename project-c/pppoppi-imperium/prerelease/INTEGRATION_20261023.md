@@ -27,3 +27,13 @@ Struktur-/Negativtests dürfen PASS sein. Der Quellencheck muss ohne 110 Dateien
 3. **P1:** Browser, 800×600, Vergrößerung, Tastatur, Barrierefreiheit, Offline-Start, Performance, Dokumentation und vollständige Regressionen schließen; erst danach Kandidat einfrieren.
 
 **Keine automatische Zusammenführung, keine Veröffentlichung.** Nutzer-Sichtprüfung und Kubuntu-Praxistest sind ausschließlich persönliche Schlussprüfungen. Release nur nach ausdrücklicher Freigabe.
+
+## Tatsächliche GitHub-Ausführung des ersten Integrationscommits
+
+- **Geprüfter HEAD:** `577cfe17b1f7e25dcfa97388de522037fd03136c`.
+- **PR-Prüfung:** https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40028265554 – Matrix-Schema **PASS**, **20/20** Node-Regressionen **PASS**, Forschungs-/Datenvertrag **PASS**, **8/8** Python-Grundtests **PASS**, **18/18** Import-Sicherheitsregressionen **PASS**.
+- **Quellimport:** **BLOCKED** (`WIEDERHERSTELLUNG_MANIFEST.json` fehlt). Technische Pflichtmatrix **BLOCKED** (0/52 PASS). Beide Schritte liefern Exitcode 1; gemeinsame CI deshalb **FAIL** (korrekte Release-Sperre).
+- **Push-Prüfung:** https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40028243833 – gleicher fachlicher Befund.
+- **Separater Recovery-Workflow:** https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40028265623 – **FAIL** wegen fehlendem Quellmanifest; die acht Fachprogramme konnten dadurch nicht gestartet werden.
+
+Diese CI-Links belegen den **ersten Integrationscommit**. Nach diesem Dokumentationscommit muss die CI auf dem neuen HEAD erneut ausgeführt werden; die Ergebnisse werden im Entwurfs-PR nachgewiesen. Kein grüner Release-Gate.
