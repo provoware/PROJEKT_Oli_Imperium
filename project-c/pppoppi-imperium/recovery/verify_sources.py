@@ -36,16 +36,31 @@ def inventory_digest(entries):
                                     separators=(',', ':')).encode('utf-8')).hexdigest()
 
 
+def reject_duplicate_json_keys(pairs):
+    """JSON mit mehrdeutigen Schluesseln darf keinen Quellimport freigeben."""
+    result = {}
+    for key, value in pairs:
+        if key in result:
+            raise SourceInvalid(f'Doppelter JSON-Schluessel: {key!r}')
+        result[key] = value
+    return result
+
+
 def validate_sources(root, *, expected_inventory_sha256=EXPECTED_INVENTORY_SHA256,
                      expected_count=EXPECTED_COUNT,
                      expected_source_sha256=EXPECTED_SOURCE_SHA256,
                      expected_archive_entries=EXPECTED_ARCHIVE_ENTRIES):
     root = Path(root)
+    if root.is_symlink():
+        raise SourceInvalid('Import-Wurzel ist ein symbolischer Link')
     manifest = root / 'WIEDERHERSTELLUNG_MANIFEST.json'
-    if not manifest.is_file() or manifest.is_symlink():
-        raise SourceBlocked('WIEDERHERSTELLUNG_MANIFEST.json fehlt oder ist ein Link')
+    if manifest.is_symlink():
+        raise SourceInvalid('WIEDERHERSTELLUNG_MANIFEST.json ist ein symbolischer Link')
+    if not manifest.is_file():
+        raise SourceBlocked('WIEDERHERSTELLUNG_MANIFEST.json fehlt')
     try:
-        data = json.loads(manifest.read_text(encoding='utf-8'))
+        data = json.loads(manifest.read_text(encoding='utf-8'),
+                          object_pairs_hook=reject_duplicate_json_keys)
     except (OSError, UnicodeError, ValueError) as exc:
         raise SourceInvalid(f'Manifest unlesbar: {exc}') from exc
     if not isinstance(data, dict):
@@ -95,12 +110,24 @@ def validate_sources(root, *, expected_inventory_sha256=EXPECTED_INVENTORY_SHA25
             raise SourceInvalid(f'Dateigroesse falsch: {name}')
         if hashlib.sha256(target.read_bytes()).hexdigest() != entry['sha256']:
             raise SourceInvalid(f'Dateipruefsumme falsch: {name}')
+    expected_dirs = {'SPIEL'}
+    for name in seen:
+        parent = PurePosixPath(name).parent
+        while str(parent) != '.':
+            expected_dirs.add(parent.as_posix())
+            parent = parent.parent
     actual = set()
     for target in (root / 'SPIEL').rglob('*'):
+        relative = target.relative_to(root).as_posix()
         if target.is_symlink():
-            raise SourceInvalid(f'Link statt Quelldatei: {target.relative_to(root)}')
-        if target.is_file():
-            actual.add(target.relative_to(root).as_posix())
+            raise SourceInvalid(f'Link statt Quelldatei: {relative}')
+        if target.is_dir():
+            if relative not in expected_dirs:
+                raise SourceInvalid(f'Nicht freigegebenes Verzeichnis: {relative}')
+        elif target.is_file():
+            actual.add(relative)
+        else:
+            raise SourceInvalid(f'Unerlaubter Dateityp: {relative}')
     if actual != seen:
         raise SourceInvalid(f'Inventarabweichung: {len(actual-seen)} zusaetzlich, {len(seen-actual)} fehlen')
     return len(seen)
