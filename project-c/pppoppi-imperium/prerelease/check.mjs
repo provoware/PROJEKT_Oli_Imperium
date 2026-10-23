@@ -3,6 +3,17 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 export const REQUIRED_AREAS = ["quellen","spiellogik","spielverlauf","wirtschaft","balance","speichern","sicherheit","fehlerfaelle","performance","grafik","bedienung","barrierefreiheit","startbarkeit","tests","dokumentation","freigabe"];
+export const REQUIRED_GATE_DEFINITIONS = Object.freeze({
+  QUE: ["quellen",4], LOG: ["spiellogik",5], VER: ["spielverlauf",3],
+  WIR: ["wirtschaft",4], BAL: ["balance",3], SPE: ["speichern",3],
+  SIC: ["sicherheit",3], FEH: ["fehlerfaelle",3], PER: ["performance",2],
+  GRA: ["grafik",3], BED: ["bedienung",3], BAR: ["barrierefreiheit",2],
+  STA: ["startbarkeit",3], TES: ["tests",4], DOK: ["dokumentation",3],
+  FRE: ["freigabe",4]
+});
+export const REQUIRED_GATE_IDS = Object.freeze(Object.entries(REQUIRED_GATE_DEFINITIONS)
+  .flatMap(([prefix, [, count]]) => Array.from({length:count}, (_, i) =>
+    prefix + '-' + String(i+1).padStart(2, '0'))));
 export function auditMatrix(data, readEvidence = () => null, mode = "schema") {
   const errors = [], blockers = [], covered = new Set(), seen = new Set();
   if (!data || typeof data !== "object" || Array.isArray(data)) return {errors:["Matrix muss ein Objekt sein."],blockers:[],summary:{}};
@@ -22,6 +33,15 @@ export function auditMatrix(data, readEvidence = () => null, mode = "schema") {
     if (typeof g.requirement !== "string" || !g.requirement.trim()) errors.push(`${id}: Anforderung fehlt.`);
     if (typeof g.basis !== "string" || !g.basis.trim()) errors.push(`${id}: Grundlage fehlt.`);
     if (!["technical","personal"].includes(g.stage)) errors.push(`${id}: Stufe ungueltig.`);
+    if (typeof id === "string" && /^[A-Z]{3}-\d{2}$/.test(id)) {
+      const definition = REQUIRED_GATE_DEFINITIONS[id.slice(0,3)];
+      if (!definition) errors.push(`${id}: unbekannter Pflichtpraefix.`);
+      else {
+        if (g.area !== definition[0]) errors.push(`${id}: Bereich muss ${definition[0]} sein.`);
+        const requiredStage = ["FRE-02","FRE-03","FRE-04"].includes(id) ? "personal" : "technical";
+        if (g.stage !== requiredStage) errors.push(`${id}: Stufe muss ${requiredStage} sein.`);
+      }
+    }
     if (!["open","blocked","fail","pass","deferred"].includes(g.status)) errors.push(`${id}: Status ungueltig.`);
     if (g.stage === "technical" && g.status === "deferred") errors.push(`${id}: Technische Pflicht darf nicht vertagt werden.`);
     if (g.stage === "personal" && !["deferred","pass"].includes(g.status)) errors.push(`${id}: Persoenliche Abnahme muss vertagt oder bestanden sein.`);
@@ -41,6 +61,11 @@ export function auditMatrix(data, readEvidence = () => null, mode = "schema") {
       }
     }
     if (g.stage === "technical" && g.status !== "pass") blockers.push(`${id}: ${g.status}`);
+  }
+  for (const id of REQUIRED_GATE_IDS) if (!seen.has(id)) errors.push(`Pflicht-ID fehlt: ${id}.`);
+  if (data.gates.some(g => g?.stage === "personal" && g.status === "pass") &&
+      (data.source_status !== "imported" || data.gates.some(g => g?.stage === "technical" && g.status !== "pass"))) {
+    errors.push("Persoenliche Abnahme vor technischem Abschluss ist unzulaessig.");
   }
   for (const area of REQUIRED_AREAS) if (!covered.has(area)) errors.push(`Pflichtbereich fehlt: ${area}.`);
   if (data.source_status === "missing") blockers.push("Spielquellen fehlen in GitHub.");
