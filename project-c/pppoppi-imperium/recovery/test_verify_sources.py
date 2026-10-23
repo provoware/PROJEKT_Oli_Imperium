@@ -1,6 +1,7 @@
 """Negative Tests fuer den Quellimport, ohne reale Spielquellen in CI."""
 import hashlib
 import json
+import os
 from pathlib import Path
 import tempfile
 import unittest
@@ -92,6 +93,45 @@ class RecoveryVerificationTests(unittest.TestCase):
         self.meta['files'][0]['path'] = 'SPIEL/evil\nname.js'
         self.save()
         with self.assertRaises(SourceInvalid): self.verify()
+
+
+    def test_duplicate_top_level_json_key_fails(self):
+        raw = json.dumps(self.meta)
+        (self.root / 'WIEDERHERSTELLUNG_MANIFEST.json').write_text(
+            raw[:-1] + ', "total_files": 3}', encoding='utf-8')
+        with self.assertRaises(SourceInvalid): self.verify()
+
+    def test_duplicate_nested_json_key_fails(self):
+        raw = json.dumps(self.meta)
+        key = '"path": ' + json.dumps(self.entries[0]['path'])
+        self.assertIn(key, raw)
+        raw = raw.replace(key, '"path": "SPIEL/hidden.js", ' + key, 1)
+        (self.root / 'WIEDERHERSTELLUNG_MANIFEST.json').write_text(
+            raw, encoding='utf-8')
+        with self.assertRaises(SourceInvalid): self.verify()
+
+    def test_manifest_symlink_is_invalid_not_missing(self):
+        (self.root / 'WIEDERHERSTELLUNG_MANIFEST.json').unlink()
+        (self.root / 'WIEDERHERSTELLUNG_MANIFEST.json').symlink_to('SPIEL/index.html')
+        with self.assertRaises(SourceInvalid): self.verify()
+
+    def test_symlinked_import_root_fails(self):
+        alias = self.root / 'root_alias'
+        alias.symlink_to(self.root, target_is_directory=True)
+        with self.assertRaises(SourceInvalid):
+            validate_sources(alias, expected_inventory_sha256=inventory_digest(self.entries),
+                             expected_count=3, expected_source_sha256='a'*64,
+                             expected_archive_entries=4)
+
+    def test_unlisted_empty_directory_fails(self):
+        (self.root / 'SPIEL/unlisted').mkdir()
+        with self.assertRaises(SourceInvalid): self.verify()
+
+    @unittest.skipUnless(hasattr(os, 'mkfifo'), 'FIFO nur auf POSIX')
+    def test_unlisted_fifo_fails(self):
+        os.mkfifo(self.root / 'SPIEL/unlisted.fifo')
+        with self.assertRaises(SourceInvalid): self.verify()
+
 
 
 if __name__ == '__main__':

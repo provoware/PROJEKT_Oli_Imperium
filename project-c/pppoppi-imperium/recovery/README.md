@@ -38,3 +38,36 @@ Die eigentlichen 110 Quelldateien werden durch diesen PR **nicht** hochgeladen. 
 Die Vorrelease-Matrix aus PR #16 bleibt **0/52 vollständig nachgewiesen**. PR #16 ist derzeit gegenüber dem aktualisierten Recovery-Basiszweig zurückgefallen; vor einer späteren Integration müssen die Zweige regulär synchronisiert und alle Prüfungen wiederholt werden.
 
 **Keine Zusammenführung, kein Release.** Persönliche Sichtprüfung und Kubuntu-Praxistest ausschließlich nach vollständiger technischer Vorabprüfung und eingefrorenem Kandidaten.
+
+## Folgelauf 23.10.2026 – Importgrenzen weiter absichern
+
+**Änderungsumfang:** Nur der technische Prüfer, seine isolierten Tests, der Name des CI-Prüfschritts und dieser Nachweis. Keine Spielquellen, keine fremden Medien und keine persönlichen Testdaten wurden importiert.
+
+- JSON mit doppelten Schlüsseln (auch in verschachtelten Manifestobjekten) wird jetzt ausdrücklich abgelehnt; vorher hätte die JSON-Bibliothek den letzten Wert stillschweigend verwendet.
+- Vorhandene symbolische Links an Manifest oder Importwurzel werden als **FAIL** statt als fehlende Quelle bewertet.
+- Nicht im festen Inventar vorgesehene leere Unterverzeichnisse und Sonderdateien (z. B. FIFO) werden als **FAIL** erkannt; vorher konnte der abschließende Dateivergleich solche Einträge übersehen.
+- Sechs neue isolierte Regressionen prüfen diese Fehlerfälle. Erwarteter Testumfang: **18 Tests**; eine PASS-Aussage darf erst nach tatsächlichem CI-Lauf erfolgen.
+
+### Release-Pflichten und Sperren (keine Ersatzmatrix)
+
+Die 52 fachlichen und technischen Einzelpflichten liegen in [PR #16](https://github.com/provoware/PROJEKT_Oli_Imperium/pull/16) unter `project-c/pppoppi-imperium/prerelease/matrix.json`. Dieser Wiederherstellungszweig enthält die Matrix **noch nicht**; die Zweige müssen vor einer technischen Gesamtabnahme ohne Verlust der 52 Pflichten zusammengeführt und gemeinsam geprüft werden.
+
+| Bereich | Nachweis dieses Arbeitspakets | Vorrelease-Status |
+| --- | --- | --- |
+| Quellherkunft, Integrität und Importsicherheit | Fester 110-Dateien-Fingerabdruck; zusätzliche Negativprüfungen | Teilprüfung; vollständiger GitHub-Import **BLOCKED** |
+| Wirtschaft, Verträge, Transport, KI und Balance | Acht Fachprogramme erst nach Quellimport in GitHub ausführbar | **BLOCKED** |
+| Vollständige Partien, Ereignisse, Minispiele, Grenzfälle | Keine durchgehende Spielausführung auf diesem GitHub-Stand | **OPEN** |
+| Spielstände, Unterbrechung, Wiederherstellung, Migration | Kein vollständiger Datenverlust-/Migrationstest | **OPEN** |
+| 800×600, Vergrößerung, Grafik, Tastatur, Bedienbarkeit | Keine echte Browser-/Oberflächenprüfung | **OPEN** |
+| Offline-Start, Laufzeit, Performance, Langzeitstabilität | Kein vollständiger reproduzierbarer Lauf | **OPEN** |
+| Automatische Regression, CI und Dokumentation | Isolierte Prüfungen vorhanden, Quellenprüfung absichtlich rot | **PARTIAL/BLOCKED** |
+| Persönliche Sicht- und Kubuntu-Abnahme | Ausschließlich nach allen technischen Pflichtprüfungen | **DEFERRED** |
+
+**Nächste sichere Implementierung:** (1) rechtlich freigegebene 110 Quelldateien mit geprüftem Manifest auf separatem Importzweig einbringen; (2) Quell- und acht Fachprüfungen auf demselben GitHub-HEAD ausführen; (3) PR-#16-Matrix mit den Wiederherstellungsprüfungen synchronisieren und erst danach Spiel-, Speicher- und Browserfälle abarbeiten. Keine Freigabe durch isolierte PASS-Tests.
+
+### Tatsächliche GitHub-Prüfung des Folgepakets
+
+- Geprüfter Code-HEAD: `7e16db725500fb8f108387bfc6666a8ef4e15f19`.
+- [PR-CI #39988525433](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/39988525433): Forschungs-/Datenvertrag **PASS**, **8/8** Python-Grundtests **PASS**, **18/18** isolierte Importregressionen **PASS**.
+- Vollständiger Quellencheck: **BLOCKED** (`WIEDERHERSTELLUNG_MANIFEST.json` fehlt). Acht wirtschaftliche Fachprogramme: **SKIPPED**. **Gesamt-CI FAIL**, keine technische Freigabe.
+- Diese Dokumentation ist ein nachgelagerter Commit; für die Freigabe zählt ausschließlich der nach dem letzten Commit erneut ausgeführte GitHub-Workflow am endgültigen HEAD. Die Belege dazu stehen im zugehörigen Entwurfs-PR.

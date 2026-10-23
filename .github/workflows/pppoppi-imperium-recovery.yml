@@ -23,7 +23,11 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Zwölf negative Sicherheits- und Wiederherstellungstests
+      - name: Forschungs- und Datenvertragscheck
+        run: |
+          python3 tools/validate_project.py
+          python3 -m unittest discover -s tests -v
+      - name: Sicherheits- und Wiederherstellungsregressionen
         run: python3 -m unittest discover -s project-c/pppoppi-imperium/recovery -p 'test_verify_sources.py' -v
       - name: Vollständige GitHub-Quellen gegen das geprüfte Originalinventar
         run: python3 project-c/pppoppi-imperium/recovery/verify_sources.py
