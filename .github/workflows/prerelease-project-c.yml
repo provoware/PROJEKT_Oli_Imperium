@@ -25,6 +25,10 @@ jobs:
         run: node project-c/pppoppi-imperium/prerelease/check.mjs --schema
       - name: Negative Regressionstests
         run: node --test project-c/pppoppi-imperium/prerelease/test.mjs
+      - name: Forschungsvertrag und Grundtests (A/B, unveraendert)
+        run: |
+          python3 tools/validate_project.py
+          python3 -m unittest discover -s tests -v
       - name: Technischen Vorrelease-Status ohne Freigabe ausgeben
         run: |
           node project-c/pppoppi-imperium/prerelease/check.mjs --technical && exit 0
