@@ -64,3 +64,10 @@ Die 52 fachlichen und technischen Einzelpflichten liegen in [PR #16](https://git
 | Persönliche Sicht- und Kubuntu-Abnahme | Ausschließlich nach allen technischen Pflichtprüfungen | **DEFERRED** |
 
 **Nächste sichere Implementierung:** (1) rechtlich freigegebene 110 Quelldateien mit geprüftem Manifest auf separatem Importzweig einbringen; (2) Quell- und acht Fachprüfungen auf demselben GitHub-HEAD ausführen; (3) PR-#16-Matrix mit den Wiederherstellungsprüfungen synchronisieren und erst danach Spiel-, Speicher- und Browserfälle abarbeiten. Keine Freigabe durch isolierte PASS-Tests.
+
+### Tatsächliche GitHub-Prüfung des Folgepakets
+
+- Geprüfter Code-HEAD: `7e16db725500fb8f108387bfc6666a8ef4e15f19`.
+- [PR-CI #39988525433](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/39988525433): Forschungs-/Datenvertrag **PASS**, **8/8** Python-Grundtests **PASS**, **18/18** isolierte Importregressionen **PASS**.
+- Vollständiger Quellencheck: **BLOCKED** (`WIEDERHERSTELLUNG_MANIFEST.json` fehlt). Acht wirtschaftliche Fachprogramme: **SKIPPED**. **Gesamt-CI FAIL**, keine technische Freigabe.
+- Diese Dokumentation ist ein nachgelagerter Commit; für die Freigabe zählt ausschließlich der nach dem letzten Commit erneut ausgeführte GitHub-Workflow am endgültigen HEAD. Die Belege dazu stehen im zugehörigen Entwurfs-PR.
