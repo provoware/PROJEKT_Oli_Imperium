@@ -1,0 +1,28 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import { auditMatrix, REQUIRED_AREAS } from './check.mjs';
+const source = JSON.parse(fs.readFileSync(new URL('./matrix.json', import.meta.url), 'utf8'));
+const clone = () => structuredClone(source);
+const good = { gate_id:'QUE-01',result:'PASS',commit:'a'.repeat(40),command:'node --test',date:'2026-10-22' };
+test('Ausgangsmatrix ist strukturell gueltig, aber nicht freigabefaehig',()=>{const r=auditMatrix(source);assert.deepEqual(r.errors,[]);assert.ok(r.blockers.length>0);assert.equal(r.summary.total,52);});
+test('Pflichtbereiche sind vollstaendig',()=>{assert.deepEqual([...new Set(source.gates.map(g=>g.area))].sort(),[...REQUIRED_AREAS].sort());});
+test('Doppelte IDs werden erkannt',()=>{const m=clone();m.gates[1].id=m.gates[0].id;assert.match(auditMatrix(m).errors.join(' '),/Doppelte/);});
+test('Unbelegtes PASS ist verboten',()=>{const m=clone();m.gates[0].status='pass';assert.match(auditMatrix(m).errors.join(' '),/PASS ohne Nachweis/);});
+test('Pfadmanipulation im Nachweis wird verworfen',()=>{const m=clone();m.gates[0].status='pass';m.gates[0].evidence=['project-c/pppoppi-imperium/prerelease/evidence/../x.json'];assert.match(auditMatrix(m).errors.join(' '),/Nachweispfad/);});
+test('Falscher oder fehlender Nachweis wird verworfen',()=>{const m=clone();m.gates[0].status='pass';m.gates[0].evidence=['project-c/pppoppi-imperium/prerelease/evidence/QUE-01.json'];assert.match(auditMatrix(m,()=>null).errors.join(' '),/Nachweis fehlt/);assert.match(auditMatrix(m,()=>({...good,gate_id:'QUE-99'})).errors.join(' '),/Nachweis fehlt/);});
+test('Auch formal guter Quellnachweis hebt Quellsperre nicht auf',()=>{const m=clone();m.gates[0].status='pass';m.gates[0].evidence=['project-c/pppoppi-imperium/prerelease/evidence/QUE-01.json'];assert.match(auditMatrix(m,()=>good).errors.join(' '),/ohne importierte/);});
+test('Formaler Nachweis wird bei importiertem Status akzeptiert',()=>{const m=clone();m.source_status='imported';m.gates[0].status='pass';m.gates[0].evidence=['project-c/pppoppi-imperium/prerelease/evidence/QUE-01.json'];assert.deepEqual(auditMatrix(m,()=>good).errors,[]);});
+test('Technische Pflichten duerfen nicht vertagt werden',()=>{const m=clone();m.gates[0].status='deferred';assert.match(auditMatrix(m).errors.join(' '),/Technische Pflicht/);});
+test('Persoenliche Abnahme bleibt bis zum Schluss vertagt',()=>{const m=clone();const p=m.gates.find(g=>g.stage==='personal');assert.equal(p.status,'deferred');p.status='open';assert.match(auditMatrix(m).errors.join(' '),/Persoenliche Abnahme/);});
+test('Fehlende Pflichtbereiche blockieren die Matrix',()=>{const m=clone();m.gates=m.gates.filter(g=>g.area!=='performance');assert.match(auditMatrix(m).errors.join(' '),/Pflichtbereich fehlt/);});
+test('Technisches Gate bleibt bei offenen Punkten gesperrt',()=>{const r=auditMatrix(source,()=>null,'technical');assert.equal(r.ready,false);assert.ok(r.blockers.length>0);});
+
+test('Einzelne entfernte Pflicht trotz erhaltenem Bereich erkannt',()=>{const m=clone();m.gates=m.gates.filter(g=>g.id!=='LOG-02');assert.match(auditMatrix(m).errors.join(' '),/Pflicht-ID fehlt: LOG-02/);});
+test('Ersatz-ID verdeckt entfernte Pflicht nicht',()=>{const m=clone();m.gates.find(g=>g.id==='LOG-02').id='LOG-99';assert.match(auditMatrix(m).errors.join(' '),/Pflicht-ID fehlt: LOG-02/);});
+test('Neue technische Pflichten duerfen hinzugefuegt werden',()=>{const m=clone();const g=structuredClone(m.gates.find(g=>g.id==='LOG-02'));g.id='LOG-99';m.gates.push(g);assert.deepEqual(auditMatrix(m).errors,[]);});
+test('Pflicht darf nicht in fremden Bereich verschoben werden',()=>{const m=clone();m.gates.find(g=>g.id==='LOG-02').area='wirtschaft';assert.match(auditMatrix(m).errors.join(' '),/LOG-02: Bereich muss spiellogik/);});
+test('Technische Pflicht darf nicht persoenlich vertagt werden',()=>{const m=clone();const g=m.gates.find(g=>g.id==='LOG-02');g.stage='personal';g.status='deferred';assert.match(auditMatrix(m).errors.join(' '),/Stufe muss technical/);});
+test('Persoenliche Pflicht bleibt persoenlich',()=>{const m=clone();const g=m.gates.find(g=>g.id==='FRE-02');g.stage='technical';g.status='open';assert.match(auditMatrix(m).errors.join(' '),/Stufe muss personal/);});
+test('Vorzeitige persoenliche PASS-Abnahme wird abgewiesen',()=>{const m=clone();const g=m.gates.find(g=>g.id==='FRE-02');g.status='pass';g.evidence=['project-c/pppoppi-imperium/prerelease/evidence/FRE-02.json'];assert.match(auditMatrix(m,()=>({...good,gate_id:'FRE-02'})).errors.join(' '),/vor technischem Abschluss/);});
+test('Unbekannte Fachpraefixe werden abgewiesen',()=>{const m=clone();const g=structuredClone(m.gates.find(g=>g.id==='LOG-02'));g.id='XYZ-01';m.gates.push(g);assert.match(auditMatrix(m).errors.join(' '),/unbekannter Pflichtpraefix/);});
