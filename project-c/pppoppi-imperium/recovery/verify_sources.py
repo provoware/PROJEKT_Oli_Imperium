@@ -10,12 +10,14 @@ import hashlib
 import json
 from pathlib import Path, PurePosixPath
 import re
+import stat
 import sys
 
 EXPECTED_SOURCE_SHA256 = '94f41725f1d1addaa07505302a4f448e3410df0bcebe68bfb24fc07b72d433ca'
 EXPECTED_INVENTORY_SHA256 = '2514ffd8b641d8ed230ff6c9a461f309d0874c3820ad872ffcc1e5b814e39913'
 EXPECTED_COUNT = 110
 EXPECTED_ARCHIVE_ENTRIES = 187
+MAX_MANIFEST_BYTES = 1_048_576  # Harte Grenze gegen uebergrosse/unlesbare JSON-Manifeste.
 ALLOWED_EXTENSIONS = frozenset({'.js', '.css', '.cjs', '.html', '.py', '.json', '.txt', '.md', '.sh'})
 REQUIRED = frozenset({'SPIEL/index.html', 'SPIEL/src/neo_bridge.js', 'SPIEL/src/strategy_logistics_v193.js'})
 SHA256 = re.compile(r'[0-9a-f]{64}\Z')
@@ -46,6 +48,11 @@ def reject_duplicate_json_keys(pairs):
     return result
 
 
+def reject_nonfinite_json_number(value):
+    """Python akzeptiert NaN/Infinity sonst entgegen der JSON-Spezifikation."""
+    raise SourceInvalid(f'Nicht-endliche JSON-Zahl im Manifest: {value}')
+
+
 def validate_sources(root, *, expected_inventory_sha256=EXPECTED_INVENTORY_SHA256,
                      expected_count=EXPECTED_COUNT,
                      expected_source_sha256=EXPECTED_SOURCE_SHA256,
@@ -56,11 +63,24 @@ def validate_sources(root, *, expected_inventory_sha256=EXPECTED_INVENTORY_SHA25
     manifest = root / 'WIEDERHERSTELLUNG_MANIFEST.json'
     if manifest.is_symlink():
         raise SourceInvalid('WIEDERHERSTELLUNG_MANIFEST.json ist ein symbolischer Link')
-    if not manifest.is_file():
-        raise SourceBlocked('WIEDERHERSTELLUNG_MANIFEST.json fehlt')
     try:
-        data = json.loads(manifest.read_text(encoding='utf-8'),
-                          object_pairs_hook=reject_duplicate_json_keys)
+        metadata = manifest.lstat()
+    except FileNotFoundError as exc:
+        raise SourceBlocked('WIEDERHERSTELLUNG_MANIFEST.json fehlt') from exc
+    except OSError as exc:
+        raise SourceInvalid(f'Manifest nicht pruefbar: {exc}') from exc
+    if not stat.S_ISREG(metadata.st_mode):
+        raise SourceInvalid('Manifest ist keine regulaere Datei')
+    if metadata.st_size > MAX_MANIFEST_BYTES:
+        raise SourceInvalid('Manifest ueberschreitet die Groessengrenze')
+    try:
+        with manifest.open('rb') as stream:
+            raw = stream.read(MAX_MANIFEST_BYTES + 1)
+        if len(raw) > MAX_MANIFEST_BYTES:
+            raise SourceInvalid('Manifest ueberschreitet die Groessengrenze')
+        data = json.loads(raw.decode('utf-8'),
+                          object_pairs_hook=reject_duplicate_json_keys,
+                          parse_constant=reject_nonfinite_json_number)
     except (OSError, UnicodeError, ValueError) as exc:
         raise SourceInvalid(f'Manifest unlesbar: {exc}') from exc
     if not isinstance(data, dict):
