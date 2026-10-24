@@ -1,5 +1,6 @@
 """Isolierte Importtests mit KUENSTLICHEN Quellen; kein Originalspiel enthalten."""
 import hashlib
+import io
 import json
 import os
 from pathlib import Path
@@ -11,7 +12,7 @@ import warnings
 import zipfile
 
 from import_archive import (ImportRejected, MAX_MEMBER_BYTES, ZIP_PREFIX,
-                            prepare_import)
+                            _sha256, prepare_import)
 from verify_sources import inventory_digest, validate_sources
 
 
@@ -190,6 +191,62 @@ class OfflineImportTests(unittest.TestCase):
 
         with patch('import_archive.os.rename', side_effect=fail_second_rename):
             with self.assertRaises(ImportRejected):
+                self.run_import(digest)
+        self.assertFalse(self.destination.exists())
+        self.assertFalse(list(self.root.glob('.pppoppi-import-*')))
+
+
+    def test_bounded_archive_hash_accepts_exact_size(self):
+        data = b'test-data' * 10000
+        self.assertEqual(_sha256(io.BytesIO(data), len(data)),
+                         hashlib.sha256(data).hexdigest())
+        self.assertEqual(_sha256(io.BytesIO(b''), 0),
+                         hashlib.sha256(b'').hexdigest())
+
+    def test_bounded_archive_hash_rejects_growth(self):
+        with self.assertRaisesRegex(ImportRejected, 'gewachsen'):
+            _sha256(io.BytesIO(b'abcd'), 3)
+
+    def test_bounded_archive_hash_rejects_truncation(self):
+        with self.assertRaisesRegex(ImportRejected, 'verkuerzt'):
+            _sha256(io.BytesIO(b'ab'), 3)
+
+    def test_archive_growth_after_initial_hash_blocks_installation(self):
+        digest = self.build()
+        original_hash = _sha256
+        calls = 0
+
+        def append_after_hash(stream, expected_size):
+            nonlocal calls
+            result = original_hash(stream, expected_size)
+            calls += 1
+            if calls == 1:
+                with self.zip_path.open('ab') as writer:
+                    writer.write(b'parallel angehaengte Bytes')
+            return result
+
+        with patch('import_archive._sha256', side_effect=append_after_hash):
+            with self.assertRaisesRegex(ImportRejected, 'Archivgroesse'):
+                self.run_import(digest)
+        self.assertFalse(self.destination.exists())
+        self.assertFalse(list(self.root.glob('.pppoppi-import-*')))
+
+    def test_archive_truncation_after_initial_hash_blocks_installation(self):
+        digest = self.build()
+        original_hash = _sha256
+        calls = 0
+
+        def truncate_after_hash(stream, expected_size):
+            nonlocal calls
+            result = original_hash(stream, expected_size)
+            calls += 1
+            if calls == 1:
+                with self.zip_path.open('r+b') as writer:
+                    writer.truncate(expected_size - 1)
+            return result
+
+        with patch('import_archive._sha256', side_effect=truncate_after_hash):
+            with self.assertRaisesRegex(ImportRejected, 'Archivgroesse'):
                 self.run_import(digest)
         self.assertFalse(self.destination.exists())
         self.assertFalse(list(self.root.glob('.pppoppi-import-*')))
