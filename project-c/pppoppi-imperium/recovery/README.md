@@ -94,9 +94,11 @@ Beispiel unter Linux (Zielordner darf noch nicht existieren):
 Der Helfer prueft ZIP-Integritaet, sichere relative Pfade, Dateitypen, Duplikate,
 Entpackgrenzen sowie **alle 110** Dateien gegen den festen Inventarfingerabdruck.
 Er legt den Zielordner erst nach erfolgreicher Pruefung an; bestehende Ordner
-werden nicht ueberschrieben. Bei einem Installationsfehler wird nur der
-gerade neu angelegte Zielordner zurueckgenommen. Er enthaelt danach ausschliesslich
-'SPIEL/' und 'WIEDERHERSTELLUNG_MANIFEST.json'.
+werden nicht ueberschrieben. Bei einem Installationsfehler wird der neue Zielordner NICHT automatisch
+geloescht: Er koennte inzwischen fremde Daten enthalten. Ein unvollstaendiger
+Import ist kein Erfolg und muss separat untersucht werden. Nur ein erfolgreich
+gepruefter Import enthaelt ausschliesslich 'SPIEL/' und
+'WIEDERHERSTELLUNG_MANIFEST.json'.
 
 **Wichtige Grenze:** Es erfolgt weder ein automatischer GitHub-Upload noch
 eine rechtliche Freigabe. Der so vorbereitete Ordner ist erst nach gesonderter
@@ -112,3 +114,30 @@ Reproduzierbare synthetische Tests (ohne Originalspiel):
 Die zwei GitHub-Workflows fuehren die Importtests mit aus. Ihr roter Gesamtstatus
 bleibt bis zum echten Quellimport und den weiteren 49 technischen Freigaben
 verbindlich. Kein Merge, kein Release und keine vorgezogene persoenliche Abnahme.
+
+## Folgepaket 25.10.2026 – Zielordner-Tausch und Datenverlustschutz
+
+Bei gleichzeitigem Umbenennen des Zielordners konnte die bisherige
+Fehlerbehandlung ueber `shutil.rmtree(destination)` einen inzwischen
+fremden Ordner loeschen. Zudem waren beide Installations-`rename`-Aufrufe
+vom veraenderbaren Zielpfad abhaengig.
+
+Der Installer bindet beide Umbenennungen jetzt an ein geoeffnetes,
+nicht-symbolisches Zielverzeichnis (Verzeichnis-Handle) und prueft dessen
+Dateiidentitaet vor und nach der Abschlusspruefung. Bei fehlender sicherer
+POSIX-Unterstuetzung bricht er kontrolliert ab, statt ungeschuetzt zu
+installieren. Ein Schreibfehler laesst den neu reservierten, moeglicherweise
+unvollstaendigen Ordner stehen; es erfolgt **keine automatische Loeschung**
+ueber den sichtbaren Zielpfad. Eine fehlende Manifestdatei bedeutet:
+Import nicht abgeschlossen. Der Benutzer darf solche Teilordner nicht als
+geprueften Spielstand verwenden oder unbesehen loeschen.
+
+Drei gezielte Testfaelle decken den Schreibfehler, Zielpfadtausch nach
+dem ersten Kopierschritt und den Zielpfadtausch mit nachfolgendem
+Schreibfehler ab. Die Belege und CI-Grenzen stehen unter
+`prerelease/RUN_20261025_0037.md`. Dies ist **kein** Nachweis gegen
+alle denkbaren konkurrierenden Angreifer oder einen echten Stromausfall;
+insbesondere Dateisystemdauerhaftigkeit und Windows bleiben offen.
+
+Die Quellen fehlen weiterhin auf GitHub. Die 52 Pflichtpunkte bleiben
+ohne Spiel- und Releasefreigabe; weder Merge noch persoenliche Abnahme.
