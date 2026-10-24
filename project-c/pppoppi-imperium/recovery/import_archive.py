@@ -26,6 +26,8 @@ ZIP_PREFIX = 'project-c/pppoppi-imperium/'
 MAX_ARCHIVE_BYTES = 268_435_456  # Original-ZIP kann Bild-/Berichtsmedien enthalten.
 MAX_MEMBER_BYTES = 2_097_152
 MAX_TOTAL_BYTES = 8_388_608
+SAFE_DIRFD_INSTALL = (os.name == 'posix' and hasattr(os, 'O_NOFOLLOW') and
+                      hasattr(os, 'O_DIRECTORY') and os.rename in os.supports_dir_fd)
 
 
 class ImportRejected(Exception):
@@ -217,15 +219,36 @@ def prepare_import(archive_path, destination, *,
                         os.fstat(source.fileno()).st_size != metadata.st_size):
                     raise ImportRejected('Archiv wurde waehrend des Imports veraendert')
                 count = validate_sources(staging, **(verification or {}))
-                destination.mkdir(mode=0o700)  # Exklusiv: auch leere Zielordner niemals ersetzen.
+                # POSIX-Verzeichnisbezug verhindert Umleitung durch spaeteren
+                # Symlink-Tausch am sichtbaren Zielpfad. Auf anderen Systemen
+                # sicher abbrechen statt ungeschuetzt zu installieren.
+                if not SAFE_DIRFD_INSTALL:
+                    raise ImportRejected('Sichere Zielinstallation auf diesem System nicht verfuegbar')
+                destination.mkdir(mode=0o700)  # Exklusiv, nie bestehende Ordner ersetzen.
+                dest_fd = os.open(destination, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
                 try:
-                    os.rename(staging / 'SPIEL', destination / 'SPIEL')
+                    if os.listdir(dest_fd):
+                        raise ImportRejected('Neu reservierter Zielordner ist nicht leer')
+                    os.rename(staging / 'SPIEL', 'SPIEL', dst_dir_fd=dest_fd)
                     os.rename(staging / 'WIEDERHERSTELLUNG_MANIFEST.json',
-                              destination / 'WIEDERHERSTELLUNG_MANIFEST.json')
-                    validate_sources(destination, **(verification or {}))
-                except Exception:
-                    shutil.rmtree(destination)
-                    raise
+                              'WIEDERHERSTELLUNG_MANIFEST.json', dst_dir_fd=dest_fd)
+                    # Ein paralleler Umbenenner darf keinen scheinbar
+                    # erfolgreichen Import unter einem fremden Pfad erzeugen.
+                    identity = os.fstat(dest_fd)
+                    for _ in range(2):
+                        current = os.lstat(destination)
+                        if (not stat.S_ISDIR(current.st_mode) or
+                                (current.st_dev, current.st_ino) !=
+                                (identity.st_dev, identity.st_ino)):
+                            raise ImportRejected('Zielordner waehrend des Imports ausgetauscht')
+                        if _ == 0:
+                            validate_sources(destination, **(verification or {}))
+                finally:
+                    os.close(dest_fd)
+                # Bei Installationsfehlern niemals einen per Pfad erreichbaren
+                # Ordner loeschen: Er koennte inzwischen fremde Daten enthalten.
+                # Unvollstaendige Importe bleiben erkennbar und muessen separat
+                # untersucht werden; es gibt keine Erfolgsmeldung.
                 return count
             finally:
                 shutil.rmtree(staging, ignore_errors=True)
