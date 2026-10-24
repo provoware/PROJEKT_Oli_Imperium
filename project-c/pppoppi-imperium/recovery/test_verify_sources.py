@@ -6,7 +6,7 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from verify_sources import (SourceBlocked, SourceInvalid,
+from verify_sources import (MAX_MANIFEST_BYTES, SourceBlocked, SourceInvalid,
                             inventory_digest, validate_sources)
 
 
@@ -132,6 +132,38 @@ class RecoveryVerificationTests(unittest.TestCase):
         os.mkfifo(self.root / 'SPIEL/unlisted.fifo')
         with self.assertRaises(SourceInvalid): self.verify()
 
+
+
+    def test_nonfinite_top_level_number_fails(self):
+        raw = json.dumps(self.meta)
+        (self.root / 'WIEDERHERSTELLUNG_MANIFEST.json').write_text(
+            raw[:-1] + ', "ignored": NaN}', encoding='utf-8')
+        with self.assertRaises(SourceInvalid): self.verify()
+
+    def test_nonfinite_nested_number_fails(self):
+        raw = json.dumps(self.meta)
+        raw = raw.replace('"path": ', '"ignored": -Infinity, "path": ', 1)
+        (self.root / 'WIEDERHERSTELLUNG_MANIFEST.json').write_text(
+            raw, encoding='utf-8')
+        with self.assertRaises(SourceInvalid): self.verify()
+
+    def test_oversized_manifest_fails(self):
+        (self.root / 'WIEDERHERSTELLUNG_MANIFEST.json').write_text(
+            json.dumps(self.meta) + ' ' * MAX_MANIFEST_BYTES, encoding='utf-8')
+        with self.assertRaises(SourceInvalid): self.verify()
+
+    def test_manifest_directory_fails(self):
+        manifest = self.root / 'WIEDERHERSTELLUNG_MANIFEST.json'
+        manifest.unlink()
+        manifest.mkdir()
+        with self.assertRaises(SourceInvalid): self.verify()
+
+    @unittest.skipUnless(hasattr(os, 'mkfifo'), 'FIFO nur auf POSIX')
+    def test_manifest_fifo_fails(self):
+        manifest = self.root / 'WIEDERHERSTELLUNG_MANIFEST.json'
+        manifest.unlink()
+        os.mkfifo(manifest)
+        with self.assertRaises(SourceInvalid): self.verify()
 
 
 if __name__ == '__main__':
