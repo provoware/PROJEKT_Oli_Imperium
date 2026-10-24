@@ -32,11 +32,22 @@ class ImportRejected(Exception):
     """Der Import darf nicht ausgefuehrt werden."""
 
 
-def _sha256(stream):
+def _sha256(stream, expected_size):
+    """Hash nur ueber die anfangs gemessene Archivgroesse.
+
+    Wachsende Dateien duerfen den Hashlauf nicht unbegrenzt verlaengern;
+    ein vorzeitig beendeter Leselauf darf nicht als vollstaendig gelten.
+    """
     stream.seek(0)
     digest = hashlib.sha256()
-    while chunk := stream.read(65536):
+    total = 0
+    while chunk := stream.read(min(65536, expected_size - total + 1)):
+        total += len(chunk)
+        if total > expected_size:
+            raise ImportRejected('Archiv ist waehrend der Pruefung gewachsen')
         digest.update(chunk)
+    if total != expected_size:
+        raise ImportRejected('Archiv ist waehrend der Pruefung verkuerzt')
     return digest.hexdigest()
 
 
@@ -188,9 +199,12 @@ def prepare_import(archive_path, destination, *,
     try:
         with os.fdopen(fd, 'rb') as source:
             metadata = os.fstat(source.fileno())
-            if not stat.S_ISREG(metadata.st_mode) or metadata.st_size > MAX_ARCHIVE_BYTES:
+            if (not stat.S_ISREG(metadata.st_mode) or
+                    metadata.st_size < 0 or metadata.st_size > MAX_ARCHIVE_BYTES):
                 raise ImportRejected('Archiv ist keine regulaere Datei oder zu gross')
-            archive_digest = _sha256(source)
+            archive_digest = _sha256(source, metadata.st_size)
+            if os.fstat(source.fileno()).st_size != metadata.st_size:
+                raise ImportRejected('Archivgroesse hat sich waehrend des Hashens geaendert')
             if archive_digest not in (expected_archive_sha256, expected_original_sha256):
                 raise ImportRejected('Archiv-SHA-256 weicht von beiden freigegebenen Paketen ab')
             staging = Path(tempfile.mkdtemp(prefix='.pppoppi-import-', dir=parent))
@@ -199,7 +213,8 @@ def prepare_import(archive_path, destination, *,
                     _extract_original_zip(source, staging, verification or {})
                 else:
                     _extract_verified_zip(source, staging)
-                if _sha256(source) != archive_digest:
+                if (_sha256(source, metadata.st_size) != archive_digest or
+                        os.fstat(source.fileno()).st_size != metadata.st_size):
                     raise ImportRejected('Archiv wurde waehrend des Imports veraendert')
                 count = validate_sources(staging, **(verification or {}))
                 destination.mkdir(mode=0o700)  # Exklusiv: auch leere Zielordner niemals ersetzen.
