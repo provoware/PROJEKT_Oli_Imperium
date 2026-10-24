@@ -6,6 +6,7 @@ Keine Rechtefreigabe, kein GitHub-Upload und keine Spielbarkeitszusage.
 """
 import argparse
 import hashlib
+import json
 import os
 from pathlib import Path, PurePosixPath
 import shutil
@@ -14,7 +15,10 @@ import sys
 import tempfile
 import zipfile
 
-from verify_sources import (MAX_MANIFEST_BYTES, SourceBlocked, SourceInvalid,
+from verify_sources import (ALLOWED_EXTENSIONS, EXPECTED_ARCHIVE_ENTRIES,
+                            EXPECTED_COUNT, EXPECTED_INVENTORY_SHA256,
+                            EXPECTED_SOURCE_SHA256, MAX_MANIFEST_BYTES,
+                            SourceBlocked, SourceInvalid, inventory_digest,
                             validate_sources)
 
 SAFE_ARCHIVE_SHA256 = '54ab598afc58fdf06cb250c33dda08bb0dc4077b8e8b31c328df868a94e809f4'
@@ -36,7 +40,7 @@ def _sha256(stream):
     return digest.hexdigest()
 
 
-def _member_destination(info):
+def _check_zip_member(info):
     name = info.filename
     parts = name.split('/')
     if (not name or name.startswith('/') or '\\' in name or '\x00' in name or
@@ -51,11 +55,17 @@ def _member_destination(info):
     if info.is_dir():
         if filetype == stat.S_IFREG:
             raise ImportRejected(f'ZIP-Verzeichnis mit Dateityp: {name!r}')
+    elif filetype == stat.S_IFDIR:
+        raise ImportRejected(f'ZIP-Datei mit Verzeichnistyp: {name!r}')
+    return name
+
+
+def _member_destination(info):
+    name = _check_zip_member(info)
+    if info.is_dir():
         if not name.startswith(ZIP_PREFIX):
             raise ImportRejected(f'Fremdes ZIP-Verzeichnis: {name!r}')
         return None
-    if filetype == stat.S_IFDIR:
-        raise ImportRejected(f'ZIP-Datei mit Verzeichnistyp: {name!r}')
     if name == ZIP_PREFIX + 'QUELLIMPORT_HINWEIS.md':
         return None  # Nur Hinweistext; nicht Bestandteil des Quellinventars.
     if name == ZIP_PREFIX + 'WIEDERHERSTELLUNG_MANIFEST.json':
@@ -105,8 +115,58 @@ def _extract_verified_zip(stream, staging):
                 raise ImportRejected(f'Unvollstaendig entpackt: {relative}')
 
 
+def _extract_original_zip(stream, staging, verification):
+    """Extrahiert nur erlaubte Quelltexte aus dem fest gepinnten Original-ZIP."""
+    source_sha = verification.get('expected_source_sha256', EXPECTED_SOURCE_SHA256)
+    entry_count = verification.get('expected_archive_entries', EXPECTED_ARCHIVE_ENTRIES)
+    required_count = verification.get('expected_count', EXPECTED_COUNT)
+    required_inventory = verification.get('expected_inventory_sha256',
+                                           EXPECTED_INVENTORY_SHA256)
+    stream.seek(0)
+    entries, seen, total = [], set(), 0
+    with zipfile.ZipFile(stream) as archive:
+        infos = archive.infolist()
+        if len(infos) != entry_count:
+            raise ImportRejected(f'Original-ZIP muss {entry_count} Eintraege enthalten')
+        for info in infos:
+            name = _check_zip_member(info)
+            if name in seen:
+                raise ImportRejected(f'Doppelter Original-ZIP-Eintrag: {name!r}')
+            seen.add(name)
+            if info.is_dir() or not name.startswith('SPIEL/'):
+                continue
+            if PurePosixPath(name).suffix not in ALLOWED_EXTENSIONS:
+                continue  # Medien und andere Nichtquellen bleiben ausgeschlossen.
+            if info.file_size < 0 or info.file_size > MAX_MEMBER_BYTES:
+                raise ImportRejected(f'Original-Quelldatei zu gross: {name!r}')
+            total += info.file_size
+            if total > MAX_TOTAL_BYTES:
+                raise ImportRejected('Original-Quellumfang zu gross')
+            target = staging / name
+            target.parent.mkdir(parents=True, exist_ok=True)
+            size = 0
+            digest = hashlib.sha256()
+            with archive.open(info) as source, target.open('xb') as output:
+                while chunk := source.read(65536):
+                    size += len(chunk)
+                    if size > MAX_MEMBER_BYTES or size > info.file_size:
+                        raise ImportRejected(f'Originaldatei zu gross: {name!r}')
+                    output.write(chunk)
+                    digest.update(chunk)
+            if size != info.file_size:
+                raise ImportRejected(f'Originaldatei unvollstaendig: {name!r}')
+            entries.append({'path': name, 'sha256': digest.hexdigest(), 'size': size})
+    if len(entries) != required_count or inventory_digest(entries) != required_inventory:
+        raise ImportRejected('Originalquellen entsprechen nicht dem festen 110-Dateien-Inventar')
+    manifest = {'source_sha256': source_sha, 'source_entries': entry_count,
+                'total_files': len(entries), 'files': sorted(entries, key=lambda x: x['path'])}
+    (staging / 'WIEDERHERSTELLUNG_MANIFEST.json').write_text(
+        json.dumps(manifest, ensure_ascii=False, indent=2), encoding='utf-8')
+
+
 def prepare_import(archive_path, destination, *,
                    expected_archive_sha256=SAFE_ARCHIVE_SHA256,
+                   expected_original_sha256=EXPECTED_SOURCE_SHA256,
                    verification=None):
     """Prueft ZIP und Dateien, installiert nur in einen nicht existierenden Ordner.
 
@@ -130,12 +190,16 @@ def prepare_import(archive_path, destination, *,
             metadata = os.fstat(source.fileno())
             if not stat.S_ISREG(metadata.st_mode) or metadata.st_size > MAX_ARCHIVE_BYTES:
                 raise ImportRejected('Archiv ist keine regulaere Datei oder zu gross')
-            if _sha256(source) != expected_archive_sha256:
-                raise ImportRejected('Archiv-SHA-256 weicht vom freigegebenen Paket ab')
+            archive_digest = _sha256(source)
+            if archive_digest not in (expected_archive_sha256, expected_original_sha256):
+                raise ImportRejected('Archiv-SHA-256 weicht von beiden freigegebenen Paketen ab')
             staging = Path(tempfile.mkdtemp(prefix='.pppoppi-import-', dir=parent))
             try:
-                _extract_verified_zip(source, staging)
-                if _sha256(source) != expected_archive_sha256:
+                if archive_digest == expected_original_sha256:
+                    _extract_original_zip(source, staging, verification or {})
+                else:
+                    _extract_verified_zip(source, staging)
+                if _sha256(source) != archive_digest:
                     raise ImportRejected('Archiv wurde waehrend des Imports veraendert')
                 count = validate_sources(staging, **(verification or {}))
                 destination.mkdir(mode=0o700)  # Exklusiv: auch leere Zielordner niemals ersetzen.
@@ -157,7 +221,7 @@ def prepare_import(archive_path, destination, *,
 def main(argv=None):
     parser = argparse.ArgumentParser(description='V1.9.4-Quellen sicher lokal vorbereiten (kein Upload)')
     parser.add_argument('--archive', required=True, type=Path,
-                        help='Unveraendertes PPPOPPI_IMPERIUM_V194_GITHUB_QUELLCODE_SICHER.zip')
+                        help='Unveraendertes Original-ZIP oder kuratiertes GITHUB_QUELLCODE_SICHER.zip')
     parser.add_argument('--destination', required=True, type=Path,
                         help='Neuer, bisher NICHT vorhandener Zielordner')
     args = parser.parse_args(argv)
