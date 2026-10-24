@@ -8,6 +8,7 @@ genuegt nicht. Der Check beweist keine Urheberrechte oder Spielfreigabe.
 """
 import hashlib
 import json
+import os
 from pathlib import Path, PurePosixPath
 import re
 import stat
@@ -51,6 +52,47 @@ def reject_duplicate_json_keys(pairs):
 def reject_nonfinite_json_number(value):
     """Python akzeptiert NaN/Infinity sonst entgegen der JSON-Spezifikation."""
     raise SourceInvalid(f'Nicht-endliche JSON-Zahl im Manifest: {value}')
+
+
+def hash_source_file(target, expected_size):
+    """Prueft eine regulaere Quelldatei speicherschonend am offenen Dateihandle.
+
+    O_NOFOLLOW verhindert unter POSIX, dass ein unmittelbar vor dem Oeffnen
+    ausgetauschter finaler Dateipfad auf ein fremdes Linkziel verweist.
+    Die feste Inventargroesse begrenzt auch bei paralleler Dateiaenderung
+    die insgesamt eingelesenen Bytes auf expected_size + 1.
+    """
+    flags = os.O_RDONLY | getattr(os, 'O_BINARY', 0)
+    flags |= getattr(os, 'O_NOFOLLOW', 0)
+    flags |= getattr(os, 'O_NONBLOCK', 0)  # Keine Blockade bei FIFO-Race.
+    try:
+        fd = os.open(target, flags)
+    except FileNotFoundError as exc:
+        raise SourceBlocked(f'Quelldatei fehlt: {target}') from exc
+    except OSError as exc:
+        raise SourceInvalid(f'Quelldatei nicht sicher oeffenbar: {target}: {exc}') from exc
+    try:
+        with os.fdopen(fd, 'rb') as stream:
+            info = os.fstat(stream.fileno())
+            if not stat.S_ISREG(info.st_mode):
+                raise SourceInvalid(f'Keine regulaere Quelldatei: {target}')
+            if info.st_size != expected_size:
+                raise SourceInvalid(f'Dateigroesse falsch: {target}')
+            digest = hashlib.sha256()
+            total = 0
+            while True:
+                chunk = stream.read(min(65536, expected_size - total + 1))
+                if not chunk:
+                    break
+                total += len(chunk)
+                if total > expected_size:
+                    raise SourceInvalid(f'Quelldatei waehrend Pruefung gewachsen: {target}')
+                digest.update(chunk)
+            if total != expected_size or os.fstat(stream.fileno()).st_size != expected_size:
+                raise SourceInvalid(f'Quelldatei waehrend Pruefung geaendert: {target}')
+            return digest.hexdigest()
+    except OSError as exc:
+        raise SourceInvalid(f'Quelldatei nicht lesbar: {target}: {exc}') from exc
 
 
 def validate_sources(root, *, expected_inventory_sha256=EXPECTED_INVENTORY_SHA256,
@@ -126,9 +168,7 @@ def validate_sources(root, *, expected_inventory_sha256=EXPECTED_INVENTORY_SHA25
                 raise SourceInvalid(f'Symbolischer Link im Quellpfad: {name}')
         if not target.is_file():
             raise SourceBlocked(f'Quelldatei fehlt: {name}')
-        if target.stat().st_size != entry['size']:
-            raise SourceInvalid(f'Dateigroesse falsch: {name}')
-        if hashlib.sha256(target.read_bytes()).hexdigest() != entry['sha256']:
+        if hash_source_file(target, entry['size']) != entry['sha256']:
             raise SourceInvalid(f'Dateipruefsumme falsch: {name}')
     expected_dirs = {'SPIEL'}
     for name in seen:
