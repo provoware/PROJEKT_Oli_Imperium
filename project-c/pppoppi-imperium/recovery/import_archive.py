@@ -23,7 +23,7 @@ from verify_sources import (ALLOWED_EXTENSIONS, EXPECTED_ARCHIVE_ENTRIES,
 
 SAFE_ARCHIVE_SHA256 = '54ab598afc58fdf06cb250c33dda08bb0dc4077b8e8b31c328df868a94e809f4'
 ZIP_PREFIX = 'project-c/pppoppi-imperium/'
-MAX_ARCHIVE_BYTES = 4_194_304
+MAX_ARCHIVE_BYTES = 268_435_456  # Original-ZIP kann Bild-/Berichtsmedien enthalten.
 MAX_MEMBER_BYTES = 2_097_152
 MAX_TOTAL_BYTES = 8_388_608
 
