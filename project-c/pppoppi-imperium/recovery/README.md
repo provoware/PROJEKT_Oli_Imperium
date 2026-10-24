@@ -75,16 +75,20 @@ Die 52 fachlichen und technischen Einzelpflichten liegen in [PR #16](https://git
 
 ## Folgepaket 24.10.2026 – Offline-Nachimport ohne bestehende Daten zu ersetzen
 
-Der neue Helfer 'recovery/import_archive.py' kann das bereits kuratierte, medienbereinigte Paket
-'PPPOPPI_IMPERIUM_V194_GITHUB_QUELLCODE_SICHER.zip' **lokal** in einen neuen Ordner
-vorbereiten. Das ZIP muss exakt den fest hinterlegten SHA-256-Wert
-'54ab598afc58fdf06cb250c33dda08bb0dc4077b8e8b31c328df868a94e809f4'
-haben. Ein beliebiges ZIP mit nur passend selbst deklarierten Manifestdaten wird abgelehnt.
+Der neue Helfer 'recovery/import_archive.py' kann **wahlweise** das originale Paket
+'PPPOPPI_IMPERIUM_V194_Pruefstand_und_Spiel.zip' oder das bereits kuratierte
+'PPPOPPI_IMPERIUM_V194_GITHUB_QUELLCODE_SICHER.zip' lokal in einen neuen Ordner
+vorbereiten. Die ZIP-Datei muss exakt einem der zwei fest hinterlegten SHA-256-Werte
+entsprechen (Original: '94f41725f1d1addaa07505302a4f448e3410df0bcebe68bfb24fc07b72d433ca',
+kuratiert: '54ab598afc58fdf06cb250c33dda08bb0dc4077b8e8b31c328df868a94e809f4').
+Beim Original werden nur die 110 freigegebenen Text-/Quell-/Testdateien uebernommen;
+Medien, Archive und aeussere Berichte bleiben ausgeschlossen. Ein beliebiges ZIP
+mit nur passend selbst deklarierten Manifestdaten wird abgelehnt.
 
 Beispiel unter Linux (Zielordner darf noch nicht existieren):
 
     python3 project-c/pppoppi-imperium/recovery/import_archive.py \
-      --archive "/pfad/PPPOPPI_IMPERIUM_V194_GITHUB_QUELLCODE_SICHER.zip" \
+      --archive "/pfad/PPPOPPI_IMPERIUM_V194_Pruefstand_und_Spiel.zip" \
       --destination "/pfad/PPPOPPI_V194_VERIFIZIERT"
 
 Der Helfer prueft ZIP-Integritaet, sichere relative Pfade, Dateitypen, Duplikate,
