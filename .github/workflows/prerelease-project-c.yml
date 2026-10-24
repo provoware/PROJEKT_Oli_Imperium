@@ -31,7 +31,7 @@ jobs:
           python3 tools/validate_project.py
           python3 -m unittest discover -s tests -v
       - name: Import-Sicherheitsregressionen
-        run: python3 -m unittest discover -s project-c/pppoppi-imperium/recovery -p 'test_verify_sources.py' -v
+        run: python3 -m unittest discover -s project-c/pppoppi-imperium/recovery -p 'test_*.py' -v
       - name: 110 Originalquellen und Manifest tatsächlich prüfen (harte Sperre)
         run: python3 project-c/pppoppi-imperium/recovery/verify_sources.py
       - name: Technische Pflichtmatrix (harte Sperre; niemals BLOCKED als PASS)
