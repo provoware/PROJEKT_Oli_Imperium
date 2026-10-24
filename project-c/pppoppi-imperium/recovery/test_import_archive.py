@@ -70,6 +70,35 @@ class OfflineImportTests(unittest.TestCase):
             sorted([*self.files, 'WIEDERHERSTELLUNG_MANIFEST.json']))
         self.assertFalse(list(self.root.glob('.pppoppi-import-*')))
 
+    def test_original_zip_is_reduced_to_verified_text_sources(self):
+        with zipfile.ZipFile(self.zip_path, 'w', zipfile.ZIP_DEFLATED) as archive:
+            for name, content in self.files.items():
+                archive.writestr(name, content)
+            archive.writestr('SPIEL/cover.png', b'fake media not imported')
+        digest = hashlib.sha256(self.zip_path.read_bytes()).hexdigest()
+        self.assertEqual(
+            prepare_import(self.zip_path, self.destination,
+                           expected_original_sha256=digest,
+                           verification=self.verify_args), 3)
+        self.assertEqual(validate_sources(self.destination, **self.verify_args), 3)
+        self.assertFalse((self.destination / 'SPIEL/cover.png').exists())
+        manifest = json.loads(
+            (self.destination / 'WIEDERHERSTELLUNG_MANIFEST.json').read_text())
+        self.assertEqual(manifest['source_sha256'], 'a' * 64)
+        self.assertEqual(manifest['source_entries'], 4)
+
+    def test_original_zip_with_modified_source_rejected(self):
+        with zipfile.ZipFile(self.zip_path, 'w', zipfile.ZIP_DEFLATED) as archive:
+            for name, content in self.files.items():
+                archive.writestr(name, content + b'changed')
+            archive.writestr('SPIEL/cover.png', b'fake media')
+        digest = hashlib.sha256(self.zip_path.read_bytes()).hexdigest()
+        with self.assertRaises(ImportRejected):
+            prepare_import(self.zip_path, self.destination,
+                           expected_original_sha256=digest,
+                           verification=self.verify_args)
+        self.assertFalse(self.destination.exists())
+
     def test_wrong_archive_digest_never_creates_destination(self):
         self.build()
         with self.assertRaisesRegex(ImportRejected, 'SHA-256'):
