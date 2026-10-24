@@ -71,3 +71,44 @@ Die 52 fachlichen und technischen Einzelpflichten liegen in [PR #16](https://git
 - [PR-CI #39988525433](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/39988525433): Forschungs-/Datenvertrag **PASS**, **8/8** Python-Grundtests **PASS**, **18/18** isolierte Importregressionen **PASS**.
 - Vollständiger Quellencheck: **BLOCKED** (`WIEDERHERSTELLUNG_MANIFEST.json` fehlt). Acht wirtschaftliche Fachprogramme: **SKIPPED**. **Gesamt-CI FAIL**, keine technische Freigabe.
 - Diese Dokumentation ist ein nachgelagerter Commit; für die Freigabe zählt ausschließlich der nach dem letzten Commit erneut ausgeführte GitHub-Workflow am endgültigen HEAD. Die Belege dazu stehen im zugehörigen Entwurfs-PR.
+
+
+## Folgepaket 24.10.2026 – Offline-Nachimport ohne bestehende Daten zu ersetzen
+
+Der neue Helfer 'recovery/import_archive.py' kann **wahlweise** das originale Paket
+'PPPOPPI_IMPERIUM_V194_Pruefstand_und_Spiel.zip' oder das bereits kuratierte
+'PPPOPPI_IMPERIUM_V194_GITHUB_QUELLCODE_SICHER.zip' lokal in einen neuen Ordner
+vorbereiten. Die ZIP-Datei muss exakt einem der zwei fest hinterlegten SHA-256-Werte
+entsprechen (Original: '94f41725f1d1addaa07505302a4f448e3410df0bcebe68bfb24fc07b72d433ca',
+kuratiert: '54ab598afc58fdf06cb250c33dda08bb0dc4077b8e8b31c328df868a94e809f4').
+Beim Original werden nur die 110 freigegebenen Text-/Quell-/Testdateien uebernommen;
+Medien, Archive und aeussere Berichte bleiben ausgeschlossen. Ein beliebiges ZIP
+mit nur passend selbst deklarierten Manifestdaten wird abgelehnt.
+
+Beispiel unter Linux (Zielordner darf noch nicht existieren):
+
+    python3 project-c/pppoppi-imperium/recovery/import_archive.py \
+      --archive "/pfad/PPPOPPI_IMPERIUM_V194_Pruefstand_und_Spiel.zip" \
+      --destination "/pfad/PPPOPPI_V194_VERIFIZIERT"
+
+Der Helfer prueft ZIP-Integritaet, sichere relative Pfade, Dateitypen, Duplikate,
+Entpackgrenzen sowie **alle 110** Dateien gegen den festen Inventarfingerabdruck.
+Er legt den Zielordner erst nach erfolgreicher Pruefung an; bestehende Ordner
+werden nicht ueberschrieben. Bei einem Installationsfehler wird nur der
+gerade neu angelegte Zielordner zurueckgenommen. Er enthaelt danach ausschliesslich
+'SPIEL/' und 'WIEDERHERSTELLUNG_MANIFEST.json'.
+
+**Wichtige Grenze:** Es erfolgt weder ein automatischer GitHub-Upload noch
+eine rechtliche Freigabe. Der so vorbereitete Ordner ist erst nach gesonderter
+Rechtepruefung und bewusster Uebernahme in einen getrennten Entwicklungszweig
+als GitHub-Quelle nutzbar. Die echten ZIP-Bytes stehen in diesem Repository
+weiterhin nicht zur Verfuegung; deshalb bleiben Quell-Gate, acht Fachprogramme
+und die technische Vorrelease-Freigabe **BLOCKED**.
+
+Reproduzierbare synthetische Tests (ohne Originalspiel):
+
+    python3 -m unittest discover -s project-c/pppoppi-imperium/recovery -p 'test_*.py' -v
+
+Die zwei GitHub-Workflows fuehren die Importtests mit aus. Ihr roter Gesamtstatus
+bleibt bis zum echten Quellimport und den weiteren 49 technischen Freigaben
+verbindlich. Kein Merge, kein Release und keine vorgezogene persoenliche Abnahme.
