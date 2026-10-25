@@ -58,8 +58,8 @@ Spielstart** nichts benötigt; Node.js ist nur zum Erzeugen der Fassung nötig.
 - Quelloriginale unverändert: **110/110**.
 - Zusätzliche lokale Technikprüfungen: **18/18 PASS**.
 - GitHub-CI muss dieselben Prüfungen am neuen Commit wiederholen.
-- Vorrelease-Matrix nach den Einzelabnahmen QUE-02/03: **2/52 PASS**,
-  davon 43 BLOCKED, 4 OPEN und
+- Vorrelease-Matrix nach QUE-02/03 und TES-01: **3/52 PASS**,
+  davon 42 BLOCKED, 4 OPEN und
   3 persönliche Prüfungen DEFERRED.
 - Die 77 ausgeschlossenen Archivdateien (73 PNG, 2 PDF, 1 ZIP, 1 TXT)
   bleiben außerhalb des Quellzweigs; keine ist eine in `index.html`
