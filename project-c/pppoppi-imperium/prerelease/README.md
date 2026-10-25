@@ -145,3 +145,17 @@ Nachweis: `evidence/BAL-03.json`. **Matrixstand: 6/52 PASS,
 39 BLOCKED, 4 OPEN, 3 DEFERRED.** Die gezielten Stressfälle
 ersetzen weder allgemeine Insolvenz-, Sieges- und Verlusttests noch
 echte menschliche Langzeitpartien.
+
+## Einzelabnahme WIR-01 – 25.10.2026
+
+Der Markt-Fachtest mit **18 bestandenen Einzelprüfungen** wurde bereits auf
+dem unveränderten GitHub-Entwicklerstand `8f2fa297825ecf35be92726ccc363a18134e0ae7`
+ausgeführt ([Quellworkflow #40160324165](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40160324165)).
+Zusätzlich verfolgt `quality_v194/test_market_ledger_v194.cjs` in **sechs**
+unabhängigen Fällen die tatsächlichen Marktpreise, centgenaue Gebühren,
+Lohn- und Wartungszahlungen, Verkaufsgutschriften sowie das Journal.
+Beide Programme laufen gemeinsam in GitHub-CI.
+
+Nachweis: `evidence/WIR-01.json`. **Matrixstand: 7/52 PASS,
+38 BLOCKED, 4 OPEN, 3 DEFERRED.** Keine Pauschalfreigabe aller
+Vertrags-, Logistik- oder Überlauf-Sonderfälle.

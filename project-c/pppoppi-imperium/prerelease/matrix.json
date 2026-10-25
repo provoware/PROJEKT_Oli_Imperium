@@ -139,10 +139,10 @@
       "requirement": "Marktpreise, Einnahmen und Ausgaben nachvollziehbar",
       "basis": "PR #14",
       "stage": "technical",
-      "status": "blocked",
-      "evidence": [],
-      "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "Markt-Fachtests auf GitHub wiederholen"
+      "status": "pass",
+      "evidence": ["project-c/pppoppi-imperium/prerelease/evidence/WIR-01.json"],
+      "blocker": "",
+      "next": ""
     },
     {
       "id": "WIR-02",

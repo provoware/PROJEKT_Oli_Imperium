@@ -1,0 +1,21 @@
+{
+  "gate_id": "WIR-01",
+  "result": "PASS",
+  "commit": "8f2fa297825ecf35be92726ccc363a18134e0ae7",
+  "command": "cd project-c/pppoppi-imperium/SPIEL && node test_fair_market_v161.cjs && node ../quality_v194/test_market_ledger_v194.cjs",
+  "date": "2026-10-25",
+  "ci_run": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40160324165",
+  "ci_conclusion": "success",
+  "original_market_cases": 18,
+  "independent_ledger_cases": 6,
+  "checks": [
+    "Gutachten und Kauf belasten exakt die ausgewiesenen Kosten; abgelehnte Doppelaktion ist atomar.",
+    "Bohrung, Foerderung und Versand sind getrennte, nachvollziehbare Abbuchungen.",
+    "Vor Monatsabschluss wird weder Markt- noch Raffinerieerloes vorzeitig gutgeschrieben.",
+    "Absatzmenge multipliziert mit Regionalpreis ergibt centgenau den Erlös im Kassenjournal; Lohn und Wartung werden einmal belastet.",
+    "Regionalpreis bewegt sich nach Absatz (+1 %) oder Ausfall (-3 %) in festgelegten Grenzen.",
+    "Raffinerie-Verkauf nutzt seinen gesonderten Marktpreis (130 %) und bucht Erlös einmal."
+  ],
+  "original_sources_modified": false,
+  "limits": "Nachweis fuer pruefbare Preis- und Buchungswege im V1.9.3-Kern, nicht fuer alle Vertragsvarianten, Wirtschaftsbalance, Ueberlaufgrenzen oder historische C64-Originaltreue."
+}
