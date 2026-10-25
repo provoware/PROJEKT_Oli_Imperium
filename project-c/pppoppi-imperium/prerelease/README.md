@@ -203,3 +203,23 @@ GitHub-CI prüft dieselbe Testdatei am Pull Request separat.
 
 Nachweis: `evidence/WIR-03.json`. **Matrixstand: 10/52 PASS,
 35 BLOCKED, 4 OPEN, 3 DEFERRED.** Kein Release und keine Sichtprüfung.
+
+## Einzelabnahme WIR-04 – 25.10.2026
+
+Zehn unabhängige Finanztests prüfen negative und unsichere Speicherwerte,
+centgenaue Kostenschwellen, Rettungskredite und Schuldüberläufe,
+Gleichrangigkeit offener Rechnungen, genau einmalige Kreditvergabe und
+atomare Ablehnung eines Geldüberlaufs beim Monatsabschluss.
+
+**Gefundener und isoliert behobener Fehler:** Bei einem gültigen hohen
+Schuldbetrag (`9007199254740349` Cent) berechnet der ursprüngliche
+Spielkern einen Cent zu viel Zins. Der unveränderte Quellimport bleibt
+aus Provenienzgründen geschützt. `quality_v194/build.cjs` legt den Fix
+in zwei generierten Engine-Modulen mit `BigInt`-Zwischenarithmetik an.
+Die zehn Prüfungen beziehen sich daher **nur auf die erzeugte Technikfassung**,
+nicht auf die unbereinigten Originaldateien. Auch die bisherige
+Quellherkunftsaussage bleibt damit präzise. Die CI baut und prüft den
+Stand erneut. Eine Freigabe nach `main` ist ausgeschlossen.
+
+Nachweis: `evidence/WIR-04.json`. **Matrixstand: 11/52 PASS,
+34 BLOCKED, 4 OPEN, 3 DEFERRED.**

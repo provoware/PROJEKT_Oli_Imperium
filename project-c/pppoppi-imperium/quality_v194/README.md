@@ -12,7 +12,7 @@ Sie direkt zu bearbeiten würde den unabhängig geprüften Herkunftsnachweis
 zerstören. Deshalb bleiben sie byteidentisch.
 
 `build.cjs` prüft alle 110 Dateihashes, übernimmt ausschließlich die
-freigegebenen Quelldateien und trägt vier gezielte Korrekturen **in einem
+freigegebenen Quelldateien und trägt sechs gezielte Korrekturgruppen **in einem
 neuen Zielordner** auf:
 
 1. `index.html`: eindeutige Anzeige für Spielkern V1.9.3 und Prüfstand V1.9.4.
@@ -22,9 +22,13 @@ neuen Zielordner** auf:
    im öffentlichen Quellzweig fehlenden Bild- und Vergleichsarchive.
 4. `test_human_parity_v192.cjs`: blockierte, leere oder abgebrochene
    Vergleichs-Unterprozesse können nicht länger fälschlich PASS melden.
+5. `src/v082_engine.js`: Zinsen und Tilgungen auch bei hohen Schulden
+   mit `BigInt` zwischenrechnen und centgenau abrunden.
+6. `src/v082_strategy_engine.js`: dieselbe Korrektur im tatsächlich
+   für Strategien und Monatsabschluss benutzten zweiten Rechenpfad.
 
 Die **Wirtschaftsregeln, KI und gespeicherten Spielstandschemas** werden
-dadurch nicht geändert.
+bis auf die ausdrücklich nachgewiesene Zins-/Tilgungsrundung nicht geändert.
 
 ## Prüfen (aus der Repository-Wurzel)
 
@@ -49,19 +53,20 @@ node project-c/pppoppi-imperium/quality_v194/build.cjs ./PPPOPPI_IMPERIUM_V194_T
 Der Zielordner darf **noch nicht existieren**; bestehende Dateien werden
 nicht überschrieben. Danach befindet sich die eigenständige Offline-Datei
 unter `PPPOPPI_IMPERIUM_V194_TECH/index.html`.
-Die erzeugte `BUILD_INFO.json` hält die Herkunft und die vier
+Die erzeugte `BUILD_INFO.json` hält die Herkunft und die sechs
 überlagerten Quelldateien fest. Ohne Node.js wird für den **späteren
 Spielstart** nichts benötigt; Node.js ist nur zum Erzeugen der Fassung nötig.
 
 ## Ehrlicher Freigabestand
 
 - Quelloriginale unverändert: **110/110**.
-- Zusätzliche Technikprüfungen: **49/49 PASS** (10 UI-Verträge,
+- Zusätzliche Technikprüfungen: **59/59 PASS** (10 UI-Verträge,
   8 Spielabläufe, 6 Markt-/Journal-, 7 Logistik-,
-  8 Monats-/Idempotenz- und 10 Raffinerie-/Lager-/Vertragsprüfungen).
+  8 Monats-/Idempotenz-, 10 Raffinerie-/Lager-/Vertrags- und
+  10 Geld-/Schulden-/Überlaufprüfungen).
 - GitHub-CI muss dieselben Prüfungen am neuen Commit wiederholen.
 - Vorrelease-Matrix nach QUE-02/03, TES-01/02, BAL-02/03,
-  WIR-01/02/03 und LOG-05: **10/52 PASS**, davon 35 BLOCKED, 4 OPEN und
+  WIR-01/02/03/04 und LOG-05: **11/52 PASS**, davon 34 BLOCKED, 4 OPEN und
   3 persönliche Prüfungen DEFERRED.
 - Die 77 ausgeschlossenen Archivdateien (73 PNG, 2 PDF, 1 ZIP, 1 TXT)
   bleiben außerhalb des Quellzweigs; keine ist eine in `index.html`
