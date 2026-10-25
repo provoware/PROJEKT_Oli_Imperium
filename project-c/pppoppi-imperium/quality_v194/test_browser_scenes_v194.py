@@ -22,6 +22,18 @@ def check(label, passed):
         raise AssertionError(label)
 
 
+def tab_to(page, selector, max_tabs=160):
+    """Nur echte Tab-Tastendruecke; keine programmatische Fokussetzung."""
+    target = page.locator(selector)
+    if target.count() != 1 or not target.is_visible():
+        return False
+    for _ in range(max_tabs + 1):
+        if target.evaluate("(element) => document.activeElement === element"):
+            return True
+        page.keyboard.press("Tab")
+    return False
+
+
 def main():
     with tempfile.TemporaryDirectory(prefix="pppoppi-scenes-") as temp:
         target = Path(temp) / "preview"
@@ -50,9 +62,13 @@ def main():
                     check(label + ": erwartete CSS-Viewport-Abmessungen",
                           page.evaluate("(size) => innerWidth === size.width && innerHeight === size.height",
                                         {"width": css_width, "height": css_height}))
-                    page.locator("#startGame").focus()
+                    check(label + ": Startknopf nur per Tab erreichbar",
+                          tab_to(page, "#startGame"))
                     page.keyboard.press("Enter")
-                    page.locator('[data-ui="newgame"]').click()
+                    page.locator("#econMode").wait_for(state="visible")
+                    check(label + ": Partiestart nur per Tab erreichbar",
+                          tab_to(page, '[data-ui="newgame"]'))
+                    page.keyboard.press("Enter")
                     page.wait_for_function("NeoEconomy.getState() !== null")
                     base_page_excess = page.evaluate(
                         "() => Math.max(0, document.documentElement.scrollWidth - document.documentElement.clientWidth)"
@@ -86,11 +102,18 @@ def main():
                     check(label + ": alle " + str(len(rows)) + " Szenen rendern mit Navigation",
                           not broken)
                     page.evaluate("PPNavigation191.open('computer')")
-                    page.locator('#v191-navigator [data-nav="quick"]').focus()
+                    check(label + ": Uebersicht nur per Tab erreichbar",
+                          tab_to(page, '#v191-navigator [data-nav="quick"]'))
+                    page.keyboard.press("Shift+Tab")
+                    check(label + ": Rueckwaerts-Tab erreicht Buero",
+                          page.evaluate("""() => document.activeElement?.matches(
+                              '#v191-navigator [data-nav="desk"]') === true"""))
+                    page.keyboard.press("Tab")
                     page.keyboard.press("Enter")
                     check(label + ": Übersicht mit Tab-Fokus und Enter erreichbar",
                           page.evaluate("PPNavigation191.current()") == "quick")
-                    page.locator("#closeBtn").focus()
+                    check(label + ": Schliessen nur per Tab erreichbar",
+                          tab_to(page, "#closeBtn"))
                     page.keyboard.press("Enter")
                     check(label + ": Dialog per Tastatur schließbar",
                           not page.locator("#dialog").evaluate("(d) => d.open"))
