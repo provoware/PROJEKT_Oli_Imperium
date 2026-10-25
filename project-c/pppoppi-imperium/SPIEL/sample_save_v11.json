@@ -1,0 +1,706 @@
+{
+  "schema": "pppoppi.berlin.save/0.8.2",
+  "ruleset": "berlin-economy/0.8.2.0",
+  "seed": "PPPOPPI-2026",
+  "month": 2,
+  "phase": "TURN",
+  "turnIndex": 0,
+  "companies": [
+    {
+      "id": "H1",
+      "name": "PPPOPPI",
+      "type": "human",
+      "generation": 1,
+      "cashCent": 14510000,
+      "debtCent": 0,
+      "daysUsed": 0,
+      "contracts": [],
+      "obligations": [
+        {
+          "id": "M1-G1-LOHN",
+          "priority": 1,
+          "dueCent": 90000,
+          "paidCent": 90000,
+          "kind": "PERSONAL"
+        },
+        {
+          "id": "M1-G1-WARTUNG",
+          "priority": 1,
+          "dueCent": 50000,
+          "paidCent": 50000,
+          "kind": "WARTUNG"
+        }
+      ],
+      "ledger": [
+        {
+          "id": "B1-1-0",
+          "month": 1,
+          "deltaCent": -200000,
+          "code": "GUTACHTEN",
+          "info": "BERLIN-1"
+        },
+        {
+          "id": "B1-2-1",
+          "month": 1,
+          "deltaCent": -5000000,
+          "code": "FELDKAUF",
+          "info": "BERLIN-1"
+        },
+        {
+          "id": "B1-3-2",
+          "month": 1,
+          "deltaCent": -7000000,
+          "code": "FACHBOHRUNG",
+          "info": "BERLIN-1"
+        },
+        {
+          "id": "B1-4-3",
+          "month": 1,
+          "deltaCent": -100000,
+          "code": "FOERDERUNG",
+          "info": "BERLIN-1"
+        },
+        {
+          "id": "B1-5-4",
+          "month": 1,
+          "deltaCent": -50000,
+          "code": "TRANSPORT",
+          "info": "BERLIN-1"
+        },
+        {
+          "id": "B1-7-5",
+          "month": 1,
+          "deltaCent": 7000000,
+          "code": "MARKTERLÖS",
+          "info": "BERLIN-1"
+        },
+        {
+          "id": "B1-7-6",
+          "month": 1,
+          "deltaCent": -90000,
+          "code": "ZAHLUNG_PERSONAL",
+          "info": "M1-G1-LOHN"
+        },
+        {
+          "id": "B1-7-7",
+          "month": 1,
+          "deltaCent": -50000,
+          "code": "ZAHLUNG_WARTUNG",
+          "info": "M1-G1-WARTUNG"
+        }
+      ],
+      "stats": {
+        "contractsDone": 0,
+        "contractsOnTime": 0,
+        "contractsProfitable": 0,
+        "contractsProfitCent": 0,
+        "marketStreak": 0,
+        "awards": [],
+        "rescues": 0
+      },
+      "loanUsed": false,
+      "monthRevenueCent": 0,
+      "monthSoldMilli": 0,
+      "monthProducedMilli": 0,
+      "monthContractMilli": 0
+    },
+    {
+      "id": "A1",
+      "name": "Milchmädchen Pete GmbH",
+      "type": "ai",
+      "generation": 1,
+      "cashCent": 7335000,
+      "debtCent": 0,
+      "daysUsed": 0,
+      "contracts": [],
+      "obligations": [
+        {
+          "id": "M1-G1-LOHN",
+          "priority": 1,
+          "dueCent": 90000,
+          "paidCent": 90000,
+          "kind": "PERSONAL"
+        },
+        {
+          "id": "M1-G1-WARTUNG",
+          "priority": 1,
+          "dueCent": 50000,
+          "paidCent": 50000,
+          "kind": "WARTUNG"
+        }
+      ],
+      "ledger": [
+        {
+          "id": "B1-7-0",
+          "month": 1,
+          "deltaCent": -200000,
+          "code": "GUTACHTEN",
+          "info": "BRANDENBURG-1"
+        },
+        {
+          "id": "B1-7-1",
+          "month": 1,
+          "deltaCent": -3900000,
+          "code": "FELDKAUF",
+          "info": "BRANDENBURG-1"
+        },
+        {
+          "id": "B1-7-2",
+          "month": 1,
+          "deltaCent": -6300000,
+          "code": "FACHBOHRUNG",
+          "info": "BRANDENBURG-1"
+        },
+        {
+          "id": "B1-7-3",
+          "month": 1,
+          "deltaCent": -100000,
+          "code": "FOERDERUNG",
+          "info": "BRANDENBURG-1"
+        },
+        {
+          "id": "B1-7-4",
+          "month": 1,
+          "deltaCent": -50000,
+          "code": "TRANSPORT",
+          "info": "BRANDENBURG-1"
+        },
+        {
+          "id": "B1-7-5",
+          "month": 1,
+          "deltaCent": -200000,
+          "code": "GUTACHTEN",
+          "info": "BERLIN-2"
+        },
+        {
+          "id": "B1-7-6",
+          "month": 1,
+          "deltaCent": -5000000,
+          "code": "FELDKAUF",
+          "info": "BERLIN-2"
+        },
+        {
+          "id": "B1-7-7",
+          "month": 1,
+          "deltaCent": -240000,
+          "code": "GUTACHTEN",
+          "info": "NORD-1"
+        },
+        {
+          "id": "B1-7-8",
+          "month": 1,
+          "deltaCent": 3465000,
+          "code": "MARKTERLÖS",
+          "info": "BRANDENBURG-1"
+        },
+        {
+          "id": "B1-7-9",
+          "month": 1,
+          "deltaCent": -90000,
+          "code": "ZAHLUNG_PERSONAL",
+          "info": "M1-G1-LOHN"
+        },
+        {
+          "id": "B1-7-10",
+          "month": 1,
+          "deltaCent": -50000,
+          "code": "ZAHLUNG_WARTUNG",
+          "info": "M1-G1-WARTUNG"
+        }
+      ],
+      "stats": {
+        "contractsDone": 0,
+        "contractsOnTime": 0,
+        "contractsProfitable": 0,
+        "contractsProfitCent": 0,
+        "marketStreak": 0,
+        "awards": [],
+        "rescues": 0
+      },
+      "loanUsed": false,
+      "monthRevenueCent": 0,
+      "monthSoldMilli": 0,
+      "monthProducedMilli": 0,
+      "monthContractMilli": 0
+    },
+    {
+      "id": "A2",
+      "name": "Edna Ruppen & Co.",
+      "type": "ai",
+      "generation": 1,
+      "cashCent": 7335000,
+      "debtCent": 0,
+      "daysUsed": 0,
+      "contracts": [],
+      "obligations": [
+        {
+          "id": "M1-G1-LOHN",
+          "priority": 1,
+          "dueCent": 90000,
+          "paidCent": 90000,
+          "kind": "PERSONAL"
+        },
+        {
+          "id": "M1-G1-WARTUNG",
+          "priority": 1,
+          "dueCent": 50000,
+          "paidCent": 50000,
+          "kind": "WARTUNG"
+        }
+      ],
+      "ledger": [
+        {
+          "id": "B1-7-0",
+          "month": 1,
+          "deltaCent": -200000,
+          "code": "GUTACHTEN",
+          "info": "BRANDENBURG-2"
+        },
+        {
+          "id": "B1-7-1",
+          "month": 1,
+          "deltaCent": -3900000,
+          "code": "FELDKAUF",
+          "info": "BRANDENBURG-2"
+        },
+        {
+          "id": "B1-7-2",
+          "month": 1,
+          "deltaCent": -6300000,
+          "code": "FACHBOHRUNG",
+          "info": "BRANDENBURG-2"
+        },
+        {
+          "id": "B1-7-3",
+          "month": 1,
+          "deltaCent": -100000,
+          "code": "FOERDERUNG",
+          "info": "BRANDENBURG-2"
+        },
+        {
+          "id": "B1-7-4",
+          "month": 1,
+          "deltaCent": -50000,
+          "code": "TRANSPORT",
+          "info": "BRANDENBURG-2"
+        },
+        {
+          "id": "B1-7-5",
+          "month": 1,
+          "deltaCent": -200000,
+          "code": "GUTACHTEN",
+          "info": "BERLIN-3"
+        },
+        {
+          "id": "B1-7-6",
+          "month": 1,
+          "deltaCent": -5000000,
+          "code": "FELDKAUF",
+          "info": "BERLIN-3"
+        },
+        {
+          "id": "B1-7-7",
+          "month": 1,
+          "deltaCent": -240000,
+          "code": "GUTACHTEN",
+          "info": "NORD-1"
+        },
+        {
+          "id": "B1-7-8",
+          "month": 1,
+          "deltaCent": 3465000,
+          "code": "MARKTERLÖS",
+          "info": "BRANDENBURG-2"
+        },
+        {
+          "id": "B1-7-9",
+          "month": 1,
+          "deltaCent": -90000,
+          "code": "ZAHLUNG_PERSONAL",
+          "info": "M1-G1-LOHN"
+        },
+        {
+          "id": "B1-7-10",
+          "month": 1,
+          "deltaCent": -50000,
+          "code": "ZAHLUNG_WARTUNG",
+          "info": "M1-G1-WARTUNG"
+        }
+      ],
+      "stats": {
+        "contractsDone": 0,
+        "contractsOnTime": 0,
+        "contractsProfitable": 0,
+        "contractsProfitCent": 0,
+        "marketStreak": 0,
+        "awards": [],
+        "rescues": 0
+      },
+      "loanUsed": false,
+      "monthRevenueCent": 0,
+      "monthSoldMilli": 0,
+      "monthProducedMilli": 0,
+      "monthContractMilli": 0
+    }
+  ],
+  "claims": {
+    "BERLIN-1": {
+      "id": "BERLIN-1",
+      "region": "BERLIN",
+      "name": "Berlin-Mitte (Satirezone) / Claim 1",
+      "owner": "H1",
+      "surveyedBy": [
+        "H1"
+      ],
+      "drilled": true,
+      "reserveMilli": 400000,
+      "inventoryMilli": 0,
+      "preparedMilli": 0,
+      "order": false,
+      "tankLevel": 1,
+      "tankMilli": 250000,
+      "pipeline": false,
+      "burning": false,
+      "damaged": false,
+      "securityUntil": 0
+    },
+    "BERLIN-2": {
+      "id": "BERLIN-2",
+      "region": "BERLIN",
+      "name": "Berlin-Mitte (Satirezone) / Claim 2",
+      "owner": "A1",
+      "surveyedBy": [
+        "A1"
+      ],
+      "drilled": false,
+      "reserveMilli": 555000,
+      "inventoryMilli": 0,
+      "preparedMilli": 0,
+      "order": false,
+      "tankLevel": 1,
+      "tankMilli": 250000,
+      "pipeline": false,
+      "burning": false,
+      "damaged": false,
+      "securityUntil": 0
+    },
+    "BERLIN-3": {
+      "id": "BERLIN-3",
+      "region": "BERLIN",
+      "name": "Berlin-Mitte (Satirezone) / Claim 3",
+      "owner": "A2",
+      "surveyedBy": [
+        "A2"
+      ],
+      "drilled": false,
+      "reserveMilli": 610000,
+      "inventoryMilli": 0,
+      "preparedMilli": 0,
+      "order": false,
+      "tankLevel": 1,
+      "tankMilli": 250000,
+      "pipeline": false,
+      "burning": false,
+      "damaged": false,
+      "securityUntil": 0
+    },
+    "BRANDENBURG-1": {
+      "id": "BRANDENBURG-1",
+      "region": "BRANDENBURG",
+      "name": "Brandenburg-Nord (fiktiv) / Claim 1",
+      "owner": "A1",
+      "surveyedBy": [
+        "A1"
+      ],
+      "drilled": true,
+      "reserveMilli": 500000,
+      "inventoryMilli": 45000,
+      "preparedMilli": 0,
+      "order": false,
+      "tankLevel": 1,
+      "tankMilli": 250000,
+      "pipeline": false,
+      "burning": false,
+      "damaged": false,
+      "securityUntil": 0
+    },
+    "BRANDENBURG-2": {
+      "id": "BRANDENBURG-2",
+      "region": "BRANDENBURG",
+      "name": "Brandenburg-Nord (fiktiv) / Claim 2",
+      "owner": "A2",
+      "surveyedBy": [
+        "A2"
+      ],
+      "drilled": true,
+      "reserveMilli": 555000,
+      "inventoryMilli": 45000,
+      "preparedMilli": 0,
+      "order": false,
+      "tankLevel": 1,
+      "tankMilli": 250000,
+      "pipeline": false,
+      "burning": false,
+      "damaged": false,
+      "securityUntil": 0
+    },
+    "BRANDENBURG-3": {
+      "id": "BRANDENBURG-3",
+      "region": "BRANDENBURG",
+      "name": "Brandenburg-Nord (fiktiv) / Claim 3",
+      "owner": null,
+      "surveyedBy": [],
+      "drilled": false,
+      "reserveMilli": 710000,
+      "inventoryMilli": 0,
+      "preparedMilli": 0,
+      "order": false,
+      "tankLevel": 1,
+      "tankMilli": 250000,
+      "pipeline": false,
+      "burning": false,
+      "damaged": false,
+      "securityUntil": 0
+    },
+    "NORD-1": {
+      "id": "NORD-1",
+      "region": "NORD",
+      "name": "Norddeutsche Küste (fiktiv) / Claim 1",
+      "owner": null,
+      "surveyedBy": [
+        "A1",
+        "A2"
+      ],
+      "drilled": false,
+      "reserveMilli": 420000,
+      "inventoryMilli": 0,
+      "preparedMilli": 0,
+      "order": false,
+      "tankLevel": 1,
+      "tankMilli": 250000,
+      "pipeline": false,
+      "burning": false,
+      "damaged": false,
+      "securityUntil": 0
+    },
+    "NORD-2": {
+      "id": "NORD-2",
+      "region": "NORD",
+      "name": "Norddeutsche Küste (fiktiv) / Claim 2",
+      "owner": null,
+      "surveyedBy": [],
+      "drilled": false,
+      "reserveMilli": 475000,
+      "inventoryMilli": 0,
+      "preparedMilli": 0,
+      "order": false,
+      "tankLevel": 1,
+      "tankMilli": 250000,
+      "pipeline": false,
+      "burning": false,
+      "damaged": false,
+      "securityUntil": 0
+    },
+    "NORD-3": {
+      "id": "NORD-3",
+      "region": "NORD",
+      "name": "Norddeutsche Küste (fiktiv) / Claim 3",
+      "owner": null,
+      "surveyedBy": [],
+      "drilled": false,
+      "reserveMilli": 530000,
+      "inventoryMilli": 0,
+      "preparedMilli": 0,
+      "order": false,
+      "tankLevel": 1,
+      "tankMilli": 250000,
+      "pipeline": false,
+      "burning": false,
+      "damaged": false,
+      "securityUntil": 0
+    }
+  },
+  "prices": {
+    "BERLIN": 70700,
+    "BRANDENBURG": 65520,
+    "NORD": 75660
+  },
+  "demand": {
+    "BERLIN": 114000,
+    "BRANDENBURG": 104500,
+    "NORD": 76000
+  },
+  "processedIds": [
+    "neo-1-1792505595960",
+    "neo-2-1792505596073",
+    "neo-3-1792505596175",
+    "neo-4-1792505596280",
+    "neo-5-1792505597400",
+    "neo-6-1792505597543",
+    "neo-7-1792505598302",
+    "neo-8-1792505598914"
+  ],
+  "sequence": 8,
+  "reports": [
+    {
+      "month": 1,
+      "allocations": {
+        "BERLIN": {
+          "BERLIN-1": 100000,
+          "BERLIN-2": 0,
+          "BERLIN-3": 0
+        },
+        "BRANDENBURG": {
+          "BRANDENBURG-1": 55000,
+          "BRANDENBURG-2": 55000,
+          "BRANDENBURG-3": 0
+        },
+        "NORD": {
+          "NORD-1": 0,
+          "NORD-2": 0,
+          "NORD-3": 0
+        }
+      },
+      "regions": {
+        "BERLIN": {
+          "priceCent": 70000,
+          "demandMilli": 120000,
+          "soldMilli": 100000
+        },
+        "BRANDENBURG": {
+          "priceCent": 63000,
+          "demandMilli": 110000,
+          "soldMilli": 110000
+        },
+        "NORD": {
+          "priceCent": 78000,
+          "demandMilli": 80000,
+          "soldMilli": 0
+        }
+      },
+      "companies": [
+        {
+          "id": "H1",
+          "name": "PPPOPPI",
+          "soldMilli": 100000,
+          "revenueCent": 7000000,
+          "marketShareBps": 4762,
+          "arrearsCent": 0,
+          "cashCent": 14510000,
+          "debtCent": 0
+        },
+        {
+          "id": "A1",
+          "name": "Milchmädchen Pete GmbH",
+          "soldMilli": 55000,
+          "revenueCent": 3465000,
+          "marketShareBps": 2619,
+          "arrearsCent": 0,
+          "cashCent": 7335000,
+          "debtCent": 0
+        },
+        {
+          "id": "A2",
+          "name": "Edna Ruppen & Co.",
+          "soldMilli": 55000,
+          "revenueCent": 3465000,
+          "marketShareBps": 2619,
+          "arrearsCent": 0,
+          "cashCent": 7335000,
+          "debtCent": 0
+        }
+      ]
+    }
+  ],
+  "events": [
+    {
+      "month": 1,
+      "type": "KI_ZUG",
+      "company": "A1",
+      "days": 19
+    },
+    {
+      "month": 1,
+      "type": "KI_ZUG",
+      "company": "A2",
+      "days": 19
+    },
+    {
+      "month": 1,
+      "type": "MONATSABSCHLUSS",
+      "soldMilli": 210000
+    }
+  ],
+  "rescueIds": [],
+  "lastReport": {
+    "month": 1,
+    "allocations": {
+      "BERLIN": {
+        "BERLIN-1": 100000,
+        "BERLIN-2": 0,
+        "BERLIN-3": 0
+      },
+      "BRANDENBURG": {
+        "BRANDENBURG-1": 55000,
+        "BRANDENBURG-2": 55000,
+        "BRANDENBURG-3": 0
+      },
+      "NORD": {
+        "NORD-1": 0,
+        "NORD-2": 0,
+        "NORD-3": 0
+      }
+    },
+    "regions": {
+      "BERLIN": {
+        "priceCent": 70000,
+        "demandMilli": 120000,
+        "soldMilli": 100000
+      },
+      "BRANDENBURG": {
+        "priceCent": 63000,
+        "demandMilli": 110000,
+        "soldMilli": 110000
+      },
+      "NORD": {
+        "priceCent": 78000,
+        "demandMilli": 80000,
+        "soldMilli": 0
+      }
+    },
+    "companies": [
+      {
+        "id": "H1",
+        "name": "PPPOPPI",
+        "soldMilli": 100000,
+        "revenueCent": 7000000,
+        "marketShareBps": 4762,
+        "arrearsCent": 0,
+        "cashCent": 14510000,
+        "debtCent": 0
+      },
+      {
+        "id": "A1",
+        "name": "Milchmädchen Pete GmbH",
+        "soldMilli": 55000,
+        "revenueCent": 3465000,
+        "marketShareBps": 2619,
+        "arrearsCent": 0,
+        "cashCent": 7335000,
+        "debtCent": 0
+      },
+      {
+        "id": "A2",
+        "name": "Edna Ruppen & Co.",
+        "soldMilli": 55000,
+        "revenueCent": 3465000,
+        "marketShareBps": 2619,
+        "arrearsCent": 0,
+        "cashCent": 7335000,
+        "debtCent": 0
+      }
+    ]
+  },
+  "minigame": null,
+  "lineage": null
+}

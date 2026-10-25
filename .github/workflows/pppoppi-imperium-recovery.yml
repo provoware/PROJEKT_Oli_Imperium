@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - 'recovery/pppoppi-imperium-v194-*'
+      - 'restore/v194-verified-sources-*'
       - 'agent/prerelease-recovery-*'
     paths:
       - 'project-c/pppoppi-imperium/**'

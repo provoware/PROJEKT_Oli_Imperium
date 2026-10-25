@@ -3,8 +3,8 @@
   "project": "PPPOPPI IMPERIUM",
   "version_scope": "Projekt C: V1.9.4-Prüfschicht auf V1.9.3-Spielkern",
   "observed_pr14_head": "a7b67275d10ad682585816fd46c7ef83cc7d511b",
-  "source_status": "missing",
-  "updated_on": "2026-10-23",
+  "source_status": "imported",
+  "updated_on": "2026-10-25",
   "gates": [
     {
       "id": "QUE-01",
@@ -14,8 +14,8 @@
       "stage": "technical",
       "status": "blocked",
       "evidence": [],
-      "blocker": "Vollständige Quellimporte fehlen auf GitHub.",
-      "next": "110 Originaldateien mit festem Inventarfingerabdruck importieren; weitere Ressourcen getrennt auf Rechte und Spielnotwendigkeit prüfen"
+      "blocker": "110 Quelldateien importiert; Ressourcen- und Rechtepruefung sowie unabhaengige GitHub-CI stehen aus.",
+      "next": "Quellimport auf finalem GitHub-HEAD nachweisen und weitere Ressourcen getrennt auf Rechte und Spielnotwendigkeit pruefen"
     },
     {
       "id": "QUE-02",
@@ -25,7 +25,7 @@
       "stage": "technical",
       "status": "blocked",
       "evidence": [],
-      "blocker": "Vollständige Quellimporte fehlen auf GitHub.",
+      "blocker": "Lokal 110/110 verifiziert; erneuter Hash-Nachweis auf finalem GitHub-HEAD steht aus.",
       "next": "Prüfsummen auf GitHub gegenprüfen"
     },
     {
@@ -36,7 +36,7 @@
       "stage": "technical",
       "status": "blocked",
       "evidence": [],
-      "blocker": "Vollständige Quellimporte fehlen auf GitHub.",
+      "blocker": "Quellen vorhanden; V1.9.3-/V1.9.4-Trennung ist noch nicht unabhaengig abgenommen.",
       "next": "Versionen und Dateilisten abgleichen"
     },
     {
@@ -57,8 +57,8 @@
       "stage": "technical",
       "status": "blocked",
       "evidence": [],
-      "blocker": "Spielquellen fehlen noch auf GitHub; keine unabhängige Spielprüfung möglich.",
-      "next": "Spielkern importieren und Aktionsmatrix ausführen"
+      "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
+      "next": "Aktionsmatrix auf dem importierten Spielkern ausfuehren"
     },
     {
       "id": "LOG-02",
@@ -68,7 +68,7 @@
       "stage": "technical",
       "status": "blocked",
       "evidence": [],
-      "blocker": "Spielquellen fehlen noch auf GitHub; keine unabhängige Spielprüfung möglich.",
+      "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
       "next": "Produktionsablauf testen"
     },
     {
@@ -79,7 +79,7 @@
       "stage": "technical",
       "status": "blocked",
       "evidence": [],
-      "blocker": "Spielquellen fehlen noch auf GitHub; keine unabhängige Spielprüfung möglich.",
+      "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
       "next": "Vertrags- und Lieferketten prüfen"
     },
     {
@@ -90,7 +90,7 @@
       "stage": "technical",
       "status": "blocked",
       "evidence": [],
-      "blocker": "Spielquellen fehlen noch auf GitHub; keine unabhängige Spielprüfung möglich.",
+      "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
       "next": "Jede Sonderaktion testen"
     },
     {
@@ -101,7 +101,7 @@
       "stage": "technical",
       "status": "blocked",
       "evidence": [],
-      "blocker": "Spielquellen fehlen noch auf GitHub; keine unabhängige Spielprüfung möglich.",
+      "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
       "next": "Zeitgrenzen simulieren"
     },
     {
@@ -112,7 +112,7 @@
       "stage": "technical",
       "status": "blocked",
       "evidence": [],
-      "blocker": "Spielquellen fehlen noch auf GitHub; keine unabhängige Spielprüfung möglich.",
+      "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
       "next": "Gesamtdurchlauf protokollieren"
     },
     {
@@ -123,7 +123,7 @@
       "stage": "technical",
       "status": "blocked",
       "evidence": [],
-      "blocker": "Spielquellen fehlen noch auf GitHub; keine unabhängige Spielprüfung möglich.",
+      "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
       "next": "Verlustpfade testen"
     },
     {
@@ -134,7 +134,7 @@
       "stage": "technical",
       "status": "blocked",
       "evidence": [],
-      "blocker": "Spielquellen fehlen noch auf GitHub; keine unabhängige Spielprüfung möglich.",
+      "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
       "next": "Fortsetzung nach Neustart prüfen"
     },
     {
@@ -145,7 +145,7 @@
       "stage": "technical",
       "status": "blocked",
       "evidence": [],
-      "blocker": "Spielquellen fehlen noch auf GitHub; keine unabhängige Spielprüfung möglich.",
+      "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
       "next": "Markt-Fachtests auf GitHub wiederholen"
     },
     {
@@ -156,7 +156,7 @@
       "stage": "technical",
       "status": "blocked",
       "evidence": [],
-      "blocker": "Spielquellen fehlen noch auf GitHub; keine unabhängige Spielprüfung möglich.",
+      "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
       "next": "Drei Fachprüfprogramme integrieren"
     },
     {
@@ -167,7 +167,7 @@
       "stage": "technical",
       "status": "blocked",
       "evidence": [],
-      "blocker": "Spielquellen fehlen noch auf GitHub; keine unabhängige Spielprüfung möglich.",
+      "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
       "next": "Mengen- und Lagergrenzen prüfen"
     },
     {
@@ -178,7 +178,7 @@
       "stage": "technical",
       "status": "blocked",
       "evidence": [],
-      "blocker": "Spielquellen fehlen noch auf GitHub; keine unabhängige Spielprüfung möglich.",
+      "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
       "next": "Extremwerte und Rundung testen"
     },
     {
@@ -189,7 +189,7 @@
       "stage": "technical",
       "status": "blocked",
       "evidence": [],
-      "blocker": "Spielquellen fehlen noch auf GitHub; keine unabhängige Spielprüfung möglich.",
+      "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
       "next": "Strategieprüfung auf Originalquellen wiederholen"
     },
     {
@@ -200,7 +200,7 @@
       "stage": "technical",
       "status": "blocked",
       "evidence": [],
-      "blocker": "Spielquellen fehlen noch auf GitHub; keine unabhängige Spielprüfung möglich.",
+      "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
       "next": "Balance-Szenarien reproduzieren"
     },
     {
@@ -211,7 +211,7 @@
       "stage": "technical",
       "status": "blocked",
       "evidence": [],
-      "blocker": "Spielquellen fehlen noch auf GitHub; keine unabhängige Spielprüfung möglich.",
+      "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
       "next": "Stresstests reproduzieren"
     },
     {
@@ -222,7 +222,7 @@
       "stage": "technical",
       "status": "blocked",
       "evidence": [],
-      "blocker": "Spielquellen fehlen noch auf GitHub; keine unabhängige Spielprüfung möglich.",
+      "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
       "next": "Speicher-Rundlauf testen"
     },
     {
@@ -233,7 +233,7 @@
       "stage": "technical",
       "status": "blocked",
       "evidence": [],
-      "blocker": "Spielquellen fehlen noch auf GitHub; keine unabhängige Spielprüfung möglich.",
+      "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
       "next": "Versionsmigration testen"
     },
     {
@@ -244,7 +244,7 @@
       "stage": "technical",
       "status": "blocked",
       "evidence": [],
-      "blocker": "Spielquellen fehlen noch auf GitHub; keine unabhängige Spielprüfung möglich.",
+      "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
       "next": "Beschädigte Speicherstände testen"
     },
     {
@@ -255,7 +255,7 @@
       "stage": "technical",
       "status": "blocked",
       "evidence": [],
-      "blocker": "Spielquellen fehlen noch auf GitHub; keine unabhängige Spielprüfung möglich.",
+      "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
       "next": "Traversal- und Pfadtests ausführen"
     },
     {
@@ -266,7 +266,7 @@
       "stage": "technical",
       "status": "blocked",
       "evidence": [],
-      "blocker": "Spielquellen fehlen noch auf GitHub; keine unabhängige Spielprüfung möglich.",
+      "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
       "next": "Ungültige Eingaben prüfen"
     },
     {
@@ -277,7 +277,7 @@
       "stage": "technical",
       "status": "blocked",
       "evidence": [],
-      "blocker": "Spielquellen fehlen noch auf GitHub; keine unabhängige Spielprüfung möglich.",
+      "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
       "next": "Netzwerkfreiheit nachweisen"
     },
     {
@@ -288,7 +288,7 @@
       "stage": "technical",
       "status": "blocked",
       "evidence": [],
-      "blocker": "Spielquellen fehlen noch auf GitHub; keine unabhängige Spielprüfung möglich.",
+      "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
       "next": "Fehlerfälle simulieren"
     },
     {
@@ -299,7 +299,7 @@
       "stage": "technical",
       "status": "blocked",
       "evidence": [],
-      "blocker": "Spielquellen fehlen noch auf GitHub; keine unabhängige Spielprüfung möglich.",
+      "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
       "next": "Grenzfallmatrix ausführen"
     },
     {
@@ -310,7 +310,7 @@
       "stage": "technical",
       "status": "blocked",
       "evidence": [],
-      "blocker": "Spielquellen fehlen noch auf GitHub; keine unabhängige Spielprüfung möglich.",
+      "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
       "next": "Wiederholungs- und Abbruchtests"
     },
     {
@@ -321,7 +321,7 @@
       "stage": "technical",
       "status": "blocked",
       "evidence": [],
-      "blocker": "Spielquellen fehlen noch auf GitHub; keine unabhängige Spielprüfung möglich.",
+      "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
       "next": "Laufzeitprofil erstellen"
     },
     {
@@ -332,7 +332,7 @@
       "stage": "technical",
       "status": "blocked",
       "evidence": [],
-      "blocker": "Spielquellen fehlen noch auf GitHub; keine unabhängige Spielprüfung möglich.",
+      "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
       "next": "Langzeit-Ressourcenmessung"
     },
     {
@@ -343,7 +343,7 @@
       "stage": "technical",
       "status": "blocked",
       "evidence": [],
-      "blocker": "Spielquellen fehlen noch auf GitHub; keine unabhängige Spielprüfung möglich.",
+      "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
       "next": "Bildschirm-Inventar prüfen"
     },
     {
@@ -354,7 +354,7 @@
       "stage": "technical",
       "status": "blocked",
       "evidence": [],
-      "blocker": "Spielquellen fehlen noch auf GitHub; keine unabhängige Spielprüfung möglich.",
+      "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
       "next": "Automatisierte Bildschirmfotos prüfen"
     },
     {
@@ -365,7 +365,7 @@
       "stage": "technical",
       "status": "blocked",
       "evidence": [],
-      "blocker": "Spielquellen fehlen noch auf GitHub; keine unabhängige Spielprüfung möglich.",
+      "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
       "next": "800x600-Ansichten prüfen"
     },
     {
@@ -376,7 +376,7 @@
       "stage": "technical",
       "status": "blocked",
       "evidence": [],
-      "blocker": "Spielquellen fehlen noch auf GitHub; keine unabhängige Spielprüfung möglich.",
+      "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
       "next": "Bedienpfade prüfen"
     },
     {
@@ -387,7 +387,7 @@
       "stage": "technical",
       "status": "blocked",
       "evidence": [],
-      "blocker": "Spielquellen fehlen noch auf GitHub; keine unabhängige Spielprüfung möglich.",
+      "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
       "next": "Tastaturprobe durchführen"
     },
     {
@@ -398,7 +398,7 @@
       "stage": "technical",
       "status": "blocked",
       "evidence": [],
-      "blocker": "Spielquellen fehlen noch auf GitHub; keine unabhängige Spielprüfung möglich.",
+      "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
       "next": "Skalierungsansichten prüfen"
     },
     {
@@ -409,7 +409,7 @@
       "stage": "technical",
       "status": "blocked",
       "evidence": [],
-      "blocker": "Spielquellen fehlen noch auf GitHub; keine unabhängige Spielprüfung möglich.",
+      "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
       "next": "Fokusfolge prüfen"
     },
     {
@@ -420,7 +420,7 @@
       "stage": "technical",
       "status": "blocked",
       "evidence": [],
-      "blocker": "Spielquellen fehlen noch auf GitHub; keine unabhängige Spielprüfung möglich.",
+      "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
       "next": "Beschriftungsprüfung"
     },
     {
@@ -431,7 +431,7 @@
       "stage": "technical",
       "status": "blocked",
       "evidence": [],
-      "blocker": "Spielquellen fehlen noch auf GitHub; keine unabhängige Spielprüfung möglich.",
+      "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
       "next": "Offline-Startprobe"
     },
     {
@@ -442,7 +442,7 @@
       "stage": "technical",
       "status": "blocked",
       "evidence": [],
-      "blocker": "Spielquellen fehlen noch auf GitHub; keine unabhängige Spielprüfung möglich.",
+      "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
       "next": "Installationsnegativtest"
     },
     {
@@ -453,7 +453,7 @@
       "stage": "technical",
       "status": "blocked",
       "evidence": [],
-      "blocker": "Spielquellen fehlen noch auf GitHub; keine unabhängige Spielprüfung möglich.",
+      "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
       "next": "Neustartprobe"
     },
     {
@@ -464,7 +464,7 @@
       "stage": "technical",
       "status": "blocked",
       "evidence": [],
-      "blocker": "Spielquellen fehlen noch auf GitHub; keine unabhängige Spielprüfung möglich.",
+      "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
       "next": "Alle Fachtests in CI ausführen"
     },
     {
@@ -475,7 +475,7 @@
       "stage": "technical",
       "status": "blocked",
       "evidence": [],
-      "blocker": "Spielquellen fehlen noch auf GitHub; keine unabhängige Spielprüfung möglich.",
+      "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
       "next": "Zwei Langzeittests in CI ausführen"
     },
     {
@@ -486,7 +486,7 @@
       "stage": "technical",
       "status": "blocked",
       "evidence": [],
-      "blocker": "Spielquellen fehlen noch auf GitHub; keine unabhängige Spielprüfung möglich.",
+      "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
       "next": "Alte und neue Browserfälle abgleichen"
     },
     {
@@ -497,7 +497,7 @@
       "stage": "technical",
       "status": "blocked",
       "evidence": [],
-      "blocker": "Spielquellen fehlen noch auf GitHub; keine unabhängige Spielprüfung möglich.",
+      "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
       "next": "Alle Workflows auf demselben Commit prüfen"
     },
     {
@@ -538,7 +538,7 @@
       "stage": "technical",
       "status": "blocked",
       "evidence": [],
-      "blocker": "Spielquellen fehlen noch auf GitHub; keine unabhängige Spielprüfung möglich.",
+      "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
       "next": "Erst nach vollständiger Technikprüfung einfrieren"
     },
     {

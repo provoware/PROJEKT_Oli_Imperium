@@ -1,0 +1,37 @@
+{
+  "passed": 20,
+  "checks": [
+    "Büro im echten Chromium gerendert",
+    "Transportmodul geladen",
+    "Partie gestartet",
+    "Grafische Transportleitstelle erreichbar",
+    "Logistik optional aktiviert",
+    "Drei baubare Strecken sichtbar",
+    "Rohöl-, Umschlag- und Marktleitung gebaut",
+    "Rohöl tatsächlich versendet",
+    "Vertraulicher Mehrspielerwechsel sichtbar",
+    "Monat korrekt abgeschlossen",
+    "Rohöl im Folgemonat angekommen",
+    "Anlieferung verarbeitet, Rohölpuffer entleert",
+    "Fertigware versandt",
+    "Unterwegsware im Export enthalten",
+    "Laufender Transport wird korrekt importiert",
+    "Fertigware im regionalen Marktlager angekommen",
+    "Marktauftrag richtig vorgemerkt",
+    "Marktverkauf korrekt im Abschluss",
+    "Keine JavaScript-Seitenfehler",
+    "Keine externen Netzwerkanfragen"
+  ],
+  "browser_errors": [],
+  "external_requests": [],
+  "screenshots": {
+    "02_Leitstelle_ohne_Netz.png": "0814372fb8bd69e47a7d8075160390cdf8983c407cd855153099353db59e50e6",
+    "06_Fertigware_unterwegs.png": "3b6c4c245bd44c0b647858979cb8f4853933985f902a35a4b7fafca9c8ccf365",
+    "07_Fertigware_am_Markt.png": "7c9a23fd47a5e45b98aa28d36b70af722cae8fa4cb50aa0e0faa395cce11db08",
+    "08_Marktauftrag.png": "f3a9fdc7f38ba302175e2876b954f8ec8f9a7df8bbf9b304b01a8d6d20fd654a",
+    "04_Rohoel_unterwegs.png": "e2660205e44f3f3065343f7db211b431d11adce54d2b1afeb19365a140f6658f",
+    "03_Transportnetz_gebaut.png": "eaa4cfa3a8a59eb6ec87da103fce41f870a582a5820746a640179e9bb7fe86cb",
+    "05_Rohoel_angekommen.png": "1f68c37b3867fb5045f6d850c27e780892bc45509686d7aa299173129e6ab649",
+    "01_Buero_V17.png": "9dfa60cfed70f18f186ea038862bb38ee6d0e1a3e6d994602bd87b00e4acddf8"
+  }
+}

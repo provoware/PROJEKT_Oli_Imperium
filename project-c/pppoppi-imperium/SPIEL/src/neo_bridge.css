@@ -1,0 +1,84 @@
+/* Neo-Retro UI integration. All economic data come from OliV082. */
+.dlg { width:min(1030px,96vw); max-height:91dvh; }
+.dcontent .econ-header{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;border:1px solid #74603c;background:#142b30;border-radius:12px;padding:10px 14px;margin-bottom:14px}
+.dcontent .econ-header strong{color:#f4da9a}
+.dcontent .econ-header .number{font-variant-numeric:tabular-nums}
+.dcontent .econ-topline{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:10px 0 15px}
+.dcontent .econ-pill{background:#233c3b;border:1px solid #6e857362;border-radius:9px;padding:10px;min-width:0}
+.dcontent .econ-pill small{display:block;color:#b7cabe;font-size:11px}
+.dcontent .econ-pill b{color:#f7ddae;font-size:17px;overflow-wrap:anywhere}
+.dcontent .econ-actions{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
+.dcontent button[data-econ],.dcontent button[data-ui],.dcontent button[data-go],.dcontent button[data-claim]{background:#1e4144;border:1px solid #d3b37c;color:#f8ead2;border-radius:8px;padding:10px 14px;min-height:42px;font-weight:650}
+.dcontent button[data-go]{border-color:#739486;background:#213b39}
+.dcontent button:hover:not([disabled]){filter:brightness(1.18)}
+.dcontent button[disabled]{opacity:.43;cursor:not-allowed}
+.dcontent .econ-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:13px 0}
+.dcontent .econ-card{border:1px solid #6d827a77;border-radius:11px;padding:12px;background:#1a3337;min-width:0}
+.dcontent .econ-card h3{margin:3px 0 6px;font-size:17px;color:#f1d8a5}
+.dcontent .econ-card p{margin:5px 0;color:#d7e0d3;font-size:13px;line-height:1.5}
+.dcontent .econ-card .econ-actions{margin-bottom:0}
+.dcontent .econ-tip{border-left:3px solid #d3a660;padding:8px 13px;background:#29404380;line-height:1.5;margin:13px 0}
+.dcontent .econ-visual{width:100%;max-height:330px;display:block;aspect-ratio:16/7;object-fit:cover;border:1px solid #b59465;border-radius:13px;margin:10px 0;background:#294047}
+.dcontent .econ-visual .pump-head{transform-origin:600px 160px;animation:pump 3.2s ease-in-out infinite alternate}
+.dcontent .econ-visual .smoke{animation:smoke 6s ease-in-out infinite alternate}
+.dcontent .econ-visual .pipeline-flow{stroke-dasharray:8 12;animation:flow 7s linear infinite}
+@keyframes pump{from{transform:rotate(-11deg)}to{transform:rotate(8deg)}}
+@keyframes smoke{from{transform:translateY(2px);opacity:.3}to{transform:translateY(-12px);opacity:.9}}
+@keyframes flow{to{stroke-dashoffset:-240}}
+.dcontent .econ-visual text{font-family:system-ui,sans-serif}
+.dcontent .econ-chip{display:inline-block;border:1px solid #bfa27970;color:#d7e1d5;border-radius:999px;font-size:12px;padding:3px 9px;margin:2px}
+.dcontent .econ-select{background:#263b3d;color:#fff2da;font-size:16px;padding:10px;border:1px solid #ad9970;border-radius:8px;width:100%}
+.dcontent .econ-table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+.dcontent .econ-table th,.dcontent .econ-table td{border-bottom:1px solid #80948655;padding:8px;text-align:left;font-size:13px}
+.dcontent .econ-table th{color:#f3d6a2}
+.econ-ambient{position:absolute;left:38%;top:38%;width:18px;height:18px;border-radius:50%;background:#ffd690;box-shadow:0 0 25px #ffc4768c;opacity:.2;pointer-events:none;animation:ambient 7s ease-in-out infinite alternate}
+@keyframes ambient{to{opacity:.62;transform:translate(8px,-4px)}}
+.econ-topbar{position:fixed;bottom:0;right:0;background:#102629eb;border-radius:12px 0 0 0;border:1px solid #b8955d77;padding:7px 14px;z-index:3;font-size:12px;color:#efdbb4;pointer-events:none}
+@media(max-width:740px){.dcontent .econ-grid{grid-template-columns:1fr}.dcontent .econ-topline{grid-template-columns:repeat(2,minmax(0,1fr))}.dcontent .econ-visual{aspect-ratio:4/3}.econ-topbar{display:none}}
+@media(prefers-reduced-motion:reduce){.econ-ambient,.dcontent .econ-visual .pump-head,.dcontent .econ-visual .smoke,.dcontent .econ-visual .pipeline-flow{animation:none!important}}
+
+#stage.neo-daylight{filter:brightness(1.12) saturate(1.06)}
+.hotspot[data-fun="phone"].neo-ringing:not(:focus-visible){animation:ringlight 1.7s ease-in-out infinite alternate}
+@keyframes ringlight{from{filter:drop-shadow(0 0 0 #e8b76200)}to{filter:drop-shadow(0 0 7px #e8b762aa)}}
+@media(prefers-reduced-motion:reduce){.hotspot[data-fun="phone"].neo-ringing{animation:none}}
+
+.econ-character{display:grid;justify-items:center;gap:2px;border:1px solid #c2a97878;background:linear-gradient(130deg,#263a35,#51432f);border-radius:12px;padding:12px;text-align:center}.econ-character span{width:62px;height:62px;border-radius:50%;display:grid;place-items:center;font-size:32px;border:2px solid #ccae70;background:#1b343a;box-shadow:inset 0 -6px 10px #0005}.econ-character b{color:#f7d79e}.econ-character small{color:#afc7c0}
+@media(max-width:620px){
+ html,body,.shell{max-width:100%;overflow-x:hidden}
+ .bottom .toolbar{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:100%;gap:7px}
+ .bottom .toolbar button{white-space:normal;min-width:0;min-height:42px;overflow-wrap:anywhere}
+ .dcontent .econ-header{min-width:0}
+ .dcontent .econ-header span{overflow-wrap:anywhere}
+}
+
+/* PPPOPPI IMPERIUM V1.2: scenographic overlays, low-cost motion, accessible shortcuts */
+.dcontent .econ-visual{max-height:410px;aspect-ratio:960/420;box-shadow:0 15px 37px #010d12a0,inset 0 1px #d4b77a;}
+.dcontent .neo-spotbar{display:flex;flex-wrap:wrap;gap:7px;align-items:center;padding:8px 6px;margin-top:-6px;background:linear-gradient(110deg,#102b32,#25403d);border:1px solid #ab926370;border-radius:0 0 11px 11px;}
+.dcontent .neo-spotbar button{padding:9px 12px;font-size:13px;border-radius:6px;flex:1 0 auto;max-width:190px;min-height:39px;background:#25413e;color:#f2e1bb;border:1px solid #9b8d6a;}
+.dcontent .neo-spotbar button:focus-visible,.dcontent .neo-cast button:focus-visible{outline:3px solid #ffe099;outline-offset:2px}
+.dcontent .neo-cast{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:18px 0;}
+.dcontent .neo-person{background:linear-gradient(150deg,#25463f,#14272c);border:1px solid #a58b60;border-radius:13px;padding:12px;text-align:center;min-width:0}
+.dcontent .neo-avatar{max-width:112px;margin:0 auto 8px;filter:drop-shadow(0 5px 9px #001b);}
+.dcontent .neo-avatar svg{width:100%;height:auto;display:block}
+.dcontent .neo-person h3{margin:3px 0;color:#f6d99d;font-size:18px}
+.dcontent .neo-person p{font-size:12px;min-height:32px;color:#cbd4cb}
+.dcontent .neo-person button{background:#325451;color:#fce4b7;border:1px solid #cbb37d;border-radius:7px;min-height:42px;width:100%;cursor:pointer}
+.dcontent .neo-dialogue{padding:18px;min-height:70px;background:#152e34;border-left:4px solid #dbb778;border-radius:6px;font-size:17px;line-height:1.55;color:#f0e0c2}
+.dcontent .neo-steam{animation:neoSteam 4s ease-in-out infinite alternate}
+.dcontent .neo-pump-arm{transform-origin:190px 135px;animation:neoWobble 2.8s ease-in-out infinite alternate}
+.dcontent .neo-truck{animation:neoIdle 5s ease-in-out infinite alternate}
+.dcontent .neo-birds{animation:neoBird 11s linear infinite alternate}
+.dcontent .neo-flame{animation:neoFlame .85s ease-in-out infinite alternate;transform-origin:460px 185px}
+@keyframes neoSteam{to{opacity:.08;transform:translateY(-24px)}}
+@keyframes neoWobble{to{transform:rotate(8deg)}}
+@keyframes neoIdle{to{transform:translateX(10px)}}
+@keyframes neoBird{to{transform:translateX(-45px)}}
+@keyframes neoFlame{to{transform:scale(1.04,.9)}}
+@media(max-width:720px){.dcontent .neo-cast{grid-template-columns:1fr}.dcontent .neo-person{display:grid;grid-template-columns:80px 1fr;gap:0 10px;text-align:left;align-items:center}.dcontent .neo-person .neo-avatar{grid-row:1/4;width:75px}.dcontent .neo-person button{max-width:180px}.dcontent .neo-spotbar button{max-width:none;flex:1 1 40%}}
+@media(prefers-reduced-motion:reduce){.dcontent .neo-steam,.dcontent .neo-pump-arm,.dcontent .neo-truck,.dcontent .neo-birds,.dcontent .neo-flame{animation:none!important}}
+.dcontent .neo-newsroom{display:grid;gap:9px;margin:15px 0;grid-template-columns:repeat(2,minmax(0,1fr))}
+.dcontent .neo-news{background:#1b3337;border:1px solid #ac936564;border-radius:10px;padding:12px;min-width:0}
+.dcontent .neo-news small{color:#e4bb7e;font-size:11px;letter-spacing:.09em}
+.dcontent .neo-news h3{color:#f4d69b;font-size:17px;margin:4px 0}
+.dcontent .neo-news p{color:#cad5c6;font-size:13px;overflow-wrap:anywhere}
+@media(max-width:720px){.dcontent .neo-newsroom{grid-template-columns:1fr}}

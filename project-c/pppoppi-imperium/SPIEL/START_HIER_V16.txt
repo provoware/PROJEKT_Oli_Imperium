@@ -1,0 +1,17 @@
+PPPOPPI IMPERIUM V1.6 – Spiel starten
+1. ZIP-Datei vollständig entpacken.
+2. Den Ordner SPIEL öffnen.
+3. index.html doppelt anklicken und mit Chromium/Firefox starten.
+4. Im Chefbüro eine neue Partie starten.
+5. Im Industriehof auf „Raffinerie & Vertriebsroute“ klicken.
+6. Bei einem erschlossenen eigenen Feld Rohöl fördern, dann Werk bauen, 10 Barrel verarbeiten, Route bauen und 9 Barrel Produkt verkaufen.
+7. Beim Vorstand die Firmenchronik ansehen.
+8. Unter Einsatzkoffer die Schwierigkeitsoption „Profi“ ausprobieren.
+
+Die Spielfassung funktioniert vollständig ohne Server und Cloud. Der direkte Dateistart auf Kubuntu wurde vom Entwickler nicht an einer realen Kubuntu-Sitzung überprüft; die automatische Browserprüfung verwendet eingebettete, identische lokale Dateien.
+
+Optional technische Prüfung (Node.js/Playwright werden nur für die Tests gebraucht, NICHT zum Spielen):
+  node test_profi_v16.cjs
+  python3 test_browser_v16.py
+
+Das C64-Original wird NICHT mitgeliefert. VICE und rechtmäßig bereitgestellte Diskettenabbilder fehlen für den Originalvergleich.

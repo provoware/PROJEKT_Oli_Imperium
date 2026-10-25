@@ -44,3 +44,9 @@ Die neue gemeinsame Prüfkette `.github/workflows/prerelease-project-c.yml` füh
 **Korrektur einer begrifflichen Inkonsistenz:** 187 Archiv-Einträge, davon 185 unter `SPIEL/`, sind nicht identisch mit den 110 freigegebenen Quell-/Testdateien. Die übrigen 77 Einträge werden nicht ungeprüft öffentlich übernommen. QUE-01/02 verlangen den geprüften 110-Dateien-Import; notwendige weitere Ressourcen und ihre Rechte müssen gesondert nachgewiesen werden. **0/52 Release-Pflichten PASS; 45 BLOCKED, 4 OPEN, 3 persönliche DEFERRED.**
 
 Der neue Integrationsnachweis steht in `prerelease/INTEGRATION_20261023.md`. Ein bestandener Schema- oder Regressionstest ist kein Beleg für Spielbarkeit. Browser, Langzeitpartien, Speicherung, 800×600, Skalierung, Tastatur, Performance, Offline-Start und Dokumentation bleiben offen. Persönliche Abnahme ausschließlich nach technischem Abschluss.
+
+## Nachtrag: Quellimport vom 25.10.2026
+
+Auf dem getrennten Zweig `restore/v194-verified-sources-20261025` wurden die **110 fest inventarisierten Quell-/Testdateien** aus dem SHA-256-geprüften V1.9.4-Originalarchiv nachgetragen. Der Prüfbericht steht unter [`../QUELLIMPORT_20261025.md`](../QUELLIMPORT_20261025.md). Die oben beschriebenen fehlenden Quelldateien sind damit für **diesen neuen Zweig** kein Hindernis mehr; die älteren Berichte bleiben historische Momentaufnahmen.
+
+Die Matrix kennzeichnet die Quellverfügbarkeit nun als `imported`, hält aber alle 52 Einzelpflichten bis zu unabhängig bewerteten Nachweisen unverändert offen bzw. gesperrt: **0 PASS, 45 BLOCKED, 4 OPEN, 3 DEFERRED**. Acht Fachprogramme wurden lokal ausgeführt; GitHub-CI auf dem endgültigen Commit, Ressourcenrechte, vollständige Partien und Browser-/Speicher-/Kubuntu-Abnahmen bleiben eigene Gates. Keine automatische Freigabe und kein Merge nach `main`.

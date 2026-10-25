@@ -1,0 +1,535 @@
+<!DOCTYPE html><html lang="de"><meta charset="utf-8"><style>
+@page {size:A4;margin:19mm 17mm 17mm 17mm;@top-left{content:"PROVOWARE  /  PPPOPPI-IMPERIUM";font-family:DejaVu Sans;font-size:8pt;color:#78869a;}@top-right{content:"EXPERTENPAKET V0.4–V0.6";font-family:DejaVu Sans;font-size:8pt;color:#78869a;}@bottom-center{content:"SEITE " counter(page) " / " counter(pages);font-family:DejaVu Sans;font-size:8pt;color:#697c8f;}}
+*{box-sizing:border-box}html,body{font-family:"DejaVu Sans",Arial,sans-serif;font-size:9pt;line-height:1.51;color:#213249;background:white}
+body{margin:0;}h1{font-size:20pt;line-height:1.3;color:#163350;border-bottom:3px solid #18a7af;padding-bottom:11px;margin:20px 0 10px}h2{font-size:12.3pt;color:#17426a;margin:17px 0 9px;padding:8px 0 5px;border-bottom:1px solid #d5e3eb;break-after:avoid}h3{font-size:10.4pt;color:#0f5c6d;break-after:avoid}p{margin:6px 0 9px;orphans:3;widows:3}strong{color:#143a5b}table{width:100%;border-collapse:collapse;margin:8px 0 13px;table-layout:auto;font-size:8.1pt;break-inside:auto;}thead{display:table-header-group;background:#173b56;color:white}th{color:white;font-weight:700;text-align:left}td,th{border-bottom:1px solid #cbd8e2;padding:6px 7px;vertical-align:top;overflow-wrap:anywhere;}th:first-child,td:first-child{min-width:24mm;}tbody tr:nth-child(even){background:#f0f6f8}tr{break-inside:avoid;}code{font-family:DejaVu Sans Mono,monospace;font-size:8.3pt;color:#126272;overflow-wrap:anywhere}blockquote{border-left:4px solid #1ba6ad;background:#eef9f9;padding:10px 14px;margin:15px 0;color:#183b55;break-inside:avoid}ul,ol{padding-left:20px}li{margin:4px 0}hr{border:0;border-top:1px solid #bbcddd}h1 + h2{font-size:12.5pt;color:#397286;border:0;padding:0;margin-top:2px}h1:first-child{margin-top:0}pre{white-space:pre-wrap;font-size:8pt;padding:9px;background:#f4f8fa}a{color:#126282}
+</style><body><h1>OLI IMPERIUM / PPPOPPI-IMPERIUM</h1>
+<h2>V0.4 Datenmodell · V0.5 Ablaufarchitektur · V0.6 spielbarer Offline-Pilot</h2>
+<p><strong>Stand: 20.10.2026 · Entwicklungsnachweis und wissenschaftlicher Entwurf</strong><br />
+<strong>Repository-Bezug:</strong> <code>provoware/PROJEKT_Oli_Imperium</code><br />
+<strong>Status:</strong> Lokal erstelltes eigenständiges Arbeitspaket. Nicht in GitHub übernommen. Keine C64-Originalabnahme.</p>
+<blockquote>
+<p><strong>Kernentscheidung:</strong> Die historischen C64-Befunde, unsere Berliner Spielfachregeln und die tatsächlich ausgeführte Pilotimplementierung sind drei getrennte Wahrheitsbereiche. Das Paket enthält die Entwurfsgrundlagen für das ganze Spiel, prüft die zentrale Verbindung von Regeln und Abläufen, implementiert aber ausdrücklich nur einen ersten vollständigen Spielmonat als vertikalen Prototyp.</p>
+</blockquote>
+<h2>01. Projektarchitektur und Geltungsbereich</h2>
+<p>Es gibt drei Produkte mit unterschiedlichem Erkenntnisziel: <strong>A</strong> erforscht die C64-Ausgabe, einschließlich Quellen- und Emulatornachweis; <strong>B</strong> übersetzt ausreichend belegte Regeln in eine wissenschaftlich begründete Architektur; <strong>C</strong> entwickelt ein eigenständiges, satirisches Wirtschaftsspiel mit PPPOPPI und Freunden. Die Berliner Spielregeln werden nicht rückwirkend als historische Originalregeln ausgegeben.</p>
+<table>
+<thead>
+<tr>
+  <th>Teil</th>
+  <th>Bedeutung</th>
+  <th>Evidenz- bzw. Fertigstatus</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>C64-Forschung</td>
+  <td>Beobachtete Originalabläufe und Originalwerte</td>
+  <td>Originalemulatorlauf weiterhin ausstehend</td>
+</tr>
+<tr>
+  <td>V0.4</td>
+  <td>Numerisches, wirtschaftliches und Zustandsmodell für die Eigenentwicklung</td>
+  <td>Als <strong>Pilotprofil</strong> konkretisiert, nicht als endgültiges Spielbalancing</td>
+</tr>
+<tr>
+  <td>V0.5</td>
+  <td>Gesamtkatalog von Bildschirmen und gerichteten Übergängen</td>
+  <td>32 Bildschirm- und 62 Übergangsentwürfe, davon 34 im Pilot als vorgesehen markiert</td>
+</tr>
+<tr>
+  <td>V0.6</td>
+  <td>Umsetzung einer durchspielbaren ersten Wirtschaftskette</td>
+  <td>Kern umgesetzt und automatisiert getestet</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Achtung:</strong> Die 62 Verbindungen beschreiben einen zukünftigen Soll-Graphen, nicht 62 original belegte C64-Abläufe. Die 34 Kanten bilden den für den Piloten markierten Umfang ab; nicht alle Bildschirme und Wirtschaftsfunktionen des Vollspiels sind fertig.</p>
+<h2>02. Qualitätsziele und Abnahmegrenzen</h2>
+<p>Jede Funktion braucht eine Eingabe, Vorbedingung, zulässige Datenänderung, Fehlerbehandlung, Rückweg, eindeutige Testkennung und Kennzeichnung <strong>HISTORISCH / BERLIN-ENTWURF / IMPLEMENTIERT</strong>. Jede zustandsändernde Aktion wird über eine zentrale Transaktion ausgeführt, nicht durch eine Bildschirmschaltfläche selbst.</p>
+<p>Abnahmeklassen: (1) <strong>strukturell geprüft</strong>: Datensätze und Übergänge sind in sich konsistent; (2) <strong>fachlich geprüft</strong>: Berechnungen liefern erwartete Modellwerte; (3) <strong>im Browser geprüft</strong>: Bedienabläufe funktionieren im konkreten Test; (4) <strong>originalverifiziert</strong>: Handlung und Ergebnis wurden mit einer exakt identifizierten rechtmäßig nutzbaren C64-Version im Emulator abgeglichen. Die vierte Klasse wurde bislang nicht erreicht.</p>
+<h2>03. V0.4 – Einheiten und feste Zahlenregeln</h2>
+<table>
+<thead>
+<tr>
+  <th>Größe</th>
+  <th>Interne Speicherung</th>
+  <th>Sichtbare Einheit</th>
+  <th>Verbindliche Behandlung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Geld</td>
+  <td>ganze Eurocent</td>
+  <td>Euro (€)</td>
+  <td>Keine Gleitkomma-Buchungen</td>
+</tr>
+<tr>
+  <td>Ölbestand</td>
+  <td>Tausendstel-Barrel</td>
+  <td>Barrel (bbl)</td>
+  <td>Keine negativen Bestände, eindeutiger Eigentümer</td>
+</tr>
+<tr>
+  <td>Ölpreis</td>
+  <td>Eurocent je Barrel</td>
+  <td>€/bbl</td>
+  <td>Erlös = Menge × Preis, auf Cent gerundet</td>
+</tr>
+<tr>
+  <td>Zeit</td>
+  <td>ganze Spieltage, globaler Monat</td>
+  <td>Tage / Monat</td>
+  <td>Nur Aktionen verbrauchen Zeit; Navigation kostet 0</td>
+</tr>
+<tr>
+  <td>Fördermenge</td>
+  <td>Tausendstel-Barrel</td>
+  <td>Barrel</td>
+  <td>Entnahme begrenzt durch Reserve, Lager und Aktion</td>
+</tr>
+<tr>
+  <td>Kredit</td>
+  <td>Eurocent</td>
+  <td>Euro</td>
+  <td>Zahlungseingang <strong>und</strong> Verbindlichkeit erzeugen</td>
+</tr>
+<tr>
+  <td>Marktanteil</td>
+  <td>ganze Basispunkte</td>
+  <td>Prozent</td>
+  <td>10.000 Basispunkte = 100 %</td>
+</tr>
+<tr>
+  <td>Produktionsrisiko</td>
+  <td>Im Pilot nicht numerisch modelliert</td>
+  <td>–</td>
+  <td>Erst nach spezifizierter Wahrscheinlichkeitsquelle</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Umrechnungen:</strong> 1 Barrel = 1.000 interne Mengeneinheiten; 1 Barrel Rohöl entspricht als Volumen einem US-Ölbarrel von rund 158,987 Litern. Für die Umrechnung in Gewicht sind zusätzlich Öldichte und Temperaturkontext nötig. Historische Dollarbeträge werden nicht heimlich in Euro umgerechnet.</p>
+<p><strong>Rundung:</strong> Positive Geldbeträge werden auf den nächsten Cent kaufmännisch gerundet; intern sind die kleinen Ölmenge-Schritte exakt. Bei knapper Marktmenge werden ganze Mengeneinheiten nach dem Verfahren „größter Rest, dann ID“ verteilt. Gleiche Ausgangsdaten führen damit stets zum gleichen Ergebnis.</p>
+<h2>04. V0.4 – Festes Startprofil für den Piloten</h2>
+<p>Die folgenden Zahlen sind <strong>frei entworfene Lern- und Balancingparameter</strong>, keine C64-Originalwerte, keine reale Prognose des Rohölmarkts und kein endgültig freigegebenes Vollspielbalancing.</p>
+<table>
+<thead>
+<tr>
+  <th>Merkmal</th>
+  <th style="text-align:right">Pilotwert</th>
+  <th>Bedeutung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Startkapital</td>
+  <td style="text-align:right">200.000 €</td>
+  <td>Konto vor allen Aktivitäten</td>
+</tr>
+<tr>
+  <td>Spieltage</td>
+  <td style="text-align:right">30 pro Monat</td>
+  <td>Maximaler Aktionsrahmen</td>
+</tr>
+<tr>
+  <td>Gutachten</td>
+  <td style="text-align:right">2.000 € / 2 Tage</td>
+  <td>Vor dem Kauf erforderlich</td>
+</tr>
+<tr>
+  <td>Konzession</td>
+  <td style="text-align:right">50.000 € / 1 Tag</td>
+  <td>Ein Testfeld, eine Region</td>
+</tr>
+<tr>
+  <td>Bohrung</td>
+  <td style="text-align:right">70.000 € / 5 Tage</td>
+  <td>Erst nach Kauf</td>
+</tr>
+<tr>
+  <td>Ein Fördervorgang</td>
+  <td style="text-align:right">100 Barrel / 1.000 € / 4 Tage</td>
+  <td>Reduziert Feldreserve</td>
+</tr>
+<tr>
+  <td>Ein Liefertransport</td>
+  <td style="text-align:right">500 € / 1 Tag</td>
+  <td>Vorbereitung der gesamten verfügbaren Menge</td>
+</tr>
+<tr>
+  <td>Verkaufsauftrag</td>
+  <td style="text-align:right">1 Tag</td>
+  <td>Verbindlich bis zum Monatsende</td>
+</tr>
+<tr>
+  <td>Anfangsreserve</td>
+  <td style="text-align:right">500 Barrel</td>
+  <td>Endlich, kein automatischer Nachschub</td>
+</tr>
+<tr>
+  <td>Tank</td>
+  <td style="text-align:right">200 Barrel</td>
+  <td>Vorbereitete und unvorbereitete Bestände zusammen</td>
+</tr>
+<tr>
+  <td>Marktpreis</td>
+  <td style="text-align:right">700 €/Barrel</td>
+  <td>Bewusst künstlicher Testpreis</td>
+</tr>
+<tr>
+  <td>Nachfrage / Konkurrenzangebot</td>
+  <td style="text-align:right">120 / 50 Barrel</td>
+  <td>Ein Markt; Konkurrenz zunächst ein festes Angebot</td>
+</tr>
+<tr>
+  <td>Monatskosten</td>
+  <td style="text-align:right">900 € Personal + 500 € Anlage</td>
+  <td>Anlage nur bei bestehender Bohrung</td>
+</tr>
+<tr>
+  <td>Einmaliger Rettungskredit</td>
+  <td style="text-align:right">40.000 €</td>
+  <td>Je Wirtschaftsgeneration maximal einmal</td>
+</tr>
+<tr>
+  <td>Sanierungsneustart</td>
+  <td style="text-align:right">150.000 €</td>
+  <td>Als <strong>neues</strong> Startvermögen, niemals zusätzlich</td>
+</tr>
+</tbody>
+</table>
+<p>Das Mengenmodell beschränkt die Lagerung, nicht aber die Zahl der Monatszyklen. <strong>Unbegrenztes Nachfüllen geologischer Reserven ist verboten.</strong> Die Erweiterung um mehrere Felder, weitere Regionen und reale Angebotsdynamik wird nötig, bevor die Langzeitbalance abschließend beurteilt werden kann.</p>
+<h2>05. V0.4 – Marktverteilung und Preisbildung</h2>
+<p>Aufträge werden fachlich in <em>vertraglich gebunden</em> und <em>freier Markt</em> aufgeteilt. <strong>Im ersten Pilot wird nur der freie Markt tatsächlich ausgeführt.</strong> Gleichrangige Angebote erhalten bei zu kleiner Nachfrage eine anteilige Zuteilung. Dabei wird zunächst der ganzzahlige Anteil berechnet; unteilbare Reste werden nach größtem Nachkommarest und stabiler Angebotskennung vergeben. Die Zuteilung liegt nie über der angebotenen Menge.</p>
+<p><strong>Referenzfall:</strong> PPPOPPI bietet 100 Barrel an, ein Gegner 50. Der Markt benötigt 120. Die Zuteilung beträgt 80 Barrel an PPPOPPI und 40 an den Gegner. 20 nicht abgenommene Barrel gehen zurück ins Lager. Der Preis gilt für <strong>verkaufte</strong>, nicht nur angebotene Menge. PPPOPPIs Marktanteil beträgt 80 von 120, also rund 66,67 %.</p>
+<p>Das Marktmodell ist für diese Pilotphase festpreisorientiert. Ein dynamisches Angebot-Nachfrage-Preismodell, regional unterschiedliche Preise, Vertragspriorität und tatsächliche Computergegner-Disposition bleiben in V0.7 beziehungsweise später gesondert zu implementieren.</p>
+<h2>06. V0.4 – Zahlungs- und Buchungslogik</h2>
+<p>Alle Monatsansprüche werden nach einer verbindlichen Rangfolge verarbeitet. Bei unzureichendem Bargeld wird innerhalb derselben Rangklasse anteilig verteilt; danach erst folgt die nächste Klasse.</p>
+<table>
+<thead>
+<tr>
+  <th>Zahlungsrang</th>
+  <th>Kategorie</th>
+  <th>Beispiel</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>1</td>
+  <td>Personal und Sicherheit</td>
+  <td>Gehalt, Anlagenbetrieb</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td>Fällige Vertragsforderungen</td>
+  <td>Lieferverpflichtung (später)</td>
+</tr>
+<tr>
+  <td>3</td>
+  <td>Kreditverpflichtungen</td>
+  <td>Zinsen und Tilgung</td>
+</tr>
+<tr>
+  <td>4</td>
+  <td>Sonstige Verbindlichkeiten</td>
+  <td>Allgemeine Rechnungen (später)</td>
+</tr>
+<tr>
+  <td>5</td>
+  <td>Optionale Ausgaben</td>
+  <td>Sonderprogramme (später)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Referenzfall:</strong> 1.000 € verfügbar, Forderungen über 600 € (Rang 1), 600 € (Rang 2), 300 € (Rang 3) → Zahlung 600 / 400 / 0 €. Der offene Betrag bleibt eine Verbindlichkeit und wird nicht gelöscht. Es ist unzulässig, bei 0 € Bargeld negative Auszahlungen zuzulassen oder eine Forderung stillschweigend als beglichen zu kennzeichnen.</p>
+<p>Der Pilot protokolliert alle Kassenbewegungen in einer unveränderlich fortlaufenden Buchungshistorie. Für eine spätere Vollimplementierung ist ein vollständiges doppisches Bilanzmodell getrennt zu untersuchen; die aktuelle Kassenhistorie ist <strong>noch keine kaufmännische Bilanz</strong>.</p>
+<h2>07. V0.4 – Lebenszyklus, Rettung und Spielziele</h2>
+<p><strong>Phasen:</strong> <code>TURN_ACTIVE → MONTH_REPORT → NEXT_MONTH</code> beziehungsweise <code>TURN_ACTIVE → RESCUE → MONTH_REPORT → NEXT_MONTH</code>. Jeder Monatsabschluss erzeugt genau einen Bericht. Ein Monatsabschluss in <code>RESCUE</code> oder <code>MONTH_REPORT</code> ist verboten. Der nächste Monat setzt die Aktionszeit zurück, nicht aber Guthaben, Vermögenswerte, Schulden oder Auszeichnungen.</p>
+<p><strong>Weiche Pleite:</strong> Reichen Einnahmen und Bargeld nicht für kritische Verbindlichkeiten, erscheint eine Rettungsphase. Diese bietet (A) einmaligen Rettungskredit mit entsprechender Schuld, (B) dokumentierten Notverkauf und (C) ausdrücklich gekennzeichneten Sanierungsneustart. Weder Kredit noch Neustart erzeugen Gratisvermögen durch doppelte Übertragung. Beim Notverkauf können an die Konzession gebundene Rohstoffe und Infrastruktur abgeschrieben werden; der Vorgang muss als Verlust dokumentiert bleiben.</p>
+<p><strong>Meilensteine:</strong> Marktführer = mindestens 60 % Marktanteil über sechs geeignete Monate; der Pilot verwendet für die Eignung bewusst die angepasste Mindestnachfrage <strong>100 Barrel</strong>, statt dem früheren V0.3-Entwurfswert 500 Barrel. Vertragsmeister = 20 erfolgreiche Verträge, mindestens 95 % pünktlich, positiver gemeinsamer Vertragsüberschuss. Vertragsmeister ist <strong>noch nicht implementiert</strong>. Der Endlosmodus ist eine eigenständige Spielart ohne zwingendes Sieg-Ende. Ursprüngliche C64-Siegziele bleiben davon unabhängig und unverifiziert.</p>
+<h2>08. V0.4 – Zentrale Spielzustände</h2>
+<p>Die Spielstanddatei beschreibt eine einzige Spielinstanz durch: Speicherformat, Regelprofil, Partiekennung, Monat, Wirtschaftsgeneration, Phase, Bargeld, Schulden, verbrauchte Tage, Feldstatus, Lager und vorgemerkte Lieferung, Angebot, offene Forderungen, Buchungsjournal, bereits verarbeitete Vorgangskennungen, Erfolgshistorie, Monatsbericht und Ereignisverlauf.</p>
+<p><strong>Invarianten (immer gültige Zustandsbedingungen):</strong> kein negativer Lagerbestand; kein Bohrstatus ohne Eigentum; keine zwei gleichzeitig offenen identischen Angebote; kein Guthaben unter Null; keine Abschlusspassage ohne passende Phase; Rückweg ohne Fachbuchung; abgeschlossene Transaktion höchstens einmal; dieselbe Ölmenge befindet sich nicht zugleich in Verkaufsreservierung und frei verfügbarem Lager.</p>
+<p>Jeder Befehl verarbeitet eine Kopie des Zustands und gibt nur bei komplett erfolgreicher Prüfung das neue Ergebnis zurück. Ein gescheiterter Befehl lässt den Ursprungszustand unverändert. Eine eindeutige Vorgangskennung verhindert doppelte Ausführung bei versehentlichen Wiederholungen. Die JSON-Schemata prüfen grundlegende Datentypen; die Programmlogik prüft zusätzliche fachliche Regeln.</p>
+<h2>09. V0.5 – Der vollständige gerichtete Ablaufkatalog</h2>
+<p>Der Katalog aus V0.3 wurde übernommen und um zwei fehlende Rettungsverbindungen ergänzt: <strong>NAV-061</strong> vom Monatsabschluss in die Rettung nach offener Zahlungslücke und <strong>NAV-062</strong> aus erfolgreicher Rettung zum Monatsbericht. Ergebnis: <strong>32 Bildschirmdefinitionen und 62 gerichtete Übergangsdefinitionen</strong>. Alle 32 Ansichten sind im geplanten Gesamtkatalog vom Start erreichbar und besitzen, wo fachlich erforderlich, einen gerichteten Weg zurück zur Zentrale.</p>
+<p>Jede Kante definiert: ID; Ausgangsansicht; Zielansicht; Ereignis; Schutzbedingung; kennzeichnet Zustandswirkung; Tageskosten; Testkennung; Entwurfsstatus; Kennzeichen <code>implemented</code>; historischer Geltungsbereich. Schaltflächen dürfen ausschließlich vorhandene, für die Implementierungsphase zugelassene Übergänge ansprechen. Ein Wechsel des Bildschirms darf keine Wirtschaftswerte buchen. Eine bewusst abgeschlossene Transaktion wird durch <strong>separaten Befehl</strong> ausgelöst.</p>
+<table>
+<thead>
+<tr>
+  <th>Ablaufbereich</th>
+  <th>Beispielkette</th>
+  <th>Stand V0.6</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Einstieg</td>
+  <td>Start → Einrichtung → Büro</td>
+  <td>Implementiert</td>
+</tr>
+<tr>
+  <td>Standort</td>
+  <td>Büro → Karte → Region → Feld</td>
+  <td>Implementiert für ein Feld</td>
+</tr>
+<tr>
+  <td>Forschung/Kauf</td>
+  <td>Feld → Gutachten / Kauf → Feld</td>
+  <td>Implementiert</td>
+</tr>
+<tr>
+  <td>Bohrung</td>
+  <td>Feld → Bohrung → Feld</td>
+  <td>Implementiert ohne Minispiel</td>
+</tr>
+<tr>
+  <td>Bestände</td>
+  <td>Büro → Lager → Logistik → Lager</td>
+  <td>Implementiert</td>
+</tr>
+<tr>
+  <td>Verkauf</td>
+  <td>Büro → Markt → Büro</td>
+  <td>Implementiert mit Monatsabwicklung</td>
+</tr>
+<tr>
+  <td>Zeit</td>
+  <td>Büro → Zugende → Bericht → Büro</td>
+  <td>Implementiert</td>
+</tr>
+<tr>
+  <td>Rettung</td>
+  <td>Zugende → Rettung → Bericht</td>
+  <td>Implementiert bei Zahlungslücke</td>
+</tr>
+<tr>
+  <td>Verträge, Medien, Sabotage</td>
+  <td>Entwurfskanten vorhanden</td>
+  <td>Nicht spielbar, ausdrücklich geplant</td>
+</tr>
+<tr>
+  <td>Drei Geschicklichkeitsspiele</td>
+  <td>Entwurfskanten vorhanden</td>
+  <td>Nicht implementiert</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Noch nicht formal verifiziert:</strong> Alle Wächterbedingungen für die späteren 28 unimplementierten Kanten können erst mit ihren Fachmodulen getestet werden. Grafische Erreichbarkeit allein ist keine vollständige semantische Konsistenzprüfung.</p>
+<h2>10. V0.5 – Navigations- und Fehlerrichtlinien</h2>
+<p>„Zurück“ und „Schließen“ erhalten den zuletzt gebuchten Wirtschaftszustand. Das Verlassen einer Kaufbestätigung setzt einen gekauften Besitz nicht auf „frei“ zurück. Begonnene Minispiele benötigen später eigene Zustandsautomaten mit Ergebnis-, Abbruch- und Wiederherstellungsregeln. Eine Rettungsansicht darf nur während einer tatsächlichen Krisenphase aufgerufen werden. Unverbindliche Transporte können ohne Erstattung bereits entstandener Transportkosten zurückgenommen werden; ein rechtsverbindlich vorgemerktes Verkaufsangebot erhält keinen stillschweigenden Abbruchknopf.</p>
+<p>Für eine vollständige Abnahme sind zusätzlich zu Strukturtests <strong>Wächtertests je Kante</strong> erforderlich: erlaubter Wechsel, blockierter Wechsel, Abbruch und Rücksprung, Finanzzustand unverändert, Fehlermeldung, Tastaturbedienung und tatsächliche Darstellung im Browser.</p>
+<h2>11. V0.6 – Erste vollständig durchspielbare Mini-Partie</h2>
+<p><strong>Startbedingungen:</strong> 200.000 € Kasse, ein unerschlossenes Feld mit 500 Barrel Reserve, 200 Barrel Tankkapazität, 30 Aktionstage. Ziel der Pilotpartie: vom Start bis zum ersten erfolgreich abgeschlossenen Monatsbericht gelangen. Die Oberfläche ist deutschsprachig, dunkel und in drei flexible Bereiche gegliedert. Eine Internetverbindung ist nicht nötig.</p>
+<table>
+<thead>
+<tr>
+  <th>Nr.</th>
+  <th>Aktion</th>
+  <th>Veränderung</th>
+  <th style="text-align:right">Kassenbestand</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>0</td>
+  <td>Spielstart</td>
+  <td>200.000 € Startkasse</td>
+  <td style="text-align:right">200.000 €</td>
+</tr>
+<tr>
+  <td>1</td>
+  <td>Gutachten</td>
+  <td>−2.000 €, −2 Tage</td>
+  <td style="text-align:right">198.000 €</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td>Konzession kaufen</td>
+  <td>−50.000 €, −1 Tag</td>
+  <td style="text-align:right">148.000 €</td>
+</tr>
+<tr>
+  <td>3</td>
+  <td>Bohrung</td>
+  <td>−70.000 €, −5 Tage</td>
+  <td style="text-align:right">78.000 €</td>
+</tr>
+<tr>
+  <td>4</td>
+  <td>100 Barrel fördern</td>
+  <td>−1.000 €, −4 Tage</td>
+  <td style="text-align:right">77.000 €</td>
+</tr>
+<tr>
+  <td>5</td>
+  <td>Lieferung vorbereiten</td>
+  <td>−500 €, −1 Tag</td>
+  <td style="text-align:right">76.500 €</td>
+</tr>
+<tr>
+  <td>6</td>
+  <td>Angebot abgeben</td>
+  <td>−1 Tag, keine sofortige Einnahme</td>
+  <td style="text-align:right">76.500 €</td>
+</tr>
+<tr>
+  <td>7</td>
+  <td>Monatsmarkt</td>
+  <td>80 von 100 Barrel verkauft = +56.000 €</td>
+  <td style="text-align:right">132.500 €</td>
+</tr>
+<tr>
+  <td>8</td>
+  <td>Monatskosten</td>
+  <td>−900 € Personal, −500 € Anlage</td>
+  <td style="text-align:right"><strong>131.100 €</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Prüfergebnis:</strong> 14 von 30 Tagen verbraucht; 80 Barrel verkauft; 20 Barrel frei im Lager; 400 Barrel verbleibende Feldreserve; keine Schulden; Marktanteil 66,67 %; Startmonat abgeschlossen. Dieser Zustand wurde in einem echten Chromium-Bedienablauf erzeugt und als <code>docs/test_save.json</code> bereitgestellt.</p>
+<h2>12. V0.6 – Bedienung unter Linux</h2>
+<p><strong>Ohne Installation:</strong> ZIP-Datei entpacken und darin <code>index.html</code> mit Firefox oder Chromium öffnen. Das Spiel braucht <strong>kein Konto, keine Internetverbindung, keine Paketinstallation und kein Terminal</strong>. Es verwendet ausschließlich mitgelieferte HTML-, CSS- und JavaScript-Dateien.</p>
+<p><strong>Spielstand:</strong> Über „Spielstand exportieren“ eine JSON-Datei sichern; „Spielstand laden“ nimmt die exportierte JSON-Datei wieder entgegen. Diese Export-/Import-Funktion ist absichtlich verlässlicher als browserabhängige Speicherung bei <code>file://</code>-Aufruf. <strong>Zum Fortsetzen grundsätzlich vorher exportieren.</strong> Die Bezeichnung <code>test_save.json</code> steht für eine Testdatei, nicht für einen automatisch erzeugten persönlichen Speicherstand.</p>
+<p><strong>Für Entwickler:</strong> <code>node tests/test_engine.cjs</code> und <code>node tests/test_navigation.cjs</code> prüfen die zentrale Wirtschaft und die Ablaufstruktur ohne NPM-Installation. <code>python3 tests/browser_smoke.py</code> ist ein zusätzlicher Prüflauf in dieser Entwicklungsumgebung mit Playwright und Chromium, aber für die normale Spielnutzung nicht erforderlich.</p>
+<h2>13. Implementiert, teilweise implementiert, bewusst offen</h2>
+<table>
+<thead>
+<tr>
+  <th>Bereich</th>
+  <th>Status</th>
+  <th>Präzisierung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Eine vollständige Wirtschaftskette</td>
+  <td><strong>IMPLEMENTIERT</strong></td>
+  <td>Survey → Kauf → Bohrung → Förderung → Angebot → Markt</td>
+</tr>
+<tr>
+  <td>Runden und Monatsabschluss</td>
+  <td><strong>IMPLEMENTIERT</strong></td>
+  <td>Ein aktiver Spieler, ein Monat; mehrfach fortsetzbar</td>
+</tr>
+<tr>
+  <td>Basis-Markt und Rang-Zahlungen</td>
+  <td><strong>IMPLEMENTIERT</strong></td>
+  <td>Fixpreis, ein Angebotsort, einfache Kosten</td>
+</tr>
+<tr>
+  <td>Rettung mit Kredit/Neustart</td>
+  <td><strong>IMPLEMENTIERT</strong></td>
+  <td>Modellbetrieb; nicht abschließende Vollbilanz</td>
+</tr>
+<tr>
+  <td>Marktführer-Meilenstein</td>
+  <td><strong>TEILWEISE</strong></td>
+  <td>Serienwert; nur eine künstliche Pilot-Marktsituation</td>
+</tr>
+<tr>
+  <td>Vertragssystem/Vertragsmeister</td>
+  <td><strong>GEPLANT</strong></td>
+  <td>Katalog und Bedingungen, noch keine echten Vertragshandlungen</td>
+</tr>
+<tr>
+  <td>Vollständige Computer-KI</td>
+  <td><strong>GEPLANT</strong></td>
+  <td>Rivalenangebot im Pilot fest vorgegeben</td>
+</tr>
+<tr>
+  <td>Mehrspieler bis zu vier Parteien</td>
+  <td><strong>GEPLANT</strong></td>
+  <td>Kein isolierter Spielstand mehrerer Firmen vorhanden</td>
+</tr>
+<tr>
+  <td>Bohren-, Brand-, Pipeline-Minispiele</td>
+  <td><strong>GEPLANT</strong></td>
+  <td>Noch keine Minispielausführung</td>
+</tr>
+<tr>
+  <td>Ereignisse, Sabotage, Gerichte</td>
+  <td><strong>GEPLANT</strong></td>
+  <td>Nur Ablaufentwürfe, keine Fachwirkung</td>
+</tr>
+<tr>
+  <td>C64-Originaltreue</td>
+  <td><strong>NICHT GEPRÜFT</strong></td>
+  <td>Keine selbst verifizierte Originaldiskette und Emulation</td>
+</tr>
+</tbody>
+</table>
+<h2>14. Ausgeführte Tests und Grenzen</h2>
+<p><strong>Automatische Fachtests:</strong> 37 von 37 bestanden (Startwerte, Umrechnung, Rundung, Angebotsverteilung, Gleichstand, Zahlungsränge, Fehlaktionen, Kassenintegrität, Vorräte, Zeitgrenzen, Monatsabschluss, Doppelbuchungsverhinderung, Lieferstorno, Rettung, Neustart, Speicherprüfung und vereinfachter Lauf über 100 Monate).</p>
+<p><strong>Graphprüfung:</strong> 411 Strukturprüfungen bestanden; 32 Bildschirme, 62 definierte Übergänge, 34 als Pilot-implementiert markiert. Die Prüfung belegt <strong>Modellstruktur</strong>, nicht die fachliche Freigabe der späteren Funktionen.</p>
+<p><strong>Browser-Praxistest:</strong> Im installierten Chromium wurde der komplette Bedienablauf von der Einrichtung bis zum Bericht ausgeführt und eine exportierte JSON-Datei wieder geladen. Keine JavaScript-Laufzeitfehler im protokollierten Prüfdurchlauf. Der Test nutzte in der isolierten Entwicklungsumgebung ein technisch inline geladenes HTML-Dokument, weil direkte lokale Browsernavigation dort gesperrt ist. Für den Anwender ist das Paket für die übliche lokale Dateiansicht konzipiert; eine gesonderte Kubuntu-Endabnahme steht weiterhin aus.</p>
+<p><strong>Nicht geprüft:</strong> originale C64-Werte, originale Navigationsfolgen, echte 4-Spielerpartien, echte Zufallsereignisse, langfristig balancierte Wirtschaft, alle Rettungsgrenzfälle, tatsächlicher Browserstart auf deinem Kubuntu, Rechtslage aller künftigen Grafiken und Namen.</p>
+<h2>15. Risiken und vorgezogene Gegenmaßnahmen</h2>
+<table>
+<thead>
+<tr>
+  <th>Risiko</th>
+  <th>Vorbeugung</th>
+  <th>Momentaner Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Vermischung von Original und Eigenentwicklung</td>
+  <td>Getrennte Quellen- und Regelprofile</td>
+  <td>Umgesetzt im Konzept und in Metadaten</td>
+</tr>
+<tr>
+  <td>Doppelte Buchung bei erneutem Klick</td>
+  <td>Vorgangskennung und zustandskopierender Befehl</td>
+  <td>Mit Tests nachgewiesen</td>
+</tr>
+<tr>
+  <td>Preis/Menge falsch verrechnet</td>
+  <td>Ganze Cent und Tausendstel-Barrel</td>
+  <td>Mit Referenzwerten geprüft</td>
+</tr>
+<tr>
+  <td>Zu viele Navigationswege</td>
+  <td>Gerichteter Graph und erreichbare Rückwege</td>
+  <td>Struktur geprüft; Teilbedienung getestet</td>
+</tr>
+<tr>
+  <td>Savegame beschädigt</td>
+  <td>Format-/Profil-Prüfung und Plausibilitätskontrolle</td>
+  <td>Grundprüfung getestet; komplexe Migration noch offen</td>
+</tr>
+<tr>
+  <td>Unendlicher Geldgenerator im Endlosmodus</td>
+  <td>Ressourcenverbrauch, Tilgung, Generationstrennung</td>
+  <td>Grundregel implementiert; Vollbalance offen</td>
+</tr>
+<tr>
+  <td>Ungerechte KI</td>
+  <td>Gemeinsamer Simulationskern statt versteckter KI-Boni</td>
+  <td>Nur als Zielvorgabe, KI noch nicht umgesetzt</td>
+</tr>
+<tr>
+  <td>Lizenzierte Originalassets</td>
+  <td>Nur eigene Berliner Bilder, Dialoge und Töne</td>
+  <td>Pilot enthält keine Originalassets</td>
+</tr>
+<tr>
+  <td>Falsches Fertigstellungsversprechen</td>
+  <td>Teststatus je Ebene und Funktion</td>
+  <td>Sichtbar im Paket getrennt</td>
+</tr>
+</tbody>
+</table>
+<h2>16. Dateien, Datenverträge und Nachvollziehbarkeit</h2>
+<p><code>index.html</code> ist der Einstieg. <code>src/engine.js</code> enthält die Regeln, <code>src/ui.js</code> die Bedienung, <code>src/nav.js</code> den lokal eingebundenen Graphen und <code>src/style.css</code> die Darstellung. <code>config/profile_v04.json</code>, <code>config/schema_save_v04.json</code>, <code>config/navigation_v05.json</code>, <code>config/schema_navigation_v05.json</code> definieren die fachlichen Vorgaben. <code>reference/</code> enthält die aus V0.3 übernommenen Forschungskataloge, <strong>ohne sie als Originalbelege aufzuwerten</strong>. <code>tests/</code> enthält Fach-, Graph- und Browserprüfungen. <code>docs/test_save.json</code> ist der gespeicherte Ende-Monat-Referenzzustand des erfolgreichen Testlaufs.</p>
+<p><strong>Wichtig für die weitere Bearbeitung:</strong> Die Pilotparameter liegen derzeit in <code>src/engine.js</code> zur offlinefähigen Ausführung und werden in <code>config/profile_v04.json</code> dokumentiert. Änderungen am Profil müssen auf Abweichungen geprüft werden; langfristig werden sie durch eine validierte Konfiguration geladen, statt in mehreren Dateien unabhängig gepflegt zu werden.</p>
+<h2>17. Wissenschaftliche Reflexion und verbleibende Widersprüche</h2>
+<p>Ein funktionierender Mini-Monat beweist nur, dass dieser <strong>eine vertikale Prozessstrecke</strong> spielbar ist. Er beweist weder, dass die historischen C64-Abläufe vollständig abgebildet sind, noch, dass sich die Preis-, Kredit- und Wirtschaftssysteme über viele reale Spieljahre als spannend und fair erweisen. Ebenfalls noch offen: faire KI-Aktionen bei gleichzeitigem Marktabschluss, bilanzielle Unternehmensbewertung, Rettung nach mehrstufigen Vertragspflichten, automatische Produktion im Monatsabschluss und Rückverfolgung aller UI-Wege auf Original-Screen-IDs.</p>
+<p>Die korrekte hochschulische Methodik trennt <strong>Beobachtungsbeleg</strong>, <strong>Modellannahme</strong>, <strong>Implementierungsstand</strong> und <strong>Testsachverhalt</strong>. Ein hypothetischer oder in Foren beschriebener Originalwert darf weder als verifiziert noch als ungeprüft verbindliche technische Vorgabe erscheinen. Die C64-Originalfassung muss vor einem 1:1-Originalvergleich eindeutig durch Prüfsumme, Rechtebasis und Emulatorlauf identifiziert werden.</p>
+<h2>18. Die drei nächsten zwingenden Entwicklungsschritte</h2>
+<p><strong>① V0.7: Vollständiges Mehrspieler- und Marktjahr.</strong> Je Partei getrenntes Vermögen und Zeitkonto, echte Computerentscheidungen aus denselben Informationen, mehrjährige Produktions- und Preisentwicklung, Verträge und verbindliche Bilanzkontrolle. Die bestehende Mini-Partie darf dabei nicht regressieren.</p>
+<p><strong>② V0.8: Funktionsgraph bis zur Oberfläche schließen.</strong> Jeder geplante Screen und Übergang erhält Implementierung, Bedingungs- und Rückwegprüfung, Tastaturtest, Fehlerfälle und unabhängige Abnahme. Danach die drei Minispiele mit speicherbaren Zwischenschritten ergänzen.</p>
+<p><strong>③ C64-Originalpilot reproduzierbar verifizieren.</strong> Rechtmäßig nutzbare PAL-Referenz identifizieren, SHA-256 und VICE-Konfiguration festhalten, Büro → Karte → Feldinformation → Rückweg reproduzierbar protokollieren; anschließend historische Ergebnisse und Berliner Abweichungen strikt getrennt vergleichen.</p>
+<p><strong>Freigabeempfehlung:</strong> Das aktuelle Paket kann als nachvollziehbarer, separat liegender Entwicklungsprototyp betrachtet werden. Eine Änderung im GitHub-Repository oder eine Freigabe als fertiges Spiel ist <strong>nicht</strong> erfolgt.</p>
+</body></html>
