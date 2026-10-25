@@ -35,6 +35,7 @@ jobs:
         run: python3 project-c/pppoppi-imperium/recovery/verify_sources.py
       - name: Technische Spielabläufe und statische Oberflächenverträge
         run: |
+          node project-c/pppoppi-imperium/quality_v194/test_build_safety_v194.cjs
           node project-c/pppoppi-imperium/quality_v194/test_ui_integrity_v194.cjs
           node project-c/pppoppi-imperium/quality_v194/test_gameflow_v194.cjs
           node project-c/pppoppi-imperium/quality_v194/build.cjs "$RUNNER_TEMP/PPPOPPI-V194-TECH"
