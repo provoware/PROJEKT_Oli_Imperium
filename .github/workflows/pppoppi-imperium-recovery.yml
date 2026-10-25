@@ -54,6 +54,7 @@ jobs:
           node test_strategy_v192.cjs
           node test_transport_v17.cjs
           node evaluate_balance_v194.cjs
+          node ../quality_v194/test_balance_report_v194.cjs
           node analyze_stress_v194.cjs
           # Beide Programme muessen exakt die versionierten Langzeitbelege
           # reproduzieren; nur gueltige Szenarien ohne Drift sind ausreichend.

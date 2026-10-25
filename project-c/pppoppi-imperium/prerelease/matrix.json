@@ -194,10 +194,10 @@
       "requirement": "Langzeitbalance über mindestens 144 Spielmonate geprüft",
       "basis": "PR #14",
       "stage": "technical",
-      "status": "blocked",
-      "evidence": [],
-      "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "Balance-Szenarien reproduzieren"
+      "status": "pass",
+      "evidence": ["project-c/pppoppi-imperium/prerelease/evidence/BAL-02.json"],
+      "blocker": "",
+      "next": ""
     },
     {
       "id": "BAL-03",
