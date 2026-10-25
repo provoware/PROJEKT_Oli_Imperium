@@ -216,10 +216,10 @@
       "requirement": "Spielstand exportieren und unverändert wiederherstellen",
       "basis": "Nutzerauftrag",
       "stage": "technical",
-      "status": "blocked",
-      "evidence": [],
-      "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "Speicher-Rundlauf testen"
+      "status": "pass",
+      "evidence": ["project-c/pppoppi-imperium/prerelease/evidence/SPE-01.json"],
+      "blocker": "",
+      "next": ""
     },
     {
       "id": "SPE-02",

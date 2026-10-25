@@ -223,3 +223,22 @@ Stand erneut. Eine Freigabe nach `main` ist ausgeschlossen.
 
 Nachweis: `evidence/WIR-04.json`. **Matrixstand: 11/52 PASS,
 34 BLOCKED, 4 OPEN, 3 DEFERRED.**
+
+## Einzelabnahme SPE-01 – 25.10.2026
+
+Der automatisierte Datei-/DOM-Test
+`quality_v194/test_save_roundtrip_v194.cjs` löst die tatsächlichen
+Speichern-/Laden-Schalter der technischen Oberfläche aus. **Zwölf**
+unabhängige Fälle belegen: JSON-Dateierzeugung samt Monatsnamen,
+vollständige Wiederherstellung, identischen Folgeexport, exakt
+fortgesetzte Aktionen, offene Verträge, Transport- und Zahlungsjournal,
+gesicherte Monatsberichte und unterbrochene Minispiele. Fehlerhafte,
+manipulierte oder übergroße Eingaben bleiben wirkungslos. Während der
+vertraulichen Übergabe sind beide Operationen gesperrt.
+
+Dies ist eine echte automatisierte Prüfung der Datei-/Ereignislogik,
+**noch keine grafische Browser-, Betriebssystem-Dateidialog- oder
+persönliche Sichtabnahme**. Migration älterer Speicherformate ist SPE-02.
+
+Nachweis: `evidence/SPE-01.json`. **Matrixstand: 12/52 PASS,
+33 BLOCKED, 4 OPEN, 3 DEFERRED.**
