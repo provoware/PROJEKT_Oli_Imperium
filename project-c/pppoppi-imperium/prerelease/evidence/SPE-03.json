@@ -1,0 +1,23 @@
+{
+  "gate_id": "SPE-03",
+  "result": "PASS",
+  "commit": "1edf8b79f501ea5e9dc40c78c7d6831f035f6d3d",
+  "command": "node project-c/pppoppi-imperium/quality_v194/build.cjs <neu> && node project-c/pppoppi-imperium/quality_v194/test_local_backup_v194.cjs <neu>/src",
+  "date": "2026-10-25",
+  "ci_run": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40176109407",
+  "new_cases": 16,
+  "dual_slot_recovery": true,
+  "persisted_handoff": true,
+  "checks": [
+    "Gültige Hauptsicherung im lokalen Browser-Speicher nach Spielstart und Aktionen.",
+    "Vorherige gültige Speicherung wechselt als unabhängiger Rückfallschritt in zweiten Slot.",
+    "Nach Neustart wird Hauptsicherung oder bei Korruption die validierte Zweitsicherung geladen.",
+    "Zwei beschädigte Sicherungen werden ohne erfundenen Spielstand und mit sichtbarer Fehlermeldung abgewiesen.",
+    "Defekter Export und übergroße Datei dürfen weder Haupt- noch Backupslot verändern.",
+    "Legitimer Dateiimport archiviert den vorherigen Stand und hält den neuen aktuell.",
+    "Mehrspieler-Übergabe, Aktionserkennung und Spielphase bleiben über Reloads erhalten.",
+    "Verweigerte Lese- und Schreibzugriffe auf Browser-Speicher blockieren das Spiel nicht."
+  ],
+  "original_sources_modified": false,
+  "limits": "PASS für zwei lokale browsergebundene Slots der generierten Technikfassung, nicht für verlässliche Lebensdauer bei gezieltem Löschen des Browserprofils. Browser-Datenschutzoptionen, Quota und Betriebssystemabbrüche können lokale Persistenz verhindern; separater JSON-Export bleibt nötig. UI-Ereignisse werden automatisiert ohne Sichtprüfung simuliert. Der genannte grüne CI-Lauf ist die vorherige Basis, die aktuelle PR-CI separat prüfen."
+}

@@ -261,3 +261,22 @@ beim Import nicht überschrieben. Noch keine Betriebssystem-/Sichtabnahme.
 
 Nachweis: `evidence/SPE-02.json`. **Matrixstand: 13/52 PASS,
 32 BLOCKED, 4 OPEN, 3 DEFERRED.**
+
+## Einzelabnahme SPE-03 – 25.10.2026
+
+Die **generierte Offline-Technikfassung** speichert beim Spielstart,
+bei Aktionen und bei gültigem Dateiimport einen validierbaren
+Primärstand im lokalen Browserspeicher. Die vorherige gültige Fassung
+liegt in einem zweiten Slot. Bei defektem Primärstand wird die
+Zweitsicherung wiederhergestellt, bei zwei defekten Ständen keine
+Partie erfunden. Auch die vertrauliche Zugübergabe und der fortlaufende
+Aktionszähler überleben Browser-Neustarts.
+
+`quality_v194/test_local_backup_v194.cjs` prüft **16** echte
+Speicher-/DOM-Rückfallfälle, korruptes JSON, Quotas, gesperrte
+Lese-/Schreibrechte und den unveränderten alten Stand nach einer
+fehlgeschlagenen Sicherung. **Ein Browserprofil kann lokale Daten
+löschen; der unabhängige JSON-Export bleibt deshalb wichtig.**
+
+Nachweis: `evidence/SPE-03.json`. **Matrixstand: 14/52 PASS,
+31 BLOCKED, 4 OPEN, 3 DEFERRED.** Noch keine persönliche Sichtabnahme.

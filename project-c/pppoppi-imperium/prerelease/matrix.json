@@ -238,10 +238,10 @@
       "requirement": "Sicherungskopie und Rückfall bei defektem Spielstand",
       "basis": "Nutzerauftrag",
       "stage": "technical",
-      "status": "blocked",
-      "evidence": [],
-      "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "Beschädigte Speicherstände testen"
+      "status": "pass",
+      "evidence": ["project-c/pppoppi-imperium/prerelease/evidence/SPE-03.json"],
+      "blocker": "",
+      "next": ""
     },
     {
       "id": "SIC-01",

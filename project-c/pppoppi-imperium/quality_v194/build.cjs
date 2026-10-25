@@ -24,6 +24,60 @@ const changes = [
   ['src/neo_bridge.js',
     "window.NeoEconomy={version:'1.7.1',getState:",
     "window.NeoEconomy={version:'1.7.1',gameVersion:'1.9.3',qaVersion:'1.9.4',getState:"],
+  ['src/neo_bridge.js',
+    "let econ=null, selected='BERLIN-1', commandNo=0, handoff=false, focusReturn='computer', callCount=0;",
+    `let econ=null, selected='BERLIN-1', commandNo=0, handoff=false, focusReturn='computer', callCount=0;
+// SPE-03: Offline-Sicherung in zwei versionierten lokalen Slots.
+// Nur die lokale JSON-Datei ist eine unabhaengige Sicherung ausserhalb des Browsers.
+const SAVE_PRIMARY='pppoppi-imperium:snapshot/1',SAVE_BACKUP='pppoppi-imperium:backup/1';
+function readSaved(raw){
+ if(typeof raw!=='string'||raw.length>5_000_000)throw Error('Lokale Sicherung ungültig');
+ const data=JSON.parse(raw);
+ if(!data||data.format!=='pppoppi.localbackup/1'||typeof data.handoff!=='boolean'||!Number.isSafeInteger(data.commandNo)||data.commandNo<0)throw Error('Lokales Sicherungsformat ungültig');
+ E.validate(data.state);
+ if(data.handoff&&(data.state.phase!=='TURN'||data.state.turnIndex===0))throw Error('Ungültiger Übergabestatus');
+ return data;
+}
+function remember(){
+ try{
+  const raw=JSON.stringify({format:'pppoppi.localbackup/1',handoff,commandNo,state:econ});
+  if(raw.length>5_000_000)throw Error('Sicherung überschreitet das Speicherlimit');
+  const previous=localStorage.getItem(SAVE_PRIMARY);
+  if(previous&&previous!==raw){try{readSaved(previous);localStorage.setItem(SAVE_BACKUP,previous)}catch(_){/* Defekte Hauptdatei nie in die Rückfallebene übernehmen. */}}
+  localStorage.setItem(SAVE_PRIMARY,raw);
+ }catch(_){toast('Automatische Sicherung nicht verfügbar. Bitte eine JSON-Datei exportieren.');}
+}
+function recoverSaved(){
+ let damaged=false;
+ for(const key of [SAVE_PRIMARY,SAVE_BACKUP]){
+  let raw;
+  try{raw=localStorage.getItem(key)}catch(_){toast('Browser-Speicher gesperrt. Spielstände bitte über JSON laden.');return;}
+  if(!raw)continue;
+  try{
+   const saved=readSaved(raw);
+   econ=saved.state;handoff=saved.handoff;commandNo=saved.commandNo;selected=Object.keys(econ.claims)[0];
+   if(key===SAVE_BACKUP){try{localStorage.setItem(SAVE_PRIMARY,raw)}catch(_){}toast('Beschädigter Spielstand: vorige Sicherungskopie wiederhergestellt.');}
+   else toast('Letzten lokalen Spielstand wiederhergestellt.');
+   show(handoff?'handoff':econ.phase==='RESCUE'?'rescue':econ.phase==='REPORT'?'report':econ.minigame?'workshop':'computer');return;
+  }catch(_){damaged=true;}
+ }
+ if(damaged)toast('Lokale Sicherungen beschädigt. Bitte eine gültige JSON-Datei laden.');
+}`],
+  ['src/neo_bridge.js',
+    "selected='BERLIN-1';handoff=false;toast('Neue Partie gegründet.",
+    "selected='BERLIN-1';handoff=false;remember();toast('Neue Partie gegründet."],
+  ['src/neo_bridge.js',
+    "if(JSON.stringify(econ)===before)toast('Bereits verarbeitet.');else toast('✓ '+type+' · Wirtschaftsdaten aktualisiert.');refreshStatus();",
+    "if(JSON.stringify(econ)===before)toast('Bereits verarbeitet.');else toast('✓ '+type+' · Wirtschaftsdaten aktualisiert.');remember();refreshStatus();"],
+  ['src/neo_bridge.js',
+    "econ=parsed;selected=Object.keys(econ.claims)[0];handoff=false;show(",
+    "econ=parsed;selected=Object.keys(econ.claims)[0];handoff=false;remember();show("],
+  ['src/neo_bridge.js',
+    "case 'handoff-ok':handoff=false;show('computer');refreshStatus();break;",
+    "case 'handoff-ok':handoff=false;remember();show('computer');refreshStatus();break;"],
+  ['src/neo_bridge.js',
+    "// Do not rewrite stored game data from the decorative demo.\nrefreshStatus();",
+    "// Do not rewrite stored game data from the decorative demo.\nrecoverSaved();refreshStatus();"],
   ['README_START.txt',
     'PPPOPPI IMPERIUM – NEO-RETRO V1.1',
     'PPPOPPI IMPERIUM – NEO-RETRO V1.9.3 / PRÜFSTAND V1.9.4'],
