@@ -1,0 +1,27 @@
+{
+  "gate_id": "WIR-02",
+  "result": "PASS",
+  "commit": "6e4629f71610e7d11afdadfe90e724bde9abd3eb",
+  "command": "cd project-c/pppoppi-imperium/SPIEL && node test_logistics_ai_v193.cjs && node test_public_network_v171.cjs && node test_transport_v17.cjs && node ../quality_v194/test_logistics_costs_v194.cjs",
+  "date": "2026-10-25",
+  "ci_run": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40171239008",
+  "ci_conclusion": "success",
+  "specialist_suites": [
+    {"file":"test_logistics_ai_v193.cjs","cases":19},
+    {"file":"test_public_network_v171.cjs","cases":28},
+    {"file":"test_transport_v17.cjs","cases":22}
+  ],
+  "specialist_cases": 69,
+  "independent_cost_cases": 7,
+  "checks": [
+    "Privater Streckenbau: drei Einzelbeträge und genau sechs Spieltage.",
+    "Rohölfracht und Fertigwarenfracht centgenau nach Menge und Zahl privater Kanten.",
+    "Ankunft im internen Lager erst nach dem nächsten Monatswechsel.",
+    "Öffentlicher Netzanschluss und Frachtreservierung centgenau.",
+    "Zwei Firmen teilen die 24-Barrel-Streckenkapazität 12/12; 6 Barrel samt zugehöriger Fracht je Firma zurück.",
+    "Zwei öffentliche Kanten kosten doppelte Fracht und benötigen zwei Monatswechsel.",
+    "Strategie-KI berechnet Zielpreisvorteil nach Abzug tatsächlicher Fracht."
+  ],
+  "original_sources_modified": false,
+  "limits": "Nachweis fuer Transportpreisregeln, gemeinsame Kapazitaeten und KI-Frachtkalkulation; nicht fuer alle Ausfallvarianten, gespeicherte Langzeitpartien, Spielspass oder C64-Originaltreue."
+}

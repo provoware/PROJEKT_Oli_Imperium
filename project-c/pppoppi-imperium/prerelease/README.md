@@ -159,3 +159,19 @@ Beide Programme laufen gemeinsam in GitHub-CI.
 Nachweis: `evidence/WIR-01.json`. **Matrixstand: 7/52 PASS,
 38 BLOCKED, 4 OPEN, 3 DEFERRED.** Keine Pauschalfreigabe aller
 Vertrags-, Logistik- oder Überlauf-Sonderfälle.
+
+## Einzelabnahme WIR-02 – 25.10.2026
+
+Die drei Fachprogramme für Logistik-KI (**19** Fälle), öffentliches Netz
+(**28** Fälle) und firmeneigenen Transport (**22** Fälle) wurden bereits
+auf dem Entwickler-Commit `6e4629f71610e7d11afdadfe90e724bde9abd3eb`
+in [Quell-CI #40171239008](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40171239008)
+erfolgreich ausgeführt. Ergänzend kontrolliert
+`quality_v194/test_logistics_costs_v194.cjs` in **sieben**
+unabhängigen Fällen Baukosten, Fracht pro Kante, tatsächliche Ankunft,
+die öffentliche 24-Barrel-Grenze, anteilige Rückerstattung und den von
+der Strategie-KI berücksichtigten Frachtabzug.
+
+Nachweis: `evidence/WIR-02.json`. **Matrixstand: 8/52 PASS,
+37 BLOCKED, 4 OPEN, 3 DEFERRED.** Sonstige Krisen-, Vertrags- und
+Überlauf-Sonderfälle sind damit nicht pauschal freigegeben.
