@@ -58,7 +58,7 @@ Die Diagnose vergleicht die vorhandenen Dateien gegen das Quellmanifest (SHA-256
 | damaged | Inhalt, Bestätigung oder Fremddateien weichen ab |
 | unsafe | Symlink, Spezialdatei, unsicherer Pfad oder zu tiefer Verzeichnisbaum |
 
-**Ausgangscode und Nachweise:** Basis-PR #35 auf HEAD 8b660299d9d4e85216fb80d101e1331842ab3069. Elf neue isolierte Diagnosetests wurden am 25.10.2026 lokal unter Node.js 22 ausgeführt: **11/11 PASS**. Die bereits vorhandenen acht Aufbauprüfungen und die tatsächliche Quell-CI müssen auf dem neuen GitHub-HEAD erneut geprüft werden; bis dahin keine Gesamtfreigabe. Der neue Diagnosecode prüft **keinen Stromausfall** und garantiert keinen Schutz gegen gleichzeitige böswillige Pfadwechsel.
+**Ausgangscode und Nachweise:** Basis-PR #35 auf HEAD 8b660299d9d4e85216fb80d101e1331842ab3069. Zwölf neue isolierte Diagnosetests wurden am 25.10.2026 lokal unter Node.js 22 ausgeführt: **12/12 PASS**. Die bereits vorhandenen acht Aufbauprüfungen und die tatsächliche Quell-CI müssen auf dem neuen GitHub-HEAD erneut geprüft werden; bis dahin keine Gesamtfreigabe. Der neue Diagnosecode prüft **keinen Stromausfall** und garantiert keinen Schutz gegen gleichzeitige böswillige Pfadwechsel.
 
 **Pflichtmatrix:** Kein bisher blockierter Gesamtpunkt wird durch diese Teilprüfung automatisch freigegeben. Besonders FEH-01, STA-03, SPE-01..03, VER-01..03, GRA-03, BED-02..03 und PER-01..02 bleiben bis zu den jeweils vollständigen Nachweisen offen/blockiert.
 
