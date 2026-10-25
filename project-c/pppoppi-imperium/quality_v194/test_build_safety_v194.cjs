@@ -56,6 +56,7 @@ try {
   check('Regulaerer Aufbau erzeugt 110 Quelldateien und Herkunftsnachweis', () => {
     const destination = path.join(temporary, 'build');
     const result = build(destination);
+    assert.equal(require('./diagnose_build.cjs').diagnose(destination).status, 'complete');
     assert.equal(result.sourceFiles, 110);
     const info = JSON.parse(fs.readFileSync(path.join(destination, 'BUILD_INFO.json'), 'utf8'));
     assert.equal(info.kind, 'technical-preview-not-released');
@@ -71,3 +72,6 @@ try {
   // Ausschliesslich das eigens erzeugte temporaere Testverzeichnis.
   fs.rmSync(temporary, {recursive: true, force: true});
 }
+
+// Isolierte Diagnose-Regressionsfaelle im bestehenden CI-Pflichtschritt.
+require('./test_diagnose_build.cjs');
