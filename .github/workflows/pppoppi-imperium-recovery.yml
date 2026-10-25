@@ -4,6 +4,7 @@ on:
     branches:
       - 'recovery/pppoppi-imperium-v194-*'
       - 'restore/v194-verified-sources-*'
+      - 'fix/v194-tech-consistency-*'
       - 'agent/prerelease-recovery-*'
     paths:
       - 'project-c/pppoppi-imperium/**'
@@ -32,6 +33,13 @@ jobs:
         run: python3 -m unittest discover -s project-c/pppoppi-imperium/recovery -p 'test_*.py' -v
       - name: Vollständige GitHub-Quellen gegen das geprüfte Originalinventar
         run: python3 project-c/pppoppi-imperium/recovery/verify_sources.py
+      - name: Technische Spielabläufe und statische Oberflächenverträge
+        run: |
+          node project-c/pppoppi-imperium/quality_v194/test_ui_integrity_v194.cjs
+          node project-c/pppoppi-imperium/quality_v194/test_gameflow_v194.cjs
+          node project-c/pppoppi-imperium/quality_v194/build.cjs "$RUNNER_TEMP/PPPOPPI-V194-TECH"
+          node --check "$RUNNER_TEMP/PPPOPPI-V194-TECH/src/neo_bridge.js"
+          node --check "$RUNNER_TEMP/PPPOPPI-V194-TECH/test_human_parity_v192.cjs"
       - name: Wirtschaftliche Fachprüfungen
         working-directory: project-c/pppoppi-imperium/SPIEL
         run: |
