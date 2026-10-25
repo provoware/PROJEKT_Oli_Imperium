@@ -37,12 +37,13 @@ function inspect(destination, entries, info = expectedInfo) {
   const target = path.resolve(destination);
   const report = {status: 'absent', expected: entries.length, valid: 0, missing: [], damaged: [], unexpected: [], reason: ''};
   // Keine Symlinks in der vorhandenen Elternkette verfolgen.
+  let targetMissing = false;
   for (let cursor = target; ; cursor = path.dirname(cursor)) {
     let stat;
     try { stat = fs.lstatSync(cursor); }
     catch (error) {
       if (error.code === 'ENOENT') {
-        if (cursor === target) return report;
+        if (cursor === target) { targetMissing = true; continue; }
         report.status = 'unsafe'; report.reason = 'Elternordner fehlt'; return report;
       }
       throw error;
@@ -52,6 +53,7 @@ function inspect(destination, entries, info = expectedInfo) {
     }
     if (path.dirname(cursor) === cursor) break;
   }
+  if (targetMissing) return report;
   if (fs.readdirSync(target).length === 0) { report.status = 'empty'; return report; }
   const seen = new Set();
   let infoStatus = 'missing';
