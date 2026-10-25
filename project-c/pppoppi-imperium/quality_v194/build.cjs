@@ -47,6 +47,12 @@ const changes = [
   ['src/v082_engine.js',
     'div(f.debtCent*CFG.loanRepaymentBps,10000)',
     'Number((BigInt(f.debtCent)*BigInt(CFG.loanRepaymentBps)+5000n)/10000n)'],
+  ['src/v082_engine.js',
+    'c.region===r.id&&c.owner!==null).length',
+    'c.region===r.id&&(c.owner!==null||c.surveyedBy.length>0)).length'],
+  ['src/v082_engine.js',
+    "ok(!c.owner,'Altspielstand besitzt zu viele Konzessionen')",
+    "ok(!c.owner&&c.surveyedBy.length===0,'Altspielstand besitzt zu viele Konzessionen oder Gutachten')"],
   // Die spaetere Strategie-Engine hat die Monatsabrechnung selbst kopiert;
   // beide wirklich ausgefuehrten Rechenpfade muessen identisch repariert sein.
   ['src/v082_strategy_engine.js',
@@ -55,6 +61,12 @@ const changes = [
   ['src/v082_strategy_engine.js',
     'div(f.debtCent*CFG.loanRepaymentBps,10000)',
     'Number((BigInt(f.debtCent)*BigInt(CFG.loanRepaymentBps)+5000n)/10000n)'],
+  ['src/v082_strategy_engine.js',
+    'c.region===r.id&&c.owner!==null).length',
+    'c.region===r.id&&(c.owner!==null||c.surveyedBy.length>0)).length'],
+  ['src/v082_strategy_engine.js',
+    "ok(!c.owner,'Altspielstand besitzt zu viele Konzessionen')",
+    "ok(!c.owner&&c.surveyedBy.length===0,'Altspielstand besitzt zu viele Konzessionen oder Gutachten')"],
   ['test_human_parity_v192.cjs',
     'if(result.status!==0)throw Error(result.stderr);return result.stdout.trim();',
     "if(result.error)throw result.error;if(result.signal)throw Error('Vergleichsprozess abgebrochen: '+result.signal);if(result.status!==0)throw Error(result.stderr||'Vergleichsprozess fehlgeschlagen: '+result.status);const output=result.stdout.trim();if(!output)throw Error('Vergleichsprozess lieferte keine Spielstanddaten');return output;"]
