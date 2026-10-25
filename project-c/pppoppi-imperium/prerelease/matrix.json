@@ -150,10 +150,10 @@
       "requirement": "Logistik, öffentliches Netz und Transportkosten stimmen",
       "basis": "PR #14",
       "stage": "technical",
-      "status": "blocked",
-      "evidence": [],
-      "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "Drei Fachprüfprogramme integrieren"
+      "status": "pass",
+      "evidence": ["project-c/pppoppi-imperium/prerelease/evidence/WIR-02.json"],
+      "blocker": "",
+      "next": ""
     },
     {
       "id": "WIR-03",

@@ -54,6 +54,7 @@ jobs:
           node test_public_network_v171.cjs
           node test_strategy_v192.cjs
           node test_transport_v17.cjs
+          node ../quality_v194/test_logistics_costs_v194.cjs
           node evaluate_balance_v194.cjs
           node ../quality_v194/test_balance_report_v194.cjs
           node analyze_stress_v194.cjs
