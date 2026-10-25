@@ -469,10 +469,10 @@
       "requirement": "Balance- und Stresstests in CI reproduziert",
       "basis": "PR #14",
       "stage": "technical",
-      "status": "blocked",
-      "evidence": [],
-      "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "Zwei Langzeittests in CI ausführen"
+      "status": "pass",
+      "evidence": ["project-c/pppoppi-imperium/prerelease/evidence/TES-02.json"],
+      "blocker": "",
+      "next": ""
     },
     {
       "id": "TES-03",

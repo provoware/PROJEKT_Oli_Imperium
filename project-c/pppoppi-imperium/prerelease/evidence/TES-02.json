@@ -1,0 +1,33 @@
+{
+  "gate_id": "TES-02",
+  "result": "PASS",
+  "commit": "51f86277bc858451b95df700196df2d1f70b8f64",
+  "command": "GitHub Actions: .github/workflows/pppoppi-imperium-recovery.yml > node evaluate_balance_v194.cjs && node analyze_stress_v194.cjs",
+  "date": "2026-10-25",
+  "ci_run": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40159644336",
+  "ci_job_id": 121068323252,
+  "ci_conclusion": "success",
+  "reproduced_ci_runs": [
+    "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40159267861",
+    "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40159593662",
+    "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40159644336"
+  ],
+  "comparison": "Ausgaben beider Programme in drei GitHub-Job-Logs nach Entfernen der Zeitstempel textgleich; die versionierten JSON-Belege werden in Folge-CI nach der Erzeugung bytegenau per git diff verglichen.",
+  "balance": {
+    "script": "SPIEL/evaluate_balance_v194.cjs",
+    "evidence": "SPIEL/evidence_v194/BALANCE_V194.json",
+    "cases": ["passive_normal","active_normal","active_low_demand","active_low_price"],
+    "case_count": 4,
+    "months": 144
+  },
+  "stress": {
+    "script": "SPIEL/analyze_stress_v194.cjs",
+    "evidence": "SPIEL/evidence_v193/KRISEN_LANGZEIT_V194.json",
+    "cases": ["Basis mit drei KI-Firmen","Monatlicher Nachfrageeinbruch","Preisverfall und Ressourcenknappheit","Erzwungener Forderungsausfall und Sanierung"],
+    "case_count": 4,
+    "months": 156,
+    "months_completed": 156
+  },
+  "total_scenario_months": 300,
+  "limits": "Szenariogesteuerte technische Invarianten sind stabil, aber kein Beweis für ausbalanciertes Gameplay, Sieg-/Verlustbedingungen, echte menschliche Langzeitpartien oder C64-Originaltreue."
+}
