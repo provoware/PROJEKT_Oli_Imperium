@@ -79,6 +79,9 @@ def main():
                 print("BEOBACHTUNG 800x600:", json.dumps(width), flush=True)
                 check("800x600 ohne horizontalen Seitenüberlauf", width["content"] <= width["viewport"] + 2)
 
+                # Das modale Firmenfenster verdeckt die globale Werkzeugleiste.
+                first.locator("#closeBtn").click()
+                check("Dialog vor Toolbar-Export geschlossen", not first.locator("#dialog").evaluate("el => el.open"))
                 with first.expect_download() as download_info:
                     first.locator("#saveGame").click()
                 downloaded = json.loads(Path(download_info.value.path()).read_text(encoding="utf-8"))
