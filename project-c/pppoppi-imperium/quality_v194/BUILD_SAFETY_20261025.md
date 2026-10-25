@@ -36,3 +36,30 @@ Die neue Testdatei prüft **acht** isolierte Fälle: Inventar, leeres Ziel, Schr
 Die Änderung erfüllt **keinen** vollständigen Matrixpunkt allein. Weiterhin offen sind insbesondere Browser-Partien, Speicherung und Wiederherstellung, 800×600/Zoom, Tastatur, Performance, Quellrechte und technische Gesamtfreigabe. Persönliche Sichtprüfung und Kubuntu-Praxistest erfolgen erst nach allen eigenständig möglichen technischen Freigaben.
 
 **Nächste Umsetzung:** Erst CI dieses Zweigs auf dem endgültigen HEAD kontrollieren; danach sichere Unterbrechungsdiagnose für unvollständige Technikaufbauten ergänzen, ohne fremde Daten zu löschen.
+
+
+## Fortsetzung: lesende Diagnose unterbrochener Technikaufbauten (25.10.2026)
+
+**Umfang:** diagnose_build.cjs, test_diagnose_build.cjs und Anbindung an test_build_safety_v194.cjs. Der unveränderte Spielkern, die 110 Originaldateien und Spielstände werden weder repariert noch beschrieben.
+
+**Aufruf nach einem Aufbau:**
+
+    node project-c/pppoppi-imperium/quality_v194/diagnose_build.cjs /pfad/zum/bestehenden-technikordner
+
+Die Diagnose vergleicht die vorhandenen Dateien gegen das Quellmanifest (SHA-256, Dateigröße) und die vier bewusst angepassten Ausgabedateien gegen den reproduzierbar berechneten Sollinhalt. BUILD_INFO.json ist die Bestätigung des fertigen Aufbaus; sie wird nicht erzeugt oder verändert. Fehlende, zusätzliche und veränderte Dateien werden einzeln benannt. Symbolische Verknüpfungen und Spezialdateien werden zurückgewiesen.
+
+| Status | Bedeutung |
+|---|---|
+| absent | Ziel existiert nicht |
+| empty | Ziel existiert, enthält aber nichts |
+| incomplete | Mindestens eine Soll-Datei fehlt |
+| unconfirmed | Alle Soll-Dateien stimmen, aber die Bestätigung fehlt |
+| complete | 110 Dateien und Bestätigung stimmen |
+| damaged | Inhalt, Bestätigung oder Fremddateien weichen ab |
+| unsafe | Symlink, Spezialdatei, unsicherer Pfad oder zu tiefer Verzeichnisbaum |
+
+**Ausgangscode und Nachweise:** Basis-PR #35 auf HEAD 8b660299d9d4e85216fb80d101e1331842ab3069. Elf neue isolierte Diagnosetests wurden am 25.10.2026 lokal unter Node.js 22 ausgeführt: **11/11 PASS**. Die bereits vorhandenen acht Aufbauprüfungen und die tatsächliche Quell-CI müssen auf dem neuen GitHub-HEAD erneut geprüft werden; bis dahin keine Gesamtfreigabe. Der neue Diagnosecode prüft **keinen Stromausfall** und garantiert keinen Schutz gegen gleichzeitige böswillige Pfadwechsel.
+
+**Pflichtmatrix:** Kein bisher blockierter Gesamtpunkt wird durch diese Teilprüfung automatisch freigegeben. Besonders FEH-01, STA-03, SPE-01..03, VER-01..03, GRA-03, BED-02..03 und PER-01..02 bleiben bis zu den jeweils vollständigen Nachweisen offen/blockiert.
+
+**Nächste Implementierung:** Technischen Browserstart und einen isolierten Speichern→Neustart→Wiederherstellen-Rundlauf auf dem erzeugten V1.9.4-Prüfstand automatisieren; danach 800×600, Tastatur und Zoom ohne persönliche Sichtabnahme prüfen.
