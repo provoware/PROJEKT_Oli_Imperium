@@ -280,3 +280,23 @@ löschen; der unabhängige JSON-Export bleibt deshalb wichtig.**
 
 Nachweis: `evidence/SPE-03.json`. **Matrixstand: 14/52 PASS,
 31 BLOCKED, 4 OPEN, 3 DEFERRED.** Noch keine persönliche Sichtabnahme.
+
+## Einzelabnahme SIC-01 – 25.10.2026
+
+Der lokale Browserimport der **generierten Technikfassung** akzeptiert
+nur reguläre JSON-Basisdateinamen. **18** Prüfgruppen versuchen
+Traversal, absolute Unix-/Windows-/UNC-Pfade, URL-Schemata,
+Prozentkodierung, Unicode-Trennzeichen und Steuerzeichen sowie
+relative Verzeichnisauswahl. Alle verdächtigen Namen werden **vor**
+`File.text()` zurückgewiesen. Für akzeptierte Dateinamen wird nur
+lokaler JSON-Inhalt gelesen – keine Datei-, Netzwerk- oder
+Pfadauflösung. Manipulierte Formate und Claims dürfen weder Partie
+noch Sicherungskopien überschreiben.
+
+**Grenze:** SIC-01 betrifft ausschließlich den Dateipfadschutz beim
+Import. Die allgemeine Eingabevalidierung SIC-02 und weitergehende
+Sicherheitsprüfung SIC-03 bleiben eigene Freigabepunkte. Kein
+Release und keine vorgezogene persönliche Sichtprüfung.
+
+Nachweis: `evidence/SIC-01.json`. **Matrixstand: 15/52 PASS,
+30 BLOCKED, 4 OPEN, 3 DEFERRED.**
