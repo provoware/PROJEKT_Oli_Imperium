@@ -141,3 +141,41 @@ insbesondere Dateisystemdauerhaftigkeit und Windows bleiben offen.
 
 Die Quellen fehlen weiterhin auf GitHub. Die 52 Pflichtpunkte bleiben
 ohne Spiel- und Releasefreigabe; weder Merge noch persoenliche Abnahme.
+
+
+## Folgepaket 25.10.2026 – vorhandene Teilimporte gefahrlos untersuchen
+
+Der neue **nur lesende** Helfer `recovery/inspect_import.py` dient dazu, nach einem
+abgebrochenen Quellimport den Zielordner zu beurteilen, **ohne ihn zu loeschen,
+zu veraendern oder in denselben Ordner erneut zu importieren**:
+
+```bash
+python3 project-c/pppoppi-imperium/recovery/inspect_import.py \
+  --destination "/pfad/PPPOPPI_V194_VERIFIZIERT"
+```
+
+Die Rueckgaben sind `MISSING` (Ordner fehlt), `INCOMPLETE` (Teilimport),
+`FOREIGN` (fremde Dateien), `UNSAFE` (Link/unsicherer Ordner),
+`INVALID` (abweichende Inhalte), `BLOCKED` (Systemunterstuetzung fehlt)
+oder `CHECKED` (110 Dateien **zum Zeitpunkt der Pruefung** konsistent).
+Nur `CHECKED` liefert Rueckgabewert 0. `MISSING`, `INCOMPLETE` und
+`BLOCKED` liefern 1; andere Abweichungen 2. Es erfolgt **keine**
+automatische Wiederaufnahme: Ein Teilimport ist kein bestaetigter Spielstand.
+Der sichere Weg ist, die Ursache zu dokumentieren und nach erneuter
+Archiv-/Rechtepruefung in einen **anderen, noch nicht existierenden Ordner**
+zu importieren. Fremde Dateien niemals automatisch bereinigen.
+
+Der Helfer prueft den Zielordner ohne Folgen von symbolischen Links, erkennt
+unerwartete Eintraege, nutzt die vorhandene SHA-256-Inventarpruefung und
+kontrolliert die Verzeichnisidentitaet vor/nach dem Lauf. Bei boeswilligen
+gleichzeitigen Veraenderungen bleibt eine Restrisikoluecke zwischen einzelnen
+Dateipruefungen: `CHECKED` ist **keine atomare Momentaufnahme**, keine
+Rechtefreigabe und kein Beweis fuer die Spielbarkeit. Auf Systemen ohne
+sichere POSIX-Verzeichnispruefung wird nicht ersatzweise ungeschuetzt geprueft.
+
+15 isolierte Regressionen mit kuenstlichen Quellen stehen in
+`recovery/test_inspect_import.py`. Sie laufen mit der bestehenden
+`test_*.py`-Erkennung beider GitHub-Pruefketten. Der konkrete GitHub-Nachweis
+und der unveraenderte Status der 52 Vorrelease-Pflichten stehen unter
+`prerelease/RUN_20261025_0233.md`. Kein Merge, kein Release, keine
+vorgezogene persoenliche Endabnahme.
