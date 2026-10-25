@@ -114,3 +114,19 @@ Beleg: `evidence/TES-02.json`. **Matrixstand: 4/52 PASS, 41 BLOCKED,
 4 OPEN, 3 DEFERRED.** Diese Prüfung zeigt reproduzierbare technische
 Konsistenz, **nicht** den Spaß-/Balancegrad oder den Abschluss einer
 vollständigen menschlichen Partie.
+
+## Einzelabnahme BAL-02 – 25.10.2026
+
+Vier getrennte, deterministische V1.9.4-Balancefälle zu jeweils 36 Monaten
+ergeben exakt **144 simulierte Monate** mit zwölf Jahresständen für
+vier beteiligte Firmen. Das Originalprogramm und die versionierten JSON-Daten
+wurden auf dem Quell-Commit
+`e30ae05ab793485475405fd4b4f7762b6b955434`
+in [GitHub-CI #40159924132](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40159924132)
+bestätigt. `quality_v194/test_balance_report_v194.cjs` kontrolliert
+Szenarioabdeckung, Quartett der Firmen und Nichtnegativität der
+Jahres-Endkonten zusätzlich im CI-Folgelauf.
+
+Nachweis: `evidence/BAL-02.json`. **Matrixstand: 5/52 PASS,
+40 BLOCKED, 4 OPEN, 3 DEFERRED.** Dies ist ein Nachweis für
+144 Langzeit-Testmonate, noch kein Beweis für faire Spielbalance.

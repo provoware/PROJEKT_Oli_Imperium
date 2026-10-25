@@ -1,0 +1,18 @@
+{
+  "gate_id": "BAL-02",
+  "result": "PASS",
+  "commit": "e30ae05ab793485475405fd4b4f7762b6b955434",
+  "command": "cd project-c/pppoppi-imperium/SPIEL && node evaluate_balance_v194.cjs && node ../quality_v194/test_balance_report_v194.cjs",
+  "date": "2026-10-25",
+  "ci_run": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40159924132",
+  "ci_conclusion": "success",
+  "game_engine": "V1.9.3",
+  "scenario_runner": "V1.9.4",
+  "cases": ["passive_normal","active_normal","active_low_demand","active_low_price"],
+  "months_per_case": 36,
+  "months": 144,
+  "annual_snapshots": 12,
+  "report_file": "project-c/pppoppi-imperium/SPIEL/evidence_v194/BALANCE_V194.json",
+  "source_evidence": "Die zwei historischen und die aktuelle GitHub-CI reproduzierten die 144 Monate; auf dem Folge-PR prueft test_balance_report_v194.cjs auch Szenarionamen, Jahresbelege und nichtnegative Konten.",
+  "limits": "Geprueft ist die vorgegebene Laufzeit mit technischen Invarianten. Der menschliche Akteur folgt einer einfachen deterministischen Heuristik; weder Spielspass noch reale Gewinnchancen oder historisches Originalverhalten sind damit belegt."
+}
