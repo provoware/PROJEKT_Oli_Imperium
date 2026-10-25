@@ -81,30 +81,67 @@ function verifySource() {
   return manifest.files;
 }
 
-function build(destination) {
-  assert.ok(destination, 'Zielordner fehlt');
+// Zielpfade werden vor jedem Schreibzugriff auf vorhandene Links und
+// Aliasse zum unveraenderlichen Spieloriginal geprueft. Keine Reparatur,
+// kein Aufraeumen fremder Ordner und keine Ueberschreibung.
+function isInside(directory, candidate) {
+  const relative = path.relative(directory, candidate);
+  return relative === '' || (relative !== '..' && !relative.startsWith('..' + path.sep) && !path.isAbsolute(relative));
+}
+function safeBuildTarget(destination) {
+  assert.ok(typeof destination === 'string' && destination.trim(), 'Zielordner fehlt');
   const targetRoot = path.resolve(destination);
-  assert.ok(targetRoot !== gameRoot && !targetRoot.startsWith(gameRoot + path.sep), 'Spieloriginale dürfen nicht überschrieben werden');
-  assert.ok(!fs.existsSync(targetRoot), 'Zielordner existiert bereits: ' + targetRoot);
+  assert.ok(path.basename(targetRoot), 'Dateisystemwurzel ist kein Zielordner');
+  const parent = path.dirname(targetRoot);
+  // Jede existierende Elternkomponente muss ein echtes Verzeichnis sein.
+  // Auch ein Symlink auf einen scheinbar harmlosen Pfad wird abgelehnt.
+  for (let cursor = parent; ; cursor = path.dirname(cursor)) {
+    const info = fs.lstatSync(cursor);
+    assert.ok(info.isDirectory() && !info.isSymbolicLink(), 'Unsicherer Ziel-Elternordner: ' + cursor);
+    if (path.dirname(cursor) === cursor) break;
+  }
+  const canonicalParent = fs.realpathSync(parent);
+  const canonicalTarget = path.join(canonicalParent, path.basename(targetRoot));
+  const canonicalGame = fs.realpathSync(gameRoot);
+  assert.ok(!isInside(canonicalGame, canonicalTarget), 'Spieloriginale dürfen nicht überschrieben werden');
+  // existsSync allein uebersieht haengende Symlinks.
+  try {
+    fs.lstatSync(targetRoot);
+  } catch (error) {
+    if (error.code === 'ENOENT') return {targetRoot, canonicalParent, canonicalTarget};
+    throw error;
+  }
+  throw Error('Zielordner existiert bereits: ' + targetRoot);
+}
+
+function build(destination) {
+  const {targetRoot, canonicalParent, canonicalTarget} = safeBuildTarget(destination);
   const files = verifySource();
   // Preflight: no output directory is created until all string patches match.
   for (const [name] of changes) renderPatched(name);
-  fs.mkdirSync(targetRoot, {recursive: false});
+  fs.mkdirSync(targetRoot, {recursive: false, mode: 0o700});
+  // Ein nach der Vorpruefung ausgetauschter Elternordner muss vor dem
+  // ersten Kopieren auffallen. Eine vollstaendige atomare Garantie gegen
+  // gleichzeitige Angreifer ist damit nicht behauptet.
+  assert.equal(fs.realpathSync(path.dirname(targetRoot)), canonicalParent, 'Ziel-Elternordner wurde ausgetauscht');
+  assert.equal(fs.realpathSync(targetRoot), canonicalTarget, 'Zielordner wurde ausgetauscht');
+  const created = fs.lstatSync(targetRoot);
+  assert.ok(created.isDirectory() && !created.isSymbolicLink(), 'Zielordner ist kein echtes Verzeichnis');
   for (const entry of files) {
     const relative = entry.path.slice('SPIEL/'.length);
     const dest = path.join(targetRoot, relative);
-    fs.mkdirSync(path.dirname(dest), {recursive: true});
+    fs.mkdirSync(path.dirname(dest), {recursive: true, mode: 0o700});
     if (changes.some(([name]) => name === relative)) {
-      fs.writeFileSync(dest, renderPatched(relative), 'utf8');
+      fs.writeFileSync(dest, renderPatched(relative), {encoding: 'utf8', flag: 'wx'});
     } else {
-      fs.copyFileSync(path.join(projectRoot, entry.path), dest);
+      fs.copyFileSync(path.join(projectRoot, entry.path), dest, fs.constants.COPYFILE_EXCL);
     }
   }
   fs.writeFileSync(path.join(targetRoot, 'BUILD_INFO.json'), JSON.stringify({
     kind: 'technical-preview-not-released', gameVersion: '1.9.3', qaVersion: '1.9.4',
     sourceArchiveSha256: expectedArchiveSha, sourceFiles: files.length,
     sourceOverrides: [...new Set(changes.map(c => c[0]))].sort()
-  }, null, 2) + '\n');
+  }, null, 2) + '\n', {encoding: 'utf8', flag: 'wx'});
   return {directory: targetRoot, sourceFiles: files.length};
 }
 
