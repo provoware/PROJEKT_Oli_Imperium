@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Lesender Chromium-Audit aller registrierten Spielszenen im isolierten Technikaufbau.
 
-800x600 ist eine echte Browserfenstergröße. CSS-Zoom 175/200 Prozent ist eine
-Layout-Simulation, KEIN Nachweis für nativen Browserzoom oder Sichtabnahme.
+800x600 ist eine echte Browserfenstergröße. 175/200 Prozent werden als
+entsprechend verkleinerte CSS-Viewports simuliert (457x343 / 400x300),
+KEIN Nachweis für nativen Browserzoom oder Sichtabnahme.
 """
 import json
 import subprocess
@@ -12,7 +13,7 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 
 HERE = Path(__file__).resolve().parent
-MODES = (("800x600", "100%"), ("CSS-Zoom-175", "175%"), ("CSS-Zoom-200", "200%"))
+MODES = (("800x600", 800, 600, 100), ("Zoom-äquivalent-175", 457, 343, 175), ("Zoom-äquivalent-200", 400, 300, 200))
 
 
 def check(label, passed):
@@ -34,9 +35,9 @@ def main():
         with sync_playwright() as playwright:
             browser = playwright.chromium.launch(headless=True)
             try:
-                for label, zoom in MODES:
+                for label, css_width, css_height, zoom in MODES:
                     context = browser.new_context(
-                        viewport={"width": 800, "height": 600},
+                        viewport={"width": css_width, "height": css_height},
                         reduced_motion="reduce",
                     )
                     page = context.new_page()
@@ -46,11 +47,16 @@ def main():
                             if request.url.startswith(("http://", "https://")) else None)
                     page.goto((target / "index.html").as_uri(), wait_until="load")
                     page.wait_for_function("typeof PPNavigation191 === 'object'")
-                    page.evaluate("(value) => {document.documentElement.style.zoom=value}", zoom)
+                    check(label + ": erwartete CSS-Viewport-Abmessungen",
+                          page.evaluate("(size) => innerWidth === size.width && innerHeight === size.height",
+                                        {"width": css_width, "height": css_height}))
                     page.locator("#startGame").focus()
                     page.keyboard.press("Enter")
                     page.locator('[data-ui="newgame"]').click()
                     page.wait_for_function("NeoEconomy.getState() !== null")
+                    base_page_excess = page.evaluate(
+                        "() => Math.max(0, document.documentElement.scrollWidth - document.documentElement.clientWidth)"
+                    )
                     scenes = page.evaluate("PPNavigation191.getScenes()")
                     check(label + ": Szenenregister mit mindestens 35 Einträgen", len(scenes) >= 35)
                     check(label + ": Szenennamen eindeutig", len(scenes) == len(set(scenes)))
@@ -92,22 +98,29 @@ def main():
                         r["pageExcess"], r["dialogExcess"], r["contentExcess"]
                     ) > 2]
                     summary = {
-                        "mode": label, "zoom": zoom, "scenes": len(rows),
-                        "overflow_scenes": len(overflow),
+                        "mode": label, "zoom_equivalent_percent": zoom,
+                        "css_viewport": [css_width, css_height],
+                        "physical_target": [800, 600],
+                        "baseline_page_excess": base_page_excess,
+                        "scenes": len(rows), "overflow_scenes": len(overflow),
+                        "layout_status": "BLOCKED" if overflow else "PASS",
                         "worst": sorted(overflow, key=lambda r: max(
                             r["pageExcess"], r["dialogExcess"], r["contentExcess"]
                         ), reverse=True)[:8],
                     }
                     audits.append(summary)
                     print("LAYOUT-AUDIT:", json.dumps(summary, ensure_ascii=False), flush=True)
+                    if zoom == 100:
+                        check("800x600: keine horizontalen Szenenüberläufe", not overflow)
                     context.close()
                 check("Keine JavaScript-Laufzeitfehler", not errors)
                 check("Keine externen HTTP-Anfragen", not external)
             finally:
                 browser.close()
         print("SZENEN-AUDIT:", json.dumps(audits, ensure_ascii=False), flush=True)
-        print("HINWEIS: Gemessene Überläufe sind offene UI-Befunde, keine bestandene "
-              "Freigabe. CSS-Zoom ersetzt keinen nativen Browserzoom.", flush=True)
+        print("HINWEIS: Überläufe in Zoom-äquivalenten CSS-Viewports bleiben BLOCKED. "
+              "Die CSS-Viewport-Simulation ersetzt weder nativen Browserzoom "
+              "noch eine persönliche Sichtabnahme.", flush=True)
 
 
 if __name__ == "__main__":
