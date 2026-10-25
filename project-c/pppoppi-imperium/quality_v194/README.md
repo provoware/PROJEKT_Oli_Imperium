@@ -60,13 +60,14 @@ Spielstart** nichts benötigt; Node.js ist nur zum Erzeugen der Fassung nötig.
 ## Ehrlicher Freigabestand
 
 - Quelloriginale unverändert: **110/110**.
-- Zusätzliche Technikprüfungen: **59/59 PASS** (10 UI-Verträge,
+- Zusätzliche Technikprüfungen: **71/71 PASS** (10 UI-Verträge,
   8 Spielabläufe, 6 Markt-/Journal-, 7 Logistik-,
   8 Monats-/Idempotenz-, 10 Raffinerie-/Lager-/Vertrags- und
-  10 Geld-/Schulden-/Überlaufprüfungen).
+  10 Geld-/Schulden-/Überlaufprüfungen und 12 tatsächliche
+  Export-/Import-Rundläufe mit simulierten Datei- und DOM-Ereignissen).
 - GitHub-CI muss dieselben Prüfungen am neuen Commit wiederholen.
 - Vorrelease-Matrix nach QUE-02/03, TES-01/02, BAL-02/03,
-  WIR-01/02/03/04 und LOG-05: **11/52 PASS**, davon 34 BLOCKED, 4 OPEN und
+  WIR-01/02/03/04, LOG-05 und SPE-01: **12/52 PASS**, davon 33 BLOCKED, 4 OPEN und
   3 persönliche Prüfungen DEFERRED.
 - Die 77 ausgeschlossenen Archivdateien (73 PNG, 2 PDF, 1 ZIP, 1 TXT)
   bleiben außerhalb des Quellzweigs; keine ist eine in `index.html`

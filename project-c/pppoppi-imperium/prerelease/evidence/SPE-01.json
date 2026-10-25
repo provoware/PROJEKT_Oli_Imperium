@@ -1,0 +1,20 @@
+{
+  "gate_id": "SPE-01",
+  "result": "PASS",
+  "commit": "cd7e6d96ebf2436afe9a8754a1a4e7a5054cb8aa",
+  "command": "node project-c/pppoppi-imperium/quality_v194/build.cjs <neu> && node project-c/pppoppi-imperium/quality_v194/test_save_roundtrip_v194.cjs <neu>/src",
+  "date": "2026-10-25",
+  "ci_run": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40173642239",
+  "new_cases": 12,
+  "actual_ui_handlers": true,
+  "checks": [
+    "Export ohne Partie verweigert; echter Button exportiert eigenständige JSON-Datei mit MIME und Monatsname.",
+    "Einlesen einer zuvor exportierten Datei stellt jede Zustandsstruktur exakt wieder her; Folgeexport ist bytegleich.",
+    "Offene Verträge, Transporte, vorhandene Ledger-Einträge und deterministische Folgeaktionen erhalten.",
+    "Abgeschlossene Monatsberichte, Spielphase und Minispiel-Drehregler erhalten.",
+    "Beschädigtes JSON, negativer Kassenbestand und über 5 MB große Datei werden ohne Datenverlust abgelehnt.",
+    "Vertrauliche Mehrspieler-Übergabe blockiert Export und Import."
+  ],
+  "original_sources_modified": false,
+  "limits": "Echte Export-/Import-Ereignisbehandlung im automatisierten DOM-Test; keine gerenderte Browseransicht, kein reales Dateidialogfenster des Betriebssystems. Ältere Spielstandformate und Migration werden gesondert in SPE-02 getestet. Der verlinkte grüne CI-Lauf ist die Basis vor den neuen Tests; die neue PR-CI muss separat grün sein."
+}
