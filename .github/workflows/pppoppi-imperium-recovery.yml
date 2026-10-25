@@ -45,6 +45,7 @@ jobs:
         run: |
           set -e
           node test_fair_market_v161.cjs
+          node ../quality_v194/test_market_ledger_v194.cjs
           node test_human_parity_v192.cjs
           # Die historische Variante kann einen leeren Unterprozess faelschlich
           # als PASS melden; die separat erzeugte Technikfassung muss ebenfalls bestehen.
