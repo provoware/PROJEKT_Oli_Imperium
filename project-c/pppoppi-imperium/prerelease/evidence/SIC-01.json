@@ -1,0 +1,22 @@
+{
+  "gate_id": "SIC-01",
+  "result": "PASS",
+  "commit": "1374c5b8f69e5a4328c290d9342a248a93a3bd0e",
+  "command": "node project-c/pppoppi-imperium/quality_v194/build.cjs <neu> && node project-c/pppoppi-imperium/quality_v194/test_import_paths_v194.cjs <neu>/src",
+  "date": "2026-10-25",
+  "ci_run": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40176789906",
+  "new_cases": 18,
+  "no_path_resolution": true,
+  "checks": [
+    "Browser-Dateiauswahl liest nur den vom Benutzer übergebenen File.text()-Inhalt, ohne Pfadauflösung.",
+    "Unix-/Windows-/UNC-Traversal, absolute Pfade und file://-/http://-URL-Namen vor Einlesen abgewiesen.",
+    "Prozentkodierte Traversalzeichen, Unicode-Trennzeichen, Bidisteuerung und NUL im Dateinamen abgewiesen.",
+    "Keine Nicht-JSON-Dateien, relativen Verzeichnisuploads oder Namen mit doppelten Punkten.",
+    "Pfadartige JSON-Schema- und Claim-Kennungen durch Spielstandvalidierung abgewiesen.",
+    "Pfadartige freie Firmennamen bleiben inerte Textdaten, dürfen nicht zu Dateisystempfaden werden.",
+    "Fehlerhafte, übergroße und zurückgewiesene Imports verändern weder Partie noch die zwei lokalen Sicherungen.",
+    "Downloads erhalten nur ein festes Präfix, den validierten Monatswert und die JSON-Endung."
+  ],
+  "original_sources_modified": false,
+  "limits": "Dieser Testnachweis betrifft die Datei-/Pfadgrenze des lokalen Browserimports, nicht alle externen Eingaben oder eine vollständige Sicherheitsfreigabe (SIC-02/03 bleiben offen). Browser-File-Dialog und Grafikanzeige nicht persönlich abgenommen. Der genannte grüne CI-Lauf ist die vorherige Basis; die aktuelle PR-CI separat bewerten."
+}

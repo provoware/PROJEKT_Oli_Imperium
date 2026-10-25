@@ -43,6 +43,7 @@ jobs:
           node project-c/pppoppi-imperium/quality_v194/test_save_roundtrip_v194.cjs "$RUNNER_TEMP/PPPOPPI-V194-TECH/src"
           node project-c/pppoppi-imperium/quality_v194/test_save_migration_v194.cjs "$RUNNER_TEMP/PPPOPPI-V194-TECH/src"
           node project-c/pppoppi-imperium/quality_v194/test_local_backup_v194.cjs "$RUNNER_TEMP/PPPOPPI-V194-TECH/src"
+          node project-c/pppoppi-imperium/quality_v194/test_import_paths_v194.cjs "$RUNNER_TEMP/PPPOPPI-V194-TECH/src"
           node --check "$RUNNER_TEMP/PPPOPPI-V194-TECH/src/neo_bridge.js"
           node --check "$RUNNER_TEMP/PPPOPPI-V194-TECH/src/v082_strategy_engine.js"
           node --check "$RUNNER_TEMP/PPPOPPI-V194-TECH/test_human_parity_v192.cjs"

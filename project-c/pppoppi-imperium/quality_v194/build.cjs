@@ -76,6 +76,18 @@ function recoverSaved(){
     "case 'handoff-ok':handoff=false;show('computer');refreshStatus();break;",
     "case 'handoff-ok':handoff=false;remember();show('computer');refreshStatus();break;"],
   ['src/neo_bridge.js',
+    "async function importGame(file){if(handoff)return toast('Import während der vertraulichen Übergabe gesperrt.');if(!file)return;try{if(file.size>5_000_000)",
+    String.raw`function assertSafeImportFile(file){
+ const filename=file.name===undefined?'spielstand.json':file.name;
+ if(typeof filename!=='string'||filename.length<1||filename.length>180||
+    !filename.toLowerCase().endsWith('.json')||
+    /[\/\\:\x00-\x1f\x7f\u2215\u2044\uff0f]/.test(filename)||
+    /(^\.|\.\.|%(?:2e|2f|5c)|[?#\u202e\u202d\u2066-\u2069])/i.test(filename)||
+    (typeof file.webkitRelativePath==='string'&&file.webkitRelativePath.length>0))
+    throw Error('Unzulässiger Dateiname: nur lokale JSON-Dateien ohne Pfadangaben');
+}
+async function importGame(file){if(handoff)return toast('Import während der vertraulichen Übergabe gesperrt.');if(!file)return;try{assertSafeImportFile(file);if(file.size>5_000_000)`],
+  ['src/neo_bridge.js',
     "// Do not rewrite stored game data from the decorative demo.\nrefreshStatus();",
     "// Do not rewrite stored game data from the decorative demo.\nrecoverSaved();refreshStatus();"],
   ['README_START.txt',

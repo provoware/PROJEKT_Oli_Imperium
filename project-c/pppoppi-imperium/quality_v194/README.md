@@ -19,7 +19,8 @@ neuen Zielordner** auf:
 2. `src/neo_bridge.js`: widerspruchsfreie Raffinerie-Erklärung und separat
    auslesbare Spiel-/Prüfversion; zwei lokale Sicherungsslots mit
    validiertem Rückfall bei defektem Hauptstand und dauerhaftem
-   Mehrspieler-Übergabeschutz; die Adapterkennung bleibt erhalten.
+   Mehrspieler-Übergabeschutz sowie abgesicherte JSON-Dateinamen ohne
+   Traversal; die Adapterkennung bleibt erhalten.
 3. `README_START.txt`: aktuelle Versionsangabe und korrekte Hinweise auf die
    im öffentlichen Quellzweig fehlenden Bild- und Vergleichsarchive.
 4. `test_human_parity_v192.cjs`: blockierte, leere oder abgebrochene
@@ -64,15 +65,16 @@ Spielstart** nichts benötigt; Node.js ist nur zum Erzeugen der Fassung nötig.
 ## Ehrlicher Freigabestand
 
 - Quelloriginale unverändert: **110/110**.
-- Zusätzliche Technikprüfungen: **100/100 PASS** (10 UI-Verträge,
+- Zusätzliche Technikprüfungen: **118/118 PASS** (10 UI-Verträge,
   8 Spielabläufe, 6 Markt-/Journal-, 7 Logistik-,
   8 Monats-/Idempotenz-, 10 Raffinerie-/Lager-/Vertrags- und
   10 Geld-/Schulden-/Überlaufprüfungen und 12 tatsächliche
   Export-/Import-Rundläufe, 13 Altstand-/Migrationsprüfungen und
-  16 Prüfungen lokaler Sicherungen mit Rückfall und gesperrtem Speicher).
+  16 Prüfungen lokaler Sicherungen mit Rückfall und gesperrtem Speicher
+  sowie 18 Pfad-/Traversal-/Importgrenzprüfungen).
 - GitHub-CI muss dieselben Prüfungen am neuen Commit wiederholen.
 - Vorrelease-Matrix nach QUE-02/03, TES-01/02, BAL-02/03,
-  WIR-01/02/03/04, LOG-05 und SPE-01/02/03: **14/52 PASS**, davon 31 BLOCKED, 4 OPEN und
+  WIR-01/02/03/04, LOG-05, SPE-01/02/03 und SIC-01: **15/52 PASS**, davon 30 BLOCKED, 4 OPEN und
   3 persönliche Prüfungen DEFERRED.
 - Die 77 ausgeschlossenen Archivdateien (73 PNG, 2 PDF, 1 ZIP, 1 TXT)
   bleiben außerhalb des Quellzweigs; keine ist eine in `index.html`
