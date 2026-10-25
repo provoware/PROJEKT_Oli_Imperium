@@ -56,3 +56,13 @@ Der vorhandene GitHub-Workflow `.github/workflows/prerelease-browser-project-c.y
 **Nachweisgrenze:** Ein durchlaufender Tab-Test belegt einzelne wichtige Tastaturwege, **nicht** alle Dialoge, Minispiele oder die vollständige Barrierefreiheit. Echte native Browser-Vergrößerung bleibt offen. **Vorrelease-Matrix unverändert: 6/52 PASS, 39 BLOCKED, 4 OPEN, 3 DEFERRED.** Das Ergebnis des neuen HEAD darf erst nach tatsächlich abgeschlossener GitHub-CI als PASS gemeldet werden.
 
 **Nächste Umsetzung:** Fehlgeschlagene Fokuswege gezielt beheben; danach echten Browserzoom und vollständige Langzeitpartien mit mehrfacher Wiederherstellung automatisiert prüfen. Kein Merge, kein Release und keine persönliche Endabnahme.
+
+### GitHub-Nachweise für den geänderten Prüfcode (26.10.2026)
+
+**Code- und Dokumentations-HEAD vor dieser Nachweiserweiterung:** `c909134d26a6198b9ce4ac15518ed9866824d142`.
+
+- [Chromium-CI #40245231425](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40245231425): **PASS**. Echte Tab-/Enter-Wege für Start, Partiestart, Übersicht und Schließen sowie Umschalt+Tab bestanden in allen drei Viewports. **39/39 Szenen pro Viewport, insgesamt 117/117**, jeweils **0 horizontale Szenenüberläufe**; keine JavaScript-Laufzeitfehler oder externen HTTP-Anfragen. Offline-Export, Neustart, identischer Reimport und defekter Import ohne Zustandsverlust: **PASS**.
+- [Quell-/Fach-CI #40245231428](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40245231428): **PASS**, darunter SHA-256-Inventar der 110 unveränderten Originalquellen.
+- [Gesamtmatrix #40245231426](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40245231426): **FAIL/BLOCKED**, da die verbleibenden Vorrelease-Pflichten bewusst nicht freigegeben sind; keine neue Testregression.
+
+**Einordnung:** Die drei Viewports sind kein echter Browserzoom. Die Tests belegen ausgewählte Tastaturwege, nicht die vollständige Bedienbarkeit aller Aktionen. Nach diesem Dokumentations-Commit müssen die GitHub-Prüfungen auf dem endgültigen HEAD erneut kontrolliert werden. **Matrix weiterhin 6/52 PASS, 39 BLOCKED, 4 OPEN, 3 DEFERRED.**
