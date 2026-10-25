@@ -1,0 +1,23 @@
+{
+  "gate_id": "BAL-03",
+  "result": "PASS",
+  "commit": "0a2173895a089d77c4d4da1ec2d4372569b7312f",
+  "command": "cd project-c/pppoppi-imperium/SPIEL && node analyze_stress_v194.cjs && node ../quality_v194/test_stress_report_v194.cjs",
+  "date": "2026-10-25",
+  "ci_run": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40160147127",
+  "game_engine": "V1.9.3",
+  "scenario_runner": "V1.9.4",
+  "cases": [
+    "Basis mit drei KI-Firmen",
+    "Monatlicher Nachfrageeinbruch",
+    "Preisverfall und Ressourcenknappheit",
+    "Erzwungener Forderungsausfall und Sanierung"
+  ],
+  "months_by_case": [48,36,36,36],
+  "months": 156,
+  "completed": 156,
+  "human_rescues_in_restructuring": 1,
+  "report_file": "project-c/pppoppi-imperium/SPIEL/evidence_v193/KRISEN_LANGZEIT_V194.json",
+  "source_evidence": "Alle 156 Szenariomonate erfolgreich in GitHub wiederholt; der zusaetzliche CI-Berichtstest prueft vier vollstaendig abgeschlossene Fallfolgen, nichtnegative Konten und eine tatsaechlich ausgeloeste Sanierung.",
+  "limits": "Szenarien simulieren nur festgelegte Fehler- und Krisenfaelle. Keine Nachweise zu allen moeglichen Konkursvarianten, Gewinnbedingungen, menschlichen Vollpartien oder historischer Originaltreue."
+}

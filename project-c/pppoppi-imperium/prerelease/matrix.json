@@ -205,10 +205,10 @@
       "requirement": "Stressszenarien über mindestens 156 Spielmonate geprüft",
       "basis": "PR #14",
       "stage": "technical",
-      "status": "blocked",
-      "evidence": [],
-      "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "Stresstests reproduzieren"
+      "status": "pass",
+      "evidence": ["project-c/pppoppi-imperium/prerelease/evidence/BAL-03.json"],
+      "blocker": "",
+      "next": ""
     },
     {
       "id": "SPE-01",

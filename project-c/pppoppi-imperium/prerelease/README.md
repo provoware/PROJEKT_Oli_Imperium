@@ -130,3 +130,18 @@ Jahres-Endkonten zusätzlich im CI-Folgelauf.
 Nachweis: `evidence/BAL-02.json`. **Matrixstand: 5/52 PASS,
 40 BLOCKED, 4 OPEN, 3 DEFERRED.** Dies ist ein Nachweis für
 144 Langzeit-Testmonate, noch kein Beweis für faire Spielbalance.
+
+## Einzelabnahme BAL-03 – 25.10.2026
+
+Die vier V1.9.4-Krisenfälle wurden über **48 + 36 + 36 + 36 = 156 Monate**
+simuliert. Nachweis des unveränderten Kerncodes auf
+`0a2173895a089d77c4d4da1ec2d4372569b7312f`,
+[Quellworkflow #40160147127](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40160147127).
+Die zusätzliche Prüfung `quality_v194/test_stress_report_v194.cjs`
+kontrolliert vier vollständige Durchläufe, nichtnegative Geldstände und
+dass die erzwungene Sanierung tatsächlich eine Rettung ausgelöst hat.
+
+Nachweis: `evidence/BAL-03.json`. **Matrixstand: 6/52 PASS,
+39 BLOCKED, 4 OPEN, 3 DEFERRED.** Die gezielten Stressfälle
+ersetzen weder allgemeine Insolvenz-, Sieges- und Verlusttests noch
+echte menschliche Langzeitpartien.

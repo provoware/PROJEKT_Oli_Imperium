@@ -56,6 +56,7 @@ jobs:
           node evaluate_balance_v194.cjs
           node ../quality_v194/test_balance_report_v194.cjs
           node analyze_stress_v194.cjs
+          node ../quality_v194/test_stress_report_v194.cjs
           # Beide Programme muessen exakt die versionierten Langzeitbelege
           # reproduzieren; nur gueltige Szenarien ohne Drift sind ausreichend.
           git diff --exit-code -- evidence_v194/BALANCE_V194.json evidence_v193/KRISEN_LANGZEIT_V194.json
