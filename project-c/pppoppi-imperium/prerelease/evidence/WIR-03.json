@@ -1,0 +1,21 @@
+{
+  "gate_id": "WIR-03",
+  "result": "PASS",
+  "commit": "8cddef74a3f90f9d5a8308b1c944f32c20988ec0",
+  "command": "node project-c/pppoppi-imperium/quality_v194/test_refinery_contracts_v194.cjs",
+  "date": "2026-10-25",
+  "ci_run": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40171972267",
+  "new_cases": 10,
+  "checks": [
+    "Raffinerie- und Routenbau nur auf eigenem erschlossenen Claim; Kosten separat verrechnet.",
+    "Verarbeitung: 10000 Rohöl ergeben 9000 raffinierte Mengeneinheiten, einmalige Kosten.",
+    "Monatsverarbeitungskapazität und Regionalverkaufsobergrenze mit Rückgabe unverkaufter Ware.",
+    "Vertragsfälligkeit, vollständige und teilweise Lieferung, Vertragsumsatz, Transportgebühr und Strafbuchung.",
+    "Getrennte Vertragsrohöl- und Raffinerieproduktbestände verhindern Doppelverkauf.",
+    "Ungültige Lagerbestände und unmögliche Aktionen werden atomar verworfen.",
+    "Monatswechsel setzt Quoten zurück, erhält verbleibende Bestände.",
+    "Öffentliches Logistiknetz liefert Rohöl einmal; Fertigung greift nur auf tatsächliche Anlieferung zu."
+  ],
+  "original_sources_modified": false,
+  "limits": "Technische Mengen- und Buchungsinvarianten, keine historische C64-Paritätsaussage oder persönliche Browserabnahme. Der verlinkte CI-Lauf ist die grüne Basis vor Aufnahme der neuen Tests; die neue PR-CI ist separat zu prüfen."
+}

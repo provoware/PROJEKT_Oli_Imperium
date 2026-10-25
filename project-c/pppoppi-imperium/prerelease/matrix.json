@@ -161,10 +161,10 @@
       "requirement": "Raffinerie, Lager und Vertragsmengen konsistent",
       "basis": "Nutzerauftrag",
       "stage": "technical",
-      "status": "blocked",
-      "evidence": [],
-      "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "Mengen- und Lagergrenzen prüfen"
+      "status": "pass",
+      "evidence": ["project-c/pppoppi-imperium/prerelease/evidence/WIR-03.json"],
+      "blocker": "",
+      "next": ""
     },
     {
       "id": "WIR-04",
