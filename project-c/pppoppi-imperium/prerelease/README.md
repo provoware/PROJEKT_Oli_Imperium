@@ -175,3 +175,18 @@ der Strategie-KI berücksichtigten Frachtabzug.
 Nachweis: `evidence/WIR-02.json`. **Matrixstand: 8/52 PASS,
 37 BLOCKED, 4 OPEN, 3 DEFERRED.** Sonstige Krisen-, Vertrags- und
 Überlauf-Sonderfälle sind damit nicht pauschal freigegeben.
+
+## Einzelabnahme LOG-05 – 25.10.2026
+
+Auf dem vollständigen technischen Entwicklungsstand
+`3db328d7be139ba3766acc2bcd0ed8407ef48db7`
+lief der [GitHub-Quellworkflow #40171610969](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40171610969)
+erfolgreich. `quality_v194/test_monthly_idempotence_v194.cjs` ergänzt
+**acht eigenständige Prüfungen**: früher/letzter Spielerwechsel,
+einmalige Abrechnung, wiederholte Aktionen, gespeicherte Zustände,
+30-Spieltage-Grenze, private und öffentliche Einmallieferung sowie
+**36 Monatsabschlüsse mit genau 72 Lohnbuchungen** für zwei Firmen.
+
+Nachweis: `evidence/LOG-05.json`. **Matrixstand: 9/52 PASS,
+36 BLOCKED, 4 OPEN, 3 DEFERRED.** Umfangreiche Gewinn-/Verlustpartien
+und persönliche Sichtabnahme bleiben separate harte Freigaben.
