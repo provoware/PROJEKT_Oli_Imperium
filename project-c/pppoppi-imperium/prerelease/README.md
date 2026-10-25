@@ -78,3 +78,21 @@ unveränderten GitHub-Commit `cf7a6cd66e44a79657920b33b5cbc9aba45a8541`,
 Maschinenlesbarer Nachweis: `evidence/QUE-03.json`.
 **Neuer Matrixstand: 2/52 PASS, 43 BLOCKED, 4 OPEN, 3 DEFERRED.**
 Originalvergleich, Spielbalance und persönliche Sichtprüfung bleiben offen.
+
+## Einzelabnahme TES-01 – 25.10.2026
+
+Sechs tatsächlich in GitHub Actions ausgeführte Fachprogramme bestanden
+zusammen **105 Einzelprüfungen** (18 Markt, 1 Mensch-gegen-Mensch-Parität,
+19 Logistik-KI, 28 öffentliches Netz, 17 Strategie, 22 Transport).
+Der erfolgreiche [Push-Quellworkflow #40159267861](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40159267861)
+lief auf dem unveränderten Entwicklungs-Commit
+`160c460cbe1f833ce5f8ee18c74b6b4e06589e3a`. Die Paritätsprüfung
+lieferte den **nichtleeren** Hash
+`e9cea8fd1e3320900a31c91bcda27d3400cd06a20cb2ebd26b648cb98f52524a`.
+
+Zusätzlich wird in der CI die gegen leere/abgebrochene Unterprozesse
+gehärtete Paritätsprüfung aus dem Technikaufbau ausgeführt; sie verändert
+keine der 110 Quelloriginale. Nachweis: `evidence/TES-01.json`.
+**Matrixstand: 3/52 PASS, 42 BLOCKED, 4 OPEN, 3 DEFERRED.**
+Langzeitsimulation, tatsächliche Browserbenutzung, Gesamtpartie und
+persönliche Sichtprüfung sind dadurch nicht automatisch bestanden.

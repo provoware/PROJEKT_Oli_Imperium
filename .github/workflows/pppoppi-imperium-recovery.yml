@@ -46,6 +46,9 @@ jobs:
           set -e
           node test_fair_market_v161.cjs
           node test_human_parity_v192.cjs
+          # Die historische Variante kann einen leeren Unterprozess faelschlich
+          # als PASS melden; die separat erzeugte Technikfassung muss ebenfalls bestehen.
+          node "$RUNNER_TEMP/PPPOPPI-V194-TECH/test_human_parity_v192.cjs"
           node test_logistics_ai_v193.cjs
           node test_public_network_v171.cjs
           node test_strategy_v192.cjs
