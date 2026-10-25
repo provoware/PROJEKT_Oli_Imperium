@@ -1,6 +1,6 @@
 # Projekt C – Offline-Browser-Rundlauf (25.10.2026)
 
-**Status vor CI:** Test implementiert, GitHub-Ausführung noch zu prüfen; keine Freigabe.
+**Status:** 15/15 Browser-Teilprüfungen auf dokumentiertem Code-HEAD bestanden; Gesamtfreigabe weiterhin BLOCKED.
 **Basiskette:** Entwurfs-PR #45, `687be1dd6ff9f517493d824814c7d2159bceaf43`.
 **Entwicklungszweig:** `agent/prerelease-c-browser-roundtrip-20261025-1735`.
 **Schreibgrenze:** nur dieser getrennte Zweig; unveränderte 110 Originaldateien in `SPIEL/`, keine echten Spielstände, kein Merge.
@@ -29,6 +29,18 @@ python3 project-c/pppoppi-imperium/quality_v194/test_browser_roundtrip_v194.py
 ```
 
 GitHub führt diesen Ablauf mit den nötigen Chromium-Systempaketen über `.github/workflows/prerelease-browser-project-c.yml` aus. Die vorhandenen Quell-/Fachtests und die absichtlich sperrende Gesamtmatrix bleiben unverändert.
+
+## GitHub-Ausführung und Fehlerkorrektur (25.10.2026)
+
+**Erster Lauf:** [Chromium-CI #40212574771](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40212574771) **FAIL**: Nach dem Monatswechsel verdeckte das geöffnete modale Firmenfenster den globalen Speicherknopf. Das Testskript versuchte, durch den Dialog hindurchzuklicken; es wurde korrigiert, den Dialog regulär mit der sichtbaren Schließen-Schaltfläche zu schließen. Kein Spielkern-Patch nötig.
+
+**Korrigierter Code-HEAD:** `ae017e60462a9cc786b69e802ce73154c2216f1e`.
+
+- [Chromium-CI #40212665187](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40212665187): **PASS, 15/15 Einzelprüfungen**, echter `file://`-Start, 800×600 mit 800 Pixeln Dokumentbreite, Tastaturstart, Monatsabschluss, Export, Neustart, Reimport, beschädigter Import, keine externen HTTP-Anfragen, keine JS-Laufzeitfehler.
+- [Quell-/Fach-CI #40212665175](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40212665175): **PASS**.
+- [Gesamtmatrix #40212665275](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40212665275): **FAIL/BLOCKED wie vorgeschrieben**, weil nicht alle 52 Release-Pflichten erfüllt sind.
+
+Die dokumentierte GitHub-CI bezieht sich auf den oben genannten Code-HEAD. Ein späterer Dokumentations-Commit ist erneut auf seinem eigenen HEAD zu kontrollieren. Trotz erfolgreichem Browser-Teiltest werden die vier berührten Matrix-Pflichten **nicht** ohne vollständige Nachweise auf PASS gesetzt.
 
 ## Grenzen und Vorrelease-Pflichtmatrix
 
