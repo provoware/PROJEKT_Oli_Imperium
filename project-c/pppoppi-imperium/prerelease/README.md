@@ -242,3 +242,22 @@ persönliche Sichtabnahme**. Migration älterer Speicherformate ist SPE-02.
 
 Nachweis: `evidence/SPE-01.json`. **Matrixstand: 12/52 PASS,
 33 BLOCKED, 4 OPEN, 3 DEFERRED.**
+
+## Einzelabnahme SPE-02 – 25.10.2026
+
+Die V0.8-zu-V0.8.2-Speichermigration wird mit **13** neuen Prüfungen
+einschließlich tatsächlichem Dateiimport und Folgeexport kontrolliert.
+Ein zuvor unbemerkter Fehler überschrieb regionale Altgutachten, wenn
+zwei Firmen dieselbe Region unabhängig untersucht hatten. Die
+**erzeugte Technikfassung** belegt jetzt verschiedene freie Claims auch
+für ungekaufte Gutachten und sperrt Überbelegung mit verständlichem Fehler.
+Kassenstände, Journal, aktive Firma, Eigentum und Lager bleiben erhalten.
+
+**Kompatibilitätsgrenze:** V0.7, V0.8 mit offenem Vertrag, laufendem
+Minispiel oder in der Berichtsphase sowie mehr Altgutachten als Claims
+werden nicht stillschweigend umgedeutet, sondern abgewiesen.
+Die 110 Originaldateien bleiben byteidentisch; alte Dateien werden
+beim Import nicht überschrieben. Noch keine Betriebssystem-/Sichtabnahme.
+
+Nachweis: `evidence/SPE-02.json`. **Matrixstand: 13/52 PASS,
+32 BLOCKED, 4 OPEN, 3 DEFERRED.**

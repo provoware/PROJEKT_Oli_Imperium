@@ -23,12 +23,14 @@ neuen Zielordner** auf:
 4. `test_human_parity_v192.cjs`: blockierte, leere oder abgebrochene
    Vergleichs-Unterprozesse können nicht länger fälschlich PASS melden.
 5. `src/v082_engine.js`: Zinsen und Tilgungen auch bei hohen Schulden
-   mit `BigInt` zwischenrechnen und centgenau abrunden.
-6. `src/v082_strategy_engine.js`: dieselbe Korrektur im tatsächlich
-   für Strategien und Monatsabschluss benutzten zweiten Rechenpfad.
+   mit `BigInt` centgenau runden; getrennte ältere Regionalgutachten
+   bei der V0.8-Migration verlustfrei auf freie Claims verteilen.
+6. `src/v082_strategy_engine.js`: dieselben beiden Korrekturen im
+   tatsächlich für Strategien und Monatsabschluss benutzten Rechenpfad.
 
 Die **Wirtschaftsregeln, KI und gespeicherten Spielstandschemas** werden
-bis auf die ausdrücklich nachgewiesene Zins-/Tilgungsrundung nicht geändert.
+bis auf die ausdrücklich nachgewiesene Zins-/Tilgungsrundung und
+V0.8-Gutachtenmigration nicht geändert.
 
 ## Prüfen (aus der Repository-Wurzel)
 
@@ -60,14 +62,14 @@ Spielstart** nichts benötigt; Node.js ist nur zum Erzeugen der Fassung nötig.
 ## Ehrlicher Freigabestand
 
 - Quelloriginale unverändert: **110/110**.
-- Zusätzliche Technikprüfungen: **71/71 PASS** (10 UI-Verträge,
+- Zusätzliche Technikprüfungen: **84/84 PASS** (10 UI-Verträge,
   8 Spielabläufe, 6 Markt-/Journal-, 7 Logistik-,
   8 Monats-/Idempotenz-, 10 Raffinerie-/Lager-/Vertrags- und
   10 Geld-/Schulden-/Überlaufprüfungen und 12 tatsächliche
-  Export-/Import-Rundläufe mit simulierten Datei- und DOM-Ereignissen).
+  Export-/Import-Rundläufe sowie 13 Altstand-/Migrationsprüfungen).
 - GitHub-CI muss dieselben Prüfungen am neuen Commit wiederholen.
 - Vorrelease-Matrix nach QUE-02/03, TES-01/02, BAL-02/03,
-  WIR-01/02/03/04, LOG-05 und SPE-01: **12/52 PASS**, davon 33 BLOCKED, 4 OPEN und
+  WIR-01/02/03/04, LOG-05 und SPE-01/02: **13/52 PASS**, davon 32 BLOCKED, 4 OPEN und
   3 persönliche Prüfungen DEFERRED.
 - Die 77 ausgeschlossenen Archivdateien (73 PNG, 2 PDF, 1 ZIP, 1 TXT)
   bleiben außerhalb des Quellzweigs; keine ist eine in `index.html`

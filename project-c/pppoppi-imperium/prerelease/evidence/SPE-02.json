@@ -1,0 +1,21 @@
+{
+  "gate_id": "SPE-02",
+  "result": "PASS",
+  "commit": "b6859b2fdc66d92fccea37e193719990f5aecf63",
+  "command": "node project-c/pppoppi-imperium/quality_v194/build.cjs <neu> && node project-c/pppoppi-imperium/quality_v194/test_save_migration_v194.cjs <neu>/src",
+  "date": "2026-10-25",
+  "ci_run": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40173980315",
+  "new_cases": 13,
+  "survey_collision_fixed": true,
+  "checks": [
+    "Gültiges V0.8-Format wird zu V0.8.2 mit korrekter Herkunft migriert.",
+    "Getrennte Altgutachten unterschiedlicher Firmen behalten getrennte neue Claims.",
+    "Eigentum, Tank, Rohöl, Pipeline, Schutzfrist, Geld, aktive Firma und Journal werden übernommen.",
+    "Ein alter Stand läuft nach Migration mit aktuelleren Industriemodulen und Aktionen weiter.",
+    "Unerfüllte Verträge, laufende alte Minispiele, Berichtsphase und vier Gutachten bei drei Claims werden erklärt zurückgewiesen.",
+    "Der echte UI-Dateihandler importiert V0.8, der Export schreibt normalisiertes V0.8.2.",
+    "Fremde, zukünftige, beschädigte und V0.7-Schemata überschreiben den aktuellen Spielstand nicht."
+  ],
+  "original_sources_modified": false,
+  "limits": "PASS betrifft die dokumentiert kompatible V0.8-zu-V0.8.2-Migration der technischen Fassung. Altes V0.7, aktive V0.8-Minispiele, offene Altverträge und Altspielstände oberhalb der drei neuen Claims pro Region sind nicht verlustfrei abbildbar und werden bewusst abgewiesen. Eine ursprüngliche Überschreibung konkurrierender Gutachten wurde im erzeugten Build isoliert behoben, nicht in 110 Originalen. Der angeführte grüne CI-Lauf belegt die vorherige Basis; die neue PR-CI muss eigens bestehen."
+}
