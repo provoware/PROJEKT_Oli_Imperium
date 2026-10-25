@@ -177,7 +177,7 @@ class OfflineImportTests(unittest.TestCase):
             self.run_import(digest)
         self.assertFalse(self.destination.exists())
 
-    def test_install_failure_rolls_back_only_created_destination(self):
+    def test_install_failure_keeps_partial_target_without_deleting_data(self):
         digest = self.build()
         original_rename = os.rename
         calls = 0
@@ -192,7 +192,65 @@ class OfflineImportTests(unittest.TestCase):
         with patch('import_archive.os.rename', side_effect=fail_second_rename):
             with self.assertRaises(ImportRejected):
                 self.run_import(digest)
-        self.assertFalse(self.destination.exists())
+        self.assertTrue((self.destination / 'SPIEL/index.html').is_file())
+        self.assertFalse((self.destination / 'WIEDERHERSTELLUNG_MANIFEST.json').exists())
+        self.assertFalse(list(self.root.glob('.pppoppi-import-*')))
+
+    def test_swapped_target_symlink_never_redirects_import_or_deletes_victim(self):
+        digest = self.build()
+        victim = self.root / 'victim'
+        victim.mkdir()
+        (victim / 'user.txt').write_text('geschuetzt', encoding='utf-8')
+        displaced = self.root / 'displaced'
+        original_rename = os.rename
+        calls = 0
+
+        def swap_after_first_rename(src, dst, *args, **kwargs):
+            nonlocal calls
+            calls += 1
+            result = original_rename(src, dst, *args, **kwargs)
+            if calls == 1:
+                original_rename(self.destination, displaced)
+                self.destination.symlink_to(victim, target_is_directory=True)
+            return result
+
+        with patch('import_archive.os.rename', side_effect=swap_after_first_rename):
+            with self.assertRaisesRegex(ImportRejected, 'ausgetauscht'):
+                self.run_import(digest)
+        self.assertEqual((victim / 'user.txt').read_text(encoding='utf-8'),
+                         'geschuetzt')
+        self.assertEqual(sorted(p.name for p in victim.iterdir()), ['user.txt'])
+        self.assertTrue(self.destination.is_symlink())
+        self.assertTrue((displaced / 'SPIEL/index.html').is_file())
+        self.assertFalse(list(self.root.glob('.pppoppi-import-*')))
+
+    def test_swapped_target_on_write_failure_keeps_unrelated_directory(self):
+        digest = self.build()
+        victim = self.root / 'victim'
+        victim.mkdir()
+        marker = victim / 'keep.txt'
+        marker.write_text('nicht loeschen', encoding='utf-8')
+        displaced = self.root / 'displaced'
+        original_rename = os.rename
+        calls = 0
+
+        def swap_then_fail(src, dst, *args, **kwargs):
+            nonlocal calls
+            calls += 1
+            if calls == 2:
+                raise OSError('simulierter zweiter Schreibfehler')
+            result = original_rename(src, dst, *args, **kwargs)
+            if calls == 1:
+                original_rename(self.destination, displaced)
+                self.destination.symlink_to(victim, target_is_directory=True)
+            return result
+
+        with patch('import_archive.os.rename', side_effect=swap_then_fail):
+            with self.assertRaises(ImportRejected):
+                self.run_import(digest)
+        self.assertEqual(marker.read_text(encoding='utf-8'), 'nicht loeschen')
+        self.assertEqual(sorted(p.name for p in victim.iterdir()), ['keep.txt'])
+        self.assertTrue(self.destination.is_symlink())
         self.assertFalse(list(self.root.glob('.pppoppi-import-*')))
 
 
