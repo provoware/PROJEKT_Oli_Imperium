@@ -190,3 +190,16 @@ einmalige Abrechnung, wiederholte Aktionen, gespeicherte Zustände,
 Nachweis: `evidence/LOG-05.json`. **Matrixstand: 9/52 PASS,
 36 BLOCKED, 4 OPEN, 3 DEFERRED.** Umfangreiche Gewinn-/Verlustpartien
 und persönliche Sichtabnahme bleiben separate harte Freigaben.
+
+## Einzelabnahme WIR-03 – 25.10.2026
+
+`quality_v194/test_refinery_contracts_v194.cjs` prüft zehn unabhängige
+Fälle am unveränderten Spielkern: Werk- und Routenbau mit Kosten, 10:9-
+Verarbeitung, Monatskapazität, Marktkontingente samt Warenrückgabe,
+Fälligkeitsverträge mit Voll- und Teillieferung, Vertragsstrafe,
+getrennte Rohöl-/Produktlager, atomare Fehlversuche und Anlieferung
+über das öffentliche Netz. Alle zehn lokalen Einzelprüfungen bestanden.
+GitHub-CI prüft dieselbe Testdatei am Pull Request separat.
+
+Nachweis: `evidence/WIR-03.json`. **Matrixstand: 10/52 PASS,
+35 BLOCKED, 4 OPEN, 3 DEFERRED.** Kein Release und keine Sichtprüfung.
