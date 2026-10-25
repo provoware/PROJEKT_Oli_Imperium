@@ -14,3 +14,12 @@ Status (25.10.2026): **110 verifizierte Quell-/Testdateien auf getrenntem Integr
 **GitHub-Quelle als Pflicht:** künftige Spielversionen müssen zuerst unter `project-c/pppoppi-imperium/` im Entwicklungszweig mitsamt Tests gesichert, durch GitHub Actions überprüft und anschließend als überprüfbarer PR angeboten werden. Erst dann gilt ein Versionsstand als auf GitHub gesichert.
 
 Das Forschungsprojekt A/B und dessen offener PR-Stapel bleiben getrennt und unverändert. Keine historischen C64-Originaldateien ins öffentliche Repository aufnehmen.
+
+## Technische Fortsetzung ohne Sichtabnahme
+
+Die belegten Versions- und Hilfetextwidersprüche sowie ein falscher grüner
+Unterprozess-Test werden in einem getrennten, reproduzierbaren Technikaufbau
+korrigiert. Die 110 gegen das Originalarchiv verifizierten Quelldateien bleiben
+unverändert; zusätzliche Spielablauf- und UI-Vertragstests laufen außerhalb
+des geschützten `SPIEL/`-Inventars. Details, Befehle und weiterhin offene
+Freigaben: [quality_v194/README.md](quality_v194/README.md).
