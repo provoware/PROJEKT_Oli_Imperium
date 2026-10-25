@@ -25,3 +25,5 @@ jobs:
           python -m playwright install --with-deps chromium
       - name: Offline-Dateistart, Tastatur, 800x600, Speichern, Neustart, defekter Import
         run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_roundtrip_v194.py
+      - name: Alle Spielszenen, Tastatur und simulierte 175-200 Prozent Zoomstufen
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_scenes_v194.py
