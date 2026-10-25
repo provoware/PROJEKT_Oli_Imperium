@@ -52,6 +52,7 @@ try {
   const alias = path.join(temp, 'alias');
   fs.symlinkSync(target, alias, 'dir');
   test('Ziel-Symlink', () => assert.equal(inspect(alias, entries, info).status, 'unsafe'));
+  test('Symlink-Elternpfad bei fehlendem Ziel', () => assert.equal(inspect(path.join(alias, 'fehlt'), entries, info).status, 'unsafe'));
   test('Traversal im Inventar', () => assert.throws(() => inspect(target, [{path:'../evil',size:1,sha256:sha('x')}], info), /Pfad ausserhalb/));
   console.log('ERGEBNIS', count, '/', count, 'Diagnosetests bestanden');
 } finally { fs.rmSync(temp, {recursive: true, force: true}); }
