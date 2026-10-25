@@ -96,3 +96,21 @@ keine der 110 Quelloriginale. Nachweis: `evidence/TES-01.json`.
 **Matrixstand: 3/52 PASS, 42 BLOCKED, 4 OPEN, 3 DEFERRED.**
 Langzeitsimulation, tatsächliche Browserbenutzung, Gesamtpartie und
 persönliche Sichtprüfung sind dadurch nicht automatisch bestanden.
+
+## Einzelabnahme TES-02 – 25.10.2026
+
+Der unveränderte V1.9.4-Szenarioprüfer absolvierte vier Balancefälle mit
+**144 Spielmonaten** sowie vier Krisenfälle mit **156 Spielmonaten**.
+Die insgesamt **300 Szenariomonate** wurden in drei erfolgreichen GitHub-Läufen
+([#40159267861](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40159267861),
+[#40159593662](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40159593662),
+[#40159644336](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40159644336))
+mit nachweislich **identischen Ausgaben** wiederholt. Der Quellstand
+`51f86277bc858451b95df700196df2d1f70b8f64` ist der Bezugs-Commit;
+ab dieser Prüfung vergleicht die CI die erneut generierten JSON-Nachweise
+mit den versionierten Belegen per `git diff --exit-code`.
+
+Beleg: `evidence/TES-02.json`. **Matrixstand: 4/52 PASS, 41 BLOCKED,
+4 OPEN, 3 DEFERRED.** Diese Prüfung zeigt reproduzierbare technische
+Konsistenz, **nicht** den Spaß-/Balancegrad oder den Abschluss einer
+vollständigen menschlichen Partie.
