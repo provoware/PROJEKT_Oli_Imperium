@@ -1,0 +1,19 @@
+{
+  "gate_id": "QUE-03",
+  "result": "PASS",
+  "commit": "cf7a6cd66e44a79657920b33b5cbc9aba45a8541",
+  "command": "node project-c/pppoppi-imperium/quality_v194/test_ui_integrity_v194.cjs",
+  "date": "2026-10-25",
+  "game_version": "1.9.3",
+  "qa_version": "1.9.4",
+  "legacy_adapter_version": "1.7.1",
+  "ci_run": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40158971232",
+  "ci_conclusion": "success",
+  "checks": [
+    "Der V1.9.3-KI-Logistikadapter ist in index.html geladen; V1.9.4-Analyseskripte sind keine Browser-Laufzeitmodule.",
+    "Die V1.9.4-Balance- und Krisenprogramme verwenden die unveränderten V1.9.3-/V0.8.2-Spielmodule.",
+    "Der reproduzierbare Technikaufbau verändert nur Versionshinweis, Beschreibung, Dokumentation und den Unterprozess-Test; keine Wirtschaftsregeln.",
+    "Die Benutzeranzeige unterscheidet ausdrücklich Spielkern V1.9.3 und Prüfschicht V1.9.4."
+  ],
+  "limits": "Versionstrennung ist keine Freigabe der Balance, C64-Originaltreue oder persönlichen Sichtprüfung."
+}
