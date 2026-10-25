@@ -39,6 +39,22 @@ const changes = [
   ['README_START.txt',
     'Original-V0.8.2 als separate Datei im vergleiche/-Ordner.',
     'Das historische V0.8.2-Archiv liegt nur im ursprünglichen Nutzerpaket.'],
+  // Centgenaue Zins- und Tilgungsrundung auch oberhalb 2^53 bei der
+  // Zwischenmultiplikation. BigInt darf nicht im JSON-Spielstand landen.
+  ['src/v082_engine.js',
+    'div(f.debtCent*CFG.loanInterestBps,10000)',
+    'Number((BigInt(f.debtCent)*BigInt(CFG.loanInterestBps)+5000n)/10000n)'],
+  ['src/v082_engine.js',
+    'div(f.debtCent*CFG.loanRepaymentBps,10000)',
+    'Number((BigInt(f.debtCent)*BigInt(CFG.loanRepaymentBps)+5000n)/10000n)'],
+  // Die spaetere Strategie-Engine hat die Monatsabrechnung selbst kopiert;
+  // beide wirklich ausgefuehrten Rechenpfade muessen identisch repariert sein.
+  ['src/v082_strategy_engine.js',
+    'div(f.debtCent*CFG.loanInterestBps,10000)',
+    'Number((BigInt(f.debtCent)*BigInt(CFG.loanInterestBps)+5000n)/10000n)'],
+  ['src/v082_strategy_engine.js',
+    'div(f.debtCent*CFG.loanRepaymentBps,10000)',
+    'Number((BigInt(f.debtCent)*BigInt(CFG.loanRepaymentBps)+5000n)/10000n)'],
   ['test_human_parity_v192.cjs',
     'if(result.status!==0)throw Error(result.stderr);return result.stdout.trim();',
     "if(result.error)throw result.error;if(result.signal)throw Error('Vergleichsprozess abgebrochen: '+result.signal);if(result.status!==0)throw Error(result.stderr||'Vergleichsprozess fehlgeschlagen: '+result.status);const output=result.stdout.trim();if(!output)throw Error('Vergleichsprozess lieferte keine Spielstanddaten');return output;"]

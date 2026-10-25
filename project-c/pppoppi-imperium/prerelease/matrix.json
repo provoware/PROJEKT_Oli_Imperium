@@ -172,10 +172,10 @@
       "requirement": "Geld, Schulden und Zahlungsfähigkeit gegen Überläufe abgesichert",
       "basis": "docs/05_TESTS_FORTSCHRITT.md",
       "stage": "technical",
-      "status": "blocked",
-      "evidence": [],
-      "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "Extremwerte und Rundung testen"
+      "status": "pass",
+      "evidence": ["project-c/pppoppi-imperium/prerelease/evidence/WIR-04.json"],
+      "blocker": "",
+      "next": ""
     },
     {
       "id": "BAL-01",

@@ -1,0 +1,21 @@
+{
+  "gate_id": "WIR-04",
+  "result": "PASS",
+  "commit": "06374ae559b9c48af8a96b188fab2c565ed95687",
+  "command": "node project-c/pppoppi-imperium/quality_v194/build.cjs <neu> && node project-c/pppoppi-imperium/quality_v194/test_financial_limits_v194.cjs <neu>/src",
+  "date": "2026-10-25",
+  "ci_run": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40173218207",
+  "new_cases": 10,
+  "cent_precision_fix": true,
+  "corrected_generated_modules": ["src/v082_engine.js", "src/v082_strategy_engine.js"],
+  "checks": [
+    "Ungültige, negative, gebrochene und nicht sicher darstellbare Geld- und Schuldwerte abgewiesen.",
+    "Kauf und Raffineriebau bei fehlendem Cent ohne Belastung abgebrochen; exakter Grenzbetrag erlaubt.",
+    "Zins und Tilgung bei kleinen und sehr hohen Schuldbeträgen BigInt-genau auf ganze Cent gerundet.",
+    "MAX_SAFE_INTEGER-Kontostand abbuchbar, Einnahme darüber blockiert gesamten Monatsabschluss atomar.",
+    "Rettungskredit bilanziert Guthaben und Schuld einmal; Schuldner gleicher Priorität fair und nur einmal bezahlt.",
+    "Unzulässige zweite Kreditaufnahme sowie Schuldüberlauf ohne Eingabemutation abgewiesen."
+  ],
+  "original_sources_modified": false,
+  "limits": "PASS gilt für die erzeugte Technikfassung mit zwei zusätzlichen Quellüberlagerungen, nicht für die byteidentischen Originalskripte. Dort war bei Schulden von 9007199254740349 Cent ein Zinsrundungsfehler um 1 Cent nachweisbar. Der referenzierte grüne CI-Lauf ist vor Aufnahme der neuen Prüfungen; die neue PR-CI muss gesondert grün werden. Keine vollständige historische C64-Paritäts- oder Browserabnahme."
+}

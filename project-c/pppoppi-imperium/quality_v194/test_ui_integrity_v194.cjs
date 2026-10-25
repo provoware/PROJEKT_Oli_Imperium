@@ -36,12 +36,13 @@ check('V1.9.4-Prüfprogramme sind keine Laufzeitmodule der V1.9.3-Spieloberfläc
   assert.ok(!scripts.some(file => file.includes('evaluate_balance') || file.includes('analyze_stress')));
 });
 
-check('V1.9.4-Berichte lesen den tatsächlichen V1.9.3-Kern; dessen Module bleiben bytegleich', () => {
-  const runtimeModules = ['src/v082_strategy_engine.js', 'src/strategy_ai_v192.js',
+check('V1.9.4-Berichte lesen den tatsächlichen V1.9.3-Kern; Finanzkorrekturen isoliert', () => {
+  const runtimeModules = ['src/strategy_ai_v192.js',
     'src/strategy_logistics_v193.js', 'src/profi_economy.js', 'src/logistics_v17.js'];
   const modifiedFiles = [...new Set(changes.map(entry => entry[0]))];
   assert.deepEqual(modifiedFiles.sort(), ['README_START.txt', 'index.html',
-    'src/neo_bridge.js', 'test_human_parity_v192.cjs']);
+    'src/neo_bridge.js', 'src/v082_engine.js', 'src/v082_strategy_engine.js',
+    'test_human_parity_v192.cjs']);
   for (const name of runtimeModules) assert.ok(!modifiedFiles.includes(name));
   for (const testScript of ['evaluate_balance_v194.cjs', 'analyze_stress_v194.cjs']) {
     const source = read(testScript);
