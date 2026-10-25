@@ -32,10 +32,8 @@
       "requirement": "V1.9.3-Spielkern und V1.9.4-Prüfschicht versionsrichtig getrennt",
       "basis": "PR #14",
       "stage": "technical",
-      "status": "blocked",
-      "evidence": [],
-      "blocker": "Quellen vorhanden; V1.9.3-/V1.9.4-Trennung ist noch nicht unabhaengig abgenommen.",
-      "next": "Versionen und Dateilisten abgleichen"
+      "status": "pass",
+      "evidence": ["project-c/pppoppi-imperium/prerelease/evidence/QUE-03.json"]
     },
     {
       "id": "QUE-04",

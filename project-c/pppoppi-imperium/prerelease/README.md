@@ -64,3 +64,17 @@ Der maschinenprüfbare Nachweis liegt unter `evidence/QUE-02.json`.
 Alle 48 anderen technischen Pflichten und alle drei persönlichen Freigaben
 bleiben unbestätigt. Diese einzelne Quellenprüfung beweist weder die
 Spielbarkeit noch die Rechte der 77 ausgeschlossenen Archivdateien.
+
+## Einzelabnahme QUE-03 – 25.10.2026
+
+Die V1.9.4-Prüfprogramme werden **nicht** als Spielmodule geladen, sondern
+verwenden die tatsächlich vorhandenen V1.9.3-Strategie- und Logistikmodule.
+Die im Technikaufbau eingesetzte Versionskennzeichnung wird zusätzlich durch
+`quality_v194/test_ui_integrity_v194.cjs` abgesichert; Wirtschaftsdateien
+werden durch den Aufbau nicht verändert. Der Ausgangsnachweis stammt vom
+unveränderten GitHub-Commit `cf7a6cd66e44a79657920b33b5cbc9aba45a8541`,
+[Quellworkflow #40158971232](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40158971232).
+
+Maschinenlesbarer Nachweis: `evidence/QUE-03.json`.
+**Neuer Matrixstand: 2/52 PASS, 43 BLOCKED, 4 OPEN, 3 DEFERRED.**
+Originalvergleich, Spielbalance und persönliche Sichtprüfung bleiben offen.

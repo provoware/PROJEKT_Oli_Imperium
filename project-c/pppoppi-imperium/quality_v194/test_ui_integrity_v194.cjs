@@ -3,7 +3,7 @@
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
-const {renderPatched, verifySource} = require('./build.cjs');
+const {changes, renderPatched, verifySource} = require('./build.cjs');
 
 const root = path.resolve(__dirname, '../SPIEL');
 const read = relative => fs.readFileSync(path.join(root, relative), 'utf8');
@@ -26,6 +26,30 @@ check('Spielkern und Prüfschicht sind als zwei Versionen gekennzeichnet', () =>
   assert.match(html, /SPIEL V1\.9\.3 · TEST V1\.9\.4/);
   assert.doesNotMatch(html, /V1\.6 · PROFI · LIVE/);
   assert.match(bridge, /version:'1\.7\.1',gameVersion:'1\.9\.3',qaVersion:'1\.9\.4'/);
+});
+
+check('V1.9.4-Prüfprogramme sind keine Laufzeitmodule der V1.9.3-Spieloberfläche', () => {
+  const scripts = [...html.matchAll(/<script\b[^>]*\bsrc="([^"]+)"/g)].map(m => m[1]);
+  assert.ok(scripts.includes('src/strategy_logistics_v193.js'));
+  assert.ok(scripts.includes('src/neo_bridge.js'));
+  assert.ok(!scripts.some(file => /v194\.(?:js|cjs)$/.test(file)));
+  assert.ok(!scripts.some(file => file.includes('evaluate_balance') || file.includes('analyze_stress')));
+});
+
+check('V1.9.4-Berichte lesen den tatsächlichen V1.9.3-Kern; dessen Module bleiben bytegleich', () => {
+  const runtimeModules = ['src/v082_strategy_engine.js', 'src/strategy_ai_v192.js',
+    'src/strategy_logistics_v193.js', 'src/profi_economy.js', 'src/logistics_v17.js'];
+  const modifiedFiles = [...new Set(changes.map(entry => entry[0]))];
+  assert.deepEqual(modifiedFiles.sort(), ['README_START.txt', 'index.html',
+    'src/neo_bridge.js', 'test_human_parity_v192.cjs']);
+  for (const name of runtimeModules) assert.ok(!modifiedFiles.includes(name));
+  for (const testScript of ['evaluate_balance_v194.cjs', 'analyze_stress_v194.cjs']) {
+    const source = read(testScript);
+    assert.match(source, /strategy_logistics_v193/);
+    assert.match(source, /v082_strategy_engine/);
+    assert.doesNotMatch(source, /require\(['"]\.\/src\/strategy_balance_v194/);
+  }
+  assert.match(read('evaluate_balance_v194.cjs'), /source:'actual V1\.9\.3 game engine'/);
 });
 
 check('Alle HTML-Quellen sind lokal vorhanden und ohne CDN erreichbar', () => {

@@ -35,7 +35,7 @@ node project-c/pppoppi-imperium/quality_v194/test_gameflow_v194.cjs
 node project-c/pppoppi-imperium/prerelease/check.mjs --schema
 ```
 
-Die beiden neuen Tests prüfen 8 statische UI-Verträge und 8 technische
+Die beiden neuen Tests prüfen 10 statische UI-Verträge und 8 technische
 Spielabläufe: Start, Förderkette, Angebot, Monatswechsel, KI, JSON-Roundtrip,
 ungültigen Spielstand, zwei menschliche Firmen, drei Minispiele und
 zwölf zusätzliche Monate. **Ein DOM-/Browser-Live-Test ist das nicht.**
@@ -56,10 +56,10 @@ Spielstart** nichts benötigt; Node.js ist nur zum Erzeugen der Fassung nötig.
 ## Ehrlicher Freigabestand
 
 - Quelloriginale unverändert: **110/110**.
-- Zusätzliche lokale Technikprüfungen: **16/16 PASS**.
+- Zusätzliche lokale Technikprüfungen: **18/18 PASS**.
 - GitHub-CI muss dieselben Prüfungen am neuen Commit wiederholen.
-- Vorrelease-Matrix nach unabhängiger SHA-Abnahme QUE-02: **1/52 PASS**,
-  davon 44 BLOCKED, 4 OPEN und
+- Vorrelease-Matrix nach den Einzelabnahmen QUE-02/03: **2/52 PASS**,
+  davon 43 BLOCKED, 4 OPEN und
   3 persönliche Prüfungen DEFERRED.
 - Die 77 ausgeschlossenen Archivdateien (73 PNG, 2 PDF, 1 ZIP, 1 TXT)
   bleiben außerhalb des Quellzweigs; keine ist eine in `index.html`
