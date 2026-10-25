@@ -23,10 +23,8 @@
       "requirement": "SHA-256 der 110 freigegebenen Quell-/Testdateien gegen das fest gebundene Originalinventar geprüft",
       "basis": "Recovery-PR #18",
       "stage": "technical",
-      "status": "blocked",
-      "evidence": [],
-      "blocker": "Lokal 110/110 verifiziert; erneuter Hash-Nachweis auf finalem GitHub-HEAD steht aus.",
-      "next": "Prüfsummen auf GitHub gegenprüfen"
+      "status": "pass",
+      "evidence": ["project-c/pppoppi-imperium/prerelease/evidence/QUE-02.json"]
     },
     {
       "id": "QUE-03",

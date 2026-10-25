@@ -1,0 +1,15 @@
+{
+  "gate_id": "QUE-02",
+  "result": "PASS",
+  "commit": "0ddf47bee13688ad5ecc5d02f5ae07bbc7288b2a",
+  "command": "python3 project-c/pppoppi-imperium/recovery/verify_sources.py",
+  "date": "2026-10-25",
+  "source_archive_sha256": "94f41725f1d1addaa07505302a4f448e3410df0bcebe68bfb24fc07b72d433ca",
+  "inventory_sha256": "2514ffd8b641d8ed230ff6c9a461f309d0874c3820ad872ffcc1e5b814e39913",
+  "verified_files": 110,
+  "source_git_tree_sha1": "c631f759741082ef6b64bb48dc77ab9c63c52165",
+  "ci_run": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40158404633",
+  "ci_event": "push",
+  "ci_conclusion": "success",
+  "limits": "Nur Quelleninventar und SHA-256. Rechte, Laufzeitressourcen, Spielfunktionen und Release bleiben eigene Pflichten."
+}

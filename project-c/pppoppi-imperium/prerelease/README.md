@@ -50,3 +50,17 @@ Der neue Integrationsnachweis steht in `prerelease/INTEGRATION_20261023.md`. Ein
 Auf dem getrennten Zweig `restore/v194-verified-sources-20261025` wurden die **110 fest inventarisierten Quell-/Testdateien** aus dem SHA-256-geprüften V1.9.4-Originalarchiv nachgetragen. Der Prüfbericht steht unter [`../QUELLIMPORT_20261025.md`](../QUELLIMPORT_20261025.md). Die oben beschriebenen fehlenden Quelldateien sind damit für **diesen neuen Zweig** kein Hindernis mehr; die älteren Berichte bleiben historische Momentaufnahmen.
 
 Die Matrix kennzeichnet die Quellverfügbarkeit nun als `imported`, hält aber alle 52 Einzelpflichten bis zu unabhängig bewerteten Nachweisen unverändert offen bzw. gesperrt: **0 PASS, 45 BLOCKED, 4 OPEN, 3 DEFERRED**. Acht Fachprogramme wurden lokal ausgeführt; GitHub-CI auf dem endgültigen Commit, Ressourcenrechte, vollständige Partien und Browser-/Speicher-/Kubuntu-Abnahmen bleiben eigene Gates. Keine automatische Freigabe und kein Merge nach `main`.
+
+## Einzelabnahme QUE-02 – 25.10.2026
+
+Erstmals liegt für die **SHA-256-Prüfung aller 110 Quellen** ein unabhängiger
+GitHub-Nachweis auf dem tatsächlich gemergten Entwicklerstand
+`0ddf47bee13688ad5ecc5d02f5ae07bbc7288b2a` vor. Der
+[Quellworkflow #40158404633](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40158404633)
+war erfolgreich; die Inventardateien blieben seitdem byteidentisch.
+Der maschinenprüfbare Nachweis liegt unter `evidence/QUE-02.json`.
+
+**Neuer Matrixstand: 1/52 PASS, 44 BLOCKED, 4 OPEN, 3 DEFERRED.**
+Alle 48 anderen technischen Pflichten und alle drei persönlichen Freigaben
+bleiben unbestätigt. Diese einzelne Quellenprüfung beweist weder die
+Spielbarkeit noch die Rechte der 77 ausgeschlossenen Archivdateien.
