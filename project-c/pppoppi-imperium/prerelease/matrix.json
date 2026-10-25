@@ -95,10 +95,10 @@
       "requirement": "Zeitfortschritt und Monatswechsel ohne doppelte Buchung",
       "basis": "docs/05_TESTS_FORTSCHRITT.md",
       "stage": "technical",
-      "status": "blocked",
-      "evidence": [],
-      "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "Zeitgrenzen simulieren"
+      "status": "pass",
+      "evidence": ["project-c/pppoppi-imperium/prerelease/evidence/LOG-05.json"],
+      "blocker": "",
+      "next": ""
     },
     {
       "id": "VER-01",

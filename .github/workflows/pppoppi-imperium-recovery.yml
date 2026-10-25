@@ -37,6 +37,7 @@ jobs:
         run: |
           node project-c/pppoppi-imperium/quality_v194/test_ui_integrity_v194.cjs
           node project-c/pppoppi-imperium/quality_v194/test_gameflow_v194.cjs
+          node project-c/pppoppi-imperium/quality_v194/test_monthly_idempotence_v194.cjs
           node project-c/pppoppi-imperium/quality_v194/build.cjs "$RUNNER_TEMP/PPPOPPI-V194-TECH"
           node --check "$RUNNER_TEMP/PPPOPPI-V194-TECH/src/neo_bridge.js"
           node --check "$RUNNER_TEMP/PPPOPPI-V194-TECH/test_human_parity_v192.cjs"

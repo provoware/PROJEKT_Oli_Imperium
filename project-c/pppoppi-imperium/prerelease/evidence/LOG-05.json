@@ -1,0 +1,24 @@
+{
+  "gate_id": "LOG-05",
+  "result": "PASS",
+  "commit": "3db328d7be139ba3766acc2bcd0ed8407ef48db7",
+  "command": "node project-c/pppoppi-imperium/quality_v194/test_monthly_idempotence_v194.cjs",
+  "date": "2026-10-25",
+  "ci_run": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40171610969",
+  "ci_conclusion": "success",
+  "new_cases": 8,
+  "long_run_months": 36,
+  "long_run_companies": 2,
+  "long_run_wage_bookings": 72,
+  "checks": [
+    "Erster menschlicher Spielerwechsel loest keinen vorzeitigen Monatsabschluss aus.",
+    "Letzter Spieler schreibt Monatserloese, Lohn, Journal, Report und Ereignis exakt einmal.",
+    "Wiederholte END_TURN- und NEXT_MONTH-Kommandos sind idempotent; erneute Befehle in falscher Phase werden verworfen.",
+    "Nach JSON-Roundtrip bleiben alte Befehlskennungen gesperrt.",
+    "Zeitgrenze 30 Spieltage wird atomar geprueft und beim Wechsel zurueckgesetzt.",
+    "Oeffentliche und private Frachten werden genau einmal reserviert und genau einmal angeliefert.",
+    "36 passive Monatswechsel erzeugen exakt 36 Berichte, 36 Abschlussereignisse und 72 einmalige Gehaltsbuchungen."
+  ],
+  "original_sources_modified": false,
+  "limits": "Abgedeckt sind technische Zeit- und Idempotenz-Invarianten; keine vollstaendige Sieg-/Verlustpartie, alle Sonderereignisse, DOM-Browserabnahme oder C64-Originaltreue."
+}
