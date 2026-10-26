@@ -25,8 +25,7 @@ Doppelbuchung, JSON-Roundtrip und Fortsetzung im dritten Monat sowie
 fehlende externe Anfragen und JavaScript-Fehler.
 
 ## Pruefstand
-**NEU / CI AUSSTEHEND** – dieser Bericht behauptet vor Ausfuehrung
-keinen erfolgreichen Test. Die Gesamtsperre bleibt bestehen.
+**Nachgewiesen:** Der erste Chromium-Lauf [#40420309399](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40420309399) scheiterte korrekt, weil die wiederverwendete Start-Hilfsfunktion bereits Gutachten, Kauf und Bohrung ausgefuehrt hatte. Das war ein Testaufbaufehler, kein nachgewiesener Spielfehler. Nach Korrektur auf Commit `731deb03703c23ba3472145e20cee78e4de0109b` war der vollstaendige [Chromium-Lauf #40420513353](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40420513353) **PASS**: in 800x600 und 400x300 jeweils 15 dokumentierte Tastatur-Testschritte, zwei abgeschlossene Monate, Vertragserfuellung, zwei abgewiesene Aktionen ohne Doppelbuchung, Export/Import und Weiterfuehrung ohne erneute Abrechnung. [Quellnachweis #40420513326](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40420513326) **PASS**; [technische Pflichtmatrix #40420513335](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40420513335) **erwartungsgemaess BLOCKED**. Das ist nur ein Teilnachweis, kein Gesamt-PASS.
 Vorpruefung: main `d3dc371154cc1089e06f34d0dc4ff04047132360`;
 Ausgangsbasis PR #72 `c054b3d1835cf8bd17ec49b0a9be2a1e8bc9c472`.
 Alle Aenderungen liegen ausschliesslich auf einem separaten Zweig.
