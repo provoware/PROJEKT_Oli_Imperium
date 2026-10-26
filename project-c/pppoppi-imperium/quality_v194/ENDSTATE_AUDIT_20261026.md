@@ -41,3 +41,15 @@ Die Chromium-CI führt die Diagnose vor den Browserprüfungen aus. Ein erfolgrei
 3. Erst nach freigegebenem Regelvertrag eine sichere, versionierte Endphase implementieren, Browser-Endpfade und Spielstand-Roundtrips prüfen und danach die Zoom-/Tastaturpflichten fortsetzen.
 
 **Kein Merge, kein Release, keine vorgezogene persönliche Endabnahme.**
+
+## Tatsächlich ausgeführte GitHub-Prüfungen (erster vollständiger Prüfstand)
+
+**Geprüfter Implementierungs-HEAD:** `7fb928fea89233854d741d1a07d02d409af165cb`.
+
+- [Chromium-Gesamtprüfung #40371058416](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40371058416): **PASS**, einschließlich des neuen Node-Diagnosetests, aller vorhandenen Browserregressionen, drei 12-Monats-Leistungsprofile und des 48-Monats-Browserprofils.
+- [Quell- und Fachprüfung #40371058436](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40371058436): **PASS**.
+- [Integrierte Vorrelease-Sperre #40371058364](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40371058364): **FAIL/BLOCKED** am technischen Pflicht-Gate, wie vorgesehen.
+
+**Tatsächliches Diagnoseergebnis laut GitHub-Protokoll:** 240 reguläre Monate mit zwei menschlichen Firmen; die beobachteten Phasen waren `TURN`, `RESCUE`, `REPORT`. Im Monat 223 (ein gemeinsamer Insolvenzmonat) wurden **zwei** reguläre `RESTART`-Sanierungen ausgeführt. Im Monat 240 hatten beide Firmen Generation 2; 120 Monatsberichte waren erhalten (beabsichtigte Historiengrenze). **Kein Sieg-/Endzustand wurde beobachtet.** Der Test prüft weder eine KI-Partie noch alle möglichen Spielstrategien.
+
+Diese Befunde belegen die technische Diagnose, **nicht** `VER-01` oder eine Vorrelease-Freigabe. Der nachträgliche Dokumentations-Commit benötigt erneut CI auf seinem eigenen endgültigen HEAD.
