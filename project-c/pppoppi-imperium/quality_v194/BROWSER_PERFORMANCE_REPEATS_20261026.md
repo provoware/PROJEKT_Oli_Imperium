@@ -29,3 +29,24 @@ Die erste Browser-Leistungsprobe meldete **0,1261 s Offline-Ladezeit**, Monatswe
 **Nächste Implementierung:** (1) dreifache CI-Messreihe samt Abweichungen auswerten; (2) längere Browser-Partien mit reproduzierbarem Speicherverlauf und normalem Spielende prüfen; (3) danach echte Zoom-/Tastaturpfade und vollständige technische Pflichtgates schließen.
 
 **Kein Merge, kein Release, keine persönliche Vorabnahme.**
+
+## Tatsächlich ausgeführte GitHub-Prüfung
+
+**Implementierungs-HEAD:** `effca7f41908d770e08208c96979ea988d7b4235`
+
+- [Chromium #40351415613](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40351415613): **PASS**, alle drei Wiederholungen mit zwölf echten Monatswechseln (insgesamt 36 Browser-Spielmonate).
+- [Quell-/Fachprüfung #40351415556](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40351415556): **PASS**.
+- [Gesamtmatrix #40351415573](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40351415573): **FAIL/BLOCKED** erwartungsgemäß, nicht als Freigabe gewertet.
+
+| Messung | Lauf 1 | Lauf 2 | Lauf 3 |
+| --- | ---: | ---: | ---: |
+| Offline-Laden (s) | 0,0927 | 0,0842 | 0,1246 |
+| Median Monatswechsel (s) | 0,2319 | 0,2402 | 0,2349 |
+| Langsamster Monatswechsel (s) | 0,2861 | 0,2956 | 0,2948 |
+| JS-Heap Monat 0 nach GC (Bytes) | 2.116.960 | 2.116.960 | 2.116.960 |
+| JS-Heap Monat 12 nach GC (Bytes) | 3.076.728 | 3.076.888 | 3.076.908 |
+| Heap-Anstieg nach GC (Bytes) | 959.768 | 959.928 | 959.948 |
+
+Die Messreihe ist über drei Durchläufe eng reproduzierbar. Der **bereinigte** Speicheranstieg beträgt etwa **0,96 MB pro zwölf Spielmonate**; ob er aus notwendiger Spielhistorie oder unnötiger Speicherung entsteht, ist damit noch nicht geklärt. Insbesondere ist die Aussage „kein Speicherleck“ **nicht belegt**. Die neue Messreihe ist wegen der erzwungenen Bereinigung nicht direkt mit den 14,5 MB der alten Messung vergleichbar.
+
+**Freigabestand unverändert:** 6/52 PASS; PER-01 und PER-02 BLOCKED. Als nächstes mindestens eine längere echte Browserpartie mit Speicherbereinigung und Monats-/Berichtszähler ausführen; bei vorzeitigem Spielende den Endzustand als fachlichen Befund dokumentieren, nicht künstlich weiterklicken.
