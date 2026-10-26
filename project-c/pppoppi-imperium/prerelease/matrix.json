@@ -393,10 +393,11 @@
       "evidence": [
         "project-c/pppoppi-imperium/prerelease/evidence/BED-02-PARTIAL-20261026.json",
         "project-c/pppoppi-imperium/prerelease/evidence/BED-02-DRILL-PARTIAL-20261026.json",
-        "project-c/pppoppi-imperium/prerelease/evidence/BED-02-PIPE-FIRE-PARTIAL-20261026.json"
+        "project-c/pppoppi-imperium/prerelease/evidence/BED-02-PIPE-FIRE-PARTIAL-20261026.json",
+        "project-c/pppoppi-imperium/prerelease/evidence/BED-02-DIALOG-FOCUS-PARTIAL-20261026.json"
       ],
-      "blocker": "39 Szenen per Tab/Enter (Chromium #40388761002), Bohr-Minispiel (#40397209006) sowie Rohrnetz und Feuerwehr mit je drei Abschnitten in zwei CSS-Viewports (#40406059761) als echte Browser-Teilnachweise PASS. Weitere Dialogaktionen, nativer Browserzoom, durchgaengige Fokusreihenfolge und visueller Fokuskontrast fehlen; BED-02 bleibt BLOCKED.",
-      "next": "Weitere Pflichtaktionen der Dialoge per Tab/Enter pruefen; nativen Browserzoom 175-200 Prozent und Fokuskontrast separat messen. Spielende-Logik getrennt bearbeiten."
+      "blocker": "Chromium #40413530587: 39 Szenen und je 463 aktive Dialogelemente in 800x600 und CSS-200 per echter Tab-Taste erreichbar; :focus-visible, Umriss/Schatten und Namensheuristik ohne Auffaelligkeit (926/926). Bisherige Bohr-, Rohrnetz-, Feuerwehr- und Schliesspruefungen bleiben bestehen. Aktionen innerhalb aller Szenen, nativer Zoom und visueller Fokuskontrast nicht vollstaendig geprueft; BED-02 bleibt BLOCKED.",
+      "next": "Szenenaktionen samt Fehlerfaellen gezielt mit Enter und Spielstandpruefung abdecken; nativen Browserzoom und Kontrast getrennt auditieren."
     },
     {
       "id": "BED-03",
@@ -417,10 +418,11 @@
       "stage": "technical",
       "status": "blocked",
       "evidence": [
-        "project-c/pppoppi-imperium/prerelease/evidence/BAR-01-PARTIAL-20261026.json"
+        "project-c/pppoppi-imperium/prerelease/evidence/BAR-01-PARTIAL-20261026.json",
+        "project-c/pppoppi-imperium/prerelease/evidence/BAR-01-DIALOG-FOCUS-PARTIAL-20261026.json"
       ],
-      "blocker": "Chromium #40387673447 meldet 117/117 Tastaturfokusse mit :focus-visible und 117/117 berechnete Umrisse/Schatten. Vollstaendige Fokusreihenfolge, Sichtbarkeit/ausreichender Kontrast aller Elemente und Minispiele bleiben ungeprueft.",
-      "next": "Fokusreihenfolge aller Bedienelemente und sichtbare Fokuskontraste technisch auditieren; erst nach allen Gates persoenliche Sichtabnahme."
+      "blocker": "Chromium #40413530587: 926/926 aktive Dialogelemente in 39 Szenen x 2 CSS-Viewports per Tab erreicht, mit :focus-visible und berechnetem Umriss/Schatten. Es handelt sich um wiederholte Szenenstichproben, nicht um 926 unterschiedliche Steuerelemente. Kontrast gegen tatsaechlichen Hintergrund, Reihenfolge unter allen Zustandswechseln, nativer Zoom und weitere Minispielzustaende bleiben offen.",
+      "next": "Visuellen Fokuskontrast rechnerisch und mit Browser-Bildbelegen nachweisen; Fokusfolge nach Zustandswechseln und nativen Zoom pruefen."
     },
     {
       "id": "BAR-02",
