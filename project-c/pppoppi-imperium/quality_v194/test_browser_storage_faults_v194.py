@@ -81,8 +81,13 @@ def main():
             page.evaluate("() => { IDBObjectStore.prototype.put = window.__storageFaults.put; }")
             page.evaluate("NeoEconomy.open('startup')")
             page.locator('[data-ui="restore-backup"]').click()
-            page.wait_for_function("(expected) => JSON.stringify(NeoEconomy.getState()) === JSON.stringify(expected)",
-                                   arg=safe)
+            page.wait_for_timeout(400)
+            print("DIAG-SICHERUNG:", json.dumps({
+                "status": page.evaluate("PPBackup.status()"),
+                "restored_equals_safe": state(page) == safe,
+                "current_ledger_count": len(state(page)["companies"][0]["ledger"]) if state(page) else None,
+                "expected_ledger_count": len(safe["companies"][0]["ledger"]),
+            }, ensure_ascii=False), flush=True)
             check("Nach Transaktionsabbruch letzte gueltige Generation erhalten",
                   state(page) == safe)
             check("Keine doppelten Buchungen nach Rueckfall",
