@@ -51,6 +51,27 @@ const changes = [
   ['src/neo_bridge.js',
     "async function importGame(file){if(handoff)return toast('Import während der vertraulichen Übergabe gesperrt.');if(!file)return;try{if(file.size>5_000_000)throw Error('Spielstand zu groß');let parsed=JSON.parse(await file.text());if(parsed.schema==='pppoppi.berlin.save/0.8'){parsed=E.migrateV08(parsed)}E.validate(parsed);econ=parsed;selected=Object.keys(econ.claims)[0];handoff=false;show(econ.phase==='RESCUE'?'rescue':econ.phase==='REPORT'?'report':'computer');refreshStatus();toast('Spielstand geprüft und übernommen.')}catch(err){toast('Import abgelehnt: '+err.message)}}",
     "async function importGame(file){if(handoff)return toast('Import während der vertraulichen Übergabe gesperrt.');if(!file)return;const revision=++importRevision;try{if(file.size>5_000_000)throw Error('Spielstand zu groß');let parsed=JSON.parse(await file.text());if(revision!==importRevision)return;if(parsed.schema==='pppoppi.berlin.save/0.8'){parsed=E.migrateV08(parsed)}E.validate(parsed);if(revision!==importRevision)return;econ=parsed;selected=Object.keys(econ.claims)[0];handoff=false;show(econ.phase==='RESCUE'?'rescue':econ.phase==='REPORT'?'report':'computer');refreshStatus();toast('Spielstand geprüft und übernommen.')}catch(err){if(revision===importRevision)toast('Import abgelehnt: '+err.message)}}"],
+  ['index.html',
+    '<script src="src/neo_bridge.js"></script>',
+    '<script src="src/backup_v194.js"></script><script src="src/neo_bridge.js"></script>'],
+  ['src/neo_bridge.js',
+    "econ=E.fresh({humans,ais,seed:'PPPOPPI-2026'});selected=",
+    "econ=E.fresh({humans,ais,seed:'PPPOPPI-2026'});window.PPBackup.capture(econ);selected="],
+  ['src/neo_bridge.js',
+    'E.validate(next.state);++importRevision;econ=next.state;',
+    'E.validate(next.state);++importRevision;econ=next.state;window.PPBackup.capture(econ);'],
+  ['src/neo_bridge.js',
+    'econ=parsed;selected=Object.keys(econ.claims)[0];',
+    'econ=parsed;window.PPBackup.capture(econ);selected=Object.keys(econ.claims)[0];'],
+  ['src/neo_bridge.js',
+    '<div class="econ-actions"><button data-ui="newgame">▶ Neue Partie starten</button></div>',
+    '<div class="econ-actions"><button data-ui="newgame">▶ Neue Partie starten</button><button data-ui="restore-backup">💾 Lokale Zwischensicherung wiederherstellen</button></div>'],
+  ['src/neo_bridge.js',
+    "card('💾 Spielstände','<p>Unabhängige Datei auf dem eigenen Rechner.</p>','<button data-ui=\"export\">Spielstand exportieren</button><button data-ui=\"import\">Spielstand laden</button>')",
+    "card('💾 Spielstände','<p>Unabhängige Datei auf dem eigenen Rechner.</p>','<button data-ui=\"export\">Spielstand exportieren</button><button data-ui=\"import\">Spielstand laden</button><button data-ui=\"restore-backup\">Zwischensicherung wiederherstellen</button>')"],
+  ['src/neo_bridge.js',
+    "case 'import':$('loadEconFile').click();break;",
+    "case 'import':$('loadEconFile').click();break;case 'restore-backup':if(handoff){toast('Während des Spielerwechsels gesperrt.');break;}if(econ&&!confirm('Aktuelle Partie durch eine lokale Zwischensicherung ersetzen?'))break;{const revision=++importRevision;window.PPBackup.restore(E.validate).then(({state,older})=>{if(revision!==importRevision)return;econ=state;selected=Object.keys(econ.claims)[0];handoff=false;show(econ.phase==='RESCUE'?'rescue':econ.phase==='REPORT'?'report':'computer');refreshStatus();toast(older?'Ältere gültige Zwischensicherung geladen.':'Zwischensicherung geprüft und geladen.');}).catch(error=>{if(revision===importRevision)toast('Wiederherstellung nicht möglich: '+error.message);});}break;"],
   ['test_human_parity_v192.cjs',
     'if(result.status!==0)throw Error(result.stderr);return result.stdout.trim();',
     "if(result.error)throw result.error;if(result.signal)throw Error('Vergleichsprozess abgebrochen: '+result.signal);if(result.status!==0)throw Error(result.stderr||'Vergleichsprozess fehlgeschlagen: '+result.status);const output=result.stdout.trim();if(!output)throw Error('Vergleichsprozess lieferte keine Spielstanddaten');return output;"]
@@ -131,6 +152,8 @@ function build(destination) {
   const files = verifySource();
   // Preflight: no output directory is created until all string patches match.
   for (const [name] of changes) renderPatched(name);
+  // Zusatzskript vor dem Anlegen des Zielordners auf Lesbarkeit und Syntax pruefen.
+  new Function(fs.readFileSync(path.join(__dirname, 'backup_v194.js'), 'utf8'));
   fs.mkdirSync(targetRoot, {recursive: false, mode: 0o700});
   // Ein nach der Vorpruefung ausgetauschter Elternordner muss vor dem
   // ersten Kopieren auffallen. Eine vollstaendige atomare Garantie gegen
@@ -149,10 +172,13 @@ function build(destination) {
       fs.copyFileSync(path.join(projectRoot, entry.path), dest, fs.constants.COPYFILE_EXCL);
     }
   }
+  fs.copyFileSync(path.join(__dirname, 'backup_v194.js'),
+    path.join(targetRoot, 'src', 'backup_v194.js'), fs.constants.COPYFILE_EXCL);
   fs.writeFileSync(path.join(targetRoot, 'BUILD_INFO.json'), JSON.stringify({
     kind: 'technical-preview-not-released', gameVersion: '1.9.3', qaVersion: '1.9.4',
     sourceArchiveSha256: expectedArchiveSha, sourceFiles: files.length,
-    sourceOverrides: [...new Set(changes.map(c => c[0]))].sort()
+    sourceOverrides: [...new Set(changes.map(c => c[0]))].sort(),
+    generatedAddons: ['src/backup_v194.js']
   }, null, 2) + '\n', {encoding: 'utf8', flag: 'wx'});
   return {directory: targetRoot, sourceFiles: files.length};
 }
