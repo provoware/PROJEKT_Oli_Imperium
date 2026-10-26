@@ -34,3 +34,15 @@ Der Browserlauf benötigt Python, Playwright 1.56.0, Chromium und Node 22; GitHu
 3. Anschließend Speicherausfälle und sichere Wiederherstellung, vollständige Spielpartien, echten Browserzoom, Tastaturpfade und Leistungsmessungen unabhängig abarbeiten.
 
 Persönliche Sichtprüfung und Kubuntu-Endabnahme ausschließlich gesammelt nach grünem technischem Gate und eingefrorenem Kandidaten. Veröffentlichung nur nach ausdrücklicher Freigabe.
+
+
+## Nachweise der tatsächlichen Implementierungsprüfung
+
+**Geprüfter Implementierungs-HEAD:** `61f2965cb2314080c5666f8946390c79e6630f8e`.
+
+- [Chromium-CI #40294773625](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40294773625): **PASS**. Alle elf Browser-Testprogramme erfolgreich, darunter **15/15 PASS** für Sonderzustände: echter offener Altvertrag und aktives Altminispiel abgelehnt, beschädigtes Minispiel abgelehnt, abgeschlossene Eigenbohrung migriert, Buchungen/Verarbeitungskennungen erhalten, Export/Wiederimport identisch, 800×600 und offline ohne Laufzeitfehler.
+- [Quell-/Fach-CI #40294773442](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40294773442): **PASS**. Originalquellen- und Fachprüfungen erfolgreich.
+- [Gesamtmatrix-CI #40294773455](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40294773455): **FAIL/BLOCKED** ausschließlich am noch offenen technischen Gesamt-Gate; die vorangehenden Matrix-, Quellen- und Sicherheitsprüfschritte waren erfolgreich.
+- Fehlerbehebung belegt: Der erste neue Browsertest scheiterte [in CI #40294559809](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40294559809) an einer **Test-Hilfsfunktion**, die ein bereits geschlossenes Fenster erneut schließen wollte. Die Export-Hilfe prüft seitdem den sichtbaren Fensterzustand. Kein nachgewiesener Fehler der Spielstands-Migration; der korrigierte Test ist auf dem oben genannten HEAD grün.
+
+**Diese Dokumentationsnachtragung erzeugt einen neuen Commit.** Dessen endgültige CI ist getrennt zu prüfen; obige Prüfergebnisse beziehen sich ausschließlich auf den angegebenen Implementierungs-HEAD. **Keine Änderung der 52er-Gesamtfreigabe, kein Release.**
