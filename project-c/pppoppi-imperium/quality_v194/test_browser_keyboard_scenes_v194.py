@@ -85,9 +85,20 @@ def main():
                             ring += int(focus["ring"])
                             check(label + "/" + scene + ": Tastaturfokus markiert",
                                   focus["keyboard"])
+                            # Das native close-Ereignis ist asynchron. Erst nach
+                            # dessen Zustellung darf die naechste Szene oeffnen,
+                            # sonst kann der spaete Handler die Historie leeren.
+                            page.evaluate("""() => {
+                                window.__keyboardCloseSeen = false;
+                                document.querySelector('#dialog').addEventListener(
+                                    'close', () => { window.__keyboardCloseSeen = true; },
+                                    {once: true}
+                                );
+                            }""")
                             page.keyboard.press("Enter")
                             check(label + "/" + scene + ": Enter schliesst Dialog",
                                   not page.locator("#dialog").evaluate("(el) => el.open"))
+                            page.wait_for_function("window.__keyboardCloseSeen === true")
                             closed += 1
                         check(label + ": Navigation veraendert Spielstand nicht",
                               before == page.evaluate("JSON.stringify(NeoEconomy.getState())"))

@@ -1,0 +1,31 @@
+{
+  "gate_id": "BED-02",
+  "result": "PARTIAL",
+  "date": "2026-10-26",
+  "commit": "3127a469cc3741d766ed586178284a094ef751ad",
+  "command": "python3 project-c/pppoppi-imperium/quality_v194/test_browser_keyboard_drill_v194.py",
+  "ci_url": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40397209006",
+  "checks": {
+    "browser_step": "PASS",
+    "viewport_modes": [
+      "800x600",
+      "CSS-200"
+    ],
+    "minigame": "DRILL",
+    "stages_per_mode": 3,
+    "keyboard": [
+      "Tab",
+      "Enter",
+      "Home",
+      "ArrowRight"
+    ],
+    "state_validation": true,
+    "json_export_equal": true
+  },
+  "limits": [
+    "Gesamter Browser-Workflow war bei Erstellung dieses Teilnachweises noch in Ausfuehrung.",
+    "Nur Bohr-Minispiel geprueft; Rohrnetz, Feuerwehr und weitere Dialogaktionen offen.",
+    "CSS-200 ist kein nativer Browserzoom.",
+    "Vorrelease-Gate BED-02 bleibt BLOCKED."
+  ]
+}
