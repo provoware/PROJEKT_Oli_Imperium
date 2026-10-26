@@ -78,7 +78,7 @@ def main():
                   page.evaluate("PPBackup.idle()") is False and
                   page.locator("#backupStatus").get_attribute("data-error") == "true" and
                   "Sicherung fehlgeschlagen" in page.locator("#backupStatus").inner_text())
-            page.evaluate("IDBObjectStore.prototype.put = window.__storageFaults.put")
+            page.evaluate("() => { IDBObjectStore.prototype.put = window.__storageFaults.put; }")
             page.locator('[data-ui="restore-backup"]').click()
             page.wait_for_function("(expected) => JSON.stringify(NeoEconomy.getState()) === JSON.stringify(expected)",
                                    arg=safe)
@@ -108,7 +108,7 @@ def main():
                   page.locator("#backupStatus").get_attribute("data-error") == "true")
             check("Lesefehler veraendert laufende Partie nicht",
                   state(page) == restored_buy)
-            page.evaluate("indexedDB.open = window.__storageFaults.open")
+            page.evaluate("() => { indexedDB.open = window.__storageFaults.open; }")
             check("JSON-Export auch nach Speicherverweigerung nutzbar",
                   export_state(page) == restored_buy)
             context.close()
