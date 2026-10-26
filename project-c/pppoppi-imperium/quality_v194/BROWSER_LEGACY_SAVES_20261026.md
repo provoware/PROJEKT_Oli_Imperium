@@ -36,3 +36,14 @@ Der Chromium-Lauf benötigt Python 3.12, Playwright 1.56.0 und Chromium. Die Git
 3. Echte Speicherunterbrechung, Sicherungsrückfall und Langzeit-Integrität separat testen; anschließend nativen Zoom, vollständige Tastaturpfade und Leistungsmessungen abarbeiten.
 
 **Matrix bleibt bis zu unabhängig geprüften Einzelnachweisen: 6/52 PASS, 39 BLOCKED, 4 OPEN, 3 persönliche DEFERRED.** Persönliche Sichtprüfung und Kubuntu-Endabnahme erst nach sämtlichen technischen Freigaben und eingefrorenem Kandidaten. Kein Release ohne ausdrückliche Nutzerfreigabe.
+
+
+## GitHub-Prüfnachweise des Implementierungs-HEAD
+
+**Geprüfter Implementierungs-HEAD:** `886c820980ab65000714fc419e7bedf2e7f2b9b3`.
+
+- [Chromium-CI #40287346399](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40287346399): **PASS**. Alle zehn Browser-Testprogramme einschließlich des neuen Altstands-Tests erfolgreich. Dessen Protokoll enthält **15/15 PASS**: V0.8 mit regulären Gutachten-/Kaufbuchungen migriert, Geld/Schulden/Journal/Eigentum/Verarbeitungskennungen erhalten, Export/Wiederimport unverändert; V0.8.2-Originaldatei unverändert; V0.6 und zwei beschädigte Dateien ohne Datenverlust abgewiesen; 800 × 600, offline und keine JavaScript-Laufzeitfehler.
+- [Quell-/Fach-CI #40287346386](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40287346386): **PASS**. Originalquellen, Sicherheits-/Fachtests und Basisprüfungen erfolgreich.
+- [Integrierte Matrix-CI #40287346368](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40287346368): **FAIL/BLOCKED** am harten Gesamt-Gate; der davor ausgeführte technische Teil war erfolgreich. Diese Sperre bleibt absichtlich bestehen.
+
+**Wichtig:** Diese nachträgliche Dokumentation erzeugt einen weiteren Commit. Seine CI muss separat geprüft werden. Kein Nachweis für V0.6-Migration, Sonderfälle oder echte Stromunterbrechung. Die **52er-Matrix bleibt unverändert**; ein erfolgreiches Testpaket allein ist keine vollständige Pflichtfreigabe.
