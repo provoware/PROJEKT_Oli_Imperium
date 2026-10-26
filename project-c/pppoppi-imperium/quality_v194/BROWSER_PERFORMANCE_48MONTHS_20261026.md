@@ -43,3 +43,21 @@ Voraussetzung: Python mit Playwright und installiertem Chromium sowie Node.js f�
 3. Anschließend einen **echten Spielendepfad** und die verbleibenden Zoom-/Tastaturfälle unabhängig prüfen.
 
 **Kein Merge, kein Release, keine vorgezogene persönliche Endabnahme.**
+
+## Tatsächliche GitHub-Ergebnisse des Implementierungs-HEADs
+
+**Geprüfter Code-HEAD:** `31316cbef73309637050692d44b13ce086993ad5`.
+
+- [Chromium #40360438778](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40360438778): **PASS**. Alle 16 bisherigen Browser-Prüfprogramme sowie die neue 48-Monats-Stufe erfolgreich; keine gemeldeten Laufzeitfehler.
+- [Quell-/Fach-CI #40360438881](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40360438881): **PASS**.
+- [Gesamtmatrix #40360438766](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40360438766): **FAIL/BLOCKED** wegen weiterhin offener Pflichten.
+
+| Bereinigter Speicher / Messwert | Monat 0 | Monat 12 | Monat 24 | Monat 36 | Monat 48 |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| JavaScript-Heap (Bytes) | 2.116.960 | 3.076.576 | 3.144.856 | 3.226.588 | 3.389.820 |
+| DOM-Knoten | 1.032 | 1.032 | 1.032 | 1.032 | 1.032 |
+| Dokumente | 1 | 1 | 1 | 1 | 1 |
+
+**48/48 reguläre Monatswechsel und 48/48 Berichte:** PASS. Offline-Ladezeit **0,0762 s**, Monatswechsel-Median **0,3469 s**, langsamster Monat **0,5772 s** auf dem GitHub-Linux-Testrechner. Bereinigter Heap: **+1.272.860 Bytes** in 48 Monaten, davon **+313.244 Bytes** zwischen Monat 12 und 48. Der Verlauf ist mit gespeicherter Historie vereinbar, beweist aber noch keine Leckfreiheit. Die Monatswechsel werden im Verlauf messbar langsamer; Ursache und zulässige Grenzwerte sind weiter zu untersuchen.
+
+**Freigabe unverändert:** 6/52 PASS; PER-01, PER-02 und VER-01 bleiben BLOCKED. Keine vollständige Sieg-/Endpartie nachgewiesen. Keine persönliche Abnahme, kein Merge, kein Release.
