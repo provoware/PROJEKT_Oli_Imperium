@@ -49,3 +49,5 @@ jobs:
         run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_legacy_contracts_v194.py
       - name: Unvollstaendige Exportkopien, Abbruch und Rueckfall auf gueltige Sicherung
         run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_save_interruption_v194.py
+      - name: Zwei lokale Zwischensicherungen, Browser-Neustart und sicherer Rueckfall
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_autobackup_v194.py
