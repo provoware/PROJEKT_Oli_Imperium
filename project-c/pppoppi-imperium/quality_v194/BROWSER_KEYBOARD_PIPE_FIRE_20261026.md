@@ -21,13 +21,13 @@
 7. Test im bestehenden Chromium-Workflow zusätzlich zu sämtlichen bisherigen Browser-Regressionen ausführen. Die Gesamtmatrix bleibt bis zur vollständigen Freigabe rot.
 
 ## Nachweisstand
-**PENDING:** Test und Workflow sind implementiert; ein tatsächliches PASS ist erst nach erfolgreicher GitHub-CI auf dem entsprechenden Commit nachgewiesen. Bei FAIL werden Test und gegebenenfalls unabhängige Fehler korrigiert; keine Scheinfreigabe.
+**Teilprüfung PASS auf HEAD `0b0f54c3fed5abd4d6ab55116a45e277f183ea49`:** [Chromium #40406059761](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40406059761) vollständig PASS, einschließlich neuem Rohrnetz-/Feuerwehrtest. [Quell-/Fachprüfung #40406059619](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40406059619) PASS. [Pflichtmatrix #40406059587](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40406059587) erwartet BLOCKED (technische Freigabe), Schema-/Regressionsteile separat. Je zwei Browserkontexte: drei Rohr- und drei Löschabschnitte, 32 Rohrdrehungen, natürlicher Brand in Monat vier, ein kontrollierter Fehlversuch, JSON-Export exakt gleich. Teilnachweis: `prerelease/evidence/BED-02-PIPE-FIRE-PARTIAL-20261026.json`. BED-02 bleibt BLOCKED; kein vollständiger Freigabebeleg.
 
 **Unverändert:** 6/52 PASS, 39 BLOCKED, 4 OPEN, 3 persönliche DEFERRED. Keine Benutzer-Sichtprüfung, keine Kubuntu-Endabnahme, kein Merge und kein Release.
 
 ## Drei nächste Schritte
-1. Chromium-CI für den neuen Rohrnetz-/Feuerwehrtest prüfen, eventuelle Fehler korrigieren und echten CI-Link nachtragen.
-2. BED-02-Teilnachweis samt tatsächlichem HEAD/CI ergänzen, übrige Dialogaktionen per Tastatur prüfen.
-3. Nativen Browserzoom 175–200 % und Fokuskontrast separat nachweisen.
+1. Weitere Dialogaktionen über echte Tab-/Enter-Tasten abdecken und Fehlerfälle reproduzierbar prüfen.
+2. Nativen Browserzoom 175–200 % und Fokuskontrast mit getrennten Messungen prüfen.
+3. Vollständige Sieg-/Niederlagenbedingungen und Spielend-Übergänge technisch absichern.
 
 **Weiterführend:** Endzustands-Logik fachlich spezifizieren; ein 240-Monats-Lauf ohne Spielende ist kein Sieg-/Niederlagennachweis.

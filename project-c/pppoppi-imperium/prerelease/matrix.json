@@ -392,10 +392,11 @@
       "status": "blocked",
       "evidence": [
         "project-c/pppoppi-imperium/prerelease/evidence/BED-02-PARTIAL-20261026.json",
-        "project-c/pppoppi-imperium/prerelease/evidence/BED-02-DRILL-PARTIAL-20261026.json"
+        "project-c/pppoppi-imperium/prerelease/evidence/BED-02-DRILL-PARTIAL-20261026.json",
+        "project-c/pppoppi-imperium/prerelease/evidence/BED-02-PIPE-FIRE-PARTIAL-20261026.json"
       ],
-      "blocker": "39 Szenen per Tab/Enter (Chromium #40388761002) und dreistufige Bohrsteuerung (Chromium #40397209006) als Teilbelege PASS. Neuer Rohrnetz-/Feuerwehr-Tastaturtest im Entwurfs-PR #71 implementiert, GitHub-CI noch PENDING; keine Vorabfreigabe. Weitere Dialogaktionen, nativer Zoom und Fokuskontrast fehlen.",
-      "next": "CI fuer Rohrnetz/Feuerwehr auswerten, echte Teilnachweise nachtragen; danach restliche Dialogaktionen, nativen Zoom und Fokuskontrast auditieren."
+      "blocker": "39 Szenen per Tab/Enter (Chromium #40388761002), Bohr-Minispiel (#40397209006) sowie Rohrnetz und Feuerwehr mit je drei Abschnitten in zwei CSS-Viewports (#40406059761) als echte Browser-Teilnachweise PASS. Weitere Dialogaktionen, nativer Browserzoom, durchgaengige Fokusreihenfolge und visueller Fokuskontrast fehlen; BED-02 bleibt BLOCKED.",
+      "next": "Weitere Pflichtaktionen der Dialoge per Tab/Enter pruefen; nativen Browserzoom 175-200 Prozent und Fokuskontrast separat messen. Spielende-Logik getrennt bearbeiten."
     },
     {
       "id": "BED-03",
