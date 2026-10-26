@@ -394,8 +394,8 @@
         "project-c/pppoppi-imperium/prerelease/evidence/BED-02-PARTIAL-20261026.json",
         "project-c/pppoppi-imperium/prerelease/evidence/BED-02-DRILL-PARTIAL-20261026.json"
       ],
-      "blocker": "39 Szenen per Tab/Enter geprueft (Chromium #40388761002). Dreistufiges Bohr-Minispiel mit Home/Pfeil/Tab/Enter und JSON-Export in beiden Viewports als Browser-Teilschritt PASS (#40397209006). Rohrnetz, Feuerwehr, weitere Aktionen, nativer Zoom und umfassender Fokuskontrast fehlen weiterhin.",
-      "next": "Rohrnetz und Feuerwehr sowie alle weiteren Dialogaktionen rein per Tastatur pruefen; nativen Zoom und Fokuskontrast separat auditieren."
+      "blocker": "39 Szenen per Tab/Enter (Chromium #40388761002) und dreistufige Bohrsteuerung (Chromium #40397209006) als Teilbelege PASS. Neuer Rohrnetz-/Feuerwehr-Tastaturtest im Entwurfs-PR #71 implementiert, GitHub-CI noch PENDING; keine Vorabfreigabe. Weitere Dialogaktionen, nativer Zoom und Fokuskontrast fehlen.",
+      "next": "CI fuer Rohrnetz/Feuerwehr auswerten, echte Teilnachweise nachtragen; danach restliche Dialogaktionen, nativen Zoom und Fokuskontrast auditieren."
     },
     {
       "id": "BED-03",
