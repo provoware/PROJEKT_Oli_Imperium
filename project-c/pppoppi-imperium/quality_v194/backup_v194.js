@@ -82,8 +82,16 @@ function capture(state){
 }
 async function restore(validate){
  await queue; // niemals eine noch laufende eigene Sicherung überholen
- const saves=(await readSnapshots()).sort((a,b)=>b.seq-a.seq);
- if(!saves.length)throw Error('Keine lokale Zwischensicherung vorhanden');
+ let saves;
+ try{saves=(await readSnapshots()).sort((a,b)=>b.seq-a.seq)}
+ catch(error){
+  status('Wiederherstellung nicht möglich: '+(error?.message||'Browser-Speicher nicht lesbar')+'. JSON-Datei laden!',true);
+  throw error;
+ }
+ if(!saves.length){
+  status('Keine lokale Zwischensicherung vorhanden. JSON-Datei laden!',true);
+  throw Error('Keine lokale Zwischensicherung vorhanden');
+ }
  for(let i=0;i<saves.length;i++){
   try{
    const state=JSON.parse(saves[i].json);
