@@ -53,5 +53,10 @@ jobs:
         run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_autobackup_v194.py
       - name: Schreibtransaktionsabbruch, Speicherverweigerung und Wiederherstellung
         run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_storage_faults_v194.py
-      - name: Offline-Start und zwoelf Monatswechsel mit Chromium-Speicherprofil messen
-        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_performance_v194.py
+      - name: Drei unabhaengige Offline-Leistungsprofile mit je zwoelf Monatswechseln
+        run: |
+          for run in 1 2 3; do
+            echo "::group::Leistungsprofil $run von 3"
+            python3 project-c/pppoppi-imperium/quality_v194/test_browser_performance_v194.py
+            echo "::endgroup::"
+          done
