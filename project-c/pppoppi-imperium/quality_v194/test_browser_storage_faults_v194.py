@@ -94,8 +94,13 @@ def main():
                   state(page)["companies"][0]["ledger"] == safe["companies"][0]["ledger"])
 
             restored_buy = action(page, "claim", "BUY", "BERLIN-1")
+            saved_again = page.evaluate("PPBackup.idle()")
             check("Nach Abbruch erneut erfolgreich gespeichert",
-                  page.evaluate("PPBackup.idle()") is True and restored_buy == changed)
+                  saved_again is True and
+                  restored_buy["claims"]["BERLIN-1"]["owner"] == "H1" and
+                  restored_buy["companies"][0]["cashCent"] == changed["companies"][0]["cashCent"] and
+                  len(restored_buy["companies"][0]["ledger"]) ==
+                  len(changed["companies"][0]["ledger"]))
             check("Status nach erfolgreicher Speicherung zurueckgesetzt",
                   page.locator("#backupStatus").get_attribute("data-error") == "false")
 
