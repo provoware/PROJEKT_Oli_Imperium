@@ -20,7 +20,7 @@
       "ArrowRight"
     ],
     "state_validation": true,
-    "json_export_roundtrip": true
+    "json_export_equal": true
   },
   "limits": [
     "Gesamter Browser-Workflow war bei Erstellung dieses Teilnachweises noch in Ausfuehrung.",
