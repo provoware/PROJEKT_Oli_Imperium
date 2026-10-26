@@ -45,3 +45,5 @@ jobs:
         run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_legacy_v194.py
       - name: Altvertrag, laufendes Minispiel und abgeschlossenes Minispiel sicher migrieren
         run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_legacy_special_v194.py
+      - name: Erfuellte und gebrochene V0.8-Vertraege samt Buchungen migrieren
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_legacy_contracts_v194.py
