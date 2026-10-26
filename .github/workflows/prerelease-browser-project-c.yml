@@ -60,3 +60,7 @@ jobs:
             python3 project-c/pppoppi-imperium/quality_v194/test_browser_performance_v194.py
             echo "::endgroup::"
           done
+      - name: Laengere 48-Monats-Partie mit fuenf bereinigten Speichermessungen
+        env:
+          PPPOPPI_PERF_MONTHS: '48'
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_performance_v194.py
