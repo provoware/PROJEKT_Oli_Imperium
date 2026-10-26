@@ -29,3 +29,5 @@ jobs:
         run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_scenes_v194.py
       - name: Zwoelf Browser-Spielmonate mit drei Neustart- und Importzyklen
         run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_longrun_v194.py
+      - name: Wirtschaft, Vertrag, Abrechnung und Spielstand-Neustart mit echten Browserklicks
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_economy_v194.py
