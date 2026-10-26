@@ -14,7 +14,7 @@
 2. Beleg oder Entwurf an genau einer maßgeblichen Stelle ändern.
 3. Nur echte Abhängigkeiten über IDs nachführen; keine parallelen Kopien.
 4. Bei Dokumentationsänderung: Markdown-Links/Metadaten prüfen. Bei `data/`-Änderung: Validator. Bei Prüftool-Änderung: Unittests. Bei späterem Spielkern: ausgewählte Regression.
-5. Ergebnis und offene Unterschiede im Änderungsantrag berichten; Review, dann Übernahme.
+5. Ergebnis und offene Unterschiede im Änderungsantrag berichten; eigene Beleg-, Code- und Risikoprüfung samt passenden Tests dokumentieren, dann übernehmen. Ein externer oder unabhängiger Reviewer und ein fremdes GitHub-Approval sind für dieses Privatprojekt nicht erforderlich.
 6. Größere konzeptionelle Änderungen nur mit kurzer Entscheidungsvorlage unter `vorlagen/ENTSCHEIDUNG.md`.
 
 ## Fragekreislauf
