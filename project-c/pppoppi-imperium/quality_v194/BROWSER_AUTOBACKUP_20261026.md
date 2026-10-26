@@ -78,3 +78,15 @@ eigenständig möglichen technischen Prüfungen und eingefrorenem Kandidaten.
    und persönliche Endabnahme bündeln.
 
 **Kein Merge, kein Release, keine Top-5-Änderung.**
+
+## Tatsächlich abgeschlossene CI-Prüfung des Implementierungsstands
+
+**Geprüfter Implementierungs-HEAD:** `d9fad38045b4ff4675a850f5a669607697a19899`.
+
+- [Chromium-CI #40316350084](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40316350084): **PASS**, sämtliche 14 Browser-Testprogramme; neuer Sicherungstest mit **18 protokollierten PASS-Zeilen**, darunter zwei Generationen, echter Chromium-Profil-Neustart, beschädigte neueste/beide Generationen, korrekter Rückfall, Buchungserhalt, JSON-Export, 800×600, offline und keine JavaScript-Laufzeitfehler.
+- [Quell-/Fach-CI #40316350154](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40316350154): **PASS**; einschließlich Build-Integrität, Originalinventar und statischer UI-Verträge.
+- [Integrierte Matrix #40316350068](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40316350068): **FAIL/BLOCKED** am absichtlich harten Gesamtfreigabe-Gate wegen weiterhin offener Pflichten. Keine Vorrelease-Freigabe.
+
+Ein früherer Zwischenstand fiel bei der statischen Build-Diagnose und dem UI-Ressourcenvertrag durch. Die Zusatzdatei wurde daraufhin im erwarteten SHA-Inventar registriert und der UI-Vertrag gezielt angepasst; **erst danach** wurden beide technischen CI-Pfade erfolgreich. Frühere Fehlschläge werden nicht als Erfolg umetikettiert.
+
+**Sicherheitsgrenze:** Der Test beschädigt ausschließlich die zwei Sicherungen im wegwerfbaren Chromium-Testprofil. Kein realer Stromausfall und keine tatsächliche Dateisystem-Schreibunterbrechung. `SPE-03`, `FEH-03`, `STA-03` bleiben BLOCKED.
