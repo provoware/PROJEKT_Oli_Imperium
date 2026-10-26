@@ -49,3 +49,15 @@
 **Weiterführende Empfehlung:** Automatische Wiederherstellung und echte Unterbrechungssicherheit erst dann als PASS markieren, wenn ein reproduzierbarer Test mit tatsächlich unterbrochenem Schreibvorgang und nachgewiesenem Rückfall auf eine gültige Sicherung vorliegt.
 
 Kein Merge, kein Release, keine persönliche Sichtprüfung oder Kubuntu-Endabnahme vor vollständigen technischen Gates und eingefrorenem Kandidaten.
+
+## Nachgewiesene GitHub-Pruefungen (Implementierungs-HEAD)
+
+**Tatsaechlich gepruefter Implementierungs-HEAD:** `302f243b1b91da7889bd9fa9220599f2c1ba887d`.
+
+- [Chromium-CI #40280522643](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40280522643): **PASS**. Alle neun Browser-Testschritte erfolgreich. Der neue Test bestaetigt **4/4 Import-/Aktions-Wettlaeufe**, **1 Browserkontext-Abbruch**, **1 ausdrueckliche Wiederherstellung**, 800 × 600, Offlinebetrieb und keine JavaScript-Laufzeitfehler. Die protokollierte Angabe `power_failure_tested=false` bleibt verbindlich.
+- [Quell-/Fach-CI #40280522528](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40280522528): **PASS**, einschliesslich Originalinventar, Sicherheitsregressionen, technischen Spielablaeufen und Wirtschaftsfachtests.
+- [Integrierte Matrix-CI #40280522552](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40280522552): **FAIL/BLOCKED**, ausschliesslich am abschliessenden harten Technik-Gate. Die fuenf vorangehenden Pruefschritte sind **PASS**.
+
+**Erledigt:** Schutz vor veralteten, parallel gelesenen Importen und vor spaetem Ueberschreiben nach Spielaktion oder Neustart; reproduzierbarer Browser-Regressionsschutz. **Offen:** echte Unterbrechung beim Schreiben, automatische Sicherung und Wiederherstellung, Versionsmigration, vollstaendige Partien, nativer Browserzoom, Tastatur und Leistung. **Matrix weiterhin 6/52 PASS, 39 BLOCKED, 4 OPEN, 3 DEFERRED.**
+
+**Hinweis zur Nachpruefung:** Diese Dokumentation wird nach dem Implementierungs-HEAD als eigener Commit ergaenzt. Fuer die Freigabe dieses finalen Dokumentations-HEAD sind dessen GitHub-Prueflaeufe erneut zu kontrollieren.
