@@ -66,3 +66,15 @@ Installation und übrige Pflicht-Gates. Automatisches Speichern darf nicht
 ohne Datenverlust-/Datenschutzanalyse eingeführt werden.
 
 **Keine Top-5-Repositories berührt. Kein Merge, kein Release.**
+
+## Tatsächlich ausgeführte GitHub-Prüfungen (Implementierungs-HEAD)
+
+**Geprüfter Implementierungs-HEAD:** `e9fb63bb0f5a9cfef19a1bc89c27f417af139bf3`.
+
+- [Chromium #40308728253](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40308728253): **PASS**. Alle 13 Browser-Testprogramme, neuer Unterbrechungstest **26/26 PASS** (drei unlesbare Kopien, Rückfall, Fortsetzung, Wiederimport, 800×600, offline, keine JS-Laufzeitfehler).
+- [Quell-/Fach-CI #40308728394](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40308728394): **PASS**.
+- [Integrierte Pflichtmatrix #40308728303](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40308728303): **FAIL/BLOCKED** ausschließlich im absichtlich harten Schritt `Technische Pflichtmatrix`; die vorherigen Matrix-, Forschungs-, Import- und Quellprüfungen waren **PASS**.
+
+Die Nachtragung erzeugt einen weiteren Dokumentations-Commit. Die
+obigen CI-Ergebnisse gelten **nur** für den genannten Implementierungs-HEAD;
+der neue finale HEAD muss anschließend erneut in CI geprüft werden.
