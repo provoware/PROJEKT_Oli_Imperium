@@ -41,3 +41,5 @@ jobs:
         run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_reimport_v194.py
       - name: Import-Wettlauf, Spielaktion waehrend Import und Sitzungsabbruch
         run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_import_race_v194.py
+      - name: V0.8-Altspielstand migrieren, V0.8.2 erhalten, V0.6 sicher ablehnen
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_legacy_v194.py
