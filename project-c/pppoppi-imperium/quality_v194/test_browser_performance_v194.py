@@ -112,7 +112,7 @@ def main():
                     "max_month_seconds": round(max(months), 4),
                     "samples": samples,
                     "heap_change_bytes": round(end_heap - start_heap),
-                    "heap_sampling": "nach HeapProfiler.collectGarbage an allen vier Messpunkten",
+                    "heap_sampling": f"nach HeapProfiler.collectGarbage an allen {len(CHECKPOINTS)} Messpunkten",
                     "performance_gate": "BLOCKED: keine verbindlichen Grenzwerte oder Kubuntu-Nachweise",
                     "release_gate": "BLOCKED",
                 }
