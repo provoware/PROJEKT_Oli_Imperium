@@ -4,7 +4,7 @@
   "version_scope": "Projekt C: V1.9.4-Prüfschicht auf V1.9.3-Spielkern",
   "observed_pr14_head": "a7b67275d10ad682585816fd46c7ef83cc7d511b",
   "source_status": "imported",
-  "updated_on": "2026-10-25",
+  "updated_on": "2026-10-26",
   "gates": [
     {
       "id": "QUE-01",
@@ -24,7 +24,9 @@
       "basis": "Recovery-PR #18",
       "stage": "technical",
       "status": "pass",
-      "evidence": ["project-c/pppoppi-imperium/prerelease/evidence/QUE-02.json"]
+      "evidence": [
+        "project-c/pppoppi-imperium/prerelease/evidence/QUE-02.json"
+      ]
     },
     {
       "id": "QUE-03",
@@ -33,7 +35,9 @@
       "basis": "PR #14",
       "stage": "technical",
       "status": "pass",
-      "evidence": ["project-c/pppoppi-imperium/prerelease/evidence/QUE-03.json"]
+      "evidence": [
+        "project-c/pppoppi-imperium/prerelease/evidence/QUE-03.json"
+      ]
     },
     {
       "id": "QUE-04",
@@ -195,7 +199,9 @@
       "basis": "PR #14",
       "stage": "technical",
       "status": "pass",
-      "evidence": ["project-c/pppoppi-imperium/prerelease/evidence/BAL-02.json"],
+      "evidence": [
+        "project-c/pppoppi-imperium/prerelease/evidence/BAL-02.json"
+      ],
       "blocker": "",
       "next": ""
     },
@@ -206,7 +212,9 @@
       "basis": "PR #14",
       "stage": "technical",
       "status": "pass",
-      "evidence": ["project-c/pppoppi-imperium/prerelease/evidence/BAL-03.json"],
+      "evidence": [
+        "project-c/pppoppi-imperium/prerelease/evidence/BAL-03.json"
+      ],
       "blocker": "",
       "next": ""
     },
@@ -382,9 +390,11 @@
       "basis": "Nutzerauftrag",
       "stage": "technical",
       "status": "blocked",
-      "evidence": [],
-      "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "Tastaturprobe durchführen"
+      "evidence": [
+        "project-c/pppoppi-imperium/prerelease/evidence/BED-02-PARTIAL-20261026.json"
+      ],
+      "blocker": "Chromium #40387673447 pruefte 39/39 Szenen in drei CSS-Viewports (117/117) auf Tab/Enter-Schliessen, Alt+Links und unveraenderten Spielstand: PASS. Weitere Aktionen innerhalb der Szenen und Minispiele sind nicht vollstaendig tastaturgeprueft.",
+      "next": "Alle interaktiven Aktionen und Minispiele mit reinen Tastatureingaben samt Fokusfolge testen; native Zoomstufen separat pruefen."
     },
     {
       "id": "BED-03",
@@ -404,9 +414,11 @@
       "basis": "Nutzerauftrag",
       "stage": "technical",
       "status": "blocked",
-      "evidence": [],
-      "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "Fokusfolge prüfen"
+      "evidence": [
+        "project-c/pppoppi-imperium/prerelease/evidence/BAR-01-PARTIAL-20261026.json"
+      ],
+      "blocker": "Chromium #40387673447 meldet 117/117 Tastaturfokusse mit :focus-visible und 117/117 berechnete Umrisse/Schatten. Vollstaendige Fokusreihenfolge, Sichtbarkeit/ausreichender Kontrast aller Elemente und Minispiele bleiben ungeprueft.",
+      "next": "Fokusreihenfolge aller Bedienelemente und sichtbare Fokuskontraste technisch auditieren; erst nach allen Gates persoenliche Sichtabnahme."
     },
     {
       "id": "BAR-02",
@@ -459,7 +471,9 @@
       "basis": "PR #14",
       "stage": "technical",
       "status": "pass",
-      "evidence": ["project-c/pppoppi-imperium/prerelease/evidence/TES-01.json"],
+      "evidence": [
+        "project-c/pppoppi-imperium/prerelease/evidence/TES-01.json"
+      ],
       "blocker": "",
       "next": ""
     },
@@ -470,7 +484,9 @@
       "basis": "PR #14",
       "stage": "technical",
       "status": "pass",
-      "evidence": ["project-c/pppoppi-imperium/prerelease/evidence/TES-02.json"],
+      "evidence": [
+        "project-c/pppoppi-imperium/prerelease/evidence/TES-02.json"
+      ],
       "blocker": "",
       "next": ""
     },
