@@ -12,12 +12,12 @@ Der Test baut die Offline-Vorschau aus 110 unveränderten, hashgeprüften Quelld
 
 ## Nachweisstand
 - Vorprüfung: `main` bei `d3dc371154cc1089e06f34d0dc4ff04047132360`; gestapelte Grundlage [PR #71](https://github.com/provoware/PROJEKT_Oli_Imperium/pull/71), HEAD `014a10c5a1d639f9dd7d4d51f12cc26a3ae2f369`.
-- Neuer Test und Workflow: **IMPLEMENTIERT, CI-Nachweis noch offen**. Keine unbewiesene PASS-Aussage.
+- **Chromium-Workflow [#40413530587](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40413530587): PASS** auf Implementierungs-HEAD `d4550b598ccd930beb06d7d784582d6e6949a779`. In jeder der 39 Szenen waren je **463/463** sichtbare aktivierte Dialogelemente per Tab erreichbar, mit `:focus-visible`, berechnetem Umriss/Schatten und einem nichtleeren Beschriftungshinweis (insgesamt **926 Prüfpunkte**, aber nicht 926 unterschiedliche Funktionen). Keine JavaScript-Fehler, keine externen Anfragen und keine Veränderung des Spielstands. **Quellprüfung [#40413530363](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40413530363): PASS.** Die [technische Gesamtmatrix #40413530386](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40413530386) bleibt wie vorgesehen BLOCKED.
 - Matrix bleibt unverändert bei **6/52 PASS, 39 BLOCKED, 4 OPEN, 3 persönliche DEFERRED**. Kein Merge, kein Release, keine persönliche Endabnahme.
 
 ## Drei nächste Schritte
-1. Den neuen Chromium-Lauf auswerten; bei echten Tab-/Fokusfehlern gezielt reparieren und erneut prüfen.
-2. Nach erfolgreichem Lauf die Teilnachweise für BED-02/BAR-01 mit konkretem Commit und CI-URL ergänzen; volle Gates nicht vorzeitig freigeben.
-3. Nativen Browserzoom bei 175–200 % getrennt von CSS-Viewport-Simulationen prüfen und anschließend alle noch fehlenden Pflichtaktionen abdecken.
+1. Aktionen in den Dialogen mit echten Tab-/Enter-Eingaben samt Spielstands- und Fehlerschutz prüfen.
+2. Nativen Browserzoom bei 175–200 % getrennt von CSS-Viewport-Simulationen reproduzierbar prüfen.
+3. Fokuskontrast gegenüber den tatsächlichen Hintergründen und Zustandswechsel nach Minispielen untersuchen.
 
-**Empfehlung:** Die diagnostizierten fehlenden Beschriftungen nach Wirkung priorisieren, statt alle Oberflächenelemente blind umzubauen.
+**Empfehlung:** Da keine fehlenden Tab-Ziele oder Beschriftungshinweise im untersuchten Grundzustand gefunden wurden, nicht blind umbauen. Stattdessen die bislang ungetesteten aktiven Dialogaktionen und tatsächliche Kontrastwerte priorisieren.
