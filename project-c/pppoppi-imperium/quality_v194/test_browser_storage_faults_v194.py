@@ -79,6 +79,7 @@ def main():
                   page.locator("#backupStatus").get_attribute("data-error") == "true" and
                   "Sicherung fehlgeschlagen" in page.locator("#backupStatus").inner_text())
             page.evaluate("() => { IDBObjectStore.prototype.put = window.__storageFaults.put; }")
+            page.evaluate("NeoEconomy.open('startup')")
             page.locator('[data-ui="restore-backup"]').click()
             page.wait_for_function("(expected) => JSON.stringify(NeoEconomy.getState()) === JSON.stringify(expected)",
                                    arg=safe)
@@ -102,6 +103,7 @@ def main():
             check("Speicherverweigerung beim Schreiben sicher abgefangen",
                   page.evaluate("PPBackup.capture(NeoEconomy.getState())") is False and
                   page.locator("#backupStatus").get_attribute("data-error") == "true")
+            page.evaluate("NeoEconomy.open('startup')")
             page.locator('[data-ui="restore-backup"]').click()
             page.wait_for_function("PPBackup.status().includes('Wiederherstellung nicht möglich')")
             check("Speicherverweigerung beim Lesen sichtbar",
@@ -117,6 +119,7 @@ def main():
             check("Nach Browser-Neustart kein stilles Ueberschreiben",
                   state(page) is None)
             page.locator("#startGame").click()
+            page.evaluate("NeoEconomy.open('startup')")
             page.locator('[data-ui="restore-backup"]').click()
             page.wait_for_function("NeoEconomy.getState() !== null")
             check("Letzte bestaetigte Generation nach Neustart wiederherstellbar",
