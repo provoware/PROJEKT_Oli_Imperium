@@ -41,3 +41,13 @@ Der Browser-Workflow führt den Test nach Offline-Rundlauf und Szenenaudit aus. 
 3. Echten nativen Browserzoom, vollständige Tastaturpfade und unabhängige Leistungsmessungen nachziehen.
 
 **Kein Merge, kein Release. Persönliche Sichtprüfung und Kubuntu-Praxistest erst nach vollständig grünen technischen Gates und eingefrorenem Kandidaten.**
+
+## Tatsächlich abgeschlossene GitHub-Prüfungen – 26.10.2026
+
+**Geprüfter Code-/Dokumentations-HEAD:** `fe9a9564cb3aeaed41ef1bb3d23492cc39bdd437`. Der nachfolgende Nachweis-Commit verändert nur diesen Bericht; auf dessen endgültigem HEAD müssen die Prüfungen erneut kontrolliert werden.
+
+- [Chromium-Workflow #40250467071](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40250467071): **PASS**. Offline-Rundlauf, Szenenaudit und neuer Browser-Langlauf erfolgreich. **12/12 Monatsabschlüsse**, **12/12 Monatswechsel**, **12/12 Berichte**, **3/3 Export-/Neustart-/Reimporte** und **3/3 abgewiesene manipulierte Spielstände**. Keine externen HTTP-Anfragen oder JavaScript-Laufzeitfehler.
+- [Quell-/Fachworkflow #40250467123](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40250467123): **PASS**, einschließlich 110 unveränderter Originalquellen und der fachlichen Testprogramme.
+- [Gesamtfreigabe #40250467028](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40250467028): **FAIL/BLOCKED wie vorgesehen**. Matrix strukturell gültig, aber **6 PASS / 39 BLOCKED / 4 OPEN / 3 DEFERRED**; keine Vorrelease-Freigabe.
+
+**Laufzeitbeobachtung:** Die zwölf Monatsabschnitte benötigten in der CI-Umgebung je 0,149 bis 0,509 Sekunden. Das ist eine Momentaufnahme ohne garantierte Leistungsgrenze, kein Leistungs- oder Stabilitätsfreigabenachweis.
