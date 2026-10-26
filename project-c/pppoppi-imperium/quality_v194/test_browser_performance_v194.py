@@ -26,6 +26,9 @@ def check(label, condition):
 
 
 def metrics(session):
+    # Nur nach einer expliziten Bereinigung messen: weniger Messrauschen
+    # durch noch nicht aufgeraeumte, aber bereits unerreichbare Objekte.
+    session.send("HeapProfiler.collectGarbage")
     values = session.send("Performance.getMetrics")["metrics"]
     names = {item["name"]: item["value"] for item in values}
     required = ("JSHeapUsedSize", "Nodes", "Documents", "TaskDuration")
@@ -54,6 +57,7 @@ def main():
                         if request.url.startswith(("http://", "https://")) else None)
                 session = context.new_cdp_session(page)
                 session.send("Performance.enable")
+                session.send("HeapProfiler.enable")
                 started = time.perf_counter()
                 page.goto((preview / "index.html").as_uri(), wait_until="load")
                 page.wait_for_function("typeof NeoEconomy === 'object'")
@@ -102,6 +106,7 @@ def main():
                     "max_month_seconds": round(max(months), 4),
                     "samples": samples,
                     "heap_change_bytes": round(end_heap - start_heap),
+                    "heap_sampling": "nach HeapProfiler.collectGarbage an allen vier Messpunkten",
                     "performance_gate": "BLOCKED: keine verbindlichen Grenzwerte, kein Langzeit-/Kubuntu-Nachweis",
                     "release_gate": "BLOCKED",
                 }
