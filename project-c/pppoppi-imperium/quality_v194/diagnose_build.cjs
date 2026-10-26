@@ -11,16 +11,20 @@ const sha = bytes => crypto.createHash('sha256').update(bytes).digest('hex');
 const expectedInfo = Object.freeze({
   kind: 'technical-preview-not-released', gameVersion: '1.9.3', qaVersion: '1.9.4',
   sourceArchiveSha256: '94f41725f1d1addaa07505302a4f448e3410df0bcebe68bfb24fc07b72d433ca',
-  sourceFiles: 110, sourceOverrides: [...new Set(changes.map(c => c[0]))].sort()
+  sourceFiles: 110, sourceOverrides: [...new Set(changes.map(c => c[0]))].sort(),
+  generatedAddons: ['src/backup_v194.js']
 });
 function expectedFiles() {
   const overrides = new Set(changes.map(c => c[0]));
-  return verifySource().map(entry => {
+  const sourceEntries = verifySource().map(entry => {
     const relative = entry.path.slice('SPIEL/'.length);
     const bytes = overrides.has(relative) ? Buffer.from(renderPatched(relative), 'utf8') : null;
     return {path: relative, size: bytes ? bytes.length : entry.size,
       sha256: bytes ? sha(bytes) : entry.sha256};
   });
+  const addon = fs.readFileSync(path.join(__dirname, 'backup_v194.js'));
+  sourceEntries.push({path: 'src/backup_v194.js', size: addon.length, sha256: sha(addon)});
+  return sourceEntries;
 }
 function inspect(destination, entries, info = expectedInfo) {
   assert.ok(typeof destination === 'string' && destination.trim(), 'Zielordner fehlt');
