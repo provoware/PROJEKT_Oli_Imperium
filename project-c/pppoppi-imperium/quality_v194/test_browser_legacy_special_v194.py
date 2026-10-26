@@ -11,7 +11,7 @@ import tempfile
 from pathlib import Path
 
 from playwright.sync_api import sync_playwright
-from test_browser_natural_rescue_v194 import export_state, state
+from test_browser_natural_rescue_v194 import state
 from test_browser_reimport_v194 import import_file
 
 HERE = Path(__file__).resolve().parent
@@ -21,6 +21,14 @@ def check(label, condition):
     print(("PASS: " if condition else "FAIL: ") + label, flush=True)
     if not condition:
         raise AssertionError(label)
+
+def export_state(page):
+    """Export safely whether an import left the scene open or closed."""
+    if page.locator("#closeBtn").is_visible():
+        page.locator("#closeBtn").click()
+    with page.expect_download() as downloaded:
+        page.locator("#saveGame").click()
+    return json.loads(Path(downloaded.value.path()).read_text(encoding="utf-8"))
 
 
 def main():
