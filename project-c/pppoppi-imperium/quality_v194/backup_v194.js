@@ -95,5 +95,5 @@ async function restore(validate){
  status('Beide Zwischensicherungen sind beschädigt. JSON-Datei laden!',true);
  throw Error('Keine gültige Zwischensicherung gefunden');
 }
-window.PPBackup={capture,restore,status:()=>indicator.textContent};
+window.PPBackup={capture,restore,idle:()=>queue,status:()=>indicator.textContent};
 })();
