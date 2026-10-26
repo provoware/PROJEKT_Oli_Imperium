@@ -27,7 +27,7 @@
 - Pflicht-Workflow: `.github/workflows/prerelease-browser-project-c.yml`.
 - Gesamtsperre: `node project-c/pppoppi-imperium/prerelease/check.mjs --technical` bleibt **BLOCKED**, bis sämtliche technischen Pflichten vollständig freigegeben sind.
 
-**Status bei Erstellung:** Testimplementierung und CI-Einbindung vorhanden; Browserausführung **PENDING**, bis GitHub Actions auf dem endgültigen PR-HEAD tatsächlich geprüft wurde. Ein bestandener Einzeltest ist **keine** vollständige Freigabe von `SPE-01` oder `SPE-03`. Ein echtes Abschalten während eines Schreibvorgangs wird hier **nicht** simuliert.
+**Status bei Erstellung:** Testimplementierung und CI-Einbindung vorhanden; Browserausführung zunächst **PENDING**. Der nachfolgende Abschnitt enthält den inzwischen nachgewiesenen CI-Stand. Ein bestandener Einzeltest ist **keine** vollständige Freigabe von `SPE-01` oder `SPE-03`. Ein echtes Abschalten während eines Schreibvorgangs wird hier **nicht** simuliert.
 
 ## Drei nächste Pflichtarbeiten
 
@@ -38,3 +38,13 @@
 **Weiterführende Empfehlung:** Die Speicher-Gates erst freigeben, wenn nicht nur Wiederholbarkeit, sondern auch ein nachweisbarer Rückfall auf den letzten gültigen Stand bei einer tatsächlichen Unterbrechung belegt ist.
 
 Kein Merge. Kein Release. Persönliche Sichtprüfung und Kubuntu-Endabnahme erst nach sämtlichen technischen Pflichtgates und eingefrorenem Kandidaten.
+
+## Tatsächliche GitHub-Prüfungen der Implementierung
+
+**Geprüfter Implementierungs-HEAD:** `72f48e077466cc2b0c7bc855558908eef7920154` (3 Commits gegenüber PR #54). Die nachfolgende Dokumentationskorrektur erfordert anschließend erneut eine Prüfung auf ihrem eigenen finalen HEAD.
+
+- [Chromium-CI #40275057184](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40275057184): **PASS**. Der neue Test hat **12/12 gültige Wiederimporte, 3/3 abgewiesene beschädigte Importe, 2 Browser-Neustarts, genau einen Rettungskredit und einen Monatsbericht** nachgewiesen. Alle sieben vorherigen Browser-Testschritte ebenfalls **PASS**. Browser-Log bestätigt fehlende externe HTTP-Anfragen und keine JavaScript-Laufzeitfehler.
+- [Quell-/Fach-CI #40275057179](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40275057179): **PASS**.
+- [Integrierte Matrix-CI #40275057233](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40275057233): **FAIL/BLOCKED**. Alle acht vorgelagerten technischen Prüfungen **PASS**, ausschließlich die letzte vollständige Freigabesperre **FAIL** wegen noch offener Pflichten.
+
+**Erledigt:** Reproduzierbarer Test und verpflichtende CI-Abdeckung für wiederholte Imports und drei beschädigte Dateivarianten. **Offen:** Vollständige Unterbrechungs-/Rückfallsicherheit, Versionsmigration, Gesamtspiel, Zoom, Tastatur, Performance, Freigabeunterlagen. Matrix weiterhin **6/52 PASS, 39 BLOCKED, 4 OPEN, 3 DEFERRED**. **Kein Release-Kandidat.**
