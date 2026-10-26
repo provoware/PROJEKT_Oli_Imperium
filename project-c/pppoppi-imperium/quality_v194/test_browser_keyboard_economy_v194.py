@@ -14,11 +14,22 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 
 from test_browser_keyboard_pipe_fire_v194 import (
-    MODES, activate, check, start, state, valid,
+    MODES, activate, check, state, valid,
 )
 
 HERE = Path(__file__).resolve().parent
 CLAIM = "BERLIN-1"
+
+
+def start_fresh(page, label):
+    """Nur neue Partie starten; kein vorbereiteter Feldkauf oder Bohrung."""
+    activate(page, "#startGame", label + ": Spielstart")
+    page.locator("#econMode").wait_for(state="visible")
+    activate(page, '[data-ui="newgame"]', label + ": neue Partie")
+    page.wait_for_function("NeoEconomy.getState() !== null")
+    check(label + ": frische, unbearbeitete Partie",
+          state(page)["phase"] == "TURN"
+          and all(claim["owner"] is None for claim in state(page)["claims"].values()))
 
 
 def action(page, scene, selector, label):
@@ -130,7 +141,7 @@ def main():
                         page.goto((preview / "index.html").as_uri(),
                                   wait_until="load")
                         page.wait_for_function("typeof NeoEconomy === 'object'")
-                        start(page, label)
+                        start_fresh(page, label)
                         final_state = run_economy(page, label)
                         activate(page, "#closeBtn", label + ": Dialog schliessen")
                         with page.expect_download() as download_info:
