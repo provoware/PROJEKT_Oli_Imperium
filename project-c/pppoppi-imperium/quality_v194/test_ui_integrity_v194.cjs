@@ -32,7 +32,8 @@ check('V1.9.4-Prüfprogramme sind keine Laufzeitmodule der V1.9.3-Spieloberfläc
   const scripts = [...html.matchAll(/<script\b[^>]*\bsrc="([^"]+)"/g)].map(m => m[1]);
   assert.ok(scripts.includes('src/strategy_logistics_v193.js'));
   assert.ok(scripts.includes('src/neo_bridge.js'));
-  assert.ok(!scripts.some(file => /v194\.(?:js|cjs)$/.test(file)));
+  assert.ok(scripts.includes('src/backup_v194.js'), 'Nur der lokale Backup-Zusatz ist Laufzeitmodul');
+  assert.ok(!scripts.some(file => /v194\.(?:js|cjs)$/.test(file) && file !== 'src/backup_v194.js'));
   assert.ok(!scripts.some(file => file.includes('evaluate_balance') || file.includes('analyze_stress')));
 });
 
@@ -54,11 +55,12 @@ check('V1.9.4-Berichte lesen den tatsächlichen V1.9.3-Kern; dessen Module bleib
 
 check('Alle HTML-Quellen sind lokal vorhanden und ohne CDN erreichbar', () => {
   const resources = [...html.matchAll(/<(?:script|link)\b[^>]*?\b(?:src|href)="([^"]+)"/g)].map(m => m[1]);
-  assert.equal(resources.length, 20, 'Anzahl der eingebundenen Skripte/Styles prüfen');
+  assert.equal(resources.length, 21, '20 Original-Ressourcen und ein geprüfter Zusatz');
   for (const target of resources) {
     assert.match(target, /^(?:src|legacy_v06)\/[A-Za-z0-9_./-]+$/);
     assert.ok(!target.split('/').includes('..'), 'Kein Pfad darf den Spielordner verlassen');
-    assert.ok(fs.statSync(path.join(root, target)).isFile(), 'Fehlende Ressource: ' + target);
+    const resolved = target === 'src/backup_v194.js' ? path.join(__dirname, 'backup_v194.js') : path.join(root, target);
+    assert.ok(fs.statSync(resolved).isFile(), 'Fehlende Ressource: ' + target);
   }
 });
 
