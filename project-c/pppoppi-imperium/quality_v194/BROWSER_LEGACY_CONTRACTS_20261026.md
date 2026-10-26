@@ -77,3 +77,16 @@ Vorrelease-Kandidaten.
 **Kein Merge, kein Release, keine Änderungen an den fünf
 ausgeschlossenen Repositories.** Veröffentlichung nur mit
 ausdrücklicher Nutzerfreigabe.
+
+## Tatsächliche erste CI auf dem Implementierungs-HEAD
+
+**Geprüfter Implementierungs-HEAD:** `910f643344ef090e34a8d9ceb128e84e9a22a799` (3 Commits, 3 Dateien gegenüber PR #58).
+
+- [Chromium-CI #40301249120](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40301249120): **PASS**. Alle zwölf Browser-Testprogramme, einschließlich neuem Vertrags-Test mit **22/22 PASS**. Zwei natürlich entstandene Ergebnisse (DONE/BREACH), zwei abgelehnte offene Altverträge, vollständige Buchungen, Export/Wiederimport, 800×600, Offlinebetrieb und keine JavaScript-Laufzeitfehler.
+- [Quell-/Fach-CI #40301248854](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40301248854): **PASS**. Originalinventar, Forschungs- und Fachprüfungen.
+- [Integrierte Pflichtmatrix #40301249059](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40301249059): **FAIL/BLOCKED** ausschließlich am harten technischen Gesamt-Gate. Vorherige Matrix-, Forschungs-, Import- und Quellenprüfschritte **PASS**.
+
+**Hinweis:** Diese Dokumentationsnachtragung erzeugt einen weiteren Commit.
+Der finale HEAD muss separat durch GitHub-CI geprüft werden; die oben
+genannten Ergebnisse beziehen sich nur auf den Implementierungs-HEAD.
+Die Gesamtmatrix bleibt bei **6/52 PASS, 39 BLOCKED, 4 OPEN, 3 DEFERRED**.
