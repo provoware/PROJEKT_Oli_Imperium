@@ -12,6 +12,12 @@ const manifestPath = path.join(projectRoot, 'WIEDERHERSTELLUNG_MANIFEST.json');
 const expectedArchiveSha = '94f41725f1d1addaa07505302a4f448e3410df0bcebe68bfb24fc07b72d433ca';
 
 const changes = [
+  // Bei echtem Zoom werden die klebende Szenennavigation und der fixe
+  // KI-Knopf ueber Bedienelemente geschoben. Im schmalen Dialog bleiben
+  // beide im normalen Dokumentfluss, ohne Funktionen zu entfernen.
+  ['index.html',
+    '</head>',
+    '<style id="pppoppi-zoom-overlap-v194">@media(max-width:620px){#dialog[open] .dhead{position:static}#dialog[open] .v191-nav{position:static}#dialog[open] #pp-ai-button{position:static;display:block;margin:10px 12px 10px auto}#dialog[open] #pp-ai-drawer{position:static;width:calc(100% - 24px);max-height:none;margin:8px auto}}</style>\n</head>'],
   // Browser-Standardfokus bei <select> war bei 175 % nur 0,57 CSS-Pixel
   // breit und hatte gegen den Dialoghintergrund nur 1,18:1 Kontrast.
   // Ausschliesslich in der abgeleiteten Technikvorschau korrigieren.
