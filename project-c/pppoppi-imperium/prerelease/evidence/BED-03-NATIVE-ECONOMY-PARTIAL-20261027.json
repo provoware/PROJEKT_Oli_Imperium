@@ -1,0 +1,41 @@
+{
+  "gate_id": "BED-03",
+  "date": "2026-10-27",
+  "result": "PARTIAL",
+  "implementation_commit": "23ecb9f42522cc872c8ec0334e3ca590d2beab83",
+  "ci_url": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40467829258",
+  "ci_result": "PASS",
+  "test_command": "python3 project-c/pppoppi-imperium/quality_v194/test_browser_native_zoom_economy_v194.py",
+  "zoom_percent": [
+    175,
+    200
+  ],
+  "browser": "Chromium mit chrome.tabs.setZoom/getZoom",
+  "keyboard_actions_per_zoom": 15,
+  "months_settled_per_zoom": 2,
+  "negative_cases": [
+    "Foerderung vor Bohrung",
+    "Doppelkauf ohne Doppelbuchung"
+  ],
+  "contract_fulfilled": true,
+  "export_matches_state": true,
+  "original_sources_changed": 0,
+  "release_gate": "BLOCKED",
+  "initial_failure": {
+    "ci_url": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40467580953",
+    "result": "FAIL",
+    "zoom_percent": 200,
+    "report_horizontal_overflow_css_px": 54
+  },
+  "fixed_observations": {
+    "layout_stages_per_zoom": 2,
+    "interactive_element_occurrences_per_zoom": 27,
+    "covered_elements": 0,
+    "max_horizontal_overflow_css_px": 0
+  },
+  "limits": [
+    "Feldansicht und Monatsbericht, keine vollstaendige Pixel-/Animationspruefung",
+    "Weitere Dialoge und Spielendzustaende offen",
+    "Persoenliche Endabnahme zurueckgestellt"
+  ]
+}
