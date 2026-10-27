@@ -22,9 +22,9 @@
     "weak_contrast": 0
   },
   "limits": [
-    "200 % nach erstem FAIL nicht ausgefuehrt",
-    "Ursache der vier Trefferbefunde noch offen",
-    "Dynamische Zwischenbilder und Endpartien nicht geprueft",
+    "Historischer Erstlauf scheiterte bereits bei 175 Prozent; spaeter beide Zoomstufen erfolgreich nachgeprueft",
+    "Dynamische Zwischenbilder teilweise technisch geprueft, nicht alle Dialogaktionen",
+    "Keine vollstaendige Text-/Animations- und Endpartiepruefung",
     "Keine technische oder persoenliche Release-Freigabe"
   ],
   "diagnostic_results": {
@@ -48,5 +48,62 @@
     "result": "PENDING",
     "source_ci": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40462905788",
     "source_result": "PASS"
+  },
+  "verified_followup": {
+    "commit": "b4f5060103c0aea97783b604e0bf57c348a3bb1c",
+    "browser_ci": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40463849844",
+    "result": "PASS",
+    "source_ci": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40463850060",
+    "source_result": "PASS",
+    "release_matrix_ci": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40463849996",
+    "release_matrix_result": "BLOCKED",
+    "zoom_percent": [
+      175,
+      200
+    ],
+    "controls_per_zoom": [
+      451,
+      451
+    ],
+    "covered": [
+      0,
+      0
+    ],
+    "min_computed_contrast": 6.9
+  },
+  "dynamic_intermediate_audit": {
+    "tested_commit": "b1872e4000f8e4da6793eb099ea7b162856b0cd5",
+    "browser_ci": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40464603905",
+    "result": "PASS",
+    "test_programs": [
+      "project-c/pppoppi-imperium/quality_v194/test_browser_native_zoom_minigames_v194.py",
+      "project-c/pppoppi-imperium/quality_v194/test_browser_native_zoom_drill_v194.py"
+    ],
+    "zoom_percent": [
+      175,
+      200
+    ],
+    "dynamic_snapshots": 26,
+    "control_occurrences_checked": 324,
+    "covered_occurrences": 0,
+    "max_horizontal_overflow_css_px": 0,
+    "stages_per_zoom": {
+      "pipe": 3,
+      "pipe_finished": 1,
+      "fire_wrong_choice": 1,
+      "fire": 3,
+      "fire_finished": 1,
+      "drill": 4
+    },
+    "coverage_assertion_commit": "03be39192df5bab7c58807df4dd09124bf8188de",
+    "coverage_assertion_ci": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40464689143",
+    "coverage_assertion_result": "PENDING",
+    "limitations": [
+      "324 Bedienelement-Vorkommen, nicht 324 verschiedene Funktionen",
+      "Nur technisch sichtbare interaktive Elemente in dynamischen Ansichten",
+      "Keine Pixelpruefung von Text oder Animationen",
+      "Keine vollstaendige Sieg- oder Niederlagenpartie",
+      "Keine persoenliche Endabnahme"
+    ]
   }
 }
