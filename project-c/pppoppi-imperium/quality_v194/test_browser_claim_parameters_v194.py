@@ -46,7 +46,15 @@ def activate(page, claim, code, label):
     selector = '#dialogContent button[data-econ="%s"][data-claim="%s"]' % (
         code, claim)
     target = page.locator(selector)
-    check(label + ": korrektes Claim-Ziel", target.count() == 1)
+    diagnostic = page.evaluate("""() => ({
+        selected: document.querySelector('#econClaim')?.value || null,
+        scene: document.querySelector('#dialog')?.open,
+        claimButtons: [...document.querySelectorAll(
+            '#dialogContent button[data-econ]')].map(
+                el => [el.dataset.econ, el.dataset.claim || ''])
+    })""")
+    check(label + ": korrektes Claim-Ziel " +
+          json.dumps(diagnostic, ensure_ascii=False), target.count() == 1)
     page.evaluate("""() => {
         if (!window.__qaParamListener) {
             document.addEventListener('click', event => {
