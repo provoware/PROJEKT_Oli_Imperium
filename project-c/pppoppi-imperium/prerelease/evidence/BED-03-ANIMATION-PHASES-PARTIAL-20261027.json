@@ -1,0 +1,37 @@
+{
+  "gate_id": "BED-03",
+  "date": "2026-10-27",
+  "result": "PARTIAL",
+  "tested_code_head": "120bd650cea72f8be06582b5bcdba9e28d6455e4",
+  "ci_url": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40497893039",
+  "ci_result": "PASS",
+  "source_ci_url": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40497893005",
+  "source_ci_result": "PASS",
+  "matrix_ci_url": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40497892973",
+  "matrix_release_gate": "BLOCKED",
+  "command": "python3 project-c/pppoppi-imperium/quality_v194/test_browser_animation_phases_v194.py",
+  "native_zoom_percent": [
+    175,
+    200
+  ],
+  "scenes_per_zoom": 39,
+  "animated_scenes_per_zoom": 11,
+  "animation_occurrences_per_zoom": 29,
+  "phase_samples_per_zoom": 88,
+  "text_measurements_per_zoom": 352,
+  "word_hit_points": {
+    "175": 7488,
+    "200": 7536
+  },
+  "detected_text_errors": 0,
+  "synthetic_animation_seek_test": "PASS",
+  "synthetic_text_occlusion_controls": "PASS",
+  "original_source_files_changed": 0,
+  "release_gate": "BLOCKED",
+  "limitations": [
+    "Acht diskrete Phasen je animierter Szene, keine lueckenlose Animation oder pixelgenaue Sichtpruefung",
+    "Nur Animationsziele innerhalb des aktuell geoeffneten Dialoginhalts; 11 von 39 Szenen enthielten geeignete Animationen",
+    "Nicht alle Minispiel-Zwischenzustaende, Dialogaktionen und Endpartien in diesem Test",
+    "Persoenliche Sichtpruefung und Kubuntu-Test erst nach technischer Freigabe"
+  ]
+}
