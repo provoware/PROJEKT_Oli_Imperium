@@ -4,7 +4,7 @@
   "version_scope": "Projekt C: V1.9.4-Prüfschicht auf V1.9.3-Spielkern",
   "observed_pr14_head": "a7b67275d10ad682585816fd46c7ef83cc7d511b",
   "source_status": "imported",
-  "updated_on": "2026-10-27",
+  "updated_on": "2026-10-28",
   "gates": [
     {
       "id": "QUE-01",
@@ -230,10 +230,11 @@
       "stage": "technical",
       "status": "blocked",
       "evidence": [
-        "project-c/pppoppi-imperium/prerelease/evidence/SPE-01-CLAIM-ROUNDTRIP-PARTIAL-20261027.json"
+        "project-c/pppoppi-imperium/prerelease/evidence/SPE-01-CLAIM-ROUNDTRIP-PARTIAL-20261027.json",
+        "project-c/pppoppi-imperium/prerelease/evidence/SPE-01-COMPLEX-MULTIFIRM-PARTIAL-20261028.json"
       ],
-      "blocker": "PR #92, HEAD e132bef9a1feadc37cec2464d7294b779e2807f4: Browser-CI #40561679062 PASS in allen drei Jobs, einschliesslich 12 Monaten, drei echten Chromium-Prozessneustarts, drei exakten Export-/Import-Vergleichen und drei sicheren Manipulationsablehnungen. Sporadischer Dialogfehler bei 200%/BERLIN-2 im frueheren Lauf #40561072233 bleibt ungeklaert; vollstaendige Endpartien und weitere Speicherfaelle fehlen. Gate BLOCKED.",
-      "next": "CI #40571243683: isolierte 216/216 Feldauswahlen PASS, native Claim-Parameter FAIL bei 175%/BERLIN-3. Synchronisierung des nativen close-Ereignisses im Folge-PR pruefen; danach Speicherfehler und Endpartien."
+      "blocker": "Chromium-CI #40603795251 auf Code-HEAD 8ec7a177313136cb040dfe26c833e09b392e6b2a PASS (vier Browserjobs). Neuer Teiltest: zwei menschliche und zwei KI-Firmen, zwei Regionen, zwei Vertragsabschluesse, zwei Monatsabrechnungen, vier frische Browserkontexte, drei exakte Importe und unabhaengige wirtschaftliche Fortsetzung ohne Doppelbuchung. Weitere Spielphasen, beliebige Fremdeingaben, vollstaendige Endpartien und verbindliche Endregeln fehlen; SPE-01 und Gesamtgate BLOCKED.",
+      "next": "Weitere komplexe Speicher-/Buchungsfaelle (Sanierung, Vertragsbruch, mehrere Generationen) und komplette Endpartien testen; neues Teiltest-Ergebnis im Chromium-Job #40603795251 PASS, kein Gesamt-PASS."
     },
     {
       "id": "SPE-02",
