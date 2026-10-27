@@ -55,6 +55,79 @@ def set_real_zoom(worker, url, factor):
     }""", {"url": url, "factor": factor})
 
 
+
+def audit_all_scenes(page, label, state):
+    """Alle registrierten Szenen unter tatsaechlichem Tab-Zoom untersuchen.
+
+    Ueberlaeufe sind Diagnosen, keine stillschweigend freigegebenen Gates.
+    """
+    scenes = page.evaluate("PPNavigation191.getScenes()")
+    check(label + ": mindestens 35 eindeutige Spielszenen",
+          len(scenes) >= 35 and len(scenes) == len(set(scenes)))
+    rows = []
+    for scene in scenes:
+        page.evaluate("(id) => PPNavigation191.open(id)", scene)
+        page.locator("#dialog").wait_for(state="visible")
+        metrics = page.evaluate("""() => {
+            const d = document.querySelector('#dialog');
+            const c = document.querySelector('#dialogContent');
+            const root = document.documentElement;
+            const close = document.querySelector('#closeBtn');
+            return {
+                open: d.open,
+                title: document.querySelector('#dialogTitle').textContent.trim(),
+                contentLength: c.textContent.trim().length,
+                pageExcess: Math.max(0, root.scrollWidth - root.clientWidth),
+                dialogExcess: Math.max(0, d.scrollWidth - d.clientWidth),
+                contentExcess: Math.max(0, c.scrollWidth - c.clientWidth),
+                closeRendered: !!close.getClientRects().length
+            };
+        }""")
+        check(label + "/" + scene + ": Szene und Schliessen vorhanden",
+              metrics["open"] and metrics["title"]
+              and metrics["contentLength"] > 0 and metrics["closeRendered"])
+        check(label + "/" + scene + ": Schliessen per echter Tab-Taste",
+              tab_to(page, "#closeBtn"))
+        check(label + "/" + scene + ": Fokus sichtbar",
+              page.evaluate("document.activeElement.matches(':focus-visible')"))
+        rect = page.locator("#closeBtn").bounding_box()
+        size = page.evaluate("() => ({w: innerWidth, h: innerHeight})")
+        metrics["closeInsideViewport"] = bool(
+            rect and rect["x"] < size["w"] and rect["y"] < size["h"]
+            and rect["x"] + rect["width"] > 0
+            and rect["y"] + rect["height"] > 0)
+        page.evaluate("""() => {
+            window.__nativeZoomCloseSeen = false;
+            document.querySelector('#dialog').addEventListener(
+                'close', () => { window.__nativeZoomCloseSeen = true; },
+                {once: true});
+        }""")
+        page.keyboard.press("Enter")
+        page.wait_for_function("window.__nativeZoomCloseSeen === true")
+        check(label + "/" + scene + ": Schliessen per Enter",
+              not page.locator("#dialog").evaluate("(d) => d.open"))
+        rows.append({"scene": scene, **metrics})
+    check(label + ": Navigation aendert Wirtschaftszustand nicht",
+          page.evaluate("JSON.stringify(NeoEconomy.getState())") == state)
+    overflow = [r for r in rows if max(
+        r["pageExcess"], r["dialogExcess"], r["contentExcess"]) > 2]
+    clipped = [r["scene"] for r in rows if not r["closeInsideViewport"]]
+    summary = {
+        "scenes": len(rows),
+        "keyboard_open_programmatic_close_tab_enter": len(rows),
+        "overflow_count": len(overflow),
+        "overflow_scenes": [r["scene"] for r in overflow],
+        "worst_overflows": sorted(overflow, key=lambda r: max(
+            r["pageExcess"], r["dialogExcess"], r["contentExcess"]),
+            reverse=True)[:8],
+        "close_outside_viewport": clipped,
+        "layout_gate": "BLOCKED" if overflow or clipped else "PARTIAL"
+    }
+    print("NATIVE-ZOOM-SCENES:", json.dumps(
+        {"zoom": label, **summary}, ensure_ascii=False), flush=True)
+    return summary
+
+
 def audit_zoom(page, worker, factor, base_width, base_dpr, state):
     label = str(round(factor * 100)) + "%"
     result = set_real_zoom(worker, page.url, factor)
@@ -95,10 +168,12 @@ def audit_zoom(page, worker, factor, base_width, base_dpr, state):
               "(el) => document.activeElement === el"))
     check(label + ": Wirtschaftszustand unveraendert",
           page.evaluate("JSON.stringify(NeoEconomy.getState())") == state)
+    metrics["scene_audit"] = audit_all_scenes(page, label, state)
     metrics["zoom_percent"] = round(factor * 100)
     metrics["zoom_api"] = "chrome.tabs.setZoom/getZoom"
     metrics["layout_status"] = (
-        "BLOCKED" if metrics["pageExcess"] > 2 or metrics["dialogExcess"] > 2
+        "BLOCKED" if (metrics["pageExcess"] > 2 or metrics["dialogExcess"] > 2
+                      or metrics["scene_audit"]["layout_gate"] == "BLOCKED")
         else "PARTIAL")
     print("NATIVE-ZOOM-AUDIT:", json.dumps(metrics, ensure_ascii=False),
           flush=True)
@@ -162,8 +237,9 @@ def main():
                 print("ERGEBNIS:", json.dumps(rows, ensure_ascii=False),
                       flush=True)
                 print("GRENZE: Zoom und Tastatur-Hilfedialog technisch geprueft. "
-                      "Ueberlaeufe sind BLOCKED, keine komplette Szenen- oder "
-                      "Kontrastabnahme; BED-03 bleibt BLOCKED.", flush=True)
+                      "Alle registrierten Szenen unter echtem Zoom technisch geprueft. "
+                      "Ueberlaeufe und Fokuskontraste nicht freigegeben; "
+                      "BED-03 bleibt BLOCKED.", flush=True)
             finally:
                 context.close()
 
