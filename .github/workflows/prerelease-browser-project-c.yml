@@ -59,6 +59,8 @@ jobs:
         run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_native_zoom_flow_v194.py
       - name: Deterministische Animationsphasen bei echtem 175/200-Prozent-Zoom
         run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_animation_phases_v194.py
+      - name: Wirtschaftsaktion pro Dialogszene mit echter Tastatur bei nativem 175/200-Prozent-Zoom
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_dialog_actions_v194.py
       - name: Zwoelf Browser-Spielmonate mit drei Neustart- und Importzyklen
         run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_longrun_v194.py
       - name: Wirtschaft, Vertrag, Abrechnung und Spielstand-Neustart mit echten Browserklicks
