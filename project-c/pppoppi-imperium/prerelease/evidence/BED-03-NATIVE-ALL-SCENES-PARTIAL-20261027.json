@@ -1,0 +1,33 @@
+{
+  "gate_id": "BED-03",
+  "result": "PARTIAL",
+  "date": "2026-10-27",
+  "commit": "b330c73e94c68af7b633e25f2dd3c2a3a4e7c2ec",
+  "command": "python3 project-c/pppoppi-imperium/quality_v194/test_browser_native_zoom_v194.py",
+  "ci_url": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40439643673",
+  "source_ci_url": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40439643599",
+  "matrix_ci_url": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40439643683",
+  "checks": {
+    "native_zoom_percent": [
+      175,
+      200
+    ],
+    "registered_scenes_per_zoom": 39,
+    "scenes_opened_programmatically": 78,
+    "scenes_closed_with_real_tab_enter": 78,
+    "focus_visible": 78,
+    "horizontal_overflow_scenes": 0,
+    "close_button_outside_viewport": 0,
+    "economic_state_unchanged": true,
+    "external_http_requests": 0,
+    "browser_workflow": "PASS",
+    "source_workflow": "PASS",
+    "release_matrix": "BLOCKED_EXPECTED"
+  },
+  "limits": [
+    "Szenen programmgesteuert geoeffnet; nicht jede Aktion innerhalb der Szenen mit echten Tasten ausgefuehrt.",
+    "Gemessene scrollWidth-Ueberlaeufe decken nicht jede moegliche Ueberdeckung oder visuelle Lesbarkeit ab.",
+    "Fokuskontrast und Minispiele unter nativem Zoom nicht vollstaendig nachgewiesen.",
+    "Regulaeres Spielende und Gesamtfreigabe fehlen; keine persoenliche Endabnahme."
+  ]
+}
