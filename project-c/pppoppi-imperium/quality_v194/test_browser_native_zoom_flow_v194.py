@@ -73,25 +73,114 @@ FLOW_MEASURE = r"""(selector) => {
 }"""
 
 
+
+# Wortweise Treffpunktpruefung: auch TEILWEISE Ueberdeckungen werden erkannt.
+# Ein einzelner Treffer in der Mitte eines ganzen Absatzes reicht dafuer nicht.
+PARTIAL_MEASURE = r"""(selector) => {
+    const root = document.querySelector(selector);
+    if (!root) throw Error('Teilueberdeckungs-Pruefbereich fehlt: ' + selector);
+    const candidates = [...root.querySelectorAll('p,li,label,blockquote,figcaption')]
+        .filter(el => !el.querySelector('p,li,label,blockquote,figcaption'));
+    let inspected = 0, wordSamples = 0, partialCovered = 0, fullyCovered = 0;
+    const issues = [];
+    for (const el of candidates) {
+        if (!el.textContent.trim()) continue;
+        const css = getComputedStyle(el);
+        if (css.display === 'none' || css.visibility !== 'visible' ||
+            !el.getClientRects().length) continue;
+        el.scrollIntoView({block:'center', inline:'nearest'});
+        const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+        let visible = 0, covered = 0, node;
+        while ((node = walker.nextNode())) {
+            if (!node.textContent.trim()) continue;
+            const parent = node.parentElement;
+            if (!parent) continue;
+            const style = getComputedStyle(parent);
+            if (style.display === 'none' || style.visibility !== 'visible') continue;
+            const words = /\S+/g;
+            let match;
+            while ((match = words.exec(node.textContent)) !== null) {
+                const range = document.createRange();
+                range.setStart(node, match.index);
+                range.setEnd(node, match.index + match[0].length);
+                for (const rect of range.getClientRects()) {
+                    if (rect.width < 2 || rect.height < 2) continue;
+                    const y = rect.top + rect.height * 0.5;
+                    for (const fraction of [0.25, 0.5, 0.75]) {
+                        const x = rect.left + rect.width * fraction;
+                        if (x < 0 || y < 0 || x >= innerWidth || y >= innerHeight)
+                            continue;
+                        const hit = document.elementFromPoint(x, y);
+                        if (hit && (hit === el || el.contains(hit))) visible++;
+                        else covered++;
+                    }
+                }
+            }
+        }
+        if (visible + covered === 0) continue;
+        inspected++;
+        wordSamples += visible + covered;
+        if (visible && covered) partialCovered++;
+        if (!visible && covered) fullyCovered++;
+        if (covered) issues.push({
+            id:el.id || el.tagName.toLowerCase(),
+            text:el.textContent.trim().slice(0,70),
+            visible, covered
+        });
+    }
+    return {inspected, wordSamples, partialCovered, fullyCovered,
+        issues:issues.slice(0,12)};
+}"""
+
+
 def audit(page, stage, results):
-    first = page.evaluate(FLOW_MEASURE, "#dialogContent")
-    page.wait_for_timeout(100)
-    second = page.evaluate(FLOW_MEASURE, "#dialogContent")
-    for frame, result in enumerate((first, second), 1):
+    # Vier zeitlich getrennte Stichproben statt zwei. Kein lueckenloser Film.
+    for frame in range(1, 5):
+        result = page.evaluate(FLOW_MEASURE, "#dialogContent")
+        detail = page.evaluate(PARTIAL_MEASURE, "#dialogContent")
         check(stage + f": Frame {frame} ohne abgeschnittenen Fliesstext",
               result["clipped"] == 0)
-        check(stage + f": Frame {frame} ohne verdeckten Fliesstext",
+        check(stage + f": Frame {frame} ohne vollstaendig verdeckten Fliesstext",
               result["covered"] == 0)
         check(stage + f": Frame {frame} ohne unmessbaren Fliesstext",
               result["unmeasurable"] == 0)
-        results.append({"stage":stage, "frame":frame, **result})
-
+        check(stage + f": Frame {frame} ohne teilweise verdeckte Textwoerter",
+              detail["partialCovered"] == 0 and detail["fullyCovered"] == 0)
+        check(stage + f": Frame {frame} Wortstichproben vorhanden",
+              detail["wordSamples"] > 0 if result["measured"] > 0 else True)
+        results.append({"stage":stage, "frame":frame, **result,
+                        "wordSamples":detail["wordSamples"],
+                        "partialCovered":detail["partialCovered"],
+                        "fullyCoveredWords":detail["fullyCovered"]})
+        if frame < 4:
+            page.wait_for_timeout(75)
 
 def check_detector(page):
     page.set_content('<div id="probe"><p>Freier Text fuer den Kontrolltest</p></div>')
     clean = page.evaluate(FLOW_MEASURE, "#probe")
     check("Positivkontrolle: freier Fliesstext messbar",
           clean["measured"] == 1 and clean["covered"] == 0)
+
+    page.set_content('<div id="probe"><p style="width:320px">'
+                     'Alpha Bravo Charlie Delta Echo Foxtrot Golf Hotel'
+                     '</p></div>')
+    check("Wortprobe: freier Text ohne Teilueberdeckung",
+          page.evaluate(PARTIAL_MEASURE, "#probe")["partialCovered"] == 0)
+    page.evaluate("""() => {
+        const p = document.querySelector('#probe p');
+        const r = p.getBoundingClientRect();
+        const cover = document.createElement('div');
+        cover.style.cssText = 'position:fixed;z-index:2147483647;background:#111';
+        cover.style.left = r.left + 'px';
+        cover.style.top = r.top + 'px';
+        cover.style.width = (r.width * .43) + 'px';
+        cover.style.height = r.height + 'px';
+        document.body.appendChild(cover);
+    }""")
+    partial = page.evaluate(PARTIAL_MEASURE, "#probe")
+    check("Negativkontrolle: teilweise verdeckte Textwoerter erkannt",
+          partial["partialCovered"] == 1 and partial["fullyCovered"] == 0)
+    page.set_content('<div id="probe"><p>Freier Text fuer den Kontrolltest</p></div>')
     page.evaluate("""() => {
         const cover=document.createElement('div');
         cover.style.cssText='position:fixed;inset:0;z-index:9999;background:#111';
@@ -198,6 +287,11 @@ def main():
                         "flow_text_samples":samples,
                         "running_animation_observations":sum(
                             r["runningAnimations"] for r in rows),
+                        "word_samples":sum(r["wordSamples"] for r in rows),
+                        "partially_covered_text":sum(
+                            r["partialCovered"] for r in rows),
+                        "fully_covered_words":sum(
+                            r["fullyCoveredWords"] for r in rows),
                         "clipped":sum(r["clipped"] for r in rows),
                         "covered":sum(r["covered"] for r in rows),
                         "unmeasurable":sum(r["unmeasurable"] for r in rows),
@@ -208,7 +302,7 @@ def main():
                 check("Beide echten Zoomstufen geprueft",
                       [s["zoom_percent"] for s in summaries] == [175,200])
                 print("GRENZE: Nur sichtbare p/li/label/blockquote/figcaption-"
-                      "Textbereiche in zwei Momentaufnahmen je Spielphase. "
+                      "Textbereiche in vier Momentaufnahmen je Spielphase. "
                       "Kein Pixelvergleich und keine vollstaendige Animation, "
                       "Dialogaktion oder Endpartie. BED-03/BAR-01 BLOCKED.",
                       flush=True)
