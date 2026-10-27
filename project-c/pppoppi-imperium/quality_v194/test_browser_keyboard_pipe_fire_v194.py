@@ -72,7 +72,7 @@ def start(page, label):
           and state(page)["claims"][CLAIM]["drilled"])
 
 
-def pipe(page, label):
+def pipe(page, label, on_stage=None):
     page.evaluate("NeoEconomy.open('pipeline')")
     activate(page, f'[data-econ="PIPE_START"][data-claim="{CLAIM}"]',
              label + ": Rohrnetz starten")
@@ -81,6 +81,8 @@ def pipe(page, label):
     for stage, cells in enumerate(PIPE_PATHS):
         check(label + f": Rohrabschnitt {stage+1} aktiv",
               state(page)["minigame"]["stage"] == stage)
+        if on_stage is not None:
+            on_stage(page, f"PIPE-stage-{stage+1}")
         check(label + ": richtige Zahl sichtbarer Rohrstücke",
               page.locator('[data-arcade="rotate"]').count() == len(cells))
         for index, (x, y) in enumerate(cells):
@@ -134,7 +136,7 @@ def to_fire_month(page, label):
                   for e in current["events"]))
 
 
-def fire(page, label):
+def fire(page, label, on_stage=None):
     page.evaluate("NeoEconomy.open('workshop')")
     activate(page, f'[data-econ="FIRE_START"][data-claim="{CLAIM}"]',
              label + ": Feuerwehreinsatz starten")
@@ -152,9 +154,13 @@ def fire(page, label):
     check(label + ": Fehlversuch ohne erneute Startkosten",
           after_wrong["companies"][0]["cashCent"]
           == before_wrong["companies"][0]["cashCent"])
+    if on_stage is not None:
+        on_stage(page, "FIRE-after-wrong-choice")
     for stage, choice in enumerate(FIRE_CHOICES):
         check(label + f": Löschabschnitt {stage+1} aktiv",
               state(page)["minigame"]["stage"] == stage)
+        if on_stage is not None:
+            on_stage(page, f"FIRE-stage-{stage+1}")
         check(label + ": drei beschriftete Löschaktionen",
               page.locator('[data-arcade="fire"]').count() == 3)
         activate(page, f'[data-arcade="fire"][data-choice="{choice}"]',
