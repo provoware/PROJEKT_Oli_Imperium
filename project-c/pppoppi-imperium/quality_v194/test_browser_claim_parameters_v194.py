@@ -10,7 +10,7 @@ import subprocess
 import tempfile
 from pathlib import Path
 
-from playwright.sync_api import sync_playwright
+from playwright.sync_api import TimeoutError as PlaywrightTimeoutError, sync_playwright
 
 from test_browser_keyboard_pipe_fire_v194 import check, tab_to
 from test_browser_native_zoom_flow_v194 import new_page
@@ -42,24 +42,51 @@ def activate(page, claim, code, label):
     scene = ('warehouse' if code == 'SHIP' else
              'market' if code == 'OFFER' else 'claim')
     page.evaluate("(scene) => NeoEconomy.open(scene)", scene)
-    # Warten bis der Dialog tatsaechlich gerendert ist. Ohne diese
-    # Synchronisation konnte ein nachlaufendes Rendern die Auswahl loeschen.
-    page.wait_for_function("""() => {
+    # Nicht bloss auf irgendeinen Button warten: die verlangte Aktionsart
+    # muss im gerade geoeffneten Dialog bereits gerendert sein.
+    page.wait_for_function("""({code}) => {
         const dialog = document.querySelector('#dialog');
-        return !!(dialog?.open && document.querySelector('#econClaim') &&
-            document.querySelector('#dialogContent button[data-econ]'));
-    }""", timeout=8000)
-    page.locator("#econClaim").select_option(claim)
-    selector = '#dialogContent button[data-econ="%s"][data-claim="%s"]' % (
-        code, claim)
-    page.wait_for_function("""({claim, code}) => {
         const select = document.querySelector('#econClaim');
         const buttons = [...document.querySelectorAll(
             '#dialogContent button[data-econ]')];
-        return select?.value === claim &&
-            buttons.filter(b => b.dataset.econ === code &&
-                              b.dataset.claim === claim).length === 1;
-    }""", arg={"claim": claim, "code": code}, timeout=8000)
+        return !!(dialog?.open && select &&
+            buttons.some(b => b.dataset.econ === code));
+    }""", arg={"code": code}, timeout=8000)
+    before_selection = page.evaluate("NeoEconomy.getState()")
+    page.locator("#econClaim").select_option(claim)
+    # Das Change-Ereignis rendert den Dialog erneut. Erst zwei
+    # Browser-Zeichenzyklen abwarten, dann das neue Ziel kontrollieren.
+    page.evaluate("""() => new Promise(resolve =>
+        requestAnimationFrame(() => requestAnimationFrame(resolve)))""")
+    selector = '#dialogContent button[data-econ="%s"][data-claim="%s"]' % (
+        code, claim)
+    try:
+        page.wait_for_function("""({claim, code}) => {
+            const select = document.querySelector('#econClaim');
+            const buttons = [...document.querySelectorAll(
+                '#dialogContent button[data-econ]')];
+            return select?.value === claim &&
+                buttons.filter(b => b.dataset.econ === code &&
+                                  b.dataset.claim === claim).length === 1;
+        }""", arg={"claim": claim, "code": code}, timeout=8000)
+    except PlaywrightTimeoutError as exc:
+        # Diagnose statt stiller Wiederholung: ein UI-Fehler darf nicht
+        # durch erneutes Klicken oder kuenstliche Spielstandkorrektur verschwinden.
+        failure = page.evaluate("""() => ({
+            selected: document.querySelector('#econClaim')?.value ?? null,
+            options: [...(document.querySelector('#econClaim')?.options || [])]
+                .map(option => option.value),
+            dialogOpen: !!document.querySelector('#dialog')?.open,
+            buttons: [...document.querySelectorAll(
+                '#dialogContent button[data-econ]')].map(
+                    button => [button.dataset.econ, button.dataset.claim || '']),
+            phase: window.NeoEconomy?.getState()?.phase ?? null
+        })""")
+        raise AssertionError(
+            label + ": Ziel nach Feldauswahl nicht stabil: " +
+            json.dumps(failure, ensure_ascii=False)) from exc
+    check(label + ": Feldauswahl ohne Wirtschaftsaktion",
+          page.evaluate("NeoEconomy.getState()") == before_selection)
     target = page.locator(selector)
     diagnostic = page.evaluate("""() => ({
         selected: document.querySelector('#econClaim')?.value || null,
