@@ -1,0 +1,46 @@
+# Projekt C – Escape und Fokus-Rueckkehr (27.10.2026)
+
+## Pflichtpaket und Abgrenzung
+Nach dem Wirtschaftsketten-Tastaturtest (PR #73) prueft dieses Paket
+die native Escape-Schliessung aller registrierten Spielszenen in zwei
+CSS-Bildbereichen (800x600 und 400x300) sowie die Rueckgabe des
+Tastaturfokus nach zwei tatsaechlich per Tab/Enter geoeffneten Dialogen.
+
+Die Szenen-Inventur wird ueber `PPNavigation191.open` geoeffnet;
+sie ist daher **kein** Nachweis fuer die vollstaendige Tastaturbedienung
+aller Aktionen. Der verkleinerte CSS-Bildbereich ist **kein** nativer
+Browserzoom. Fokuskontrast und reale Sichtabnahme bleiben unbewertet.
+
+## Reproduzieren
+```bash
+python3 project-c/pppoppi-imperium/quality_v194/test_browser_keyboard_escape_v194.py
+```
+
+Das Programm erstellt ausschliesslich eine temporaere, anhand von
+110 SHA-256-Pruefsummen validierte Offline-Vorschau und verwirft sie
+anschliessend. Es prueft die Schliessung per echtem Escape-Ereignis,
+das `close`-Ereignis, die geleerte Navigationshistorie,
+die Unveraenderlichkeit des Wirtschaftszustands, die Rueckkehr des
+Fokus zu Hilfe-/Uebersicht-Ausloesern sowie JavaScript-Fehler und
+externe Netzwerkanfragen.
+
+## Stand und Freigabe
+- Ausgangspunkt: PR #73, HEAD `cca33c1c8ca0fe5ba6be3c72a1b04159a4930a92`.
+- GitHub-Quellzweig: `agent/prerelease-c-keyboard-escape-20261027-0130`.
+- Vorpruefung: Python-Syntax lokal mit `python3 -m py_compile` PASS.
+- Browserpruefung und GitHub-CI: **PENDING**, bis die Workflows auf
+  dem finalen Commit tatsaechlich abgeschlossen sind.
+- BED-02 und BAR-01 bleiben **BLOCKED**; keine neue vollstaendige
+  Pflichtfreigabe. Gesamtstand vor dem Paket: **6/52 PASS**.
+- `main`, die 110 geschuetzten Originaldateien, vorhandene
+  Spielstaende und bestehende PRs bleiben unangetastet.
+
+## Naechste drei Schritte
+1. GitHub-Chromium-Lauf auswerten und echte Fehler gezielt korrigieren.
+2. Bei gruenem Lauf einen PARTIAL-Nachweis mit finalem HEAD und CI-Link
+   in der Pflichtmatrix ergaenzen.
+3. Nativen Browserzoom (175/200 Prozent) getrennt von CSS-Verkleinerung
+   technisch nachweisen und Fokuskontrast auditieren.
+
+**Empfehlung:** Nur einen belegten Teilfortschritt dokumentieren;
+keinen Release-Status oder fachliche Endbedingungen vorwegnehmen.
