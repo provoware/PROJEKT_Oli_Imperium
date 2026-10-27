@@ -28,8 +28,9 @@ externe Netzwerkanfragen.
 - Ausgangspunkt: PR #73, HEAD `cca33c1c8ca0fe5ba6be3c72a1b04159a4930a92`.
 - GitHub-Quellzweig: `agent/prerelease-c-keyboard-escape-20261027-0130`.
 - Vorpruefung: Python-Syntax lokal mit `python3 -m py_compile` PASS.
-- Browserpruefung und GitHub-CI: **PENDING**, bis die Workflows auf
-  dem finalen Commit tatsaechlich abgeschlossen sind.
+- Browserpruefung auf Implementierungs-HEAD `0ee7a8e027204ccb1464da6828d8c2c671947082`: [Chromium #40427112310](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40427112310) **PASS**, [Quellpruefung #40427112286](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40427112286) **PASS**. Alle 39 Szenen in zwei CSS-Bildbereichen mit Escape geschlossen (78/78), zwei echte Tab/Enter-Dialogoeffnungen je Bildbereich mit Fokus-Rueckkehr (4/4). Kein JavaScript-Fehler, keine externen Anfragen, Spielstand unveraendert.
+- [Gesamtmatrix #40427112323](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40427112323) erwartungsgemaess **BLOCKED**, da 39 technische Pflichten noch nicht vollstaendig freigegeben sind. Die Nachweise stehen als PARTIAL unter `prerelease/evidence/` und aendern keine Pflicht auf PASS.
+- Nach Eintrag der Teilnachweise: erneute GitHub-CI auf dem endgueltigen Dokumentations-HEAD noch zu kontrollieren.
 - BED-02 und BAR-01 bleiben **BLOCKED**; keine neue vollstaendige
   Pflichtfreigabe. Gesamtstand vor dem Paket: **6/52 PASS**.
 - `main`, die 110 geschuetzten Originaldateien, vorhandene
