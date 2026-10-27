@@ -62,8 +62,10 @@ und Feuerwehr-Helfern aendern die Spielaktionen nicht.
   sind keine 324 unterschiedlichen Funktionen.
 - Ein anschliessender Commit `03be39192df5bab7c58807df4dd09124bf8188de`
   erzwingt zusaetzlich die Anwesenheit aller sieben Rohrnetz-/Feuerwehr-
-  Zwischenpruefpunkte je Zoomstufe. Seine abschliessende CI muss
-  gesondert geprueft werden.
+  Zwischenpruefpunkte je Zoomstufe. [Chromium #40464689143](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40464689143)
+  **PASS**, [Quellpruefung #40464689150](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40464689150)
+  **PASS**, [Gesamtmatrix #40464689162](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40464689162)
+  weiterhin **BLOCKED**.
 
 **Grenzen:** Nur aktuelle, technisch erkennbare Bedienelemente nach
 realen Aktionen. Die Messung ersetzt weder die pixelbasierte
