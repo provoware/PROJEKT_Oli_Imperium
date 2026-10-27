@@ -43,6 +43,8 @@ jobs:
         run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_keyboard_escape_v194.py
       - name: Echter Browser-Tab-Zoom 175/200 Prozent mit Offline-Tastaturpfad
         run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_native_zoom_v194.py
+      - name: Rohrnetz und Feuerwehr bei echtem Browserzoom 175 und 200 Prozent
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_native_zoom_minigames_v194.py
       - name: Wirtschaftskette und Vertragsabschluss per echter Tab- und Enter-Taste
         run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_keyboard_economy_v194.py
       - name: Zwoelf Browser-Spielmonate mit drei Neustart- und Importzyklen
