@@ -29,3 +29,44 @@ Die vier Funde sind **technische Treffbarkeitsbefunde**, noch keine bewiesenen C
 - **Korrektur-HEAD vor abschliessender Dokumentation:** `178ed9d98319533c0a9e54b96c8c687f2f19f066`. [Browser-CI #40462905790](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40462905790) wurde angestossen; **Ergebnis nicht vorweggenommen**. [Quell-CI #40462905788](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40462905788) **PASS**. [Release-Matrix #40462905824](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40462905824) weiterhin **BLOCKED**.
 
 Die technischen Funde sind reproduzierbar. Die endgueltige Aussage ueber 175 % und 200 % sowie ueber die KI-Dialogbedienung darf erst nach erfolgreicher Browser-CI getroffen werden. BAR-01 und BED-03 bleiben gesperrt.
+
+
+## Nachpruefung und dynamische Zwischenbilder (27.10.2026)
+
+Die als PENDING dokumentierte zweite Layoutkorrektur hatte im Lauf
+[Chromium #40462905790](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40462905790)
+noch **FAIL**. Erst die spaetere korrigierte Fassung auf HEAD
+`b4f5060103c0aea97783b604e0bf57c348a3bb1c` bestand in
+[Chromium #40463849844](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40463849844)
+die gesamte Browserkette: je **451/451** per Tab erreichte und an fuenf
+Punkten treffbare Elemente bei echtem 175-%- und 200-%-Zoom,
+**0 verdeckte**, **0 schwache Fokuskontraste**, berechnetes Minimum **6,90:1**.
+Der KI-Inspektor wurde in beiden Zoomstufen mit Tab/Enter geoeffnet und
+geschlossen. [Quell-CI #40463850060](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40463850060)
+**PASS**; [Gesamtmatrix #40463849996](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40463849996)
+**BLOCKED**, weil weitere Releasepflichten offen sind.
+
+Die zusaetzliche Zwischenbildpruefung ruft die bestehenden echten
+Tastatur-Spielpfade auf und kontrolliert nach jedem Abschnitt mit
+`scrollIntoView` und fuenf `elementFromPoint`-Proben alle aktuell
+bedienbaren Dialogelemente. Die optionalen Pruefpunkte in den Rohrnetz-
+und Feuerwehr-Helfern aendern die Spielaktionen nicht.
+
+- **[Chromium #40464603905](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40464603905) PASS** auf `b1872e4000f8e4da6793eb099ea7b162856b0cd5`.
+- **26 dynamische Messpunkte**: 3 Rohrabschnitte + 1 Rohrnetz-Endbild,
+  1 Feuerwehr-Fehlversuch + 3 Loeschabschnitte + 1 Feuerwehr-Endbild,
+  4 Bohrspiel-Zustaende, jeweils bei 175 % und 200 %.
+- **324 kontrollierte Bedienelement-Vorkommen**, **0 nicht treffbar**,
+  **0 Pixel horizontaler Ueberlauf** an den gemessenen Stellen.
+  Wiederholte Elemente werden pro Zwischenbild erneut geprueft; dies
+  sind keine 324 unterschiedlichen Funktionen.
+- Ein anschliessender Commit `03be39192df5bab7c58807df4dd09124bf8188de`
+  erzwingt zusaetzlich die Anwesenheit aller sieben Rohrnetz-/Feuerwehr-
+  Zwischenpruefpunkte je Zoomstufe. Seine abschliessende CI muss
+  gesondert geprueft werden.
+
+**Grenzen:** Nur aktuelle, technisch erkennbare Bedienelemente nach
+realen Aktionen. Die Messung ersetzt weder die pixelbasierte
+Text-/Animationspruefung noch vollstaendige Sieg-/Niederlagenpartien.
+**BAR-01/BED-03 und die Gesamtfreigabe bleiben BLOCKED.**
+Persoenliche Sicht- und Kubuntu-Abnahme erst nach allen technischen Gates.
