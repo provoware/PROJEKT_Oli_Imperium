@@ -26,6 +26,11 @@ def valid(page, label):
 
 
 def layout(page, label):
+    # Bei 175/200 % darf die Kopfzeile mitscrollen, damit sie keine
+    # Aktionen verdeckt. Entscheidend ist: Schliessen ist per Tab erreichbar
+    # und nach der Tastaturnavigation tatsaechlich im Bildbereich.
+    check(label + ": Schliessen per Tab erreichbar",
+          tab_to(page, "#closeBtn"))
     metrics = layout_diagnostic(page, label)
     check(label + ": kein horizontaler Ueberlauf",
           metrics["horizontal_overflow"] <= 2)
