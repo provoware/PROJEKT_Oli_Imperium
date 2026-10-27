@@ -24,6 +24,7 @@ def snapshot(page):
     """Nur Diagnose lesen, keine Dialogreparatur."""
     return page.evaluate("""() => ({
         activeScene: typeof active === 'string' ? active : null,
+        navigationScene: window.PPNavigation191?.current?.() ?? null,
         dialogOpen: !!document.querySelector('#dialog')?.open,
         title: document.querySelector('#dialogTitle')?.textContent || '',
         contentLength: document.querySelector('#dialogContent')?.innerHTML.length || 0,
@@ -79,6 +80,8 @@ def run_round(context, preview, worker, factor, number, claims):
         order = claims[1:] + claims[:1]
         for scene, action in SCENES:
             page.evaluate("(scene) => NeoEconomy.open(scene)", scene)
+            check(label + "/" + scene + ": aktive Szene korrekt",
+                  page.evaluate("active") == scene)
             check(label + "/" + scene + ": genau ein Auswahlfeld",
                   page.locator("#econClaim").count() == 1)
             check(label + "/" + scene + ": Aktionsart vorhanden",
