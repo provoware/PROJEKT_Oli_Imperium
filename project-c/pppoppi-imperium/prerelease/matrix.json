@@ -277,10 +277,11 @@
       "status": "blocked",
       "evidence": [
         "project-c/pppoppi-imperium/quality_v194/IMPORT_INPUT_SECURITY_20261027.md",
-        "project-c/pppoppi-imperium/prerelease/evidence/SIC-02-IMPORT-INPUT-PARTIAL-20261027.json"
+        "project-c/pppoppi-imperium/prerelease/evidence/SIC-02-IMPORT-INPUT-PARTIAL-20261027.json",
+        "project-c/pppoppi-imperium/quality_v194/IMPORT_NESTED_SIZE_20261027.md"
       ],
-      "blocker": "Browser-CI #40588604025 PASS auf Code-HEAD 23edc84a193d109ac2565f1dfa6dfa72af43e8ef: 13 strukturell ungueltige Imports atomar abgewiesen; gueltiger HTML-Fremdname in acht Szenen text-sicher; Export/Neustart/Import. Weitere freie Eingabefelder, Groessengrenzen und Fach-/Endpartienpruefungen fehlen; Gesamtgate BLOCKED.",
-      "next": "Weitere verschachtelte JSON-Felder, Groessengrenzen und Dateifehler gezielt pruefen; Endregelvertrag und Endpartien separat abschliessen."
+      "blocker": "PR #96 Code-HEAD 27914652cc4933239b07841009b828e0f4d2f87a: GitHub-Browser-CI #40595443169 PASS (vier Jobs, Import-Schritt success), Quellpruefung #40595443211 PASS. Insgesamt 30 ungueltige JSON-Strukturen atomar abgewiesen, gueltige 5.000.000-Byte-Datei importiert, 5.000.001 Bytes sicher abgewiesen, HTML-Fremdname in acht Szenen text-sicher. Weiterhin nicht alle Fremdeingaben, beliebige Tiefen und Endpartien abgedeckt; SIC-02 und Gesamtgate BLOCKED.",
+      "next": "Weitere Speicher-/Sicherheitsgrenzen und gueltige verschachtelte Spielstaende mit Buchungsfolgen pruefen; Endregelvertrag und vollstaendige Sieg-/Niederlagenpartien nachweisen."
     },
     {
       "id": "SIC-03",

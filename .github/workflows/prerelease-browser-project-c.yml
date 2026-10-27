@@ -71,7 +71,7 @@ jobs:
         run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_two_humans_v194.py
       - name: Wiederholte Spielstand-Imports, kaputte Dateien und Schutz vor Doppelbuchungen
         run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_reimport_v194.py
-      - name: Fremde Spielstaende, 13 Strukturfehler und HTML-Escaping in acht Spielszenen
+      - name: Fremde Spielstaende mit 30 Struktur- und Tiefenfehlern, 5-MB-Grenze und HTML-Escaping
         run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_import_input_security_v194.py
       - name: Import-Wettlauf, Spielaktion waehrend Import und Sitzungsabbruch
         run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_import_race_v194.py
