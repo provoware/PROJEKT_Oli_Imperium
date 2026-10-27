@@ -67,9 +67,11 @@
       "basis": "Nutzerauftrag",
       "stage": "technical",
       "status": "blocked",
-      "evidence": [],
+      "evidence": [
+        "project-c/pppoppi-imperium/quality_v194/BROWSER_NATIVE_ZOOM_ECONOMY_20261027.md"
+      ],
       "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "Produktionsablauf testen"
+      "next": "Vollstaendige Liefer-/Produktionskette inklusive weiterer Regionen, Fehler- und Grenzfaelle nachweisen; Teiltest der 2-Monats-Kette liegt vor."
     },
     {
       "id": "LOG-03",
@@ -78,9 +80,11 @@
       "basis": "Nutzerauftrag",
       "stage": "technical",
       "status": "blocked",
-      "evidence": [],
+      "evidence": [
+        "project-c/pppoppi-imperium/quality_v194/BROWSER_NATIVE_ZOOM_ECONOMY_20261027.md"
+      ],
       "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "Vertrags- und Lieferketten prüfen"
+      "next": "Vollstaendige Liefer-/Produktionskette inklusive weiterer Regionen, Fehler- und Grenzfaelle nachweisen; Teiltest der 2-Monats-Kette liegt vor."
     },
     {
       "id": "LOG-04",
@@ -396,10 +400,11 @@
         "project-c/pppoppi-imperium/prerelease/evidence/BED-02-PIPE-FIRE-PARTIAL-20261026.json",
         "project-c/pppoppi-imperium/prerelease/evidence/BED-02-DIALOG-FOCUS-PARTIAL-20261026.json",
         "project-c/pppoppi-imperium/prerelease/evidence/BED-02-ECONOMY-KEYBOARD-PARTIAL-20261027.json",
-        "project-c/pppoppi-imperium/prerelease/evidence/BED-02-ESCAPE-PARTIAL-20261027.json"
+        "project-c/pppoppi-imperium/prerelease/evidence/BED-02-ESCAPE-PARTIAL-20261027.json",
+        "project-c/pppoppi-imperium/prerelease/evidence/BED-02-NATIVE-ECONOMY-PARTIAL-20261027.json"
       ],
-      "blocker": "Chromium #40427112310: 39 Szenen je CSS-Bildbereich (800x600 und CSS-200) per Escape geschlossen, 78/78 PASS; je zwei echte Tab/Enter-Oeffnungen mit Fokus-Rueckkehr, insgesamt 4/4 PASS. Szeneninventur per API, nativer Zoom und weitere Aktionen offen. Gate weiterhin BLOCKED.",
-      "next": "Verbleibende Dialogaktionen per Tab/Enter und nativen Zoom 175-200 Prozent pruefen."
+      "blocker": "Teilkette mit 15 echten Tab/Enter-Aktionen je Zoomstufe (175/200 %) und zwei Monatsabschluessen je Durchlauf in Chromium #40467829258 PASS, einschliesslich unzulaessiger Foerderung, Doppelkauf und Exportgleichheit. Andere Pflichtaktionen und vollstaendige Dialog-Endpartien bleiben ungetestet; Gate BLOCKED.",
+      "next": "Restliche Dialog- und Fehleraktionen bei echtem Zoom per Tastatur sowie Fokus-Rueckkehr nach jedem Aktionswechsel pruefen."
     },
     {
       "id": "BED-03",
@@ -415,10 +420,11 @@
         "project-c/pppoppi-imperium/prerelease/evidence/BED-03-NATIVE-MINIGAMES-PARTIAL-20261027.json",
         "project-c/pppoppi-imperium/prerelease/evidence/BED-03-NATIVE-DRILL-PARTIAL-20261027.json",
         "project-c/pppoppi-imperium/prerelease/evidence/BED-03-FOCUS-CONTRAST-PARTIAL-20261027.json",
-        "project-c/pppoppi-imperium/prerelease/evidence/BED-03-OVERLAP-PARTIAL-20261027.json"
+        "project-c/pppoppi-imperium/prerelease/evidence/BED-03-OVERLAP-PARTIAL-20261027.json",
+        "project-c/pppoppi-imperium/prerelease/evidence/BED-03-NATIVE-ECONOMY-PARTIAL-20261027.json"
       ],
-      "blocker": "Echter Browserzoom 175/200 %: 39 Szenen je Zoomstufe mit Tab/Enter geschlossen (PR #76). Neu: Rohrnetz und Feuerwehr mit je drei Abschnitten pro Zoomstufe, je 32 Rohrdrehungen, natuerlicher Brand im vierten Monat, Fehlversuch, Spielkernvalidierung und Exportgleichheit in Chromium #40445202236 PASS (Implementierungs-HEAD e8989bf7). Quellnachweis #40445202211 PASS; Gesamtmatrix #40445202284 erwartungsgemaess BLOCKED. Dynamische Layoutdiagnose an vier Endpunkten ohne horizontalen Ueberlauf, aber Bohr-Minispiel bei echtem Zoom mit sechs Abschnitten, acht Layoutmessungen und Exportgleichheit im Chromium #40450228065 PASS (HEAD 4508c6e0). Zwischenbilder, alle Dialogaktionen, Fokuskontraste und visuelle Ueberdeckungen nicht vollstaendig geprueft. BED-03 bleibt BLOCKED. Neuer quantitativer Fokuskontrast-Teilnachweis: 39 Szenen x 175/200 % mit 903/903 Tab-Elementen, niedrigster berechneter Kontrast 6,90:1 nach gezielter Select-Fokuskorrektur, Chromium #40456804550 PASS. Dynamische Ueberdeckungen, alle Dialogaktionen und persoenliche Sichtabnahme bleiben offen; BED-03 bleibt BLOCKED. Neuer Treffbarkeitstest #40461751589 FAIL: bei 175 % vier von 452 per Tab erreichten Bedienelementen ohne Trefferpunkt (phone 2, quick 1, factory 1); 200 % im Erstlauf nicht erreicht. Ursache wird mit Diagnose #40461958332 untersucht. Keine Freigabe. Diagnose #40461958332: Navigation und fixer KI-Knopf als Ursachen; erster Layoutfix #40462693887 noch FAIL wegen 19 von Kopfzeile verdeckten Navigationszielen. Zweiter Fix #40462905790 zur Browserpruefung eingereicht; Ergebnis offen.",
-      "next": "Verbleibende Dialogaktionen und Text-/Animationsueberdeckungen bei echtem 175/200-%-Zoom pruefen; vollstaendige Sieg-/Niederlagenpartien nachweisen. 26 dynamische Zwischenbilder mit 324 Bedienelement-Vorkommen im Teilnachweis PASS; Gate bleibt BLOCKED."
+      "blocker": "39 Szenen und Minispiele in frueheren Teilpruefungen getestet; neuer echter Wirtschafts-/Monatsbericht-Test: 200-%-Erstlauf #40467580953 FAIL (54 CSS-Pixel Ueberlauf), korrigierte Technikfassung in #40467829258 PASS mit 175/200 %, 27 Element-Vorkommen je Zoom, 0 Ueberlauf und 0 verdeckten Bedienelementen in Feldansicht/Monatsbericht. Vollstaendige Text-/Animationsueberdeckungen, weitere Dialogaktionen und reguläre Endpartien fehlen; Gate BLOCKED.",
+      "next": "Weitere dynamische Text-/Animationsansichten und alle noch nicht getesteten Dialogaktionen bei 175/200 % untersuchen."
     },
     {
       "id": "BAR-01",
