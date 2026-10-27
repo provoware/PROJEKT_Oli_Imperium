@@ -28,6 +28,14 @@ check('Spielkern und Prüfschicht sind als zwei Versionen gekennzeichnet', () =>
   assert.match(bridge, /version:'1\.7\.1',gameVersion:'1\.9\.3',qaVersion:'1\.9\.4'/);
 });
 
+check('Klebende Navigation und KI-Knopf ueberdecken im Zoom keine Aktionen', () => {
+  assert.match(html, /id="pppoppi-zoom-overlap-v194"/);
+  assert.match(html, /#dialog\[open\] \.v191-nav\{position:static\}/);
+  assert.match(html, /#dialog\[open\] #pp-ai-button\{position:static/);
+  assert.match(html, /#dialog\[open\] #pp-ai-drawer\{position:static/);
+  assert.doesNotMatch(read('index.html'), /pppoppi-zoom-overlap-v194/);
+});
+
 check('Select-Fokus ist nur in der Technikvorschau sichtbar und kontrastreich', () => {
   assert.match(html, /id="pppoppi-select-focus-v194"/);
   assert.match(html, /#dialog select:focus-visible\{outline:3px solid #ffda8d;outline-offset:3px\}/);
