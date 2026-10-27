@@ -421,10 +421,11 @@
         "project-c/pppoppi-imperium/prerelease/evidence/BED-03-NATIVE-DRILL-PARTIAL-20261027.json",
         "project-c/pppoppi-imperium/prerelease/evidence/BED-03-FOCUS-CONTRAST-PARTIAL-20261027.json",
         "project-c/pppoppi-imperium/prerelease/evidence/BED-03-OVERLAP-PARTIAL-20261027.json",
-        "project-c/pppoppi-imperium/prerelease/evidence/BED-03-NATIVE-ECONOMY-PARTIAL-20261027.json"
+        "project-c/pppoppi-imperium/prerelease/evidence/BED-03-NATIVE-ECONOMY-PARTIAL-20261027.json",
+        "project-c/pppoppi-imperium/prerelease/evidence/BED-03-TEXT-LAYOUT-PARTIAL-20261027.json"
       ],
-      "blocker": "39 Szenen und Minispiele in frueheren Teilpruefungen getestet; neuer echter Wirtschafts-/Monatsbericht-Test: 200-%-Erstlauf #40467580953 FAIL (54 CSS-Pixel Ueberlauf), korrigierte Technikfassung in #40467829258 PASS mit 175/200 %, 27 Element-Vorkommen je Zoom, 0 Ueberlauf und 0 verdeckten Bedienelementen in Feldansicht/Monatsbericht. Vollstaendige Text-/Animationsueberdeckungen, weitere Dialogaktionen und reguläre Endpartien fehlen; Gate BLOCKED.",
-      "next": "Weitere dynamische Text-/Animationsansichten und alle noch nicht getesteten Dialogaktionen bei 175/200 % untersuchen."
+      "blocker": "39 Szenen und Minispiele in frueheren Teilpruefungen getestet; neuer echter Wirtschafts-/Monatsbericht-Test: 200-%-Erstlauf #40467580953 FAIL (54 CSS-Pixel Ueberlauf), korrigierte Technikfassung in #40467829258 PASS mit 175/200 %, 27 Element-Vorkommen je Zoom, 0 Ueberlauf und 0 verdeckten Bedienelementen in Feldansicht/Monatsbericht. Vollstaendige Text-/Animationsueberdeckungen, weitere Dialogaktionen und reguläre Endpartien fehlen; Gate BLOCKED. Neuer Text-Teiltest: Chromium #40474144518 PASS, je 39 Szenen, 170 gemessene Ueberschriften-/Tabellen-Textstellen und 32 Zellen bei echtem 175/200-%-Zoom, 0 erkannte Abschneidungen oder vollstaendige Ueberdeckungen; synthetische Ueberdeckung korrekt erkannt. Nicht alle Textarten/Animationen oder Endpartien geprueft; Gate BLOCKED.",
+      "next": "Weitere dynamische Fliesstexte, Animationen und fehlende Dialogaktionen bei echtem 175/200-%-Zoom pruefen; anschliessend vollstaendige Endpartien."
     },
     {
       "id": "BAR-01",
