@@ -409,10 +409,11 @@
       "stage": "technical",
       "status": "blocked",
       "evidence": [
-        "project-c/pppoppi-imperium/prerelease/evidence/BED-03-NATIVE-ZOOM-PARTIAL-20261027.json"
+        "project-c/pppoppi-imperium/prerelease/evidence/BED-03-NATIVE-ZOOM-PARTIAL-20261027.json",
+        "project-c/pppoppi-imperium/prerelease/evidence/BED-03-NATIVE-ALL-SCENES-PARTIAL-20261027.json"
       ],
-      "blocker": "Echter Chromium-Seitenzoom 175/200 % per chrome.tabs.setZoom/getZoom im Offline-Browser: CI #40433519507 PASS, CSS-Breite 457/400, DPR 1,75/2,00, Hilfe-Dialog per Tab/Enter/Escape und Fokus-Rueckkehr 2/2 PASS, keine gemessenen horizontalen Ueberlaeufe im geprueften Pfad. Aber nicht alle 39 Szenen, Minispiele, Fokuskontraste und vollstaendige Spielaktionen unter nativem Zoom geprueft; BED-03 bleibt BLOCKED.",
-      "next": "39 Szenen und Minispiele unter echtem Zoom auf Ueberdeckung, Tastatur und Fokuskontrast pruefen."
+      "blocker": "Echter Chromium-Tab-Zoom 175/200 % mit allen 39 registrierten Szenen je Zoomstufe: 78/78 per Tab/Enter geschlossen, sichtbarer Fokus, 0 gemessene horizontale Ueberlaeufe und 0 ausserhalb des Viewports liegende Schliessen-Knoepfe (Chromium #40439643673 PASS, Implementierungs-HEAD b330c73). Die Szenen wurden programmatisch geoeffnet; nicht alle Aktionen, Minispiele, Fokuskontraste und verdeckte Ueberdeckungen sind damit belegt. BED-03 bleibt BLOCKED.",
+      "next": "Minispiele und vollstaendige Dialogaktionen bei echtem Zoom pruefen; Fokuskontrast quantitativ und visuelle Ueberdeckungen technisch untersuchen."
     },
     {
       "id": "BAR-01",
