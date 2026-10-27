@@ -62,7 +62,7 @@ def audit_zoom(page, worker, factor, base_width, base_dpr, state):
           abs(result["factor"] - factor) < 0.01)
     page.wait_for_function(
         "({factor, base}) => devicePixelRatio >= base * (factor - 0.05)",
-        {"factor": factor, "base": base_dpr})
+        arg={"factor": factor, "base": base_dpr})
     metrics = page.evaluate("""() => {
         const root = document.documentElement;
         const dialog = document.querySelector('#dialog');
@@ -83,6 +83,7 @@ def audit_zoom(page, worker, factor, base_width, base_dpr, state):
     page.locator("#dialog").wait_for(state="visible")
     check(label + ": Hilfedialog nach Zoom geoeffnet",
           page.locator("#dialog").evaluate("(d) => d.open"))
+    metrics["dialogExcess"] = page.evaluate("""() => {const d = document.querySelector("#dialog"); return Math.max(0, d.scrollWidth - d.clientWidth)}""")
     check(label + ": Schliessen per Tab erreichbar",
           tab_to(page, "#closeBtn"))
     page.keyboard.press("Escape")
