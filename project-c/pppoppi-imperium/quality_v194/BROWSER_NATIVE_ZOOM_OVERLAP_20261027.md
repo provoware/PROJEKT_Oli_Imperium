@@ -20,3 +20,12 @@ Die vier Funde sind **technische Treffbarkeitsbefunde**, noch keine bewiesenen C
 - Danach 175 % **und** 200 % erneut ausfuehren, die dynamischen Zwischenbilder der drei Minispiele gesondert erfassen und die restlichen Dialogaktionen testen.
 
 **Abgrenzung:** Dieser Fuenfpunkt-Test misst nur aktive Bedienelemente der programmatisch geoeffneten 39 Szenen, nicht alle Textueberlagerungen, Animationen, Spielendzustände oder die persoenliche Sichtpruefung. **BAR-01/BED-03 bleiben BLOCKED. 6/52 technische Pflichten PASS. Kein Merge, kein Release.**
+
+## Vertiefte Diagnose und gezielte Korrektur (gleicher Arbeitsschritt)
+
+- [Diagnose-CI #40461958332](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40461958332) **FAIL**: Vier Bedienelemente liegen nach Tab-Fokus unter der klebenden Szenennavigation (`phone`, y=102) bzw. unter dem fixierten KI-Knopf (`quick` und `factory`, y=284–327) bei 457 × 343 CSS-Pixeln. Der Fehler betrifft die Trefferbarkeit, nicht die 110 unveraenderten Spielquellen.
+- Im **isolierten V1.9.4-Aufbau** wird deshalb bei schmalem CSS-Viewport (max. 620 px) die Szenennavigation und der KI-Inspektor in den normalen Dialogfluss gesetzt. Der KI-Inspektor bleibt vorhanden; ein zusaetzlicher Tastaturtest soll Oeffnen/Schliessen pruefen.
+- [Zwischenlauf #40462693887](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40462693887) **FAIL**: Die bisherige klebende Dialog-Kopfzeile verdeckte nun 19 Navigationsziele (z. B. y=16–81). Deshalb wird auch die Kopfzeile bei schmalem Zoom nicht mehr fixiert; sie bleibt per Scrollen, Tab und Escape erreichbar.
+- **Korrektur-HEAD vor abschliessender Dokumentation:** `178ed9d98319533c0a9e54b96c8c687f2f19f066`. [Browser-CI #40462905790](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40462905790) wurde angestossen; **Ergebnis nicht vorweggenommen**. [Quell-CI #40462905788](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40462905788) **PASS**. [Release-Matrix #40462905824](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40462905824) weiterhin **BLOCKED**.
+
+Die technischen Funde sind reproduzierbar. Die endgueltige Aussage ueber 175 % und 200 % sowie ueber die KI-Dialogbedienung darf erst nach erfolgreicher Browser-CI getroffen werden. BAR-01 und BED-03 bleiben gesperrt.
