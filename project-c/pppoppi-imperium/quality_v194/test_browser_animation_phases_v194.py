@@ -190,8 +190,9 @@ def main():
                         page.close()
                 check("Beide echten Zoomstufen erfasst",
                       [s["zoom_percent"] for s in summaries] == [175,200])
-                print("GRENZE: Acht deterministische Phasen je gefundener "
-                      "Animation/Szene, inklusive Rueckwaertsphase bei "
+                print("GRENZE: Acht deterministische Phasen je animierter "
+                      "Szene; alle dort erkannten Animationen zeitversetzt, "
+                      "inklusive Rueckwaertsphase bei "
                       "alternierenden Mehrfachlaeufen. Kein lueckenloser "
                       "Pixelvergleich, keine vollstaendige Animation, "
                       "Dialogaktion oder Endpartie. BED-03 BLOCKED.", flush=True)
