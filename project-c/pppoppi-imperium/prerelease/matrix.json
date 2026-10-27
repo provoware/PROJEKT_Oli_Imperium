@@ -395,10 +395,11 @@
         "project-c/pppoppi-imperium/prerelease/evidence/BED-02-DRILL-PARTIAL-20261026.json",
         "project-c/pppoppi-imperium/prerelease/evidence/BED-02-PIPE-FIRE-PARTIAL-20261026.json",
         "project-c/pppoppi-imperium/prerelease/evidence/BED-02-DIALOG-FOCUS-PARTIAL-20261026.json",
-        "project-c/pppoppi-imperium/prerelease/evidence/BED-02-ECONOMY-KEYBOARD-PARTIAL-20261027.json"
+        "project-c/pppoppi-imperium/prerelease/evidence/BED-02-ECONOMY-KEYBOARD-PARTIAL-20261027.json",
+        "project-c/pppoppi-imperium/prerelease/evidence/BED-02-ESCAPE-PARTIAL-20261027.json"
       ],
-      "blocker": "Chromium #40420513353: Wirtschaftskette mit 15 dokumentierten Tastatur-Testschritten je CSS-Bildbereich (800x600, 400x300), zwei Monatsabschluessen, Vertragsabwicklung, Negativfaellen, JSON-Roundtrip und Fortsetzung PASS. Zuvor 39 Szenen mit je 463 erreichbaren Dialogelementen, Bohr-/Rohrnetz-/Feuerwehr-Tastaturpruefungen PASS. Weitere Dialogaktionen, nativer Browserzoom und Fokuskontrast bleiben offen; BED-02 weiterhin BLOCKED.",
-      "next": "Noch fehlende Dialogaktionen/Fehlbedienungen per Tab/Enter testen; nativen Browserzoom 175-200 Prozent und Fokuskontrast getrennt nachweisen."
+      "blocker": "Chromium #40427112310: 39 Szenen je CSS-Bildbereich (800x600 und CSS-200) per Escape geschlossen, 78/78 PASS; je zwei echte Tab/Enter-Oeffnungen mit Fokus-Rueckkehr, insgesamt 4/4 PASS. Szeneninventur per API, nativer Zoom und weitere Aktionen offen. Gate weiterhin BLOCKED.",
+      "next": "Verbleibende Dialogaktionen per Tab/Enter und nativen Zoom 175-200 Prozent pruefen."
     },
     {
       "id": "BED-03",
@@ -420,10 +421,11 @@
       "status": "blocked",
       "evidence": [
         "project-c/pppoppi-imperium/prerelease/evidence/BAR-01-PARTIAL-20261026.json",
-        "project-c/pppoppi-imperium/prerelease/evidence/BAR-01-DIALOG-FOCUS-PARTIAL-20261026.json"
+        "project-c/pppoppi-imperium/prerelease/evidence/BAR-01-DIALOG-FOCUS-PARTIAL-20261026.json",
+        "project-c/pppoppi-imperium/prerelease/evidence/BAR-01-ESCAPE-PARTIAL-20261027.json"
       ],
-      "blocker": "Chromium #40413530587: 926/926 aktive Dialogelemente in 39 Szenen x 2 CSS-Viewports per Tab erreicht, mit :focus-visible und berechnetem Umriss/Schatten. Es handelt sich um wiederholte Szenenstichproben, nicht um 926 unterschiedliche Steuerelemente. Kontrast gegen tatsaechlichen Hintergrund, Reihenfolge unter allen Zustandswechseln, nativer Zoom und weitere Minispielzustaende bleiben offen.",
-      "next": "Visuellen Fokuskontrast rechnerisch und mit Browser-Bildbelegen nachweisen; Fokusfolge nach Zustandswechseln und nativen Zoom pruefen."
+      "blocker": "Chromium #40427112310: Fokus-Rueckkehr bei zwei per Tab/Enter geoeffneten Dialogen je CSS-Bildbereich 4/4 PASS; 78 Escape-Schliessungen ohne Spielstandsveraenderung. Rechnerischer/visueller Fokuskontrast und Zustandswechsel bleiben offen. Gate weiterhin BLOCKED.",
+      "next": "Fokuskontrast und Fokusfolge in weiteren Spielzustaenden sowie nativen Zoom getrennt pruefen."
     },
     {
       "id": "BAR-02",
