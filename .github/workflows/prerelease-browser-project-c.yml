@@ -39,6 +39,8 @@ jobs:
         run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_keyboard_pipe_fire_v194.py
       - name: Alle sichtbaren Dialogelemente per echter Tab-Taste und Fokuszustand auditieren
         run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_dialog_focus_v194.py
+      - name: Native Escape-Schliessung und Fokus-Rueckkehr in allen Spielszenen
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_keyboard_escape_v194.py
       - name: Wirtschaftskette und Vertragsabschluss per echter Tab- und Enter-Taste
         run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_keyboard_economy_v194.py
       - name: Zwoelf Browser-Spielmonate mit drei Neustart- und Importzyklen
