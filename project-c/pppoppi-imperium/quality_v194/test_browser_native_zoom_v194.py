@@ -141,6 +141,14 @@ def main():
                 check("Neue Partie mit Tab", tab_to(page, '[data-ui="newgame"]'))
                 page.keyboard.press("Enter")
                 page.wait_for_function("NeoEconomy.getState() !== null")
+                # Neue Partie oeffnet den modalen Unternehmenscomputer. Solange
+                # dieser offen ist, duerfen Kopfknoepfe nicht per Tab erreichbar
+                # sein: zuerst den Dialog regulär mit Escape schliessen.
+                if page.locator("#dialog").evaluate("(d) => d.open"):
+                    page.keyboard.press("Escape")
+                    page.wait_for_function("!document.querySelector('#dialog').open")
+                check("Startdialog vor Kopfbedienung geschlossen",
+                      not page.locator("#dialog").evaluate("(d) => d.open"))
                 state = page.evaluate("JSON.stringify(NeoEconomy.getState())")
                 baseline = page.evaluate(
                     "() => ({width: innerWidth, dpr: devicePixelRatio})")
