@@ -232,8 +232,8 @@
       "evidence": [
         "project-c/pppoppi-imperium/prerelease/evidence/SPE-01-CLAIM-ROUNDTRIP-PARTIAL-20261027.json"
       ],
-      "blocker": "PR #91, HEAD e7b7823b4b47f5b60c3d641146152498877f8215: Chromium-Gesamtjob und isolierter Zoomjob im Lauf #40552012675 PASS; 18/18 Feld-/Zoom-Kombinationen, 180 Aktionen, 18 Export-/Import-Rundlaeufe. Das beweist weder echte Browser-Prozessneustarts noch vollstaendige Endpartien. Neue Prozessneustart-Regression auf Folge-PR noch nicht bestaetigt.",
-      "next": "Neue 12-Monats-Regression mit drei echten Chromium-Prozessneustarts auf finalem PR-HEAD pruefen; dann Altversionen, defekte Dateien und komplette Endpartien weiter absichern."
+      "blocker": "PR #91, HEAD e7b7823b4b47f5b60c3d641146152498877f8215: Chromium-Gesamtjob und isolierter Zoomjob im Lauf #40552012675 PASS; 18/18 Feld-/Zoom-Kombinationen, 180 Aktionen, 18 Export-/Import-Rundlaeufe. Das beweist weder echte Browser-Prozessneustarts noch vollstaendige Endpartien. Neue Prozessneustart-Regression auf Folge-PR noch nicht bestaetigt. Erste neue CI #40561072233: isolierter Claim-Test FAIL bei 200%/BERLIN-2/BUY/1 (Dialog offen, aber keine Auswahl und keine Aktionsbuttons); Hauptjob noch laufend. Neuer Prozessneustart-Test nun in eigenem dritten CI-Job, Nachweis PENDING.",
+      "next": "Eigenen Browser-Prozessneustart-Job auf finalem HEAD auswerten; unabhaengigen BERLIN-2-Dialogfehler gezielt diagnostizieren, dann Altversionen und komplette Endpartien."
     },
     {
       "id": "SPE-02",
