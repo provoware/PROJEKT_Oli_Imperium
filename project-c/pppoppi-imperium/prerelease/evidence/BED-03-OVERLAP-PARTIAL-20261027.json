@@ -26,5 +26,27 @@
     "Ursache der vier Trefferbefunde noch offen",
     "Dynamische Zwischenbilder und Endpartien nicht geprueft",
     "Keine technische oder persoenliche Release-Freigabe"
-  ]
+  ],
+  "diagnostic_results": {
+    "ci": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40461958332",
+    "result": "FAIL",
+    "covered_at_175": 4,
+    "causes": [
+      "Klebende Szenennavigation verdeckt zwei Telefonaktionen",
+      "Fixierter KI-Knopf verdeckt Pipeline- und Rohrnetzaktion"
+    ]
+  },
+  "first_fix": {
+    "ci": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40462693887",
+    "result": "FAIL",
+    "covered_at_175": 19,
+    "cause": "Klebende Dialog-Kopfzeile verdeckt Navigationsaktionen nach dem ersten Fix"
+  },
+  "second_fix": {
+    "commit": "178ed9d98319533c0a9e54b96c8c687f2f19f066",
+    "browser_ci": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40462905790",
+    "result": "PENDING",
+    "source_ci": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40462905788",
+    "source_result": "PASS"
+  }
 }
