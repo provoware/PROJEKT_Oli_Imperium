@@ -229,9 +229,11 @@
       "basis": "Nutzerauftrag",
       "stage": "technical",
       "status": "blocked",
-      "evidence": [],
+      "evidence": [
+        "project-c/pppoppi-imperium/prerelease/evidence/SPE-01-CLAIM-ROUNDTRIP-PARTIAL-20261027.json"
+      ],
       "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "Speicher-Rundlauf testen"
+      "next": "18 Feldketten nach echtem Zoom per Tab/Enter exportieren und in neuem Browser-Tab importieren; CI pruefen; danach Profil-Neustart, Altversionen und vollstaendige Spielphasen separat nachweisen."
     },
     {
       "id": "SPE-02",
