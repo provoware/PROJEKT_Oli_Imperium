@@ -230,10 +230,11 @@
       "stage": "technical",
       "status": "blocked",
       "evidence": [
-        "project-c/pppoppi-imperium/prerelease/evidence/SPE-01-CLAIM-ROUNDTRIP-PARTIAL-20261027.json"
+        "project-c/pppoppi-imperium/prerelease/evidence/SPE-01-CLAIM-ROUNDTRIP-PARTIAL-20261027.json",
+        "project-c/pppoppi-imperium/prerelease/evidence/SPE-01-COMPLEX-MULTIFIRM-PARTIAL-20261028.json"
       ],
-      "blocker": "PR #92, HEAD e132bef9a1feadc37cec2464d7294b779e2807f4: Browser-CI #40561679062 PASS in allen drei Jobs, einschliesslich 12 Monaten, drei echten Chromium-Prozessneustarts, drei exakten Export-/Import-Vergleichen und drei sicheren Manipulationsablehnungen. Sporadischer Dialogfehler bei 200%/BERLIN-2 im frueheren Lauf #40561072233 bleibt ungeklaert; vollstaendige Endpartien und weitere Speicherfaelle fehlen. Gate BLOCKED. Neuer komplexer Mehrfirmen-Teiltest auf getrenntem Zweig implementiert, GitHub-CI noch ausstehend; keine Freigabe durch blossen Testcode.",
-      "next": "Neuer Teiltest test_browser_complex_roundtrip_v194.py: vier Firmen, zwei Regionen, zwei regulaere Vertraege, zwei Monatsabschluesse, drei exakte Importe und unabhaengige Fortsetzung in vier Chromium-Kontexten. GitHub-CI auf finalem HEAD auswerten; weitere Speicherfaelle und Endpartien bleiben offen."
+      "blocker": "Chromium-CI #40603795251 auf Code-HEAD 8ec7a177313136cb040dfe26c833e09b392e6b2a PASS (vier Browserjobs). Neuer Teiltest: zwei menschliche und zwei KI-Firmen, zwei Regionen, zwei Vertragsabschluesse, zwei Monatsabrechnungen, vier frische Browserkontexte, drei exakte Importe und unabhaengige wirtschaftliche Fortsetzung ohne Doppelbuchung. Weitere Spielphasen, beliebige Fremdeingaben, vollstaendige Endpartien und verbindliche Endregeln fehlen; SPE-01 und Gesamtgate BLOCKED.",
+      "next": "Weitere komplexe Speicher-/Buchungsfaelle (Sanierung, Vertragsbruch, mehrere Generationen) und komplette Endpartien testen; neues Teiltest-Ergebnis im Chromium-Job #40603795251 PASS, kein Gesamt-PASS."
     },
     {
       "id": "SPE-02",

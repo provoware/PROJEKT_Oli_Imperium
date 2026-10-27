@@ -36,3 +36,11 @@ Weitere Firmenkonstellationen, Verlust- und Sanierungsketten, saemtliche zulaess
 3. Endregelvertrag der eigenstaendigen Adaption vervollstaendigen und danach vollstaendige Endpartien mit Wiederherstellung automatisieren.
 
 **Empfehlung:** Erst nach gruenen Teilpruefungen Belege als PASS eintragen. Kein Merge, kein Release und keine vorgezogene persoenliche Endabnahme.
+
+## Tatsaechliche GitHub-Pruefung auf dem Implementierungs-HEAD
+
+**Getesteter Code-HEAD:** `8ec7a177313136cb040dfe26c833e09b392e6b2a` (28.10.2026). Der neue Schritt `Vier Firmen mit zwei Regionen, zwei Vertraegen und wiederholter Spielstand-Fortsetzung` ist in [Chromium-CI #40603795251](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40603795251) **PASS**; auch die drei anderen Browserjobs sind **PASS**. Die neue Pruefung kontrolliert zwei menschliche und zwei KI-Firmen, zwei unterschiedliche Regionen, zwei fachlich erfuellte Vertraege, zwei echte Monatsabschluesse, vier Browserkontexte, drei exakte Importe und eine unabhaengige Wiederholung der Wirtschaftsfolgen.
+
+[Quellpruefung #40603795186](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40603795186) **PASS**. [Technisches Vorrelease-Gesamtgate #40603795149](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40603795149) **FAIL/BLOCKED absichtlich**, weil 6/52 Pflichten PASS und 39 BLOCKED, 4 OPEN, 3 persoenliche DEFERRED sind. `SPE-01` bleibt BLOCKED. Der zugehoerige Teilnachweis liegt in `prerelease/evidence/SPE-01-COMPLEX-MULTIFIRM-PARTIAL-20261028.json`.
+
+**Wichtig:** Die nachfolgende reine Nachweis-/Dokumentationsaenderung veraendert keinen Spiel- oder Testcode. Ihr finaler CI-Status ist getrennt zu kontrollieren; der obige PASS bezieht sich exakt auf den genannten Code-HEAD.
