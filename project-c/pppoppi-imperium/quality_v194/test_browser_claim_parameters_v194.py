@@ -1,0 +1,220 @@
+#!/usr/bin/env python3
+"""Alle neun Claim-Parameter: Wirtschaftskette und Ablehnungen bei echtem Zoom.
+
+Isolierte, manifestgepruefte Offline-Vorschau. Feldauswahl wird bewusst ueber
+das HTML-Auswahlfeld vorbereitet; alle Wirtschaftsaktionen erfolgen mit echter
+Tab-/Enter-Tastaturbedienung. Keine Original-C64- oder Release-Freigabe.
+"""
+import json
+import subprocess
+import tempfile
+from pathlib import Path
+
+from playwright.sync_api import sync_playwright
+
+from test_browser_keyboard_pipe_fire_v194 import check, tab_to
+from test_browser_native_zoom_flow_v194 import new_page
+from test_browser_native_zoom_v194 import extension_at
+
+HERE = Path(__file__).resolve().parent
+ZOOMS = (1.75, 2.0)
+# Pro Feld: vier bewusst unzulaessige Aktionen, sechs erfolgreiche Aktionen.
+SEQUENCE = (
+    ("BUY", False),
+    ("SURVEY", True),
+    ("SURVEY", False),
+    ("BUY", True),
+    ("BUY", False),
+    ("DRILL", True),
+    ("PUMP", True),
+    ("SHIP", True),
+    ("OFFER", True),
+    ("OFFER", False),
+)
+DAYS = {"SURVEY": 2, "BUY": 1, "DRILL": 5, "PUMP": 4,
+        "SHIP": 1, "OFFER": 1}
+BOOKINGS = {"SURVEY": "GUTACHTEN", "BUY": "FELDKAUF",
+            "DRILL": "FACHBOHRUNG", "PUMP": "FOERDERUNG",
+            "SHIP": "TRANSPORT"}
+
+
+def activate(page, claim, code, label):
+    page.evaluate("NeoEconomy.open('claim')")
+    page.locator("#econClaim").select_option(claim)
+    selector = '#dialogContent button[data-econ="%s"][data-claim="%s"]' % (
+        code, claim)
+    target = page.locator(selector)
+    check(label + ": korrektes Claim-Ziel", target.count() == 1)
+    page.evaluate("""() => {
+        if (!window.__qaParamListener) {
+            document.addEventListener('click', event => {
+                if (event.isTrusted && event.target.closest(
+                    '[data-qa-param-target="yes"]')) window.__qaParamClicks++;
+            }, {capture: true});
+            window.__qaParamListener = true;
+        }
+        window.__qaParamClicks = 0;
+        document.querySelectorAll('[data-qa-param-target]').forEach(
+            el => el.removeAttribute('data-qa-param-target'));
+    }""")
+    target.evaluate("(el) => el.dataset.qaParamTarget = 'yes'")
+    before = page.evaluate("NeoEconomy.getState()")
+    check(label + ": per Tab erreichbar", tab_to(page, selector, max_tabs=300))
+    check(label + ": sichtbarer Fokus",
+          page.evaluate("document.activeElement.matches(':focus-visible')"))
+    page.keyboard.press("Enter")
+    check(label + ": genau ein echter Tastaturklick",
+          page.evaluate("window.__qaParamClicks") == 1)
+    check(label + ": Spielstand gueltig",
+          page.evaluate("NeoEconomy.engine.validate(NeoEconomy.getState())") is True)
+    after = page.evaluate("NeoEconomy.getState()")
+    check(label + ": fremde Claims unveraendert",
+          all(before["claims"][other] == after["claims"][other]
+              for other in before["claims"] if other != claim))
+    return before, after
+
+
+def verify(before, after, claim, code, success, region, cfg, label):
+    if not success:
+        check(label + ": Ablehnung ohne jede Zustandsaenderung", after == before)
+        return
+    check(label + ": Erfolg aendert Spielstand", after != before)
+    a, b = before["companies"][0], after["companies"][0]
+    check(label + ": Spieltage korrekt",
+          b["daysUsed"] == a["daysUsed"] + DAYS[code])
+    cost = {"SURVEY": region["survey"], "BUY": region["buy"],
+            "DRILL": region["drill"], "PUMP": cfg["pumpCost"],
+            "SHIP": cfg["shippingCost"], "OFFER": 0}[code]
+    check(label + ": regionaler Preis / Kosten korrekt",
+          b["cashCent"] == a["cashCent"] - cost)
+    if code in BOOKINGS:
+        check(label + ": genau eine richtige Buchung",
+              len(b["ledger"]) == len(a["ledger"]) + 1
+              and b["ledger"][-1]["code"] == BOOKINGS[code]
+              and b["ledger"][-1]["info"] == claim
+              and b["ledger"][-1]["deltaCent"] == -cost)
+    else:
+        check(label + ": keine fingierte Buchung",
+              b["ledger"] == a["ledger"])
+    old, new = before["claims"][claim], after["claims"][claim]
+    if code == "SURVEY":
+        check(label + ": Gutachten nur fuer gewaehltes Feld",
+              old["surveyedBy"] == [] and new["surveyedBy"] == ["H1"])
+    elif code == "BUY":
+        check(label + ": Eigentum nur fuer gewaehltes Feld",
+              old["owner"] is None and new["owner"] == "H1")
+    elif code == "DRILL":
+        check(label + ": Feld erschlossen",
+              not old["drilled"] and new["drilled"])
+    elif code == "PUMP":
+        check(label + ": Reserven und Lager exakt gebucht",
+              new["reserveMilli"] == old["reserveMilli"] - cfg["pumpMilli"]
+              and new["inventoryMilli"] == old["inventoryMilli"] + cfg["pumpMilli"]
+              and b["monthProducedMilli"] ==
+              a["monthProducedMilli"] + cfg["pumpMilli"])
+    elif code == "SHIP":
+        check(label + ": verladen ohne Mengenverlust",
+              old["inventoryMilli"] == cfg["pumpMilli"]
+              and new["inventoryMilli"] == 0
+              and new["preparedMilli"] == cfg["pumpMilli"])
+    elif code == "OFFER":
+        check(label + ": verbindliches Angebot, kein Soforterloes",
+              not old["order"] and new["order"]
+              and b["monthRevenueCent"] == a["monthRevenueCent"])
+
+
+def run_claim(context, worker, preview, factor, claim, region, cfg):
+    label = str(round(factor * 100)) + "%/" + claim
+    errors, external = [], []
+    page = new_page(context, preview, worker, factor, errors, external)
+    try:
+        start = page.evaluate("NeoEconomy.getState()")
+        check(label + ": frische Partie", start["phase"] == "TURN"
+              and all(c["owner"] is None for c in start["claims"].values()))
+        successes = rejections = 0
+        for code, success in SEQUENCE:
+            step = label + "/" + code + "/" + str(successes + rejections + 1)
+            before, after = activate(page, claim, code, step)
+            verify(before, after, claim, code, success, region, cfg, step)
+            if success:
+                successes += 1
+            else:
+                rejections += 1
+        check(label + ": sechs Erfolge und vier Ablehnungen",
+              successes == 6 and rejections == 4)
+        check(label + ": keine JavaScript-Laufzeitfehler", not errors)
+        check(label + ": keine externen HTTP-Anfragen", not external)
+        return {"claim": claim, "region": region["id"], "zoom_percent":
+                round(factor * 100), "successful": successes,
+                "rejected": rejections, "release_gate": "BLOCKED"}
+    finally:
+        page.close()
+
+
+def main():
+    with tempfile.TemporaryDirectory(prefix="pppoppi-claim-parameters-") as tmp:
+        root = Path(tmp)
+        preview = root / "preview"
+        subprocess.run(["node", str(HERE / "build.cjs"), str(preview)],
+                       check=True, capture_output=True, text=True, timeout=90)
+        check("Manifestgepruefte Offline-Vorschau gebaut",
+              (preview / "index.html").is_file())
+        extension_at(root / "extension")
+        with sync_playwright() as playwright:
+            context = playwright.chromium.launch_persistent_context(
+                str(root / "profile"), channel="chromium", headless=True,
+                viewport={"width": 800, "height": 600}, reduced_motion="reduce",
+                args=["--disable-extensions-except=" + str(root / "extension"),
+                      "--load-extension=" + str(root / "extension")])
+            try:
+                worker = (context.service_workers[0] if context.service_workers
+                          else context.wait_for_event("serviceworker",
+                                                     timeout=15000))
+                check("Echte Chromium-Zoom-Erweiterung geladen",
+                      worker.url.startswith("chrome-extension://"))
+                probe_errors, probe_external = [], []
+                probe = new_page(context, preview, worker, 1.75,
+                                 probe_errors, probe_external)
+                try:
+                    initial = probe.evaluate("NeoEconomy.getState()")
+                    regions = probe.evaluate("NeoEconomy.engine.REGIONS")
+                    cfg = probe.evaluate("NeoEconomy.engine.CFG")
+                    claims = sorted(initial["claims"])
+                    check("Neun eindeutige Claims in drei Regionen",
+                          len(claims) == 9 and len(regions) == 3
+                          and len(set(claims)) == 9
+                          and set(c["region"] for c in initial["claims"].values())
+                          == set(r["id"] for r in regions))
+                    check("Probe ohne Fehler / Netzwerkanfragen",
+                          not probe_errors and not probe_external)
+                finally:
+                    probe.close()
+                results = []
+                for factor in ZOOMS:
+                    for claim in claims:
+                        region_id = claim.rsplit("-", 1)[0]
+                        region = next(r for r in regions if r["id"] == region_id)
+                        results.append(run_claim(context, worker, preview,
+                                                 factor, claim, region, cfg))
+                check("Alle 18 Claim/Zoom-Kombinationen",
+                      len(results) == 18 and
+                      set(x["zoom_percent"] for x in results) == {175, 200})
+                check("108 echte Erfolge und 72 echte Ablehnungen",
+                      sum(x["successful"] for x in results) == 108 and
+                      sum(x["rejected"] for x in results) == 72)
+                print("CLAIM-PARAMETER-MATRIX:",
+                      json.dumps({"cases": results, "total_actions": 180,
+                                  "successes": 108, "rejections": 72,
+                                  "release_gate": "BLOCKED"},
+                                 ensure_ascii=False), flush=True)
+                print("GRENZE: Regionale Preise aus dem vorhandenen Kern, "
+                      "keine externe Fachfreigabe. Feldwahl ueber HTML-Select; "
+                      "Aktionen per Tab/Enter. Weitere dynamische Zustaende, "
+                      "vollstaendige Endpartien und Vorrelease bleiben BLOCKED.",
+                      flush=True)
+            finally:
+                context.close()
+
+
+if __name__ == "__main__":
+    main()
