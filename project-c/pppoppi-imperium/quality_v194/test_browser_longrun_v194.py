@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Browser-Langlauf: 12 Spielmonate, 3 Export-/Neustart-/Import-Zyklen.
+"""Browser-Langlauf: 12 Monate, 3 Exporte und echte Chromium-Prozessneustarts.
 
-Ausschliesslich isolierter temporaerer Technikaufbau und neue Chromium-Kontexte.
+Ausschliesslich isolierter temporaerer Technikaufbau und neue Chromium-Prozesse.
 Kein produktiver Spielstand, Originalquelltext oder Benutzerprofil wird veraendert.
 """
 import copy
@@ -42,6 +42,7 @@ def main():
         page_url = (destination / "index.html").as_uri()
         errors, external = [], []
         measurements = []
+        browser_process_restarts = 0
         with sync_playwright() as playwright:
             browser = playwright.chromium.launch(headless=True)
             try:
@@ -104,6 +105,12 @@ def main():
                     check("Checkpoint %d: Download identisch zum Spielstand" % month,
                           exported == after)
                     context.close()
+                    # Ein neuer Kontext im selben Browser beweist keinen
+                    # Neustart des Browserprozesses. Den Prozess beenden und
+                    # aus der gespeicherten Datei in einem neuen starten.
+                    browser.close()
+                    browser = playwright.chromium.launch(headless=True)
+                    browser_process_restarts += 1
                     context, page = new_session()
                     import_json(page, "checkpoint-%02d.json" % month, exported)
                     page.wait_for_function(
@@ -122,6 +129,8 @@ def main():
                           page.evaluate("NeoEconomy.getState()") == after)
 
                 final_state = page.evaluate("NeoEconomy.getState()")
+                check("Drei unabhaengige Chromium-Prozessneustarts",
+                      browser_process_restarts == len(CHECKPOINTS))
                 check("Zwölf Monate, zwölf Berichte und Monat 13 erreicht",
                       final_state["month"] == 13 and len(final_state["reports"]) == 12)
                 check("Keine externen HTTP-Anfragen", not external)
@@ -130,6 +139,7 @@ def main():
                     "months_completed": 12,
                     "reports": len(final_state["reports"]),
                     "restart_import_cycles": len(CHECKPOINTS),
+                    "chromium_process_restarts": browser_process_restarts,
                     "rejected_manipulated_imports": len(CHECKPOINTS),
                     "month_durations_seconds": measurements,
                     "performance_gate": "BLOCKED (keine belastbare Messgrenze)",
