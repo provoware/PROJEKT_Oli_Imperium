@@ -18,6 +18,17 @@ python3 project-c/pppoppi-imperium/quality_v194/test_browser_claim_parameters_v1
 
 Die CI-Prüfung ist in `.github/workflows/prerelease-browser-project-c.yml` ergänzt. Tatsächliche Ergebnisse und den geprüften HEAD bitte am zugehörigen PR und den dort verlinkten GitHub-Actions-Läufen ablesen. Das harte Gesamtgate bleibt **BLOCKED**; die Pflichtmatrix bleibt **6/52 PASS, 39 BLOCKED, 4 OPEN, 3 DEFERRED**.
 
+
+## CI-Abschluss des Parameterpakets (geprüft am 27.10.2026)
+
+Der vormals ausstehende Diagnose-Lauf ist **PASS**: [Chromium #40526236853](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40526236853) auf HEAD `8114ce388e3b309581f96aa14138710bf2ab8bef`. Das echte CI-Protokoll meldet **18 Feld-/Zoom-Fälle, 180 per Tastatur aktivierte Wirtschaftsaktionen, davon 108 erwartete Erfolge und 72 zustandsneutrale Ablehnungen**. Auch Brandenburg-2/3 wurden bei beiden Zoomstufen erfolgreich durchlaufen. [Quellprüfung #40526236990 – PASS](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40526236990); [Gesamtgate #40526237014 – BLOCKED](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40526237014). Die vorherigen Fehlversuche bleiben als Diagnosehistorie nachvollziehbar; das ist kein Nachweis für historische Originaltreue.
+
+## Folgepaket: Feldketten nach Export und Reimport absichern
+
+Auf dem separaten Folge-Zweig `automation/prerelease-claim-save-roundtrip-20261027-1638` erweitert derselbe Browser-Test jeden der 18 Fälle um einen **echten Spielstandexport per Tab/Enter**, das Schließen des ursprünglichen Tabs, einen frischen Spiel-Tab mit echtem Zoom, einen Dateiimport und einen exakten Vergleich aller Felder, Firmen, Buchungen und Spielphasen. Der Dateiauswahldialog wird bewusst per Playwright mit JSON beliefert und **nicht** als Tastaturaktion behauptet. Vor und nach dem Import werden gültiger Zustand, externe Netzwerkanfragen und Laufzeitfehler kontrolliert.
+
+**Sollumfang:** 18 Export-/Import-Rundläufe zusätzlich zu den 180 Wirtschaftsaktionen. **Status dieses Folgepakets: PENDING bis zur tatsächlichen GitHub-CI auf seinem endgültigen HEAD.** Teilnachweis: `prerelease/evidence/SPE-01-CLAIM-ROUNDTRIP-PARTIAL-20261027.json`; `SPE-01` bleibt BLOCKED, ebenso die gesamte Vorrelease-Freigabe. Ein neuer Tab ersetzt keinen vollständigen Browser-Profil-Neustart; weitere Spielphasen, historische Regeln und persönliche Endabnahme sind ausdrücklich nicht durch diesen Teiltest freigegeben.
+
 ## Grenzen und nächste Pflichtarbeiten
 
 1. Neue CI tatsächlich ausführen und mögliche Fehler beheben; Parameterfolgen nur bei grünem Browserlauf als technischen Teilnachweis werten.
