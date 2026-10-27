@@ -1,0 +1,27 @@
+{
+  "gate_id": "BED-02",
+  "date": "2026-10-27",
+  "result": "PARTIAL",
+  "tested_code_head": null,
+  "command": "python3 project-c/pppoppi-imperium/quality_v194/test_browser_claim_parameters_v194.py",
+  "ci_result": "PENDING",
+  "browser": "Chromium 800x600; chrome.tabs.setZoom/getZoom",
+  "native_zoom_percent": [
+    175,
+    200
+  ],
+  "expected_claims": 9,
+  "expected_region_count": 3,
+  "expected_isolated_cases": 18,
+  "expected_trusted_keyboard_actions": 180,
+  "expected_successful_actions": 108,
+  "expected_rejected_actions": 72,
+  "original_source_files_changed": 0,
+  "release_gate": "BLOCKED",
+  "limitations": [
+    "Sollumfang bis CI-Ausfuehrung nicht als PASS zaehlen",
+    "Feldwahl via HTML-Auswahlfeld, Wirtschaftsaktionen per Tab/Enter",
+    "Kostenwerte gegen implementierte Kernkonstanten, keine historische Fachreferenz",
+    "Dynamische Spielzustaende und regulare Endpartien fehlen"
+  ]
+}
