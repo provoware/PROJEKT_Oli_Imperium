@@ -248,6 +248,31 @@ def main():
                           summary["unknown"] == 0)
                     check(label + ": fokussierte Bedienelemente nicht verdeckt",
                           summary["covered"] == 0)
+                    # KI-Inspektor darf durch die Layoutkorrektur nicht
+                    # verschwinden: oeffnen und schliessen per echten Tasten.
+                    page.evaluate("PPNavigation191.open('computer')")
+                    page.wait_for_function(
+                        "document.querySelector('#dialog #pp-ai-button') !== null")
+                    check(label + ": KI-Knopf bleibt im Dialog vorhanden",
+                          page.locator("#dialog #pp-ai-button").count() == 1)
+                    check(label + ": KI-Knopf im normalen Layoutfluss",
+                          page.locator("#pp-ai-button").evaluate(
+                              "(el) => getComputedStyle(el).position === 'static'"))
+                    check(label + ": KI-Knopf per Tab erreichbar",
+                          tab_to(page, "#pp-ai-button"))
+                    page.keyboard.press("Enter")
+                    check(label + ": KI-Protokoll per Enter geoeffnet",
+                          not page.locator("#pp-ai-drawer").evaluate(
+                              "(el) => el.hidden"))
+                    check(label + ": KI-Protokoll-Schliessen per Tab",
+                          tab_to(page, "#pp-ai-close"))
+                    page.keyboard.press("Enter")
+                    check(label + ": KI-Protokoll per Enter geschlossen",
+                          page.locator("#pp-ai-drawer").evaluate(
+                              "(el) => el.hidden"))
+                    page.keyboard.press("Escape")
+                    page.wait_for_function(
+                        "!document.querySelector('#dialog').open")
                     summaries.append(summary)
                 check("Spielstand bei reiner Tab-Navigation unveraendert",
                       page.evaluate("JSON.stringify(NeoEconomy.getState())") == before)
