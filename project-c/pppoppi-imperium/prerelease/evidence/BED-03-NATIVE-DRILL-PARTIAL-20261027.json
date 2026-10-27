@@ -1,0 +1,30 @@
+{
+  "gate_id": "BED-03",
+  "result": "PARTIAL",
+  "date": "2026-10-27",
+  "implementation_commit": "05fb2f698566ea35c731660ef96fe0fd0c4de9ef",
+  "test": "python3 project-c/pppoppi-imperium/quality_v194/test_browser_native_zoom_drill_v194.py",
+  "scope": {
+    "zoom_percent": [
+      175,
+      200
+    ],
+    "game": "DRILL",
+    "stages_per_zoom": 3,
+    "controls": [
+      "Tab",
+      "Enter",
+      "Home",
+      "ArrowRight"
+    ],
+    "expected_layout_snapshots": 8,
+    "export_roundtrip": "exact JSON equality"
+  },
+  "ci_status": "PENDING",
+  "limits": [
+    "Nicht alle Dialogaktionen unter echtem Zoom getestet.",
+    "Fokuskontrast und Zwischenbild-Ueberdeckungen nicht vollstaendig quantifiziert.",
+    "Keine vollstaendigen Sieg- und Niederlagenpartien.",
+    "Persoenliche Endabnahme ausdruecklich zurueckgestellt."
+  ]
+}
