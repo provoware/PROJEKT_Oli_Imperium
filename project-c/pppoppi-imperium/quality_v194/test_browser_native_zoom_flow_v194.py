@@ -104,7 +104,7 @@ def check_detector(page):
           page.evaluate(FLOW_MEASURE, "#probe")["clipped"] == 1)
 
 
-def new_page(context, preview, worker, factor, errors, external):
+def new_page(context, preview, worker, factor, errors, external, fresh=True):
     page = context.new_page()
     page.set_default_timeout(15000)
     page.on("pageerror", lambda error: errors.append(str(error)))
@@ -113,10 +113,11 @@ def new_page(context, preview, worker, factor, errors, external):
     page.goto((preview / "index.html").as_uri(), wait_until="load")
     page.wait_for_function("typeof PPNavigation191 === 'object'")
     set_real_zoom(worker, page.url, 1.0)
-    start_fresh(page, str(round(factor * 100)) + "%")
-    if page.locator("#dialog").evaluate("(d) => d.open"):
-        page.keyboard.press("Escape")
-        page.wait_for_function("!document.querySelector('#dialog').open")
+    if fresh:
+        start_fresh(page, str(round(factor * 100)) + "%")
+        if page.locator("#dialog").evaluate("(d) => d.open"):
+            page.keyboard.press("Escape")
+            page.wait_for_function("!document.querySelector('#dialog').open")
     zoom = set_real_zoom(worker, page.url, factor)
     check("Echter Chromium-Zoom " + str(round(factor * 100)) + "%",
           abs(zoom["factor"] - factor) < .01)
@@ -171,7 +172,7 @@ def main():
                     finally:
                         page.close()
 
-                    arcade = new_page(context, preview, worker, factor, errors, external)
+                    arcade = new_page(context, preview, worker, factor, errors, external, fresh=False)
                     try:
                         # Neue, unabhaengige Partie; die Aktionen laufen per Tab/Enter.
                         # start() erzeugt das erschlossene Feld, nicht ein Test-Fake.
