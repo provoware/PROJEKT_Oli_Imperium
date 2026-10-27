@@ -37,7 +37,31 @@ def corruptions(valid):
         ('duplicate-request', lambda s: s.update(processedIds=['repeat', 'repeat'])),
         ('missing-companies', lambda s: s.update(companies=[])),
     )
-    for name, edit in edits:
+    nested_edits = (
+        ('claim-foreign-owner', lambda s: s['claims']['BERLIN-1'].update(owner='UNKNOWN')),
+        ('claim-duplicate-survey', lambda s: s['claims']['BERLIN-1'].update(surveyedBy=['H1', 'H1'])),
+        ('claim-tank-level-zero', lambda s: s['claims']['BERLIN-1'].update(tankLevel=0)),
+        ('claim-storage-overflow', lambda s: s['claims']['BERLIN-1'].update(
+            inventoryMilli=s['claims']['BERLIN-1']['tankMilli'] + 1)),
+        ('claim-negative-reserve', lambda s: s['claims']['BERLIN-1'].update(reserveMilli=-1)),
+        ('claim-drilled-without-owner', lambda s: s['claims']['BERLIN-1'].update(drilled=True)),
+        ('company-name-number', lambda s: s['companies'][0].update(name=123)),
+        ('company-fractional-cash', lambda s: s['companies'][0].update(cashCent=1.25)),
+        ('company-days-overflow', lambda s: s['companies'][0].update(daysUsed=9999)),
+        ('obligation-overpaid', lambda s: s['companies'][0]['obligations'].append(
+            {'dueCent': 1, 'paidCent': 2})),
+        ('contract-invalid-status', lambda s: s['companies'][0]['contracts'].append(
+            {'status': 'UNKNOWN', 'region': 'BERLIN'})),
+        ('market-negative-price', lambda s: s['prices'].update(BERLIN=-1)),
+        ('market-negative-demand', lambda s: s['demand'].update(BERLIN=-1)),
+        ('turn-index-out-of-range', lambda s: s.update(turnIndex=999)),
+        ('negative-sequence', lambda s: s.update(sequence=-1)),
+        ('invalid-phase', lambda s: s.update(phase='UNKNOWN')),
+        ('invalid-minigame-kind', lambda s: s.update(minigame={
+            'kind': 'UNKNOWN', 'claimId': 'BERLIN-1', 'companyId': 'H1',
+            'stage': 0, 'attempts': 0, 'dial': 50})),
+    )
+    for name, edit in edits + nested_edits:
         broken = copy.deepcopy(valid)
         edit(broken)
         cases.append((name, broken))
@@ -101,6 +125,19 @@ def main():
                     import_file(page, name + '.json', broken, False)
                     check(name + ': Ablehnung atomar ohne Buchungs- oder Namensaenderung',
                           state(page) == hostile and page.evaluate('window.__pppoppiXss') == 0)
+                # Die Grenze ist inklusive: genau 5.000.000 Bytes muessen
+                # als gueltiges JSON lesbar bleiben; ein Byte mehr muss bereits
+                # vor der Auswertung sicher abgewiesen werden.
+                encoded = json.dumps(hostile, ensure_ascii=False).encode('utf-8')
+                check('Test-Spielstand kleiner als Dateigrenze', len(encoded) < 5_000_000)
+                boundary = encoded + b' ' * (5_000_000 - len(encoded))
+                check('Dateigroesse exakt 5.000.000 Bytes', len(boundary) == 5_000_000)
+                import_file(page, 'grenze-5000000.json', boundary, True)
+                check('Gueltige Datei genau an der Grenze bleibt unveraendert',
+                      state(page) == hostile)
+                import_file(page, 'zu-gross-5000001.json', boundary + b' ', False)
+                check('Uebergrosse, sonst gueltige JSON-Datei atomar abgewiesen',
+                      state(page) == hostile and page.evaluate('window.__pppoppiXss') == 0)
                 check('Export nach allen Ablehnungen exakt unveraendert', export_state(page) == hostile)
                 context.close()
 
@@ -115,6 +152,9 @@ def main():
                 check('Keine JavaScript-Laufzeitfehler', not errors)
                 print('IMPORT-EINGABESICHERHEIT:', json.dumps({
                     'rejected_structural_cases': len(invalid),
+                    'nested_invalid_cases': 17,
+                    'file_size_boundary_bytes': 5_000_000,
+                    'file_size_cases': 2,
                     'html_injection_scenes': len(SCENES),
                     'valid_untrusted_name_roundtrips': 2,
                     'browser_contexts': 2,
