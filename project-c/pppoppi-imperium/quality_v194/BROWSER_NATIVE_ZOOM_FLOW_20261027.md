@@ -12,18 +12,23 @@ Pro Phase werden zwei um 100 ms getrennte Momentaufnahmen erstellt. Messung: ech
 
 **Pruefbefehl:** `python3 project-c/pppoppi-imperium/quality_v194/test_browser_native_zoom_flow_v194.py`.
 
-## Nachweisstand
+## Tatsächlich ausgeführte Prüfungen (Chromium)
 
-- **Implementierung:** neuer Python-Browsertest und CI-Schritt auf PR #83; Browser-CI und Fach-/Quellpruefung noch auszuwerten.
-- **PASS/FAIL/BLOCKED:** Bis zum bestaetigten CI-Abschluss **BLOCKED (Pruefung ausstehend)**. Es wird kein PASS vorweggenommen.
-- **Originalquellen:** Die 110 manifestgeschuetzten Quelldateien sind nicht Teil der Aenderung; der Aufbau prueft ihre Hashes.
-- **Freigabe:** BED-03 und BAR-01 bleiben **BLOCKED**, selbst wenn der gezielte Test spaeter PASS ergibt.
+- [Browser-CI #40481736341](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40481736341): **PASS** auf `1e964e892fce09f2b6330387b9fcf89dc00ea154`.
+- [Quell-/Fachprüfung #40481736421](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40481736421): **PASS**.
+- [Pflichtmatrix #40481736348](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40481736348): **SCHEMA PASS**, technisches Gesamtgate erwartungsgemäß **BLOCKED**.
+- **175 %:** 39 Szenen, 98 zeitlich getrennte Phasen-Momentaufnahmen, 312 gemessene Fliesstextstellen, 191 Beobachtungen laufender Animationen, 0 erkannte Abschneidungen, 0 vollstaendige Ueberdeckungen, 0 unmessbare Textstellen.
+- **200 %:** 39 Szenen, 98 Phasen-Momentaufnahmen, 312 gemessene Fliesstextstellen, 194 Beobachtungen laufender Animationen, ebenfalls 0 erkannte Abschneidungen/Ueberdeckungen/unmessbare Stellen.
+- **Negativkontrollen:** Absichtliche Textueberdeckung und absichtliches Abschneiden wurden beide erkannt. Offlinebetrieb und Gueltigkeit der Wirtschaftszustaende bestanden.
+- **Geltungsbereich:** 312 sind Messungen von Textstellen ueber mehrere Phasen, keine 312 unabhaengigen Funktionen. Animationsbeobachtungen sind keine vollstaendige Animationspruefung. Originalquellen unveraendert.
+
+**Teilnachweis:** `prerelease/evidence/BED-03-FLOW-DYNAMIC-PARTIAL-20261027.json`. BED-03/BAR-01 bleiben **BLOCKED**; keine technische oder persoenliche Gesamtfreigabe.
 
 ## Grenzen und Folgearbeiten
 
 Zwei Momentaufnahmen pruefen **keine vollstaendige Animation**. Nicht erfasst werden unter anderem einzelne Textknoten ohne die genannten Elemente, Pixelunterschiede, wechselnde Schriften, teilweise Ueberdeckung innerhalb einer Zeile, alle Dialogaktionen und regulaere Endpartien. Laufende Animationen werden nur gezaehlt, nicht durchgaengig verfolgt.
 
-1. CI-Ergebnis des neuen Tests auswerten, nachgewiesene Fehler beheben und echte Zaehler als Teilnachweis in der Pflichtmatrix eintragen.
+1. Weitere Animationsphasen und teilweise Textueberdeckungen in Bewegung gezielt nachpruefen.
 2. Verbleibende Dialogaktionen und Fehlerpfade bei echtem Zoom per Tastatur abarbeiten.
 3. Regulaere Sieg-/Niederlagenpartien mit Speicher- und Neustartkontrollen absichern.
 
