@@ -18,6 +18,12 @@ Bisherige 12-Monats-Browserregression schloss nur den **Browserkontext**, nicht 
 
 **Status vor neuer CI:** Implementiert, **PENDING**; keine Behauptung eines bestandenen Prozessneustart-Tests. Gesamtrelease weiterhin BLOCKED. Kein Spielkern, keine der 110 geschuetzten Originaldateien und kein `main` veraendert.
 
+## Diagnose nach erstem GitHub-CI-Lauf
+
+[Browserlauf #40561072233](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40561072233): isolierter Claim-Test **FAIL** bei 200 % / BERLIN-2 / BUY/1, vor dem neuen Prozessneustart-Test. Die Fehlerdiagnose meldet `selected: null`, `options: []`, `dialogOpen: true`, `buttons: []` nach 8 Sekunden. Das ist ein wieder aufgetretener dynamischer Dialog-/Renderfehler; **kein** Beleg fuer Datenverlust und **kein** bestandener Prozessneustart. Die erste Chromium-Hauptpruefung ist noch im Lauf.
+
+Um die neue, unabhaengige Speicherpflicht trotz dieses Fehlers zu testen, liegt der Prozessneustart-Test jetzt in einem **eigenen dritten CI-Job** mit frischem Browserprofil. Der alte Schritt wird verlegt, nicht deaktiviert. Gesamt-CI bleibt rot, solange irgendein Job scheitert. Neue CI auf diesem Commit: **PENDING**.
+
 ## Drei naechste Schritte
 
 1. Neue Browser-CI auf finalem HEAD abwarten und bei FAIL die erste fehlgeschlagene Aktion beheben.
