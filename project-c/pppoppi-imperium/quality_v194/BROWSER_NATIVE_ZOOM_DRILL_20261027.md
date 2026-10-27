@@ -38,7 +38,14 @@ visuellen Überdeckungen.
 - [Chromium-CI](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40450228065),
   [Quell-CI](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40450228026)
   und [Gesamtmatrix](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40450228096):
-  **PASS** für die vollständige Browserkette und den Quellnachweis auf HEAD\n  `4508c6e05a5f3a84f3acf8a1b66ab25ded83030d`; die technische\n  Gesamtmatrix ist **BLOCKED** (erwartete harte Sperre).\n\n  Tatsächliche Messwerte: sechs bestandene Bohrabschnitte (je drei),\n  Druckziele `39/67/51` je Zoomstufe, acht Layoutmessungen mit\n  **0 Pixel horizontalem Überlauf**, acht erreichbare Schließen-Knöpfe,\n  JSON-Export exakt gleich, keine JavaScript-Fehler und keine externen Anfragen.
+  **PASS** für die vollständige Browserkette und den Quellnachweis auf HEAD
+  `4508c6e05a5f3a84f3acf8a1b66ab25ded83030d`; die technische
+  Gesamtmatrix ist **BLOCKED** (erwartete harte Sperre).
+
+  Tatsächliche Messwerte: sechs bestandene Bohrabschnitte (je drei),
+  Druckziele `39/67/51` je Zoomstufe, acht Layoutmessungen mit
+  **0 Pixel horizontalem Überlauf**, acht erreichbare Schließen-Knöpfe,
+  JSON-Export exakt gleich, keine JavaScript-Fehler und keine externen Anfragen.
 
 **Nicht freigegeben:** BED-03 und BAR-01 bleiben BLOCKED. Offen sind
 vollständige Dialogaktionen, Fokuskontraste, Zwischenbild-Überdeckungen,
