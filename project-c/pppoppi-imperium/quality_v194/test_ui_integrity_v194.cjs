@@ -30,6 +30,7 @@ check('Spielkern und Prüfschicht sind als zwei Versionen gekennzeichnet', () =>
 
 check('Klebende Navigation und KI-Knopf ueberdecken im Zoom keine Aktionen', () => {
   assert.match(html, /id="pppoppi-zoom-overlap-v194"/);
+  assert.match(html, /#dialog\[open\] \.dhead\{position:static\}/);
   assert.match(html, /#dialog\[open\] \.v191-nav\{position:static\}/);
   assert.match(html, /#dialog\[open\] #pp-ai-button\{position:static/);
   assert.match(html, /#dialog\[open\] #pp-ai-drawer\{position:static/);
