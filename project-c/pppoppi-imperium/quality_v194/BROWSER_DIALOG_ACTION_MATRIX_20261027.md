@@ -12,7 +12,12 @@ Das 800x600-Startfenster wird mittels `chrome.tabs.setZoom/getZoom` tatsaechlich
 
 ## Nachweisstatus
 
-**PENDING:** GitHub-CI auf dem finalen Zweig-HEAD ist noch auszuwerten. Bis dahin keine neuen PASS-Behauptungen und keine Aenderung der 52 Freigabepflichten. Die 110 manifestgeschuetzten Originaldateien bleiben unberuehrt.
+**Erster vollstaendiger GitHub-Lauf auf Test-HEAD `748a5735f9bc00f350d0bb3f65333d3667d8f35b`:**
+- [Chromium #40513698535 – PASS](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40513698535): bei **175 % und 200 %** je 39 Szenen, **37 verschiedene Szene/Aktions-Paare** aus **29 Aktionskennungen** per echter Tab-/Enter-Taste geprueft. Je Zoomstufe **2 Zustandsaenderungen und 35 unveraenderte Zustaende**, keine Laufzeit- oder externen HTTP-Fehler.
+- [Quell-/Fachpruefung #40513698787 – PASS](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40513698787).
+- [Pflichtmatrix #40513698484 – Gesamtgate BLOCKED](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40513698484): erwartete harte Freigabesperre, kein technischer PASS.
+
+Die **zwei positiven Sollfolgen** (`SURVEY`, `END_TURN`) und **vier negativen Sollfolgen** (`PUMP`, `DRILL`, `PIPE_START`, `REFINERY_BUILD`) wurden im frischen Ausgangszustand geprueft. Die anderen 35 unveraenderten Zustaende sind **keine** 35 fachlich nachgewiesenen Ablehnungen. [Maschinenlesbarer Teilnachweis](../prerelease/evidence/BED-02-DIALOG-MATRIX-PARTIAL-20261027.json). **Vorrelease-Matrix: weiterhin 6/52 PASS, 39 BLOCKED, 4 OPEN, 3 DEFERRED.** Die 110 manifestgeschuetzten Originaldateien bleiben unberuehrt. Nach diesem Dokumentations-Commit ist die CI auf dem finalen HEAD erneut zu kontrollieren.
 
 ## Grenzen / naechste Schritte
 
