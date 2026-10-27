@@ -277,10 +277,11 @@
       "status": "blocked",
       "evidence": [
         "project-c/pppoppi-imperium/quality_v194/IMPORT_INPUT_SECURITY_20261027.md",
-        "project-c/pppoppi-imperium/prerelease/evidence/SIC-02-IMPORT-INPUT-PARTIAL-20261027.json"
+        "project-c/pppoppi-imperium/prerelease/evidence/SIC-02-IMPORT-INPUT-PARTIAL-20261027.json",
+        "project-c/pppoppi-imperium/quality_v194/IMPORT_NESTED_SIZE_20261027.md"
       ],
-      "blocker": "Browser-CI #40588604025 PASS auf Code-HEAD 23edc84a193d109ac2565f1dfa6dfa72af43e8ef: 13 strukturell ungueltige Imports atomar abgewiesen; gueltiger HTML-Fremdname in acht Szenen text-sicher; Export/Neustart/Import. Weitere freie Eingabefelder, Groessengrenzen und Fach-/Endpartienpruefungen fehlen; Gesamtgate BLOCKED.",
-      "next": "Weitere verschachtelte JSON-Felder, Groessengrenzen und Dateifehler gezielt pruefen; Endregelvertrag und Endpartien separat abschliessen."
+      "blocker": "PR #95: Browser-CI #40589544860 PASS auf b8b5e11ba9feaec9ef4c1d3b94b0d047e88c877f fuer 13 Strukturfehler, HTML-Fremdname in acht Szenen, Export/Import. Folgepaket erweitert auf 30 Struktur-/Tiefenfehler und 5.000.000/5.000.001-Byte-Grenze; neuer CI-Nachweis auf finalem HEAD noch PENDING. Weitere freie Felder, Ressourcen- und Endpartienpruefungen fehlen. Gate BLOCKED.",
+      "next": "Neuen Chromium-CI-Lauf auf finalem Zweig-HEAD pruefen; weitere verschachtelte Eingaben und Speichergrenzen absichern, danach Endregelvertrag und Endpartien."
     },
     {
       "id": "SIC-03",
