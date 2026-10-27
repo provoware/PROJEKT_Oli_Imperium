@@ -402,10 +402,11 @@
         "project-c/pppoppi-imperium/prerelease/evidence/BED-02-ECONOMY-KEYBOARD-PARTIAL-20261027.json",
         "project-c/pppoppi-imperium/prerelease/evidence/BED-02-ESCAPE-PARTIAL-20261027.json",
         "project-c/pppoppi-imperium/prerelease/evidence/BED-02-NATIVE-ECONOMY-PARTIAL-20261027.json",
-        "project-c/pppoppi-imperium/prerelease/evidence/BED-02-DIALOG-ACTIONS-PARTIAL-20261027.json"
+        "project-c/pppoppi-imperium/prerelease/evidence/BED-02-DIALOG-ACTIONS-PARTIAL-20261027.json",
+        "project-c/pppoppi-imperium/prerelease/evidence/BED-02-DIALOG-MATRIX-PARTIAL-20261027.json"
       ],
       "blocker": "Teilkette mit 15 echten Tab/Enter-Aktionen je Zoomstufe (175/200 %) und zwei Monatsabschluessen je Durchlauf in Chromium #40467829258 PASS, einschliesslich unzulaessiger Foerderung, Doppelkauf und Exportgleichheit. Andere Pflichtaktionen und vollstaendige Dialog-Endpartien bleiben ungetestet; Gate BLOCKED. Neuer Teiltest: Browser-CI #40505215686 PASS auf 95b393211465427c58c08a71ce35ffc2ce026573; bei echtem 175/200-%-Zoom je 39 Szenen, 13 per Tab/Enter aktivierte Wirtschaftsaktionen (12 unterschiedliche Kennungen), 26 Szenen ohne geeignete data-econ-Aktion, je 2 Zustandsaenderungen; 0 JS-Fehler/externe Anfragen. Keine vollstaendige fachliche Sollfolgen- oder Endpartienabnahme; Gate BLOCKED.",
-      "next": "Weitere Aktionen je Szene mit erwarteten Soll-Nachbedingungen, dynamischen Fehlerpfaden und vollstaendigen Endpartien pruefen."
+      "next": "Nach 37 getesteten Szene/Aktions-Paaren je 175/200 Prozent weitere Claims/Regionen und dynamisch freigeschaltete Aktionen mit konkreten Sollfolgen pruefen; Endpartien bleiben offen."
     },
     {
       "id": "BED-03",
