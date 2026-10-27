@@ -408,9 +408,11 @@
       "basis": "Nutzerauftrag",
       "stage": "technical",
       "status": "blocked",
-      "evidence": [],
-      "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "Skalierungsansichten prüfen"
+      "evidence": [
+        "project-c/pppoppi-imperium/prerelease/evidence/BED-03-NATIVE-ZOOM-PARTIAL-20261027.json"
+      ],
+      "blocker": "Echter Chromium-Seitenzoom 175/200 % per chrome.tabs.setZoom/getZoom im Offline-Browser: CI #40433519507 PASS, CSS-Breite 457/400, DPR 1,75/2,00, Hilfe-Dialog per Tab/Enter/Escape und Fokus-Rueckkehr 2/2 PASS, keine gemessenen horizontalen Ueberlaeufe im geprueften Pfad. Aber nicht alle 39 Szenen, Minispiele, Fokuskontraste und vollstaendige Spielaktionen unter nativem Zoom geprueft; BED-03 bleibt BLOCKED.",
+      "next": "39 Szenen und Minispiele unter echtem Zoom auf Ueberdeckung, Tastatur und Fokuskontrast pruefen."
     },
     {
       "id": "BAR-01",
@@ -424,8 +426,8 @@
         "project-c/pppoppi-imperium/prerelease/evidence/BAR-01-DIALOG-FOCUS-PARTIAL-20261026.json",
         "project-c/pppoppi-imperium/prerelease/evidence/BAR-01-ESCAPE-PARTIAL-20261027.json"
       ],
-      "blocker": "Chromium #40427112310: Fokus-Rueckkehr bei zwei per Tab/Enter geoeffneten Dialogen je CSS-Bildbereich 4/4 PASS; 78 Escape-Schliessungen ohne Spielstandsveraenderung. Rechnerischer/visueller Fokuskontrast und Zustandswechsel bleiben offen. Gate weiterhin BLOCKED.",
-      "next": "Fokuskontrast und Fokusfolge in weiteren Spielzustaenden sowie nativen Zoom getrennt pruefen."
+      "blocker": "Vorherige Tab-/Escape-Teilergebnisse plus echter Zoom-Hilfe-Dialog (CI #40433519507) zeigen Fokus-Rueckkehr bei 175/200 %. Fokuskontrast und Fokusfolge aller Aktionen/Zustaende bleiben unvollstaendig; BAR-01 bleibt BLOCKED.",
+      "next": "Fokuskontrast und Fokusfolge in allen Dialogen/Spielzustaenden auch bei echtem Zoom messen."
     },
     {
       "id": "BAR-02",

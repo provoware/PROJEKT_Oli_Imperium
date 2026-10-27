@@ -22,9 +22,21 @@ Browserzooms. Damit war BED-03 (Skalierung) nicht belegt. Auch BAR-01
 - Überläufe des Dokuments und des Dialogs als Messwerte protokollieren.
 
 ## Nachweisstatus
-**PENDING:** Neuer Test ist im Entwicklungszweig und der Browser-CI
-eingebunden. Vor einem tatsächlich abgeschlossenen GitHub-Actions-Lauf
-dürfen weder PASS noch Fehlerfreiheit behauptet werden.
+**PASS als technische Teilprüfung:** [Chromium-CI #40433519507](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40433519507)
+bestand auf Implementierungs-HEAD `bd3fc32227e544aa83778eb45df9304c67224be9`; [Quellprüfung #40433519500](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40433519500)
+bestand. Die [Gesamtmatrix #40433519447](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40433519447)
+bleibt wie vorgesehen **BLOCKED**.
+
+Messwerte: 175 % → CSS-Breite 457, Pixeldichte 1,75; 200 % → CSS-Breite
+400, Pixeldichte 2,00. In beiden geprüften Hilfe-Dialogpfaden kein
+horizontaler Überlauf (0 px), Tab/Enter/Escape und Fokus-Rückkehr bestanden,
+Wirtschaftszustand unverändert, keine externen Anfragen.
+
+Der erste Lauf [#40433332941](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40433332941)
+scheiterte an einem **Testaufbaufehler**: Der modale Unternehmenscomputer
+war nach dem Partiestart noch offen und sperrte die Kopfbedienung
+korrekterweise. Der Test schließt ihn jetzt vor der Fokusprüfung regulär
+mit Escape. Der korrigierte vollständige Browserlauf bestand.
 
 BED-03 bleibt **BLOCKED**, weil ein Zoom-Test für einen Hilfedialog
 noch keine vollständige 39-Szenen- und Minispielabnahme beweist.
@@ -33,7 +45,7 @@ ausreichenden Farbkontrast beweist. Die persönliche Kubuntu-Sichtabnahme
 ist ausdrücklich zurückgestellt.
 
 ## Nachfolgende Pflichtarbeiten
-1. CI-Ausgang und Überlaufmesswerte auswerten; Fehler im neuen Test beheben.
+1. Alle 39 Spielszenen bei 175/200 % echtem Zoom auf Überläufe und Bedienbarkeit prüfen.
 2. Sämtliche relevanten Szenen und Aktionen unter echtem Zoom auf
    Erreichbarkeit, Überdeckung und Fokuskontrast untersuchen.
 3. Vollständige fachlich definierte Sieg-/Niederlagenpartien samt
