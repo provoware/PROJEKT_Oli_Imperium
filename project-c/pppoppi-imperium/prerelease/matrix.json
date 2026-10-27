@@ -139,7 +139,7 @@
       "status": "blocked",
       "evidence": [],
       "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "Fortsetzung nach Neustart prüfen"
+      "next": "Neustart und Fortsetzung nach Monat 4, 8 und 12 in frischen Chromium-Prozessen nachweisen; vollstaendige Sieg-/Niederlagenpartien bleiben unabhaengig offen."
     },
     {
       "id": "WIR-01",
@@ -232,8 +232,8 @@
       "evidence": [
         "project-c/pppoppi-imperium/prerelease/evidence/SPE-01-CLAIM-ROUNDTRIP-PARTIAL-20261027.json"
       ],
-      "blocker": "18 Export-/Import-Rundlaeufe waren auf Code-HEAD 5fb28d9 technisch PASS (Chromium #40533304063), die Wiederholung #40535544233 auf HEAD f0efbbf scheiterte aber vor NORD-3 bei der Dialog-Feldauswahl (Timeout). End-to-End-Gesamtfreigabe und Profil-Neustart bleiben BLOCKED. CI #40543143687 auf PR #90 scheiterte bereits im vorgelagerten nativen Bohrtest am fehlenden Zoom-Erweiterungs-Serviceworker (15s Timeout); Claim-Parameter-Test wurde SKIPPED, kein neuer PASS.",
-      "next": "Getrennten nativen Zoom-CI-Job auf PR #91 auswerten (Claim-Test vor Bohrtest, frisches Chromium-Profil). Danach Profil-Neustart, Altversionen und vollstaendige Endpartien."
+      "blocker": "PR #91, HEAD e7b7823b4b47f5b60c3d641146152498877f8215: Chromium-Gesamtjob und isolierter Zoomjob im Lauf #40552012675 PASS; 18/18 Feld-/Zoom-Kombinationen, 180 Aktionen, 18 Export-/Import-Rundlaeufe. Das beweist weder echte Browser-Prozessneustarts noch vollstaendige Endpartien. Neue Prozessneustart-Regression auf Folge-PR noch nicht bestaetigt.",
+      "next": "Neue 12-Monats-Regression mit drei echten Chromium-Prozessneustarts auf finalem PR-HEAD pruefen; dann Altversionen, defekte Dateien und komplette Endpartien weiter absichern."
     },
     {
       "id": "SPE-02",
@@ -495,7 +495,7 @@
       "status": "blocked",
       "evidence": [],
       "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "Neustartprobe"
+      "next": "Drei vollstaendige Chromium-Prozessneustarts in der 12-Monats-Regression pruefen; danach Start/Abbruch mit realer Fehlerbehandlung und Offline-Installation."
     },
     {
       "id": "TES-01",
