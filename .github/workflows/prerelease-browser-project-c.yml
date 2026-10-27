@@ -61,7 +61,7 @@ jobs:
         run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_dialog_actions_v194.py
       - name: Jede unterschiedliche Wirtschaftsaktion je Dialogszene bei nativem 175/200-Prozent-Zoom
         run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_dialog_action_matrix_v194.py
-      - name: Zwoelf Browser-Spielmonate mit drei Neustart- und Importzyklen
+      - name: Zwoelf Browser-Spielmonate mit drei echten Chromium-Prozessneustarts
         run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_longrun_v194.py
       - name: Wirtschaft, Vertrag, Abrechnung und Spielstand-Neustart mit echten Browserklicks
         run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_economy_v194.py
