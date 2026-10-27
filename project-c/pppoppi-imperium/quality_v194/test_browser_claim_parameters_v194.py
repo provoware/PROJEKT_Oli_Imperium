@@ -52,6 +52,8 @@ def activate(page, claim, code, label):
         return !!(dialog?.open && select &&
             buttons.some(b => b.dataset.econ === code));
     }""", arg={"code": code}, timeout=8000)
+    check(label + ": aktive Szene nach Oeffnung korrekt",
+          page.evaluate("active") == scene)
     before_selection = page.evaluate("NeoEconomy.getState()")
     page.locator("#econClaim").select_option(claim)
     # Das Change-Ereignis rendert den Dialog erneut. Erst zwei
@@ -73,6 +75,10 @@ def activate(page, claim, code, label):
         # Diagnose statt stiller Wiederholung: ein UI-Fehler darf nicht
         # durch erneutes Klicken oder kuenstliche Spielstandkorrektur verschwinden.
         failure = page.evaluate("""() => ({
+            activeScene: typeof active === 'string' ? active : null,
+            dialogTitle: document.querySelector('#dialogTitle')?.textContent || '',
+            contentLength: document.querySelector('#dialogContent')?.textContent.length || 0,
+            navigationScene: window.PPNavigation191?.current?.() ?? null,
             selected: document.querySelector('#econClaim')?.value ?? null,
             options: [...(document.querySelector('#econClaim')?.options || [])]
                 .map(option => option.value),
