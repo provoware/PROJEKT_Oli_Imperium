@@ -1,0 +1,33 @@
+{
+  "gate_id": "SPE-01",
+  "date": "2026-10-27",
+  "result": "PARTIAL",
+  "tested_code_head": null,
+  "ci_result": "PENDING",
+  "command": "python3 project-c/pppoppi-imperium/quality_v194/test_browser_claim_parameters_v194.py",
+  "browser": "Chromium 800x600; chrome.tabs.setZoom/getZoom",
+  "native_zoom_percent": [
+    175,
+    200
+  ],
+  "expected_claims": 9,
+  "expected_isolated_cases": 18,
+  "expected_export_import_roundtrips": 18,
+  "export_interaction": "Tab/Enter; echter JSON-Dateidownload",
+  "import_interaction": "Playwright set_input_files, keine behauptete Tastaturaktion",
+  "validations": [
+    "exakter Vergleich exportierter JSON-Inhalt mit aktuellem Zustand",
+    "neuer Spiel-Tab ohne stillen Altzustand",
+    "importierter Zustand exakt gleich mit allen neun Claims, Firmen und Buchungen",
+    "Engine-Validierung nach Import",
+    "keine externen HTTP-Anfragen und JavaScript-Laufzeitfehler"
+  ],
+  "original_source_files_changed": 0,
+  "release_gate": "BLOCKED",
+  "limitations": [
+    "18 Rundlaeufe erst nach gruenem CI als nachgewiesen zaehlen",
+    "kein unabhaengiger Browser-Profil-Neustart, nur neuer Tab",
+    "kein Nachweis fuer alle Spielphasen, Altstaende und defekte Dateien in diesem Test",
+    "historische C64-Fachregeln weiterhin nicht freigegeben"
+  ]
+}
