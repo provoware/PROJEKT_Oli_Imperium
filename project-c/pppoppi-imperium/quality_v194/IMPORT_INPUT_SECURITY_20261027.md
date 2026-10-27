@@ -30,3 +30,13 @@ Weitere erforderliche Pruefungen: besonders grosse Dateien, alle anderen freien 
 3. Endregelvertrag fuer die Adaption verbindlich machen und danach vollstaendige Endpartien testen.
 
 **Empfehlung:** Sicherheitstests weiterhin als echte Browserimporte ausfuehren und bei jedem Fehler den letzten gueltigen Zustand vergleichen, statt nur Fehlermeldungen zu zaehlen.
+
+## Tatsaechliche CI-Nachweise auf Implementierungs-HEAD
+
+**Code- und Matrix-HEAD:** `23edc84a193d109ac2565f1dfa6dfa72af43e8ef` (27.10.2026).
+
+- [GitHub-Browserlauf #40588604025](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40588604025): **PASS**, alle vier Chromium-Jobs. Der neue Schritt `Fremde Spielstaende, 13 Strukturfehler und HTML-Escaping in acht Spielszenen` wurde mit **success** abgeschlossen; damit sind die 13 Ablehnungen, acht Szenen und Export/Neustart/Import im abgegrenzten Testumfang nachgewiesen.
+- [Quellpruefung #40588603792](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40588603792): **PASS**.
+- [Gesamtgate #40588604015](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40588604015): **FAIL/BLOCKED wie vorgeschrieben**, weil 43 Pflichten nicht technisch freigegeben sind und drei persoenliche Abnahmen zurueckgestellt bleiben.
+
+**Evidenz:** `prerelease/evidence/SIC-02-IMPORT-INPUT-PARTIAL-20261027.json`. Diese Nachweise gelten fuer den obigen Code-HEAD; der nachfolgende reine Dokumentations-Commit wird separat durch GitHub-CI geprueft. Kein Gesamt-PASS und keine Aussage ueber alle denkbaren Angriffseingaben.

@@ -276,10 +276,11 @@
       "stage": "technical",
       "status": "blocked",
       "evidence": [
-        "project-c/pppoppi-imperium/quality_v194/IMPORT_INPUT_SECURITY_20261027.md"
+        "project-c/pppoppi-imperium/quality_v194/IMPORT_INPUT_SECURITY_20261027.md",
+        "project-c/pppoppi-imperium/prerelease/evidence/SIC-02-IMPORT-INPUT-PARTIAL-20261027.json"
       ],
-      "blocker": "Teilverfahren fuer 13 ungueltige JSON-Strukturen und HTML-Ereignisfragmente in acht Szenen im neuen PR angelegt; GitHub-CI auf neuem HEAD noch PENDING. Weitere Eingabefelder, groessere Dateien und vollstaendige Fach-/Endpartienpruefung fehlen; Gesamtgate BLOCKED.",
-      "next": "GitHub-CI des Fremdspielstand-Tests auf finalem HEAD auswerten, dann weitere verschachtelte Eingaben und Grenzfaelle pruefen."
+      "blocker": "Browser-CI #40588604025 PASS auf Code-HEAD 23edc84a193d109ac2565f1dfa6dfa72af43e8ef: 13 strukturell ungueltige Imports atomar abgewiesen; gueltiger HTML-Fremdname in acht Szenen text-sicher; Export/Neustart/Import. Weitere freie Eingabefelder, Groessengrenzen und Fach-/Endpartienpruefungen fehlen; Gesamtgate BLOCKED.",
+      "next": "Weitere verschachtelte JSON-Felder, Groessengrenzen und Dateifehler gezielt pruefen; Endregelvertrag und Endpartien separat abschliessen."
     },
     {
       "id": "SIC-03",
