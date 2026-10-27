@@ -166,6 +166,8 @@ def main():
                         fire(page, label, on_stage=audit_stage)
                         valid(page, label + ": nach Feuerwehr")
                         fire_layout = layout_diagnostic(page, "FIRE-finished")
+                        check(label + ": alle sieben dynamischen Zwischenbilder geprueft",
+                              len(dynamic_layouts) == 7)
                         exported_state = state(page)
                         activate(page, "#closeBtn", label + ": Dialog schliessen")
                         with page.expect_download() as download:
