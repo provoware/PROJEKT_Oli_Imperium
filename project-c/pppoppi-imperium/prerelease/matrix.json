@@ -4,7 +4,7 @@
   "version_scope": "Projekt C: V1.9.4-Prüfschicht auf V1.9.3-Spielkern",
   "observed_pr14_head": "a7b67275d10ad682585816fd46c7ef83cc7d511b",
   "source_status": "imported",
-  "updated_on": "2026-10-27",
+  "updated_on": "2026-10-28",
   "gates": [
     {
       "id": "QUE-01",
@@ -232,8 +232,8 @@
       "evidence": [
         "project-c/pppoppi-imperium/prerelease/evidence/SPE-01-CLAIM-ROUNDTRIP-PARTIAL-20261027.json"
       ],
-      "blocker": "PR #92, HEAD e132bef9a1feadc37cec2464d7294b779e2807f4: Browser-CI #40561679062 PASS in allen drei Jobs, einschliesslich 12 Monaten, drei echten Chromium-Prozessneustarts, drei exakten Export-/Import-Vergleichen und drei sicheren Manipulationsablehnungen. Sporadischer Dialogfehler bei 200%/BERLIN-2 im frueheren Lauf #40561072233 bleibt ungeklaert; vollstaendige Endpartien und weitere Speicherfaelle fehlen. Gate BLOCKED.",
-      "next": "CI #40571243683: isolierte 216/216 Feldauswahlen PASS, native Claim-Parameter FAIL bei 175%/BERLIN-3. Synchronisierung des nativen close-Ereignisses im Folge-PR pruefen; danach Speicherfehler und Endpartien."
+      "blocker": "PR #92, HEAD e132bef9a1feadc37cec2464d7294b779e2807f4: Browser-CI #40561679062 PASS in allen drei Jobs, einschliesslich 12 Monaten, drei echten Chromium-Prozessneustarts, drei exakten Export-/Import-Vergleichen und drei sicheren Manipulationsablehnungen. Sporadischer Dialogfehler bei 200%/BERLIN-2 im frueheren Lauf #40561072233 bleibt ungeklaert; vollstaendige Endpartien und weitere Speicherfaelle fehlen. Gate BLOCKED. Neuer komplexer Mehrfirmen-Teiltest auf getrenntem Zweig implementiert, GitHub-CI noch ausstehend; keine Freigabe durch blossen Testcode.",
+      "next": "Neuer Teiltest test_browser_complex_roundtrip_v194.py: vier Firmen, zwei Regionen, zwei regulaere Vertraege, zwei Monatsabschluesse, drei exakte Importe und unabhaengige Fortsetzung in vier Chromium-Kontexten. GitHub-CI auf finalem HEAD auswerten; weitere Speicherfaelle und Endpartien bleiben offen."
     },
     {
       "id": "SPE-02",
