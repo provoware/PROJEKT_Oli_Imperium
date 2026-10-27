@@ -411,10 +411,11 @@
       "evidence": [
         "project-c/pppoppi-imperium/prerelease/evidence/BED-03-NATIVE-ZOOM-PARTIAL-20261027.json",
         "project-c/pppoppi-imperium/prerelease/evidence/BED-03-NATIVE-ALL-SCENES-PARTIAL-20261027.json",
-        "project-c/pppoppi-imperium/quality_v194/BROWSER_NATIVE_ZOOM_MINIGAMES_20261027.md"
+        "project-c/pppoppi-imperium/quality_v194/BROWSER_NATIVE_ZOOM_MINIGAMES_20261027.md",
+        "project-c/pppoppi-imperium/prerelease/evidence/BED-03-NATIVE-MINIGAMES-PARTIAL-20261027.json"
       ],
-      "blocker": "Echter Chromium-Tab-Zoom 175/200 % mit allen 39 registrierten Szenen je Zoomstufe: 78/78 per Tab/Enter geschlossen, sichtbarer Fokus, 0 gemessene horizontale Ueberlaeufe und 0 ausserhalb des Viewports liegende Schliessen-Knoepfe (Chromium #40439643673 PASS, Implementierungs-HEAD b330c73). Die Szenen wurden programmatisch geoeffnet; nicht alle Aktionen, Minispiele, Fokuskontraste und verdeckte Ueberdeckungen sind damit belegt. BED-03 bleibt BLOCKED. Ein weiterer isolierter CI-Prueffall fuer Rohrnetz/Feuerwehr bei echtem 175/200-%-Zoom ist im PR #77 implementiert, aber noch nicht als bestanden belegt. Kein Release-PASS daraus abgeleitet.",
-      "next": "CI des nativen Zoom-Minigame-Tests auswerten und ggf. korrigieren; danach Bohr-Minispiel, Fokuskontrast und weitere Dialogaktionen unter echtem Zoom pruefen."
+      "blocker": "Echter Browserzoom 175/200 %: 39 Szenen je Zoomstufe mit Tab/Enter geschlossen (PR #76). Neu: Rohrnetz und Feuerwehr mit je drei Abschnitten pro Zoomstufe, je 32 Rohrdrehungen, natuerlicher Brand im vierten Monat, Fehlversuch, Spielkernvalidierung und Exportgleichheit in Chromium #40445202236 PASS (Implementierungs-HEAD e8989bf7). Quellnachweis #40445202211 PASS; Gesamtmatrix #40445202284 erwartungsgemaess BLOCKED. Dynamische Layoutdiagnose an vier Endpunkten ohne horizontalen Ueberlauf, aber Zwischenbilder, Bohr-Minispiel, alle Dialogaktionen, Fokuskontraste und visuelle Ueberdeckungen nicht vollstaendig geprueft. BED-03 bleibt BLOCKED.",
+      "next": "Bohr-Minispiel und weitere Dialogaktionen unter echtem Zoom pruefen, Zwischenbilder und Fokuskontrast messen; fehlende Spielendregeln getrennt behandeln."
     },
     {
       "id": "BAR-01",

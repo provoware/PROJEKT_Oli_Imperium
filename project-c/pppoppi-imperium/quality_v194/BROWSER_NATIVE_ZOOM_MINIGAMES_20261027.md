@@ -27,7 +27,11 @@ Zusätzlich prüft es den Spielkern nach den Minispielen, unveränderte Wirtscha
 ## Prüfstand und Grenzen
 
 - **Implementierung:** neuer Test und Einbindung in `.github/workflows/prerelease-browser-project-c.yml`.
-- **GitHub-CI:** zunächst ausstehend; PASS/FAIL erst nach echtem Workflow-Lauf und mit konkretem Link nachtragen.
+- **GitHub-CI auf Implementierungs-HEAD** \`e8989bf7ec75370a69d5af597abfff6f4928ac2c\`:
+  - [Chromium #40445202236](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40445202236): **PASS**, einschließlich neuem Zoom-Minispiel-Test und vollständiger Browserkette.
+  - [Quellnachweis #40445202211](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40445202211): **PASS**.
+  - [Pflichtmatrix #40445202284](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40445202284): Strukturprüfungen PASS, technische Gesamtfreigabe erwartungsgemäß **BLOCKED**.
+- **Tatsächlich gemessen:** bei 175 % CSS-Breite 457 px, bei 200 % 400 px; jeweils drei Rohrnetz- und drei Feuerwehrabschnitte, 32 Rohrdrehungen, ein absichtlich falscher Löschversuch, natürlicher Brand im vierten Monat, JSON-Export gleich dem Spielzustand, keine JavaScript-Fehler oder externen Anfragen. Vier dynamische Layout-Messungen ohne horizontalen Überlauf; Schließen-Knopf im Bildbereich. Die Messung erfolgt nach Abschluss des jeweiligen Minispiels und deckt nicht alle Zwischenbilder ab.
 - **BAR-01 und BED-03:** bleiben BLOCKED. Fokuskontrast, Bohr-Minispiel bei echtem Zoom, übrige Dialogaktionen und mögliche Überdeckungen noch nicht vollständig geprüft.
 - **Gesamtfreigabe:** weiterhin gesperrt; Sieg-/Niederlagenregeln und vollständige Endpartien fehlen.
 - **Persönliche Sicht- und Kubuntu-Abnahme:** bis zum eingefrorenen Release-Kandidaten zurückgestellt.
