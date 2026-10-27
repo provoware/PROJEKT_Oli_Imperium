@@ -1,0 +1,30 @@
+{
+  "gate_id": "BED-03",
+  "result": "PARTIAL",
+  "date": "2026-10-27",
+  "implementation_commit": "1385055ff2b9fa33a9045be6140c820ff86da16c",
+  "diagnostic_commit": "c59fb328e4c381646229df3e9475197c662abc8e",
+  "test": "python3 project-c/pppoppi-imperium/quality_v194/test_browser_focus_contrast_v194.py",
+  "browser_ci_initial": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40461751589",
+  "browser_ci_diagnostic": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40461958332",
+  "observed": {
+    "zoom_percent": 175,
+    "scenes": 39,
+    "controls": 452,
+    "reached": 452,
+    "covered": 4,
+    "affected_scenes": {
+      "phone": 2,
+      "quick": 1,
+      "factory": 1
+    },
+    "unknown_backgrounds": 0,
+    "weak_contrast": 0
+  },
+  "limits": [
+    "200 % nach erstem FAIL nicht ausgefuehrt",
+    "Ursache der vier Trefferbefunde noch offen",
+    "Dynamische Zwischenbilder und Endpartien nicht geprueft",
+    "Keine technische oder persoenliche Release-Freigabe"
+  ]
+}
