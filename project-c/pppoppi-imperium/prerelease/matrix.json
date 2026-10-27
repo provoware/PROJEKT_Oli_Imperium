@@ -275,9 +275,11 @@
       "basis": "Nutzerauftrag",
       "stage": "technical",
       "status": "blocked",
-      "evidence": [],
-      "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "Ungültige Eingaben prüfen"
+      "evidence": [
+        "project-c/pppoppi-imperium/quality_v194/IMPORT_INPUT_SECURITY_20261027.md"
+      ],
+      "blocker": "Teilverfahren fuer 13 ungueltige JSON-Strukturen und HTML-Ereignisfragmente in acht Szenen im neuen PR angelegt; GitHub-CI auf neuem HEAD noch PENDING. Weitere Eingabefelder, groessere Dateien und vollstaendige Fach-/Endpartienpruefung fehlen; Gesamtgate BLOCKED.",
+      "next": "GitHub-CI des Fremdspielstand-Tests auf finalem HEAD auswerten, dann weitere verschachtelte Eingaben und Grenzfaelle pruefen."
     },
     {
       "id": "SIC-03",
