@@ -42,9 +42,24 @@ def activate(page, claim, code, label):
     scene = ('warehouse' if code == 'SHIP' else
              'market' if code == 'OFFER' else 'claim')
     page.evaluate("(scene) => NeoEconomy.open(scene)", scene)
+    # Warten bis der Dialog tatsaechlich gerendert ist. Ohne diese
+    # Synchronisation konnte ein nachlaufendes Rendern die Auswahl loeschen.
+    page.wait_for_function("""() => {
+        const dialog = document.querySelector('#dialog');
+        return !!(dialog?.open && document.querySelector('#econClaim') &&
+            document.querySelector('#dialogContent button[data-econ]'));
+    }""", timeout=8000)
     page.locator("#econClaim").select_option(claim)
     selector = '#dialogContent button[data-econ="%s"][data-claim="%s"]' % (
         code, claim)
+    page.wait_for_function("""({claim, code}) => {
+        const select = document.querySelector('#econClaim');
+        const buttons = [...document.querySelectorAll(
+            '#dialogContent button[data-econ]')];
+        return select?.value === claim &&
+            buttons.filter(b => b.dataset.econ === code &&
+                              b.dataset.claim === claim).length === 1;
+    }""", arg={"claim": claim, "code": code}, timeout=8000)
     target = page.locator(selector)
     diagnostic = page.evaluate("""() => ({
         selected: document.querySelector('#econClaim')?.value || null,
@@ -133,6 +148,49 @@ def verify(before, after, claim, code, success, region, cfg, label):
               and b["monthRevenueCent"] == a["monthRevenueCent"])
 
 
+
+def verify_save_roundtrip(context, worker, preview, factor, claim,
+                          page, final_state, errors, external, label):
+    """Export per Tastatur, neuer Tab, Dateiimport und exakter Zustandsvergleich.
+
+    Nur der Download ist eine Tastaturaktion. Das versteckte Dateifeld wird
+    explizit per Playwright gesetzt, nicht als Tastaturtest ausgegeben.
+    """
+    page.keyboard.press("Escape")
+    page.wait_for_function("!document.querySelector('#dialog').open")
+    check(label + ": Dialog vor Export per Escape geschlossen",
+          not page.locator("#dialog").evaluate("(el) => el.open"))
+    check(label + ": Export per Tab erreichbar",
+          tab_to(page, "#saveGame", max_tabs=300))
+    with page.expect_download() as download_info:
+        page.keyboard.press("Enter")
+    exported = json.loads(Path(download_info.value.path()).read_text(
+        encoding="utf-8"))
+    check(label + ": exportierter Spielstand exakt",
+          exported == final_state)
+    # Die Zoom-Erweiterung adressiert einen Tab per URL: nie zwei
+    # gleichnamige Spiel-Tabs gleichzeitig offen lassen.
+    page.close()
+    restored = new_page(context, preview, worker, factor,
+                        errors, external, fresh=False)
+    try:
+        check(label + ": neuer Tab ohne stillen Altzustand",
+              restored.evaluate("NeoEconomy.getState()") is None)
+        restored.locator("#loadEconFile").set_input_files({
+            "name": "claim-roundtrip.json",
+            "mimeType": "application/json",
+            "buffer": json.dumps(exported, ensure_ascii=False).encode("utf-8"),
+        })
+        restored.wait_for_function("NeoEconomy.getState() !== null")
+        check(label + ": Import erhaelt alle neun Claims und Buchungen exakt",
+              restored.evaluate("NeoEconomy.getState()") == final_state)
+        check(label + ": importierter Zustand gueltig",
+              restored.evaluate(
+                  "NeoEconomy.engine.validate(NeoEconomy.getState())") is True)
+    finally:
+        restored.close()
+
+
 def run_claim(context, worker, preview, factor, claim, region, cfg):
     label = str(round(factor * 100)) + "%/" + claim
     errors, external = [], []
@@ -152,13 +210,18 @@ def run_claim(context, worker, preview, factor, claim, region, cfg):
                 rejections += 1
         check(label + ": sechs Erfolge und vier Ablehnungen",
               successes == 6 and rejections == 4)
+        final_state = page.evaluate("NeoEconomy.getState()")
+        verify_save_roundtrip(context, worker, preview, factor, claim,
+                              page, final_state, errors, external, label)
         check(label + ": keine JavaScript-Laufzeitfehler", not errors)
         check(label + ": keine externen HTTP-Anfragen", not external)
         return {"claim": claim, "region": region["id"], "zoom_percent":
                 round(factor * 100), "successful": successes,
-                "rejected": rejections, "release_gate": "BLOCKED"}
+                "rejected": rejections, "save_roundtrip": True,
+                "release_gate": "BLOCKED"}
     finally:
-        page.close()
+        if not page.is_closed():
+            page.close()
 
 
 def main():
@@ -173,7 +236,8 @@ def main():
         with sync_playwright() as playwright:
             context = playwright.chromium.launch_persistent_context(
                 str(root / "profile"), channel="chromium", headless=True,
-                viewport={"width": 800, "height": 600}, reduced_motion="reduce",
+                viewport={"width": 800, "height": 600}, accept_downloads=True,
+                reduced_motion="reduce",
                 args=["--disable-extensions-except=" + str(root / "extension"),
                       "--load-extension=" + str(root / "extension")])
             try:
@@ -212,9 +276,12 @@ def main():
                 check("108 echte Erfolge und 72 echte Ablehnungen",
                       sum(x["successful"] for x in results) == 108 and
                       sum(x["rejected"] for x in results) == 72)
+                check("18 echte Export-/Import-Rundlaeufe",
+                      sum(x["save_roundtrip"] for x in results) == 18)
                 print("CLAIM-PARAMETER-MATRIX:",
                       json.dumps({"cases": results, "total_actions": 180,
                                   "successes": 108, "rejections": 72,
+                                  "save_roundtrips": 18,
                                   "release_gate": "BLOCKED"},
                                  ensure_ascii=False), flush=True)
                 print("GRENZE: Regionale Preise aus dem vorhandenen Kern, "
