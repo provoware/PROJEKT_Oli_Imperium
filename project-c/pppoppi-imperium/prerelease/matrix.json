@@ -410,10 +410,11 @@
       "status": "blocked",
       "evidence": [
         "project-c/pppoppi-imperium/prerelease/evidence/BED-03-NATIVE-ZOOM-PARTIAL-20261027.json",
-        "project-c/pppoppi-imperium/prerelease/evidence/BED-03-NATIVE-ALL-SCENES-PARTIAL-20261027.json"
+        "project-c/pppoppi-imperium/prerelease/evidence/BED-03-NATIVE-ALL-SCENES-PARTIAL-20261027.json",
+        "project-c/pppoppi-imperium/quality_v194/BROWSER_NATIVE_ZOOM_MINIGAMES_20261027.md"
       ],
-      "blocker": "Echter Chromium-Tab-Zoom 175/200 % mit allen 39 registrierten Szenen je Zoomstufe: 78/78 per Tab/Enter geschlossen, sichtbarer Fokus, 0 gemessene horizontale Ueberlaeufe und 0 ausserhalb des Viewports liegende Schliessen-Knoepfe (Chromium #40439643673 PASS, Implementierungs-HEAD b330c73). Die Szenen wurden programmatisch geoeffnet; nicht alle Aktionen, Minispiele, Fokuskontraste und verdeckte Ueberdeckungen sind damit belegt. BED-03 bleibt BLOCKED.",
-      "next": "Minispiele und vollstaendige Dialogaktionen bei echtem Zoom pruefen; Fokuskontrast quantitativ und visuelle Ueberdeckungen technisch untersuchen."
+      "blocker": "Echter Chromium-Tab-Zoom 175/200 % mit allen 39 registrierten Szenen je Zoomstufe: 78/78 per Tab/Enter geschlossen, sichtbarer Fokus, 0 gemessene horizontale Ueberlaeufe und 0 ausserhalb des Viewports liegende Schliessen-Knoepfe (Chromium #40439643673 PASS, Implementierungs-HEAD b330c73). Die Szenen wurden programmatisch geoeffnet; nicht alle Aktionen, Minispiele, Fokuskontraste und verdeckte Ueberdeckungen sind damit belegt. BED-03 bleibt BLOCKED. Ein weiterer isolierter CI-Prueffall fuer Rohrnetz/Feuerwehr bei echtem 175/200-%-Zoom ist im PR #77 implementiert, aber noch nicht als bestanden belegt. Kein Release-PASS daraus abgeleitet.",
+      "next": "CI des nativen Zoom-Minigame-Tests auswerten und ggf. korrigieren; danach Bohr-Minispiel, Fokuskontrast und weitere Dialogaktionen unter echtem Zoom pruefen."
     },
     {
       "id": "BAR-01",
