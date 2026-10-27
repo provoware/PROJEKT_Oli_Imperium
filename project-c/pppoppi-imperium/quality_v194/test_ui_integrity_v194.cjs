@@ -43,6 +43,13 @@ check('Select-Fokus ist nur in der Technikvorschau sichtbar und kontrastreich', 
   assert.doesNotMatch(read('index.html'), /pppoppi-select-focus-v194/);
 });
 
+check('Monatsabrechnung bricht Tabellenzellen bei schmalem Zoom um', () => {
+  assert.match(html, /id="pppoppi-zoom-econ-table-v194"/);
+  assert.match(html, /\.econ-table\{display:table;width:100%;max-width:100%;table-layout:fixed\}/);
+  assert.match(html, /\.econ-table td\{min-width:0;padding:5px 3px;white-space:normal;overflow-wrap:anywhere;word-break:break-word\}/);
+  assert.doesNotMatch(read('index.html'), /pppoppi-zoom-econ-table-v194/);
+});
+
 check('V1.9.4-Prüfprogramme sind keine Laufzeitmodule der V1.9.3-Spieloberfläche', () => {
   const scripts = [...html.matchAll(/<script\b[^>]*\bsrc="([^"]+)"/g)].map(m => m[1]);
   assert.ok(scripts.includes('src/strategy_logistics_v193.js'));
