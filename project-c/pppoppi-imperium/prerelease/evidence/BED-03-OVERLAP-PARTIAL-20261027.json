@@ -97,13 +97,17 @@
     },
     "coverage_assertion_commit": "03be39192df5bab7c58807df4dd09124bf8188de",
     "coverage_assertion_ci": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40464689143",
-    "coverage_assertion_result": "PENDING",
+    "coverage_assertion_result": "PASS",
     "limitations": [
       "324 Bedienelement-Vorkommen, nicht 324 verschiedene Funktionen",
       "Nur technisch sichtbare interaktive Elemente in dynamischen Ansichten",
       "Keine Pixelpruefung von Text oder Animationen",
       "Keine vollstaendige Sieg- oder Niederlagenpartie",
       "Keine persoenliche Endabnahme"
-    ]
+    ],
+    "coverage_assertion_source_ci": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40464689150",
+    "coverage_assertion_source_result": "PASS",
+    "coverage_assertion_release_matrix_ci": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40464689162",
+    "coverage_assertion_release_matrix_result": "BLOCKED"
   }
 }
