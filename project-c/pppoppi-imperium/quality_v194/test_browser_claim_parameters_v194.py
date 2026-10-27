@@ -39,7 +39,9 @@ BOOKINGS = {"SURVEY": "GUTACHTEN", "BUY": "FELDKAUF",
 
 
 def activate(page, claim, code, label):
-    page.evaluate("NeoEconomy.open('claim')")
+    scene = ('warehouse' if code == 'SHIP' else
+             'market' if code == 'OFFER' else 'claim')
+    page.evaluate("(scene) => NeoEconomy.open(scene)", scene)
     page.locator("#econClaim").select_option(claim)
     selector = '#dialogContent button[data-econ="%s"][data-claim="%s"]' % (
         code, claim)
