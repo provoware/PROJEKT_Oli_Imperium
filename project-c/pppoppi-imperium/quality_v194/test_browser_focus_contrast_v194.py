@@ -46,6 +46,19 @@ MEASURE = r"""() => {
     const ring = parse(st.outlineColor);
     const ringVisible = el.matches(':focus-visible') &&
         st.outlineStyle !== 'none' && parseFloat(st.outlineWidth) >= 2;
+    // Ein CSS-Fokus kann trotz ausreichendem Kontrast von einem anderen
+    // Element verdeckt sein. Fuenf Punkte pruefen; Kinder zaehlen zum Ziel.
+    const rect = el.getBoundingClientRect();
+    const samples = [[.5,.5],[.2,.5],[.8,.5],[.5,.2],[.5,.8]];
+    const hitPoints = samples.map(([fx, fy]) => {
+        const x = rect.left + rect.width * fx;
+        const y = rect.top + rect.height * fy;
+        if (x < 0 || y < 0 || x >= innerWidth || y >= innerHeight)
+            return false;
+        const hit = document.elementFromPoint(x, y);
+        return !!hit && (hit === el || el.contains(hit));
+    });
+    const hitTestable = hitPoints.some(Boolean);
     let surfaces = null, surface = 'unbekannt';
     for (let n = el.parentElement; n; n = n.parentElement) {
         const css = getComputedStyle(n);
@@ -72,7 +85,8 @@ MEASURE = r"""() => {
         id: el.dataset.qaFocusIndex,
         tag: el.tagName.toLowerCase(),
         visible: el.matches(':focus-visible'),
-        ringVisible,
+        ringVisible, hitTestable,
+        hitPointsInsideTarget: hitPoints.filter(Boolean).length,
         outlineWidth: st.outlineWidth,
         outlineColor: st.outlineColor,
         surface,
@@ -113,12 +127,13 @@ def audit_scene(page, scene):
     weak = [r for r in found.values()
             if r["contrast"] is not None and r["contrast"] < 3.0]
     unknown = [r for r in found.values() if r["contrast"] is None]
+    covered = [r for r in found.values() if not r["hitTestable"]]
     page.keyboard.press("Escape")
     page.wait_for_function("!document.querySelector('#dialog').open")
     return {
         "scene": scene, "expected": len(expected), "measured": len(found),
         "missing": missing, "no_ring": no_ring, "weak": weak,
-        "unknown": unknown,
+        "unknown": unknown, "covered": covered,
         "lowest_contrast": round(min(
             (r["contrast"] for r in found.values()
              if r["contrast"] is not None), default=0), 2),
@@ -143,6 +158,23 @@ def main():
                       "--load-extension=" + str(ext)])
             try:
                 errors, external, summaries = [], [], []
+                # Kontrollversuch: ein absichtlich darueberliegendes Element
+                # muss den Treffer-Test auf FAIL setzen, sonst waere er wertlos.
+                probe = context.new_page()
+                try:
+                    probe.set_content('<input data-qa-focus-index="1" style="width:160px;height:40px">')
+                    probe.locator("input").focus()
+                    check("Treffertest erkennt freies Bedienelement",
+                          probe.evaluate(MEASURE)["hitTestable"])
+                    probe.evaluate("""() => {
+                        const cover = document.createElement('div');
+                        cover.style.cssText = 'position:fixed;inset:0;z-index:9999;background:#111';
+                        document.body.appendChild(cover);
+                    }""")
+                    check("Treffertest erkennt absichtliche Ueberdeckung",
+                          not probe.evaluate(MEASURE)["hitTestable"])
+                finally:
+                    probe.close()
                 page = context.new_page()
                 page.set_default_timeout(15000)
                 page.on("pageerror", lambda e: errors.append(str(e)))
@@ -181,10 +213,11 @@ def main():
                         "no_ring": sum(len(r["no_ring"]) for r in rows),
                         "weak": sum(len(r["weak"]) for r in rows),
                         "unknown": sum(len(r["unknown"]) for r in rows),
+                        "covered": sum(len(r["covered"]) for r in rows),
                         "minimum_contrast": min(r["lowest_contrast"] for r in rows
                                                 if r["lowest_contrast"] > 0),
                         "issues": [r for r in rows if r["missing"] or r["no_ring"]
-                                   or r["weak"] or r["unknown"]][:12],
+                                   or r["weak"] or r["unknown"] or r["covered"]][:12],
                     }
                     print("FOKUS-KONTRAST:", json.dumps(
                         summary, ensure_ascii=False), flush=True)
@@ -194,6 +227,10 @@ def main():
                           summary["no_ring"] == 0)
                     check(label + ": berechneter Kontrast >= 3:1",
                           summary["weak"] == 0)
+                    check(label + ": alle Hintergruende auswertbar",
+                          summary["unknown"] == 0)
+                    check(label + ": fokussierte Bedienelemente nicht verdeckt",
+                          summary["covered"] == 0)
                     summaries.append(summary)
                 check("Spielstand bei reiner Tab-Navigation unveraendert",
                       page.evaluate("JSON.stringify(NeoEconomy.getState())") == before)
@@ -202,9 +239,10 @@ def main():
                 check("175 und 200 Prozent getestet", len(summaries) == 2)
                 print("ERGEBNIS:", json.dumps(summaries, ensure_ascii=False),
                       flush=True)
-                print("GRENZE: CSS-Outline-Kontrast gegen berechnete Flaechen; "
-                      "transparente/Bildflaechen und echte Pixel-Sichtpruefung "
-                      "bleiben offen. BAR-01/BED-03 bleiben BLOCKED.", flush=True)
+                print("GRENZE: Fuenf Element-Trefferpunkte je fokussiertem "
+                      "Bedienelement; keine pixelbasierte Pruefung von Text, "
+                      "Animationen oder allen Zwischenbildern. "
+                      "BAR-01/BED-03 bleiben BLOCKED.", flush=True)
             finally:
                 context.close()
 
