@@ -42,9 +42,24 @@ def activate(page, claim, code, label):
     scene = ('warehouse' if code == 'SHIP' else
              'market' if code == 'OFFER' else 'claim')
     page.evaluate("(scene) => NeoEconomy.open(scene)", scene)
+    # Warten bis der Dialog tatsaechlich gerendert ist. Ohne diese
+    # Synchronisation konnte ein nachlaufendes Rendern die Auswahl loeschen.
+    page.wait_for_function("""() => {
+        const dialog = document.querySelector('#dialog');
+        return !!(dialog?.open && document.querySelector('#econClaim') &&
+            document.querySelector('#dialogContent button[data-econ]'));
+    }""", timeout=8000)
     page.locator("#econClaim").select_option(claim)
     selector = '#dialogContent button[data-econ="%s"][data-claim="%s"]' % (
         code, claim)
+    page.wait_for_function("""({claim, code}) => {
+        const select = document.querySelector('#econClaim');
+        const buttons = [...document.querySelectorAll(
+            '#dialogContent button[data-econ]')];
+        return select?.value === claim &&
+            buttons.filter(b => b.dataset.econ === code &&
+                              b.dataset.claim === claim).length === 1;
+    }""", arg={"claim": claim, "code": code}, timeout=8000)
     target = page.locator(selector)
     diagnostic = page.evaluate("""() => ({
         selected: document.querySelector('#econClaim')?.value || null,
