@@ -47,6 +47,51 @@ def layout_diagnostic(page, stage):
     result["stage"] = stage
     result["horizontal_overflow"] = max(
         result["pageExcess"], result["dialogExcess"], result["contentExcess"])
+    # Dynamische Minispiel-Zwischenbilder: nach jeder realen Spielaktion
+    # alle aktuell bedienbaren Elemente ins Sichtfeld scrollen und die
+    # tatsaechliche Treffbarkeit mit elementFromPoint kontrollieren.
+    # Keine Pixel-/Textueberlagerungs- oder menschliche Sichtpruefung.
+    hit_audit = page.evaluate(r"""() => {
+        const dialog = document.querySelector('#dialog');
+        if (!dialog || !dialog.open)
+            return {dialog_open: false, checked: 0, covered: []};
+        const selector = 'button, a[href], input, select, textarea, [tabindex]';
+        const controls = [...dialog.querySelectorAll(selector)].filter(el => {
+            const css = getComputedStyle(el);
+            return el.tabIndex >= 0 && !el.disabled &&
+                el.getClientRects().length > 0 &&
+                css.visibility !== 'hidden' && css.display !== 'none' &&
+                !el.closest('[inert]');
+        });
+        const covered = [];
+        const points = [[.5,.5],[.2,.5],[.8,.5],[.5,.2],[.5,.8]];
+        for (const [index, el] of controls.entries()) {
+            el.scrollIntoView({block: 'center', inline: 'nearest'});
+            const rect = el.getBoundingClientRect();
+            const hit = points.some(([fx, fy]) => {
+                const x = rect.left + rect.width * fx;
+                const y = rect.top + rect.height * fy;
+                if (x < 0 || y < 0 || x >= innerWidth || y >= innerHeight)
+                    return false;
+                const top = document.elementFromPoint(x, y);
+                return top && (top === el || el.contains(top));
+            });
+            if (!hit) covered.push({
+                index, tag: el.tagName, id: el.id,
+                label: (el.textContent || el.getAttribute('aria-label') || '')
+                    .trim().slice(0, 60),
+                x: Math.round(rect.x), y: Math.round(rect.y)
+            });
+        }
+        return {dialog_open: true, checked: controls.length, covered};
+    }""")
+    result["dynamic_hit_audit"] = hit_audit
+    check(stage + ": Dynamischer Dialog geoeffnet",
+          hit_audit["dialog_open"])
+    check(stage + ": Dynamische Bedienelemente vorhanden",
+          hit_audit["checked"] > 0)
+    check(stage + ": Keine verdeckten dynamischen Bedienelemente",
+          not hit_audit["covered"])
     print("ZOOM-MINIGAME-LAYOUT:", json.dumps(result, ensure_ascii=False),
           flush=True)
     return result
