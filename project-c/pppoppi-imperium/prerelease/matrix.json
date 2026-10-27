@@ -280,8 +280,8 @@
         "project-c/pppoppi-imperium/prerelease/evidence/SIC-02-IMPORT-INPUT-PARTIAL-20261027.json",
         "project-c/pppoppi-imperium/quality_v194/IMPORT_NESTED_SIZE_20261027.md"
       ],
-      "blocker": "PR #95: Browser-CI #40589544860 PASS auf b8b5e11ba9feaec9ef4c1d3b94b0d047e88c877f fuer 13 Strukturfehler, HTML-Fremdname in acht Szenen, Export/Import. Folgepaket erweitert auf 30 Struktur-/Tiefenfehler und 5.000.000/5.000.001-Byte-Grenze; neuer CI-Nachweis auf finalem HEAD noch PENDING. Weitere freie Felder, Ressourcen- und Endpartienpruefungen fehlen. Gate BLOCKED.",
-      "next": "Neuen Chromium-CI-Lauf auf finalem Zweig-HEAD pruefen; weitere verschachtelte Eingaben und Speichergrenzen absichern, danach Endregelvertrag und Endpartien."
+      "blocker": "PR #96 Code-HEAD 27914652cc4933239b07841009b828e0f4d2f87a: GitHub-Browser-CI #40595443169 PASS (vier Jobs, Import-Schritt success), Quellpruefung #40595443211 PASS. Insgesamt 30 ungueltige JSON-Strukturen atomar abgewiesen, gueltige 5.000.000-Byte-Datei importiert, 5.000.001 Bytes sicher abgewiesen, HTML-Fremdname in acht Szenen text-sicher. Weiterhin nicht alle Fremdeingaben, beliebige Tiefen und Endpartien abgedeckt; SIC-02 und Gesamtgate BLOCKED.",
+      "next": "Weitere Speicher-/Sicherheitsgrenzen und gueltige verschachtelte Spielstaende mit Buchungsfolgen pruefen; Endregelvertrag und vollstaendige Sieg-/Niederlagenpartien nachweisen."
     },
     {
       "id": "SIC-03",
