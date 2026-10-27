@@ -33,3 +33,14 @@ Auch ein gruener Test prueft nicht alle beliebigen JSON-Felder, unbegrenzte Vers
 3. Eigenstaendigen Endregelvertrag praezisieren und komplette Endpartien mit Neustarts nachweisen.
 
 **Empfehlung:** Jede Importablehnung weiterhin gegen den vollstaendigen Vorzustand pruefen, nicht allein gegen Fehlermeldungen.
+
+## Tatsaechliche GitHub-Abnahme des Implementierungs-HEAD
+
+**Getesteter Code-HEAD:** `27914652cc4933239b07841009b828e0f4d2f87a` (27.10.2026).
+
+- [Chromium-CI #40595443169](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40595443169): **PASS, alle vier Browser-Jobs**. Der konkrete Schritt `Fremde Spielstaende mit 30 Struktur- und Tiefenfehlern, 5-MB-Grenze und HTML-Escaping` im Job `chromium-roundtrip` war **success**. Die vorherigen 13 und neuen 17 Ablehnungen, die gueltige 5.000.000-Byte-Datei und die abgewiesene 5.000.001-Byte-Datei sowie die acht HTML-Szenen sind im definierten Testumfang geprueft.
+- [GitHub-Quellpruefung #40595443211](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40595443211): **PASS**.
+- [Vorrelease-Gesamtgate #40595443230](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40595443230): **FAIL/BLOCKED erwartungsgemaess**; nur 6 von 52 Pflichten freigegeben. Die Teilpruefung hebt SIC-02 nicht auf PASS.
+- Eine voruebergehend fehlerhafte YAML-Schrittbezeichnung mit ungeschuetztem Doppelpunkt verursachte vor PR #96 nicht lauffaehige Push-Workflow-Versuche. Der Doppelpunkt wurde entfernt; erst der oben verlinkte Pull-Request-Lauf beweist die erfolgreiche Korrektur.
+
+**Hinweis:** Dieser nachfolgende Dokumentations-Commit veraendert keinen Test- oder Spielcode; sein finaler CI-Status ist separat nachzusehen. Keine pauschale Sicherheitsfreigabe.
