@@ -28,6 +28,12 @@ check('Spielkern und Prüfschicht sind als zwei Versionen gekennzeichnet', () =>
   assert.match(bridge, /version:'1\.7\.1',gameVersion:'1\.9\.3',qaVersion:'1\.9\.4'/);
 });
 
+check('Select-Fokus ist nur in der Technikvorschau sichtbar und kontrastreich', () => {
+  assert.match(html, /id="pppoppi-select-focus-v194"/);
+  assert.match(html, /#dialog select:focus-visible\{outline:3px solid #ffda8d;outline-offset:3px\}/);
+  assert.doesNotMatch(read('index.html'), /pppoppi-select-focus-v194/);
+});
+
 check('V1.9.4-Prüfprogramme sind keine Laufzeitmodule der V1.9.3-Spieloberfläche', () => {
   const scripts = [...html.matchAll(/<script\b[^>]*\bsrc="([^"]+)"/g)].map(m => m[1]);
   assert.ok(scripts.includes('src/strategy_logistics_v193.js'));
