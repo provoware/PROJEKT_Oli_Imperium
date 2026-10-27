@@ -47,8 +47,6 @@ jobs:
         run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_focus_contrast_v194.py
       - name: Rohrnetz und Feuerwehr bei echtem Browserzoom 175 und 200 Prozent
         run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_native_zoom_minigames_v194.py
-      - name: Bohr-Minispiel bei echtem Browserzoom 175 und 200 Prozent per Tastatur
-        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_native_zoom_drill_v194.py
       - name: Wirtschaftskette und Vertragsabschluss per echter Tab- und Enter-Taste
         run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_keyboard_economy_v194.py
       - name: Wirtschaftskette mit echten Tab- und Enter-Aktionen bei nativem 175/200-Prozent-Zoom
@@ -63,8 +61,6 @@ jobs:
         run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_dialog_actions_v194.py
       - name: Jede unterschiedliche Wirtschaftsaktion je Dialogszene bei nativem 175/200-Prozent-Zoom
         run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_dialog_action_matrix_v194.py
-      - name: Alle neun Claim-Parameter mit Erfolgen und Ablehnungen bei echtem 175/200-Prozent-Zoom
-        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_claim_parameters_v194.py
       - name: Zwoelf Browser-Spielmonate mit drei Neustart- und Importzyklen
         run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_longrun_v194.py
       - name: Wirtschaft, Vertrag, Abrechnung und Spielstand-Neustart mit echten Browserklicks
@@ -102,3 +98,25 @@ jobs:
         env:
           PPPOPPI_PERF_MONTHS: '48'
         run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_performance_v194.py
+
+  # Die beiden aufwendigen nativen Zoomtests laufen mit frischem Chromium-Profil.
+  # Ein Fehler in anderen Browser-Tests darf ihre Diagnose nicht verhindern.
+  native-zoom-regression:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Chromium-Testumgebung installieren
+        run: |
+          python -m pip install playwright==1.56.0
+          python -m playwright install --with-deps chromium
+      - name: Alle neun Claim-Parameter bei echtem 175/200-Prozent-Zoom
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_claim_parameters_v194.py
+      - name: Bohr-Minispiel bei echtem 175/200-Prozent-Zoom
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_native_zoom_drill_v194.py

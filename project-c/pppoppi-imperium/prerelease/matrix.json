@@ -232,8 +232,8 @@
       "evidence": [
         "project-c/pppoppi-imperium/prerelease/evidence/SPE-01-CLAIM-ROUNDTRIP-PARTIAL-20261027.json"
       ],
-      "blocker": "18 Export-/Import-Rundlaeufe waren auf Code-HEAD 5fb28d9 technisch PASS (Chromium #40533304063), die Wiederholung #40535544233 auf HEAD f0efbbf scheiterte aber vor NORD-3 bei der Dialog-Feldauswahl (Timeout). End-to-End-Gesamtfreigabe und Profil-Neustart bleiben BLOCKED.",
-      "next": "Neue Dialog-Synchronisierung und Fehlerdiagnose in PR #90 per voller Chromium-CI pruefen; bei FAIL den protokollierten Auswahl-/Dialogzustand auswerten. Danach unabhaengige Profil-Neustarts, Altspielstaende und vollstaendige Endpartien absichern."
+      "blocker": "18 Export-/Import-Rundlaeufe waren auf Code-HEAD 5fb28d9 technisch PASS (Chromium #40533304063), die Wiederholung #40535544233 auf HEAD f0efbbf scheiterte aber vor NORD-3 bei der Dialog-Feldauswahl (Timeout). End-to-End-Gesamtfreigabe und Profil-Neustart bleiben BLOCKED. CI #40543143687 auf PR #90 scheiterte bereits im vorgelagerten nativen Bohrtest am fehlenden Zoom-Erweiterungs-Serviceworker (15s Timeout); Claim-Parameter-Test wurde SKIPPED, kein neuer PASS.",
+      "next": "Getrennten nativen Zoom-CI-Job auf PR #91 auswerten (Claim-Test vor Bohrtest, frisches Chromium-Profil). Danach Profil-Neustart, Altversionen und vollstaendige Endpartien."
     },
     {
       "id": "SPE-02",
@@ -409,7 +409,7 @@
         "project-c/pppoppi-imperium/prerelease/evidence/BED-02-CLAIM-PARAMETERS-PARTIAL-20261027.json"
       ],
       "blocker": "Teilkette mit 15 echten Tab/Enter-Aktionen je Zoomstufe (175/200 %) und zwei Monatsabschluessen je Durchlauf in Chromium #40467829258 PASS, einschliesslich unzulaessiger Foerderung, Doppelkauf und Exportgleichheit. Andere Pflichtaktionen und vollstaendige Dialog-Endpartien bleiben ungetestet; Gate BLOCKED. Neuer Teiltest: Browser-CI #40505215686 PASS auf 95b393211465427c58c08a71ce35ffc2ce026573; bei echtem 175/200-%-Zoom je 39 Szenen, 13 per Tab/Enter aktivierte Wirtschaftsaktionen (12 unterschiedliche Kennungen), 26 Szenen ohne geeignete data-econ-Aktion, je 2 Zustandsaenderungen; 0 JS-Fehler/externe Anfragen. Keine vollstaendige fachliche Sollfolgen- oder Endpartienabnahme; Gate BLOCKED.",
-      "next": "PR #90: bei NORD-3/175 Prozent gerenderten Dialog, Auswahl und Aktionsziel deterministisch nachweisen; erneute Chromium-CI auswerten. Danach weitere Aktionsfamilien und Endpartien pruefen."
+      "next": "Isolierte Chromium-CI fuer Claim-Parameter und Bohr-Minispiel auf PR #91 auswerten; fehlende Serviceworker-Diagnose ohne Spielstandsmanipulation beheben. Danach weitere Aktionsfamilien und Endpartien."
     },
     {
       "id": "BED-03",
