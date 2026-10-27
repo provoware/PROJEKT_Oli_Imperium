@@ -61,8 +61,6 @@ jobs:
         run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_dialog_actions_v194.py
       - name: Jede unterschiedliche Wirtschaftsaktion je Dialogszene bei nativem 175/200-Prozent-Zoom
         run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_dialog_action_matrix_v194.py
-      - name: Zwoelf Browser-Spielmonate mit drei echten Chromium-Prozessneustarts
-        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_longrun_v194.py
       - name: Wirtschaft, Vertrag, Abrechnung und Spielstand-Neustart mit echten Browserklicks
         run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_economy_v194.py
       - name: Sanierung mit Kredit, Notverkauf und Neustart im echten Browser
@@ -120,3 +118,23 @@ jobs:
         run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_claim_parameters_v194.py
       - name: Bohr-Minispiel bei echtem 175/200-Prozent-Zoom
         run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_native_zoom_drill_v194.py
+
+  # Echte Prozessneustarts bleiben unabhaengig von anderen Browserregressionen
+  # sichtbar. Die Gesamt-CI verlangt weiterhin den Erfolg aller drei Jobs.
+  browser-process-restart:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Chromium-Testumgebung installieren
+        run: |
+          python -m pip install playwright==1.56.0
+          python -m playwright install --with-deps chromium
+      - name: Zwoelf Browser-Spielmonate mit drei echten Chromium-Prozessneustarts
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_longrun_v194.py
