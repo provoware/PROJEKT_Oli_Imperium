@@ -205,8 +205,21 @@ def new_page(context, preview, worker, factor, errors, external, fresh=True):
     if fresh:
         start_fresh(page, str(round(factor * 100)) + "%")
         if page.locator("#dialog").evaluate("(d) => d.open"):
+            # Das native close-Ereignis kommt nach dem Entfernen von open.
+            # Erst danach darf die naechste Szene geoeffnet werden, sonst
+            # kann der alte close-Handler active noch asynchron leeren.
+            page.evaluate("""() => {
+                window.__qaFreshCloseSeen = false;
+                document.querySelector('#dialog').addEventListener(
+                    'close', () => { window.__qaFreshCloseSeen = true; },
+                    {once: true});
+            }""")
             page.keyboard.press("Escape")
-            page.wait_for_function("!document.querySelector('#dialog').open")
+            page.wait_for_function("""() =>
+                window.__qaFreshCloseSeen === true &&
+                !document.querySelector('#dialog').open && active === ''""")
+            check("Frischer Dialog nach echtem close-Ereignis geschlossen",
+                  page.evaluate("window.__qaFreshCloseSeen === true"))
     zoom = set_real_zoom(worker, page.url, factor)
     check("Echter Chromium-Zoom " + str(round(factor * 100)) + "%",
           abs(zoom["factor"] - factor) < .01)
