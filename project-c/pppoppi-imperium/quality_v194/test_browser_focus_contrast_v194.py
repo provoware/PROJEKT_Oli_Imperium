@@ -59,6 +59,23 @@ MEASURE = r"""() => {
         return !!hit && (hit === el || el.contains(hit));
     });
     const hitTestable = hitPoints.some(Boolean);
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    const topAtCenter = centerX >= 0 && centerX < innerWidth &&
+        centerY >= 0 && centerY < innerHeight ?
+        document.elementFromPoint(centerX, centerY) : null;
+    const overlapDiagnostic = hitTestable ? null : {
+        text: (el.textContent || el.getAttribute('aria-label') || '').trim().slice(0, 90),
+        rect: {x: Math.round(rect.x), y: Math.round(rect.y),
+               w: Math.round(rect.width), h: Math.round(rect.height)},
+        viewport: {w: innerWidth, h: innerHeight},
+        topAtCenter: topAtCenter ? {
+            tag: topAtCenter.tagName, id: topAtCenter.id,
+            className: String(topAtCenter.className).slice(0, 100)
+        } : null,
+        dialogScrollTop: document.querySelector('#dialog')?.scrollTop,
+        contentScrollTop: document.querySelector('#dialogContent')?.scrollTop
+    };
     let surfaces = null, surface = 'unbekannt';
     for (let n = el.parentElement; n; n = n.parentElement) {
         const css = getComputedStyle(n);
@@ -85,7 +102,7 @@ MEASURE = r"""() => {
         id: el.dataset.qaFocusIndex,
         tag: el.tagName.toLowerCase(),
         visible: el.matches(':focus-visible'),
-        ringVisible, hitTestable,
+        ringVisible, hitTestable, overlapDiagnostic,
         hitPointsInsideTarget: hitPoints.filter(Boolean).length,
         outlineWidth: st.outlineWidth,
         outlineColor: st.outlineColor,
