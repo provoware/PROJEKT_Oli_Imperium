@@ -155,11 +155,15 @@ def main():
                         check(label + ": Zoom aendert Wirtschaft nicht",
                               before == page.evaluate(
                                   "JSON.stringify(NeoEconomy.getState())"))
-                        rotations = pipe(page, label)
+                        dynamic_layouts = []
+                        def audit_stage(current_page, stage):
+                            dynamic_layouts.append(layout_diagnostic(
+                                current_page, label + ": " + stage))
+                        rotations = pipe(page, label, on_stage=audit_stage)
                         valid(page, label + ": nach Rohrnetz")
                         pipe_layout = layout_diagnostic(page, "PIPE-finished")
                         to_fire_month(page, label)
-                        fire(page, label)
+                        fire(page, label, on_stage=audit_stage)
                         valid(page, label + ": nach Feuerwehr")
                         fire_layout = layout_diagnostic(page, "FIRE-finished")
                         exported_state = state(page)
@@ -180,7 +184,8 @@ def main():
                             "pipe_rotations": rotations, "fire_stages": 3,
                             "wrong_fire_choices": 1, "month": 4,
                             "export_equal": True,
-                            "layout": [pipe_layout, fire_layout],
+                            "layout": dynamic_layouts + [pipe_layout, fire_layout],
+                            "dynamic_stages_checked": len(dynamic_layouts),
                             "release_gate": "BLOCKED",
                         })
                     finally:
