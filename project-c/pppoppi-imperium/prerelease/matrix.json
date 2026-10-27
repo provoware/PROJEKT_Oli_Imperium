@@ -232,8 +232,8 @@
       "evidence": [
         "project-c/pppoppi-imperium/prerelease/evidence/SPE-01-CLAIM-ROUNDTRIP-PARTIAL-20261027.json"
       ],
-      "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "18 Feldketten nach echtem Zoom per Tab/Enter exportieren und in neuem Browser-Tab importieren; CI pruefen; danach Profil-Neustart, Altversionen und vollstaendige Spielphasen separat nachweisen."
+      "blocker": "18 Export-/Import-Rundlaeufe waren auf Code-HEAD 5fb28d9 technisch PASS (Chromium #40533304063), die Wiederholung #40535544233 auf HEAD f0efbbf scheiterte aber vor NORD-3 bei der Dialog-Feldauswahl (Timeout). End-to-End-Gesamtfreigabe und Profil-Neustart bleiben BLOCKED.",
+      "next": "Neue Dialog-Synchronisierung und Fehlerdiagnose in PR #90 per voller Chromium-CI pruefen; bei FAIL den protokollierten Auswahl-/Dialogzustand auswerten. Danach unabhaengige Profil-Neustarts, Altspielstaende und vollstaendige Endpartien absichern."
     },
     {
       "id": "SPE-02",
@@ -409,7 +409,7 @@
         "project-c/pppoppi-imperium/prerelease/evidence/BED-02-CLAIM-PARAMETERS-PARTIAL-20261027.json"
       ],
       "blocker": "Teilkette mit 15 echten Tab/Enter-Aktionen je Zoomstufe (175/200 %) und zwei Monatsabschluessen je Durchlauf in Chromium #40467829258 PASS, einschliesslich unzulaessiger Foerderung, Doppelkauf und Exportgleichheit. Andere Pflichtaktionen und vollstaendige Dialog-Endpartien bleiben ungetestet; Gate BLOCKED. Neuer Teiltest: Browser-CI #40505215686 PASS auf 95b393211465427c58c08a71ce35ffc2ce026573; bei echtem 175/200-%-Zoom je 39 Szenen, 13 per Tab/Enter aktivierte Wirtschaftsaktionen (12 unterschiedliche Kennungen), 26 Szenen ohne geeignete data-econ-Aktion, je 2 Zustandsaenderungen; 0 JS-Fehler/externe Anfragen. Keine vollstaendige fachliche Sollfolgen- oder Endpartienabnahme; Gate BLOCKED.",
-      "next": "Neuen 9-Claim-Parameter-Test in CI pruefen; danach dynamische Vorbedingungen, weitere Regionen/Vertraege und vollstaendige Endpartien mit konkreten Sollfolgen absichern."
+      "next": "PR #90: bei NORD-3/175 Prozent gerenderten Dialog, Auswahl und Aktionsziel deterministisch nachweisen; erneute Chromium-CI auswerten. Danach weitere Aktionsfamilien und Endpartien pruefen."
     },
     {
       "id": "BED-03",
