@@ -12,6 +12,12 @@ const manifestPath = path.join(projectRoot, 'WIEDERHERSTELLUNG_MANIFEST.json');
 const expectedArchiveSha = '94f41725f1d1addaa07505302a4f448e3410df0bcebe68bfb24fc07b72d433ca';
 
 const changes = [
+  // Browser-Standardfokus bei <select> war bei 175 % nur 0,57 CSS-Pixel
+  // breit und hatte gegen den Dialoghintergrund nur 1,18:1 Kontrast.
+  // Ausschliesslich in der abgeleiteten Technikvorschau korrigieren.
+  ['index.html',
+    '</head>',
+    '<style id="pppoppi-select-focus-v194">#dialog select:focus-visible{outline:3px solid #ffda8d;outline-offset:3px}</style>\n</head>'],
   ['index.html',
     '<title>PPPOPPI IMPERIUM V1.7.1 PROFI – Neo-Retro Büro & Geschicklichkeitsspiele</title>',
     '<title>PPPOPPI IMPERIUM – Spielkern V1.9.3 · Prüfstand V1.9.4</title>'],
