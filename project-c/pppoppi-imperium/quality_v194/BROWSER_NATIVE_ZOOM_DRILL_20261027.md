@@ -35,8 +35,8 @@ visuellen Überdeckungen.
   bleibt Entwurf, kein Merge nach `main`.
 - Die 110 manifestgeschützten Originaldateien und echte Spielstände bleiben
   unangetastet; die Vorschau entsteht nur in einem temporären Verzeichnis.
-- [Chromium-CI](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40450188294),
-  [Quell-CI](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40450188293)
+- [Chromium-CI](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40450188293),
+  [Quell-CI](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40450188294)
   und [Gesamtmatrix](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40450188386):
   Ergebnisse erst nach tatsächlichem Abschluss als PASS/FAIL/BLOCKED bewerten.
 
