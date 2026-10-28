@@ -57,6 +57,9 @@ check('Nur die drei freigegebenen V1.9.4-Zusatzmodule werden im Browser geladen'
   assert.ok(scripts.includes('src/backup_v194.js'), 'Lokaler Backup-Zusatz fehlt');
   assert.ok(scripts.includes('src/endstate_browser_v194.js'), 'Isolierter Endspieladapter fehlt');
   assert.ok(scripts.includes('src/endstate_live_v194.js'), 'Live-Endspieladapter fehlt');
+  assert.match(bridge, /window\.PPPEndstateLive\.start\(/);
+  assert.match(bridge, /window\.PPPEndstateLive\.apply\(/);
+  assert.doesNotMatch(bridge, /E\.transition\(/, 'Kein direkter Spielkern-Aufruf darf den Sitzungsadapter umgehen');
   assert.ok(!scripts.some(file => /v194\.(?:js|cjs)$/.test(file) &&
     !['src/backup_v194.js', 'src/endstate_browser_v194.js', 'src/endstate_live_v194.js'].includes(file)));
   assert.ok(!scripts.some(file => file.includes('evaluate_balance') || file.includes('analyze_stress')));
