@@ -120,10 +120,11 @@
       "stage": "technical",
       "status": "blocked",
       "evidence": [
-        "project-c/pppoppi-imperium/quality_v194/BROWSER_ENDSTATE_BUNDLE_20261028.md"
+        "project-c/pppoppi-imperium/quality_v194/BROWSER_ENDSTATE_BUNDLE_20261028.md",
+        "project-c/pppoppi-imperium/quality_v194/LIVE_ENDSTATE_ADAPTER_20261028.md"
       ],
       "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "Drei Endspielmodule als gemeinsames Browserpaket im getrennten Technikaufbau bereitgestellt; Browseraktion, Enddialog und vollstaendige Endpartien fehlen weiterhin. Gate BLOCKED."
+      "next": "Echter Live-Spielaktionspfad im abgeleiteten Browseraufbau an versionierte Endspielsitzung angeschlossen. Sichtbare Moduswahl, Enddialog, vollstaendige Endpartien und Altstandmigration fehlen; BLOCKED."
     },
     {
       "id": "VER-02",
@@ -281,10 +282,11 @@
       "status": "blocked",
       "evidence": [
         "project-c/pppoppi-imperium/quality_v194/ARCHIVE_ENGINE_VALIDATION_20261028.md",
-        "project-c/pppoppi-imperium/quality_v194/BROWSER_ENDSTATE_BUNDLE_20261028.md"
+        "project-c/pppoppi-imperium/quality_v194/BROWSER_ENDSTATE_BUNDLE_20261028.md",
+        "project-c/pppoppi-imperium/quality_v194/LIVE_ENDSTATE_ADAPTER_20261028.md"
       ],
       "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "Versionierte aktive und archivierte Sitzungen sind als Browsermodul ladbar; realer Chromium-Rundlauf und Hashpruefung als Teiltest vorgesehen. UI-Speicherung, Altstandmigration und Endpartien fehlen; Gate BLOCKED."
+      "next": "Live-Sitzung prueft Synchronitaet und verwaltet versionierte Archive; alter JSON-Import bleibt explizit legacy. UI-Import/Export, reale Neustarts und Rueckfallpruefung fehlen; BLOCKED."
     },
     {
       "id": "SIC-01",

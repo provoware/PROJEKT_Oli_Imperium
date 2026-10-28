@@ -96,7 +96,31 @@ const changes = [
     "case 'import':$('loadEconFile').click();break;case 'restore-backup':if(handoff){toast('Während des Spielerwechsels gesperrt.');break;}if(econ&&!confirm('Aktuelle Partie durch eine lokale Zwischensicherung ersetzen?'))break;{const revision=++importRevision;window.PPBackup.restore(E.validate).then(({state,older})=>{if(revision!==importRevision)return;econ=state;selected=Object.keys(econ.claims)[0];handoff=false;show(econ.phase==='RESCUE'?'rescue':econ.phase==='REPORT'?'report':'computer');refreshStatus();toast(older?'Ältere gültige Zwischensicherung geladen.':'Zwischensicherung geprüft und geladen.');}).catch(error=>{if(revision===importRevision)toast('Wiederherstellung nicht möglich: '+error.message);});}break;"],
   ['test_human_parity_v192.cjs',
     'if(result.status!==0)throw Error(result.stderr);return result.stdout.trim();',
-    "if(result.error)throw result.error;if(result.signal)throw Error('Vergleichsprozess abgebrochen: '+result.signal);if(result.status!==0)throw Error(result.stderr||'Vergleichsprozess fehlgeschlagen: '+result.status);const output=result.stdout.trim();if(!output)throw Error('Vergleichsprozess lieferte keine Spielstanddaten');return output;"]
+    "if(result.error)throw result.error;if(result.signal)throw Error('Vergleichsprozess abgebrochen: '+result.signal);if(result.status!==0)throw Error(result.stderr||'Vergleichsprozess fehlgeschlagen: '+result.status);const output=result.stdout.trim();if(!output)throw Error('Vergleichsprozess lieferte keine Spielstanddaten');return output;"],
+  ["index.html",
+    "<script src=\"src/endstate_browser_v194.js\"></script><script src=\"src/neo_bridge.js\"></script>",
+    "<script src=\"src/endstate_browser_v194.js\"></script><script src=\"src/endstate_live_v194.js\"></script><script src=\"src/neo_bridge.js\"></script>"],
+  ["src/neo_bridge.js",
+    "function newPartie(mode='1-2'){",
+    "function newPartie(mode='1-2',endMode='free'){"],
+  ["src/neo_bridge.js",
+    "econ=E.fresh({humans,ais,seed:'PPPOPPI-2026'});window.PPBackup.capture(econ);selected=",
+    "econ=E.fresh({humans,ais,seed:'PPPOPPI-2026'});window.PPBackup.capture(econ);window.PPPEndstateLive.start(econ,endMode);selected="],
+  ["src/neo_bridge.js",
+    "const next=E.transition(econ,cmd);E.validate(next.state);++importRevision;econ=next.state;window.PPBackup.capture(econ);",
+    "const next=window.PPPEndstateLive.apply(econ,cmd);E.validate(next.state);++importRevision;econ=next.state;window.PPBackup.capture(econ);"],
+  ["src/neo_bridge.js",
+    "econ=E.transition(econ,cmd).state;current=econ.minigame.dial;",
+    "econ=window.PPPEndstateLive.apply(econ,cmd).state;current=econ.minigame.dial;"],
+  ["src/neo_bridge.js",
+    "econ=parsed;window.PPBackup.capture(econ);selected=",
+    "window.PPPEndstateLive.detach();econ=parsed;window.PPBackup.capture(econ);selected="],
+  ["src/neo_bridge.js",
+    "econ=state;selected=Object.keys(econ.claims)[0];handoff=false;",
+    "window.PPPEndstateLive.detach();econ=state;selected=Object.keys(econ.claims)[0];handoff=false;"],
+  ["src/neo_bridge.js",
+    "engine:E};",
+    "engine:E,endstate:window.PPPEndstateLive};"],
 ];
 
 function replaceExactlyOnce(text, before, after, relative) {
@@ -176,6 +200,7 @@ function build(destination) {
   for (const [name] of changes) renderPatched(name);
   // Zusatzskript vor dem Anlegen des Zielordners auf Lesbarkeit und Syntax pruefen.
   new Function(fs.readFileSync(path.join(__dirname, 'backup_v194.js'), 'utf8'));
+  new Function(fs.readFileSync(path.join(__dirname, 'endstate_live_v194.js'), 'utf8'));
   const endstateBrowser = bundleSource();
   fs.mkdirSync(targetRoot, {recursive: false, mode: 0o700});
   // Ein nach der Vorpruefung ausgetauschter Elternordner muss vor dem
@@ -199,11 +224,13 @@ function build(destination) {
     path.join(targetRoot, 'src', 'backup_v194.js'), fs.constants.COPYFILE_EXCL);
   fs.writeFileSync(path.join(targetRoot, 'src', 'endstate_browser_v194.js'),
     endstateBrowser, {encoding: 'utf8', flag: 'wx'});
+  fs.copyFileSync(path.join(__dirname, 'endstate_live_v194.js'),
+    path.join(targetRoot, 'src', 'endstate_live_v194.js'), fs.constants.COPYFILE_EXCL);
   fs.writeFileSync(path.join(targetRoot, 'BUILD_INFO.json'), JSON.stringify({
     kind: 'technical-preview-not-released', gameVersion: '1.9.3', qaVersion: '1.9.4',
     sourceArchiveSha256: expectedArchiveSha, sourceFiles: files.length,
     sourceOverrides: [...new Set(changes.map(c => c[0]))].sort(),
-    generatedAddons: ['src/backup_v194.js', 'src/endstate_browser_v194.js']
+    generatedAddons: ['src/backup_v194.js', 'src/endstate_browser_v194.js', 'src/endstate_live_v194.js']
   }, null, 2) + '\n', {encoding: 'utf8', flag: 'wx'});
   return {directory: targetRoot, sourceFiles: files.length};
 }

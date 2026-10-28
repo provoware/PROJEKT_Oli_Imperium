@@ -13,7 +13,7 @@ const expectedInfo = Object.freeze({
   kind: 'technical-preview-not-released', gameVersion: '1.9.3', qaVersion: '1.9.4',
   sourceArchiveSha256: '94f41725f1d1addaa07505302a4f448e3410df0bcebe68bfb24fc07b72d433ca',
   sourceFiles: 110, sourceOverrides: [...new Set(changes.map(c => c[0]))].sort(),
-  generatedAddons: ['src/backup_v194.js', 'src/endstate_browser_v194.js']
+  generatedAddons: ['src/backup_v194.js', 'src/endstate_browser_v194.js', 'src/endstate_live_v194.js']
 });
 function expectedFiles() {
   const overrides = new Set(changes.map(c => c[0]));
@@ -27,6 +27,8 @@ function expectedFiles() {
   sourceEntries.push({path: 'src/backup_v194.js', size: addon.length, sha256: sha(addon)});
   const browser = Buffer.from(bundleSource(), 'utf8');
   sourceEntries.push({path: 'src/endstate_browser_v194.js', size: browser.length, sha256: sha(browser)});
+  const live = fs.readFileSync(path.join(__dirname, 'endstate_live_v194.js'));
+  sourceEntries.push({path: 'src/endstate_live_v194.js', size: live.length, sha256: sha(live)});
   return sourceEntries;
 }
 function inspect(destination, entries, info = expectedInfo) {
