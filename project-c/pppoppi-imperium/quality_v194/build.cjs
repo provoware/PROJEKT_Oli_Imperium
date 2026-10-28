@@ -5,6 +5,7 @@ const assert = require('node:assert/strict');
 const crypto = require('node:crypto');
 const fs = require('node:fs');
 const path = require('node:path');
+const {bundleSource} = require('./endstate_browser_bundle_v194.cjs');
 
 const projectRoot = path.resolve(__dirname, '..');
 const gameRoot = path.join(projectRoot, 'SPIEL');
@@ -71,6 +72,10 @@ const changes = [
   ['index.html',
     '<script src="src/neo_bridge.js"></script>',
     '<script src="src/backup_v194.js"></script><script src="src/neo_bridge.js"></script>'],
+  // Endspieladapter als eigenstaendiges, noch nicht angeschlossenes Browsermodul.
+  ['index.html',
+    '<script src="src/backup_v194.js"></script><script src="src/neo_bridge.js"></script>',
+    '<script src="src/backup_v194.js"></script><script src="src/endstate_browser_v194.js"></script><script src="src/neo_bridge.js"></script>'],
   ['src/neo_bridge.js',
     "econ=E.fresh({humans,ais,seed:'PPPOPPI-2026'});selected=",
     "econ=E.fresh({humans,ais,seed:'PPPOPPI-2026'});window.PPBackup.capture(econ);selected="],
@@ -171,6 +176,7 @@ function build(destination) {
   for (const [name] of changes) renderPatched(name);
   // Zusatzskript vor dem Anlegen des Zielordners auf Lesbarkeit und Syntax pruefen.
   new Function(fs.readFileSync(path.join(__dirname, 'backup_v194.js'), 'utf8'));
+  const endstateBrowser = bundleSource();
   fs.mkdirSync(targetRoot, {recursive: false, mode: 0o700});
   // Ein nach der Vorpruefung ausgetauschter Elternordner muss vor dem
   // ersten Kopieren auffallen. Eine vollstaendige atomare Garantie gegen
@@ -191,11 +197,13 @@ function build(destination) {
   }
   fs.copyFileSync(path.join(__dirname, 'backup_v194.js'),
     path.join(targetRoot, 'src', 'backup_v194.js'), fs.constants.COPYFILE_EXCL);
+  fs.writeFileSync(path.join(targetRoot, 'src', 'endstate_browser_v194.js'),
+    endstateBrowser, {encoding: 'utf8', flag: 'wx'});
   fs.writeFileSync(path.join(targetRoot, 'BUILD_INFO.json'), JSON.stringify({
     kind: 'technical-preview-not-released', gameVersion: '1.9.3', qaVersion: '1.9.4',
     sourceArchiveSha256: expectedArchiveSha, sourceFiles: files.length,
     sourceOverrides: [...new Set(changes.map(c => c[0]))].sort(),
-    generatedAddons: ['src/backup_v194.js']
+    generatedAddons: ['src/backup_v194.js', 'src/endstate_browser_v194.js']
   }, null, 2) + '\n', {encoding: 'utf8', flag: 'wx'});
   return {directory: targetRoot, sourceFiles: files.length};
 }
