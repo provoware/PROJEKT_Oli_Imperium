@@ -114,6 +114,69 @@ def main():
             page.evaluate("window.NeoEconomy.open('endstate')")
             assert page.get_by_role("button", name="Neue Partie vorbereiten").is_visible()
             assert not errors, errors
+            # Archivdatei ueber den sichtbaren Schalter speichern.
+            with page.expect_download() as pending:
+                page.get_by_role("button", name="Sitzung exportieren").click()
+            archived_file = Path(tmp) / "archiv-sitzung.json"
+            pending.value.save_as(archived_file)
+            archive_payload = json.loads(archived_file.read_text(encoding="utf-8"))
+            assert archive_payload["schema"] == "pppoppi.endstate.session.proposal/1"
+            assert archive_payload["state"] is None
+            assert archive_payload["archive"]["endMonth"] == 1
+            browser.close()
+
+            # Neuer echter Chromium-Prozess ohne uebernommenen Browser-Speicher.
+            browser = pw.chromium.launch(headless=True)
+            page = browser.new_page(viewport={"width": 800, "height": 600}, accept_downloads=True)
+            errors = []
+            page.on("pageerror", lambda error: errors.append(str(error)))
+            page.goto((target / "index.html").as_uri())
+            page.wait_for_function("window.NeoEconomy && window.NeoEconomy.endstate")
+            page.locator("#loadSessionFile").set_input_files(str(archived_file))
+            page.wait_for_function("NeoEconomy.endstate.status()==='finished'")
+            restored = page.evaluate("""() => ({
+                state: JSON.stringify(NeoEconomy.getState()),
+                mode: NeoEconomy.endstate.contract().mode,
+                archive: NeoEconomy.endstate.archive(),
+                text: document.getElementById('dialogContent').innerText
+            })""")
+            assert restored["mode"] == "free", restored
+            assert restored["archive"]["endMonth"] == 1, restored
+            assert "NUR LESEN" in restored["text"], restored
+            page.evaluate("NeoEconomy.send('END_TURN')")
+            assert page.evaluate("JSON.stringify(NeoEconomy.getState())") == restored["state"]
+
+            # Beschaedigtes Archiv darf die wiederhergestellte Partie nicht ersetzen.
+            tampered = json.loads(archived_file.read_text(encoding="utf-8"))
+            tampered["archive"]["endMonth"] = 999
+            tampered_file = Path(tmp) / "manipuliert.json"
+            tampered_file.write_text(json.dumps(tampered), encoding="utf-8")
+            page.on("dialog", lambda dialog: dialog.accept())
+            page.locator("#loadSessionFile").set_input_files(str(tampered_file))
+            page.wait_for_function("document.querySelector('#toast').textContent.includes('Sitzungsimport abgelehnt')")
+            assert page.evaluate("JSON.stringify(NeoEconomy.getState())") == restored["state"]
+            assert page.evaluate("NeoEconomy.endstate.status()") == "finished"
+
+            # Auch ein aktiver Kampagnenvertrag muss einen Prozessneustart ueberleben.
+            page.evaluate("NeoEconomy.start('1-2','campaign:12')")
+            page.evaluate("NeoEconomy.open('computer')")
+            with page.expect_download() as pending:
+                page.get_by_role("button", name="Sitzung exportieren").click()
+            active_file = Path(tmp) / "kampagne-sitzung.json"
+            pending.value.save_as(active_file)
+            assert json.loads(active_file.read_text(encoding="utf-8"))["contract"]["months"] == 12
+            browser.close()
+            browser = pw.chromium.launch(headless=True)
+            page = browser.new_page(viewport={"width": 800, "height": 600})
+            errors = []
+            page.on("pageerror", lambda error: errors.append(str(error)))
+            page.goto((target / "index.html").as_uri())
+            page.wait_for_function("window.NeoEconomy && window.NeoEconomy.endstate")
+            page.locator("#loadSessionFile").set_input_files(str(active_file))
+            page.wait_for_function("NeoEconomy.endstate.status()==='active'")
+            assert page.evaluate("NeoEconomy.endstate.contract().months") == 12
+            assert page.evaluate("NeoEconomy.getState().month") == 1
+            assert not errors, errors
             browser.close()
             print("PASS: Offline-Chromium 800x600, Live-Spielaktion, freiwilliger "
                   "Abschluss, Aktionssperre, Kampagnenvertrag, 110 Quellhashes")
