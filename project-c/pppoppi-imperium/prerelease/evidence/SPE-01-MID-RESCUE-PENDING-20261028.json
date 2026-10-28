@@ -1,0 +1,28 @@
+{
+  "gate_id": "SPE-01",
+  "date": "2026-10-28",
+  "result": "PENDING",
+  "tested_code_head": "c8540ff832fbbba8536358a33c1975d9c95d693e",
+  "command": "python3 project-c/pppoppi-imperium/quality_v194/test_browser_two_humans_v194.py",
+  "ci_result": "PENDING",
+  "ci_run_url": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40609444650",
+  "ci_job": "chromium-roundtrip",
+  "tested_cases": {
+    "human_companies": 2,
+    "ai_companies": 2,
+    "partial_rescue_save_import": 1,
+    "browser_context_restarts_expected": 2
+  },
+  "expected_properties": [
+    "one H1 rescue credit before and after import",
+    "H2 pending obligation of 80000 cents preserved",
+    "no duplicate monthly settlement",
+    "H2 generation restart after fresh-context import"
+  ],
+  "original_source_files_changed": 0,
+  "release_gate": "BLOCKED",
+  "limitations": [
+    "CI not completed when this evidence was created",
+    "partial case only; complete win/loss games and end rules remain blocked"
+  ]
+}
