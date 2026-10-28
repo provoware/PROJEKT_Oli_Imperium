@@ -27,6 +27,8 @@ jobs:
         run: node project-c/pppoppi-imperium/quality_v194/test_rescue_sale_roundtrip_v194.cjs
       - name: Zwei Menschen - Vertragsbruch, Erfuellung, Rechnungen und JSON-Rundlauf (Teiltest)
         run: node project-c/pppoppi-imperium/quality_v194/test_contract_breach_roundtrip_v194.cjs
+      - name: Natuerliche Teillieferung, Vertragsstrafe und JSON-Rundlauf (Teiltest)
+        run: node project-c/pppoppi-imperium/quality_v194/test_contract_partial_delivery_v194.cjs
       - name: Chromium-Testumgebung installieren
         run: |
           python -m pip install playwright==1.56.0
