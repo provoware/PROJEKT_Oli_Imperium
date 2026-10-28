@@ -50,12 +50,14 @@ check('Monatsabrechnung bricht Tabellenzellen bei schmalem Zoom um', () => {
   assert.doesNotMatch(read('index.html'), /pppoppi-zoom-econ-table-v194/);
 });
 
-check('V1.9.4-Prüfprogramme sind keine Laufzeitmodule der V1.9.3-Spieloberfläche', () => {
+check('Nur die zwei freigegebenen V1.9.4-Zusatzmodule werden im Browser geladen', () => {
   const scripts = [...html.matchAll(/<script\b[^>]*\bsrc="([^"]+)"/g)].map(m => m[1]);
   assert.ok(scripts.includes('src/strategy_logistics_v193.js'));
   assert.ok(scripts.includes('src/neo_bridge.js'));
-  assert.ok(scripts.includes('src/backup_v194.js'), 'Nur der lokale Backup-Zusatz ist Laufzeitmodul');
-  assert.ok(!scripts.some(file => /v194\.(?:js|cjs)$/.test(file) && file !== 'src/backup_v194.js'));
+  assert.ok(scripts.includes('src/backup_v194.js'), 'Lokaler Backup-Zusatz fehlt');
+  assert.ok(scripts.includes('src/endstate_browser_v194.js'), 'Isolierter Endspieladapter fehlt');
+  assert.ok(!scripts.some(file => /v194\.(?:js|cjs)$/.test(file) &&
+    !['src/backup_v194.js', 'src/endstate_browser_v194.js'].includes(file)));
   assert.ok(!scripts.some(file => file.includes('evaluate_balance') || file.includes('analyze_stress')));
 });
 
@@ -77,10 +79,14 @@ check('V1.9.4-Berichte lesen den tatsächlichen V1.9.3-Kern; dessen Module bleib
 
 check('Alle HTML-Quellen sind lokal vorhanden und ohne CDN erreichbar', () => {
   const resources = [...html.matchAll(/<(?:script|link)\b[^>]*?\b(?:src|href)="([^"]+)"/g)].map(m => m[1]);
-  assert.equal(resources.length, 21, '20 Original-Ressourcen und ein geprüfter Zusatz');
+  assert.equal(resources.length, 22, '20 Original-Ressourcen und zwei gepruefte Zusaetze');
   for (const target of resources) {
     assert.match(target, /^(?:src|legacy_v06)\/[A-Za-z0-9_./-]+$/);
     assert.ok(!target.split('/').includes('..'), 'Kein Pfad darf den Spielordner verlassen');
+    if (target === 'src/endstate_browser_v194.js') {
+      assert.ok(require('./endstate_browser_bundle_v194.cjs').bundleSource().length > 5000);
+      continue;
+    }
     const resolved = target === 'src/backup_v194.js' ? path.join(__dirname, 'backup_v194.js') : path.join(root, target);
     assert.ok(fs.statSync(resolved).isFile(), 'Fehlende Ressource: ' + target);
   }
