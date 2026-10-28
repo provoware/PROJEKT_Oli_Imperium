@@ -11,7 +11,7 @@ import tempfile
 from pathlib import Path
 from time import monotonic
 
-from playwright.sync_api import TimeoutError as PlaywrightTimeoutError, sync_playwright
+from playwright.sync_api import Error as PlaywrightError, TimeoutError as PlaywrightTimeoutError, sync_playwright
 
 HERE = Path(__file__).resolve().parent
 ZOOMS = (1.75, 2.0)
@@ -47,36 +47,34 @@ def extension_at(folder):
 
 
 def wait_for_zoom_worker(context, timeout_ms=15000):
-    """Wait for the MV3 worker without a snapshot/event subscription race.
-
-    No restart or test retry: a missing extension still fails at the deadline.
-    """
+    """Wait for our MV3 worker and zoom API without event races or test retries."""
     deadline = monotonic() + timeout_ms / 1000
-
-    def ready(worker):
-        if not worker.evaluate("typeof chrome.tabs.setZoom === 'function'"):
-            raise AssertionError("Zoom-Serviceworker ohne tabs.setZoom")
-        return worker
-
+    last_status = "kein Zoom-Serviceworker gesehen"
     while True:
-        candidates = [worker for worker in context.service_workers
-                      if worker.url.startswith("chrome-extension://")]
-        if candidates:
-            return ready(candidates[0])
+        for worker in context.service_workers:
+            if not (worker.url.startswith("chrome-extension://")
+                    and worker.url.endswith("/background.js")):
+                continue
+            try:
+                ready = worker.evaluate(
+                    "typeof chrome !== 'undefined' && !!chrome.tabs && "
+                    "typeof chrome.tabs.setZoom === 'function'")
+            except PlaywrightError as exc:
+                last_status = worker.url + ": " + str(exc)[:240]
+                continue
+            if ready:
+                return worker
+            last_status = worker.url + ": tabs.setZoom noch nicht verfuegbar"
         remaining = int((deadline - monotonic()) * 1000)
         if remaining <= 0:
             raise AssertionError(
-                "Zoom-Serviceworker nicht gestartet (" + str(timeout_ms) +
-                " ms); vorhandene Worker: " +
+                "Zoom-Serviceworker/API nicht bereit (" + str(timeout_ms) +
+                " ms); " + last_status + "; vorhandene Worker: " +
                 repr([worker.url for worker in context.service_workers]))
         try:
-            worker = context.wait_for_event(
-                "serviceworker", timeout=min(500, remaining))
-            if worker.url.startswith("chrome-extension://"):
-                return ready(worker)
+            context.wait_for_event("serviceworker", timeout=min(500, remaining))
         except PlaywrightTimeoutError:
-            # Event may have arrived between snapshot and subscription.
-            continue
+            pass
 
 
 def set_real_zoom(worker, url, factor):

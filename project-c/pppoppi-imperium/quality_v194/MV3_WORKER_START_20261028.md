@@ -16,6 +16,10 @@
 
 - Automatisierte Regression `test_zoom_worker_wait_v194.py` wird vor dem 216-Auswahl-Test in GitHub Actions ausgefuehrt; ihr CI-Ergebnis ist bis zum Lauf **PENDING**.
 
+## CI-Fehler und gezielte Korrektur
+
+[Chromium-CI #40615817138](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40615817138): Die isolierten drei Worker-Regressionen **PASS**, aber die echte Dialog-Stabilitaet **FAIL** beim sofortigen Lesen von `chrome.tabs.setZoom`: `chrome.tabs` war noch nicht vorhanden. Der erste Helper hat den Worker gefunden, jedoch die API zu frueh abgefragt. Die Korrektur wartet nun innerhalb derselben harten 15-Sekunden-Frist auf **Worker und Zoom-API**; sie startet weder Browser noch Spieltest erneut. Ein nicht bereit werdender Worker bleibt FAIL mit URL-/API-Diagnose. Zusaetzlicher lokaler Regressionstest fuer verzögert bereitstehende API: **PASS**. Neue vollstaendige CI: **PENDING**.
+
 ## Naechste drei Schritte
 1. Neue CI pruefen und bei Fehler die Worker-Diagnose auswerten, nicht blind wiederholen.
 2. Vertragsbruch, Notverkauf und Sanierungsgenerationen mit Export/Import testen.
