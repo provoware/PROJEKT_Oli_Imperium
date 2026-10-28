@@ -85,13 +85,13 @@ def main():
             process_starts += 1
             try:
                 page.locator("#startGame").click()
-                page.locator("#econMode").select_option("2-0")
+                page.locator("#econMode").select_option("2-2")
                 page.locator('[data-ui="newgame"]').click()
                 fresh = state(page)
-                check("Zwei menschliche Firmen ohne KI und ohne Testfiktion",
+                check("Zwei Menschen und zwei Computer ohne Testfiktion",
                       fresh["phase"] == "TURN" and fresh["month"] == 1
-                      and [firm["id"] for firm in fresh["companies"]] == ["H1", "H2"]
-                      and all(firm["type"] == "human" for firm in fresh["companies"])
+                      and [firm["id"] for firm in fresh["companies"]] == ["H1", "H2", "A1", "A2"]
+                      and all(firm["type"] == "human" for firm in fresh["companies"][:2])
                       and fresh["companies"][0]["cashCent"] == 20_000_000)
                 for scene, name, claim in ACTIONS:
                     action(page, scene, name, claim)
@@ -188,7 +188,7 @@ def main():
                 check("Kein externer HTTP-Verkehr", not external)
                 check("Keine JavaScript-Laufzeitfehler", not errors)
                 print("BROWSER-MEHRGENERATIONEN:", json.dumps({
-                    "fixture": False, "human_companies": 2,
+                    "fixture": False, "human_companies": 2, "ai_companies": 2,
                     "real_initial_actions": len(ACTIONS),
                     "natural_insolvencies_h1": 2,
                     "generations_reached": 3,
