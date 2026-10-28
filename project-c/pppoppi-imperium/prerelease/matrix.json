@@ -123,10 +123,11 @@
         "project-c/pppoppi-imperium/quality_v194/BROWSER_ENDSTATE_BUNDLE_20261028.md",
         "project-c/pppoppi-imperium/quality_v194/LIVE_ENDSTATE_ADAPTER_20261028.md",
         "project-c/pppoppi-imperium/quality_v194/ENDMODE_SELECTOR_20261028.md",
-        "project-c/pppoppi-imperium/quality_v194/ENDSTATE_DIALOG_20261028.md"
+        "project-c/pppoppi-imperium/quality_v194/ENDSTATE_DIALOG_20261028.md",
+        "project-c/pppoppi-imperium/quality_v194/SESSION_UI_ROUNDTRIP_20261028.md"
       ],
       "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "Bestaetigten Enddialog, Abbruch und nur lesbare Abschlussansicht im abgeleiteten Browser umgesetzt; neuer 800x600-Chromium-Test und statische Pruefung eingereicht. CI fuer neuen HEAD auswerten. Versionierter UI-Sitzungsimport/-export, vollstaendige Endpartien, Neustarts und historische Originalreferenz fehlen; BLOCKED."
+      "next": "Sichtbarer Abschluss und versionierte Sitzungsdatei im getrennten Technikaufbau angebunden; vollstaendige Sieg-/Niederlagenpartien und Endregel-Abnahme fehlen. CI des neuen PR pruefen; BLOCKED."
     },
     {
       "id": "VER-02",
@@ -285,10 +286,11 @@
       "evidence": [
         "project-c/pppoppi-imperium/quality_v194/ARCHIVE_ENGINE_VALIDATION_20261028.md",
         "project-c/pppoppi-imperium/quality_v194/BROWSER_ENDSTATE_BUNDLE_20261028.md",
-        "project-c/pppoppi-imperium/quality_v194/LIVE_ENDSTATE_ADAPTER_20261028.md"
+        "project-c/pppoppi-imperium/quality_v194/LIVE_ENDSTATE_ADAPTER_20261028.md",
+        "project-c/pppoppi-imperium/quality_v194/SESSION_UI_ROUNDTRIP_20261028.md"
       ],
       "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "Live-Sitzung prueft Synchronitaet und verwaltet versionierte Archive; alter JSON-Import bleibt explizit legacy. UI-Import/Export, reale Neustarts und Rueckfallpruefung fehlen; BLOCKED."
+      "next": "Versionierter UI-Import/-Export fuer aktive Kampagne und Abschlussarchiv mit echten Chromium-Prozessneustarts als Regression eingereicht; noch kein vollstaendiger Speicherrueckfall-/Stresstest. CI pruefen; BLOCKED."
     },
     {
       "id": "SIC-01",
@@ -312,10 +314,11 @@
         "project-c/pppoppi-imperium/quality_v194/IMPORT_INPUT_SECURITY_20261027.md",
         "project-c/pppoppi-imperium/prerelease/evidence/SIC-02-IMPORT-INPUT-PARTIAL-20261027.json",
         "project-c/pppoppi-imperium/quality_v194/IMPORT_NESTED_SIZE_20261027.md",
-        "project-c/pppoppi-imperium/quality_v194/ARCHIVE_ENGINE_VALIDATION_20261028.md"
+        "project-c/pppoppi-imperium/quality_v194/ARCHIVE_ENGINE_VALIDATION_20261028.md",
+        "project-c/pppoppi-imperium/quality_v194/SESSION_UI_ROUNDTRIP_20261028.md"
       ],
       "blocker": "PR #96 Code-HEAD 27914652cc4933239b07841009b828e0f4d2f87a: GitHub-Browser-CI #40595443169 PASS (vier Jobs, Import-Schritt success), Quellpruefung #40595443211 PASS. Insgesamt 30 ungueltige JSON-Strukturen atomar abgewiesen, gueltige 5.000.000-Byte-Datei importiert, 5.000.001 Bytes sicher abgewiesen, HTML-Fremdname in acht Szenen text-sicher. Weiterhin nicht alle Fremdeingaben, beliebige Tiefen und Endpartien abgedeckt; SIC-02 und Gesamtgate BLOCKED.",
-      "next": "Weitere Speicher-/Sicherheitsgrenzen und gueltige verschachtelte Spielstaende mit Buchungsfolgen pruefen; Archiv-Schnappschuesse gegen echte Engine validieren (neuer Teiltest); weitere Eingaben und vollstaendige Endpartien nachweisen."
+      "next": "Sitzungsdatei: Groessengrenze, Schema, Engine-Validierung, manipulierter Archivimport und atomarer Zustandstausch im neuen Browser-Test; CI auswerten. Sonstige Fremdeingaben offen; BLOCKED."
     },
     {
       "id": "SIC-03",
@@ -449,10 +452,11 @@
         "project-c/pppoppi-imperium/prerelease/evidence/BED-02-DIALOG-ACTIONS-PARTIAL-20261027.json",
         "project-c/pppoppi-imperium/prerelease/evidence/BED-02-DIALOG-MATRIX-PARTIAL-20261027.json",
         "project-c/pppoppi-imperium/prerelease/evidence/BED-02-CLAIM-PARAMETERS-PARTIAL-20261027.json",
-        "project-c/pppoppi-imperium/quality_v194/ENDSTATE_DIALOG_20261028.md"
+        "project-c/pppoppi-imperium/quality_v194/ENDSTATE_DIALOG_20261028.md",
+        "project-c/pppoppi-imperium/quality_v194/SESSION_UI_ROUNDTRIP_20261028.md"
       ],
       "blocker": "Teilkette mit 15 echten Tab/Enter-Aktionen je Zoomstufe (175/200 %) und zwei Monatsabschluessen je Durchlauf in Chromium #40467829258 PASS, einschliesslich unzulaessiger Foerderung, Doppelkauf und Exportgleichheit. Andere Pflichtaktionen und vollstaendige Dialog-Endpartien bleiben ungetestet; Gate BLOCKED. Neuer Teiltest: Browser-CI #40505215686 PASS auf 95b393211465427c58c08a71ce35ffc2ce026573; bei echtem 175/200-%-Zoom je 39 Szenen, 13 per Tab/Enter aktivierte Wirtschaftsaktionen (12 unterschiedliche Kennungen), 26 Szenen ohne geeignete data-econ-Aktion, je 2 Zustandsaenderungen; 0 JS-Fehler/externe Anfragen. Keine vollstaendige fachliche Sollfolgen- oder Endpartienabnahme; Gate BLOCKED.",
-      "next": "Neuer Tastaturpfad fuer Bestaetigung und Abbruch mit Tab im Offline-Chromium eingereicht; CI auf finalem HEAD auswerten. Weitere Pflichtaktionen und native Zoomstufen bleiben zu pruefen; BLOCKED."
+      "next": "Sitzungs-Schalter im Firmencomputer und Abschlussarchiv vorhanden; Tastatur-, Zoom- und Vollstaendigkeitsnachweis fuer alle Pflichtaktionen fehlen; BLOCKED."
     },
     {
       "id": "BED-03",
