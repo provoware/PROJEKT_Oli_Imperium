@@ -10,9 +10,11 @@
 - Elf Zoom-Pruefprogramme werden auf dieselbe Startabfrage umgestellt. Keine Original-Spielquellen, keine A/B-Regeln oder Top-5-Projekte geaendert.
 
 ## Testplan und Nachweis
-- Isolierter lokaler Python-Test mit simulierter Ereignisluecke: Worker nach verpasstem Ereignis gefunden **PASS**; fehlender Worker korrekt abgewiesen **PASS**; `py_compile` **PASS**. Dies ist kein Chromium-Nachweis.
+- Isolierte lokale Python-Regression: Ereignisluecke, fehlender Worker und fehlende Zoom-API: **3/3 PASS**; `py_compile` **PASS**. Dies ist kein Chromium-Nachweis.
 - GitHub-Quellpruefung und vier Chromium-Jobs auf finalem Commit: **PENDING**.
 - BED-02, BED-03, STA-03, TES-03 und Gesamtgate bleiben **BLOCKED**, auch wenn Teiltests gruen sind.
+
+- Automatisierte Regression `test_zoom_worker_wait_v194.py` wird vor dem 216-Auswahl-Test in GitHub Actions ausgefuehrt; ihr CI-Ergebnis ist bis zum Lauf **PENDING**.
 
 ## Naechste drei Schritte
 1. Neue CI pruefen und bei Fehler die Worker-Diagnose auswerten, nicht blind wiederholen.

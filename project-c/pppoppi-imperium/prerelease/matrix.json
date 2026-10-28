@@ -415,7 +415,7 @@
         "project-c/pppoppi-imperium/prerelease/evidence/BED-02-CLAIM-PARAMETERS-PARTIAL-20261027.json"
       ],
       "blocker": "Teilkette mit 15 echten Tab/Enter-Aktionen je Zoomstufe (175/200 %) und zwei Monatsabschluessen je Durchlauf in Chromium #40467829258 PASS, einschliesslich unzulaessiger Foerderung, Doppelkauf und Exportgleichheit. Andere Pflichtaktionen und vollstaendige Dialog-Endpartien bleiben ungetestet; Gate BLOCKED. Neuer Teiltest: Browser-CI #40505215686 PASS auf 95b393211465427c58c08a71ce35ffc2ce026573; bei echtem 175/200-%-Zoom je 39 Szenen, 13 per Tab/Enter aktivierte Wirtschaftsaktionen (12 unterschiedliche Kennungen), 26 Szenen ohne geeignete data-econ-Aktion, je 2 Zustandsaenderungen; 0 JS-Fehler/externe Anfragen. Keine vollstaendige fachliche Sollfolgen- oder Endpartienabnahme; Gate BLOCKED.",
-      "next": "Isolierte Chromium-CI fuer Claim-Parameter und Bohr-Minispiel auf PR #91 auswerten; fehlende Serviceworker-Diagnose ohne Spielstandsmanipulation beheben. Danach weitere Aktionsfamilien und Endpartien."
+      "next": "MV3-Startabfrage in PR #99 und 3 Worker-Regressionen auf finalem HEAD pruefen; danach Zoom- und Endpartien weiter absichern."
     },
     {
       "id": "BED-03",
@@ -501,7 +501,7 @@
       "status": "blocked",
       "evidence": [],
       "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "Chromium #40561679062 hat drei echte Prozessneustarts mit Export/Import PASS; zusaetzlich Abbruch, fehlerhafte Sicherungen, Offline-Start und vollstaendige Endpartien pruefen."
+      "next": "MV3-Serviceworker-Race-Regression und echten Browserprozess-Neustart auf finalem HEAD pruefen; sporadische Startfehler weiter beobachten, Endpartien offen."
     },
     {
       "id": "TES-01",
@@ -538,7 +538,7 @@
       "status": "blocked",
       "evidence": [],
       "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "Alte und neue Browserfälle abgleichen"
+      "next": "Alle vorhandenen Browser-Regressionen auf PR #99 mit zentraler MV3-Startabfrage pruefen; danach alte und neue Spielverlaeufe systematisch abgleichen."
     },
     {
       "id": "TES-04",
