@@ -31,12 +31,12 @@ Der bisherige Endspieltest prueft **zwei** Insolvenzen mit Kredit und Neustart. 
 |---|---|
 | Bestehende Browser-CI auf #121 | PASS 8/8 (Link oben) |
 | Bestehende Quell-CI auf #121 | PASS (Link oben) |
-| Neuer Dreifach-Browsertest auf diesem Zweig | **PENDING** bis GitHub-CI nach PR-Erstellung |
-| Alle Browser-Regressionen auf neuem HEAD | **PENDING** |
-| Historische C64-Referenz und Ressourcenrechte | **BLOCKED/OPEN** |
+| Neuer Dreifach-Browsertest | **PASS** – [GitHub-CI #40789090475](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40789090475), 158 PASS-Zeilen, 4 Chromium-Prozesse, HEAD `a7d4f965df9ac499c2563456ffe9d63575df198d` |
+| Acht bestehende Browserjobs | **6/8 PASS, 2 noch laufend** – [Browser-CI #40789090318](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40789090318) auf `a7d4f965…`; finalen HEAD erneut pruefen |
+| Quellschutz und vorherige Doppelsanierung | **PASS** – [Quell-CI #40789090366](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40789090366), [Doppelsanierung #40789090369](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40789090369) |\n| Historische C64-Referenz und Ressourcenrechte | **BLOCKED/OPEN** |
 | Technisches Vorrelease-Gesamtgate | **BLOCKED** |
 
-**Pflichtmatrix:** `6 PASS / 39 BLOCKED / 4 OPEN / 3 DEFERRED = 52`. Neue Teilnachweise zu `LOG-05`, `VER-01`, `VER-02`, `SPE-03`, `TES-03` erst nach erfolgreicher CI; **kein Statuswechsel vor Abschluss aller Gate-Anforderungen**.
+**Pflichtmatrix:** `6 PASS / 39 BLOCKED / 4 OPEN / 3 DEFERRED = 52`. Neuer **technischer Teilnachweis** fuer `LOG-05`, `VER-01`, `VER-02`, `SPE-03`, `TES-03` durch den erfolgreichen isolierten Browsertest; **kein Statuswechsel vor Abschluss aller Gate-Anforderungen**. Nach Dokumentations-Commit muss die CI auf dem finalen HEAD erneut ausgewertet werden.
 
 ## Naechste drei Schritte
 
