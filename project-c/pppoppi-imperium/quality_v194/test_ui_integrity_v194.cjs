@@ -85,6 +85,22 @@ check('Enddialog, Abbruch und schreibgeschuetzte Archivansicht nur im Technikauf
   assert.doesNotMatch(read('src/neo_bridge.js'), /finish-confirm|endstateView/);
 });
 
+check('Versionierter Sitzungsimport und -export sind getrennt vom Altspielstand', () => {
+  assert.match(html, /id="loadSessionFile"/);
+  assert.match(bridge, /data-ui="session-export"/);
+  assert.match(bridge, /data-ui="session-import"/);
+  assert.match(bridge, /function exportEndstateSession\(\)/);
+  assert.match(bridge, /function importEndstateSession\(file\)/);
+  assert.match(bridge, /PPPEndstateLive\.exportSession\(\)/);
+  assert.match(bridge, /PPPEndstateLive\.importSession\(text\)/);
+  assert.match(bridge, /if\(revision!==importRevision\)return/);
+  assert.match(bridge, /file\.size>5_000_000/);
+  assert.match(bridge, /Sitzungsimport abgelehnt/);
+  assert.match(bridge, /Aktuelle Partie durch die ausgewaehlte Sitzung ersetzen/);
+  assert.doesNotMatch(read('index.html'), /loadSessionFile/);
+  assert.doesNotMatch(read('src/neo_bridge.js'), /importEndstateSession/);
+});
+
 check('V1.9.4-Berichte lesen den tatsächlichen V1.9.3-Kern; dessen Module bleiben bytegleich', () => {
   const runtimeModules = ['src/v082_strategy_engine.js', 'src/strategy_ai_v192.js',
     'src/strategy_logistics_v193.js', 'src/profi_economy.js', 'src/logistics_v17.js'];
