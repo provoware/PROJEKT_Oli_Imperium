@@ -124,10 +124,11 @@
         "project-c/pppoppi-imperium/quality_v194/LIVE_ENDSTATE_ADAPTER_20261028.md",
         "project-c/pppoppi-imperium/quality_v194/ENDMODE_SELECTOR_20261028.md",
         "project-c/pppoppi-imperium/quality_v194/ENDSTATE_DIALOG_20261028.md",
-        "project-c/pppoppi-imperium/quality_v194/SESSION_UI_ROUNDTRIP_20261028.md"
+        "project-c/pppoppi-imperium/quality_v194/SESSION_UI_ROUNDTRIP_20261028.md",
+        "project-c/pppoppi-imperium/quality_v194/CAMPAIGN_BROWSER_ENDGAME_20261028.md"
       ],
       "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "Sichtbarer Abschluss und versionierte Sitzungsdatei im getrennten Technikaufbau angebunden; vollstaendige Sieg-/Niederlagenpartien und Endregel-Abnahme fehlen. CI des neuen PR pruefen; BLOCKED."
+      "next": "Neuer isolierter Browser-Endpartientest: 12 Monate, Zwischenexport, zwei echte Chromium-Neustarts, Siegerwertung und Archiv-Manipulationsschutz eingereicht. CI auf finalem Entwicklungs-HEAD PENDING; Verlust-/Insolvenzpfade und weitere Pflichtfaelle offen; BLOCKED."
     },
     {
       "id": "VER-02",
@@ -289,10 +290,11 @@
         "project-c/pppoppi-imperium/quality_v194/LIVE_ENDSTATE_ADAPTER_20261028.md",
         "project-c/pppoppi-imperium/quality_v194/SESSION_UI_ROUNDTRIP_20261028.md",
         "project-c/pppoppi-imperium/quality_v194/SESSION_IMPORT_RACE_20261028.md",
-        "project-c/pppoppi-imperium/quality_v194/SESSION_NATIVE_ZOOM_20261028.md"
+        "project-c/pppoppi-imperium/quality_v194/SESSION_NATIVE_ZOOM_20261028.md",
+        "project-c/pppoppi-imperium/quality_v194/CAMPAIGN_BROWSER_ENDGAME_20261028.md"
       ],
       "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "Teiltest: Sitzungsdatei bei echtem 175/200-%-Zoom nach 12→24→12-Monats-Neustart wiederhergestellt; CI #40746767519 native-zoom-regression PASS. Weitere Speicherfehler und komplette Endpartien offen; BLOCKED."
+      "next": "Neuer isolierter Browser-Endpartientest: 12 Monate, Zwischenexport, zwei echte Chromium-Neustarts, Siegerwertung und Archiv-Manipulationsschutz eingereicht. CI auf finalem Entwicklungs-HEAD PENDING; Verlust-/Insolvenzpfade und weitere Pflichtfaelle offen; BLOCKED."
     },
     {
       "id": "SIC-01",
@@ -583,9 +585,11 @@
       "basis": "PR #14",
       "stage": "technical",
       "status": "blocked",
-      "evidence": [],
+      "evidence": [
+        "project-c/pppoppi-imperium/quality_v194/CAMPAIGN_BROWSER_ENDGAME_20261028.md"
+      ],
       "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "Alle vorhandenen Browser-Regressionen auf PR #99 mit zentraler MV3-Startabfrage pruefen; danach alte und neue Spielverlaeufe systematisch abgleichen."
+      "next": "Neuer isolierter Browser-Endpartientest: 12 Monate, Zwischenexport, zwei echte Chromium-Neustarts, Siegerwertung und Archiv-Manipulationsschutz eingereicht. CI auf finalem Entwicklungs-HEAD PENDING; Verlust-/Insolvenzpfade und weitere Pflichtfaelle offen; BLOCKED."
     },
     {
       "id": "TES-04",
