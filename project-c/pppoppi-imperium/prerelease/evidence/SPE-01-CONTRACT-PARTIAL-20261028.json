@@ -1,0 +1,30 @@
+{
+  "gate_id": "SPE-01",
+  "related_gate_ids": [
+    "WIR-03",
+    "FEH-03"
+  ],
+  "date": "2026-10-28",
+  "result": "PENDING_CI",
+  "tested_code_head": "d7fd6c44b059b80189ad1be922c792769d33c20f",
+  "command": "node project-c/pppoppi-imperium/quality_v194/test_contract_partial_delivery_v194.cjs",
+  "ci_run_url": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40633158227",
+  "ci_step_result": "PENDING",
+  "planned_cases": {
+    "human_companies": 2,
+    "market_sale_milli": 80000,
+    "contract_qty_milli": 40000,
+    "partial_delivery_milli": 20000,
+    "shortfall_milli": 20000,
+    "json_roundtrip_before_due": true,
+    "independent_settlements": 2,
+    "duplicate_guard": true
+  },
+  "original_source_files_changed": 0,
+  "release_gate": "BLOCKED",
+  "limitations": [
+    "Engine-level test, not a real browser contract path or Chromium process restart",
+    "Not a complete win/loss game, no C64 historical reference verification",
+    "Test results must be updated from actual GitHub CI, not inferred from test code"
+  ]
+}
