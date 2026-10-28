@@ -67,7 +67,7 @@ class WorkerWaitTests(unittest.TestCase):
         self.assertEqual(context.events, 1)
 
     def test_missing_worker_fails(self):
-        with self.assertRaisesRegex(AssertionError, "nicht gestartet"):
+        with self.assertRaisesRegex(AssertionError, "nicht bereit"):
             wait_for_zoom_worker(NeverStartsContext(), timeout_ms=10)
 
     def test_missing_zoom_api_fails(self):

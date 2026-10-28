@@ -20,6 +20,10 @@
 
 [Chromium-CI #40615817138](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40615817138): Die isolierten drei Worker-Regressionen **PASS**, aber die echte Dialog-Stabilitaet **FAIL** beim sofortigen Lesen von `chrome.tabs.setZoom`: `chrome.tabs` war noch nicht vorhanden. Der erste Helper hat den Worker gefunden, jedoch die API zu frueh abgefragt. Die Korrektur wartet nun innerhalb derselben harten 15-Sekunden-Frist auf **Worker und Zoom-API**; sie startet weder Browser noch Spieltest erneut. Ein nicht bereit werdender Worker bleibt FAIL mit URL-/API-Diagnose. Zusaetzlicher lokaler Regressionstest fuer verzögert bereitstehende API: **PASS**. Neue vollstaendige CI: **PENDING**.
 
+## Weitere Regressionserkenntnis
+
+[CI #40616009305](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40616009305): Drei von vier isolierten Unit-Tests **PASS**. Ein Test **FAIL**, weil die erwartete Fehlermeldung noch `nicht gestartet` lautete, die korrigierte Startabfrage aber sachlich praeziser `nicht bereit` meldet. Der Testvergleich wurde an die neue Fehlermeldung angepasst; **kein Produktions-/Spielcode geaendert**. Erneute CI: **PENDING**.
+
 ## Naechste drei Schritte
 1. Neue CI pruefen und bei Fehler die Worker-Diagnose auswerten, nicht blind wiederholen.
 2. Vertragsbruch, Notverkauf und Sanierungsgenerationen mit Export/Import testen.
