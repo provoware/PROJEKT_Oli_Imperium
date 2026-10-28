@@ -4,7 +4,7 @@
   "version_scope": "Projekt C: V1.9.4-Prüfschicht auf V1.9.3-Spielkern",
   "observed_pr14_head": "a7b67275d10ad682585816fd46c7ef83cc7d511b",
   "source_status": "imported",
-  "updated_on": "2026-10-28",
+  "updated_on": "2026-10-29",
   "gates": [
     {
       "id": "QUE-01",
@@ -110,10 +110,11 @@
       "status": "blocked",
       "evidence": [
         "project-c/pppoppi-imperium/quality_v194/LASTMONTH_RESCUE_BROWSER_20261028.md",
-        "project-c/pppoppi-imperium/quality_v194/DUAL_LASTMONTH_RESCUE_BROWSER_20261028.md"
+        "project-c/pppoppi-imperium/quality_v194/DUAL_LASTMONTH_RESCUE_BROWSER_20261028.md",
+        "project-c/pppoppi-imperium/quality_v194/TRIPLE_LASTMONTH_RESCUE_BROWSER_20261029.md"
       ],
       "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "PR-Vorschlag: zwei gleichzeitige Schlussmonatsinsolvenzen mit Kredit, Neustart, Sitzungsrundlauf und Endarchiv; GitHub-CI auf finalem HEAD auswerten. Weitere Pflichtfaelle offen; Gate BLOCKED."
+      "next": "Dreifach-Schlussmonatsinsolvenz mit Notverkauf, Kredit, Neustart und vier echten Chromium-Prozessen: isolierter Browsertest PASS auf a7d4f965 (CI #40789090475); Gesamtregression am finalen HEAD sowie weitere Pflichtfaelle bleiben offen. Gate BLOCKED."
     },
     {
       "id": "VER-01",
@@ -130,10 +131,11 @@
         "project-c/pppoppi-imperium/quality_v194/SESSION_UI_ROUNDTRIP_20261028.md",
         "project-c/pppoppi-imperium/quality_v194/CAMPAIGN_BROWSER_ENDGAME_20261028.md",
         "project-c/pppoppi-imperium/quality_v194/LASTMONTH_RESCUE_BROWSER_20261028.md",
-        "project-c/pppoppi-imperium/quality_v194/DUAL_LASTMONTH_RESCUE_BROWSER_20261028.md"
+        "project-c/pppoppi-imperium/quality_v194/DUAL_LASTMONTH_RESCUE_BROWSER_20261028.md",
+        "project-c/pppoppi-imperium/quality_v194/TRIPLE_LASTMONTH_RESCUE_BROWSER_20261029.md"
       ],
       "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "PR-Vorschlag: zwei gleichzeitige Schlussmonatsinsolvenzen mit Kredit, Neustart, Sitzungsrundlauf und Endarchiv; GitHub-CI auf finalem HEAD auswerten. Weitere Pflichtfaelle offen; Gate BLOCKED."
+      "next": "Dreifach-Schlussmonatsinsolvenz mit Notverkauf, Kredit, Neustart und vier echten Chromium-Prozessen: isolierter Browsertest PASS auf a7d4f965 (CI #40789090475); Gesamtregression am finalen HEAD sowie weitere Pflichtfaelle bleiben offen. Gate BLOCKED."
     },
     {
       "id": "VER-02",
@@ -147,10 +149,11 @@
         "project-c/pppoppi-imperium/prerelease/evidence/SPE-01-BROWSER-MULTIGEN-PARTIAL-20261028.json",
         "project-c/pppoppi-imperium/quality_v194/LOSS_CAMPAIGN_BROWSER_20261028.md",
         "project-c/pppoppi-imperium/quality_v194/LASTMONTH_RESCUE_BROWSER_20261028.md",
-        "project-c/pppoppi-imperium/quality_v194/DUAL_LASTMONTH_RESCUE_BROWSER_20261028.md"
+        "project-c/pppoppi-imperium/quality_v194/DUAL_LASTMONTH_RESCUE_BROWSER_20261028.md",
+        "project-c/pppoppi-imperium/quality_v194/TRIPLE_LASTMONTH_RESCUE_BROWSER_20261029.md"
       ],
       "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "PR-Vorschlag: zwei gleichzeitige Schlussmonatsinsolvenzen mit Kredit, Neustart, Sitzungsrundlauf und Endarchiv; GitHub-CI auf finalem HEAD auswerten. Weitere Pflichtfaelle offen; Gate BLOCKED."
+      "next": "Dreifach-Schlussmonatsinsolvenz mit Notverkauf, Kredit, Neustart und vier echten Chromium-Prozessen: isolierter Browsertest PASS auf a7d4f965 (CI #40789090475); Gesamtregression am finalen HEAD sowie weitere Pflichtfaelle bleiben offen. Gate BLOCKED."
     },
     {
       "id": "VER-03",
@@ -301,10 +304,11 @@
         "project-c/pppoppi-imperium/quality_v194/SESSION_NATIVE_ZOOM_20261028.md",
         "project-c/pppoppi-imperium/quality_v194/CAMPAIGN_BROWSER_ENDGAME_20261028.md",
         "project-c/pppoppi-imperium/quality_v194/LASTMONTH_RESCUE_BROWSER_20261028.md",
-        "project-c/pppoppi-imperium/quality_v194/DUAL_LASTMONTH_RESCUE_BROWSER_20261028.md"
+        "project-c/pppoppi-imperium/quality_v194/DUAL_LASTMONTH_RESCUE_BROWSER_20261028.md",
+        "project-c/pppoppi-imperium/quality_v194/TRIPLE_LASTMONTH_RESCUE_BROWSER_20261029.md"
       ],
       "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "PR-Vorschlag: zwei gleichzeitige Schlussmonatsinsolvenzen mit Kredit, Neustart, Sitzungsrundlauf und Endarchiv; GitHub-CI auf finalem HEAD auswerten. Weitere Pflichtfaelle offen; Gate BLOCKED."
+      "next": "Dreifach-Schlussmonatsinsolvenz mit Notverkauf, Kredit, Neustart und vier echten Chromium-Prozessen: isolierter Browsertest PASS auf a7d4f965 (CI #40789090475); Gesamtregression am finalen HEAD sowie weitere Pflichtfaelle bleiben offen. Gate BLOCKED."
     },
     {
       "id": "SIC-01",
@@ -598,10 +602,11 @@
       "evidence": [
         "project-c/pppoppi-imperium/quality_v194/CAMPAIGN_BROWSER_ENDGAME_20261028.md",
         "project-c/pppoppi-imperium/quality_v194/LASTMONTH_RESCUE_BROWSER_20261028.md",
-        "project-c/pppoppi-imperium/quality_v194/DUAL_LASTMONTH_RESCUE_BROWSER_20261028.md"
+        "project-c/pppoppi-imperium/quality_v194/DUAL_LASTMONTH_RESCUE_BROWSER_20261028.md",
+        "project-c/pppoppi-imperium/quality_v194/TRIPLE_LASTMONTH_RESCUE_BROWSER_20261029.md"
       ],
       "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "PR-Vorschlag: zwei gleichzeitige Schlussmonatsinsolvenzen mit Kredit, Neustart, Sitzungsrundlauf und Endarchiv; GitHub-CI auf finalem HEAD auswerten. Weitere Pflichtfaelle offen; Gate BLOCKED."
+      "next": "Dreifach-Schlussmonatsinsolvenz mit Notverkauf, Kredit, Neustart und vier echten Chromium-Prozessen: isolierter Browsertest PASS auf a7d4f965 (CI #40789090475); Gesamtregression am finalen HEAD sowie weitere Pflichtfaelle bleiben offen. Gate BLOCKED."
     },
     {
       "id": "TES-04",
