@@ -64,8 +64,14 @@ def finish_two_human_turns(page):
         "['REPORT','RESCUE'].includes(NeoEconomy.getState()?.phase)"
     )
     after = state(page)
-    check("Monat exakt einmal abgerechnet",
-          len(after["reports"]) == len(before["reports"]) + 1
+    # Der Spielkern haelt absichtlich nur die letzten 120 Monatsberichte.
+    before_events = sum(e["type"] == "MONATSABSCHLUSS" for e in before["events"])
+    after_events = sum(e["type"] == "MONATSABSCHLUSS" for e in after["events"])
+    check("Monat exakt einmal abgerechnet, 120-Berichte-Ringgrenze beachtet",
+          after_events == before_events + 1
+          and len(after["reports"]) == min(before["month"], 120)
+          and after["lastReport"]["month"] == before["month"]
+          and after["reports"][-1] == after["lastReport"]
           and after["month"] == before["month"])
     check("Gueltiger Spielstand nach beiden Zuegen",
           page.evaluate("NeoEconomy.engine.validate(NeoEconomy.getState())") is True)
@@ -145,7 +151,8 @@ def main():
                       and second_rescue["companies"][0]["stats"]["rescues"] == 1
                       and second_rescue["companies"][1]["generation"] == 1
                       and pending(page) > 0
-                      and len(second_rescue["reports"]) == second_rescue["month"])
+                      and len(second_rescue["reports"]) == min(second_rescue["month"], 120)
+                      and second_rescue["lastReport"]["month"] == second_rescue["month"])
                 saved_two = export_state(page)
                 check("Offene zweite Sanierung exakt exportiert", saved_two == second_rescue)
             finally:
