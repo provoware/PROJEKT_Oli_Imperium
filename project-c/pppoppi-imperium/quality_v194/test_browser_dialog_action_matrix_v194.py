@@ -131,8 +131,8 @@ def main():
                     try:
                         scenes = inventory_page.evaluate(
                             "PPNavigation191.getScenes()")
-                        check(label + ": 39 eindeutige Spielszenen",
-                              len(scenes) == 39 and len(set(scenes)) == 39)
+                        check(label + ": 40 eindeutige Spielszenen",
+                              len(scenes) == 40 and len(set(scenes)) == 40)
                         cases = scan(inventory_page, scenes)
                         check(label + ": mehrere unterschiedliche Aktionen",
                               len(cases) >= 12)
