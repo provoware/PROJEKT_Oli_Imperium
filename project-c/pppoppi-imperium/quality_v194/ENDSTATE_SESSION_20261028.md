@@ -12,7 +12,7 @@ Der bisherige Endregel-Prototyp konnte abgeschlossene Spielstaende berechnen und
 - `apply` fuehrt Aktionen ueber eine Kopie des aktuellen Spielstandes aus. Nur ein erfolgreich gepruefter Engine-Zustand wird uebernommen; Fehler duerfen die gespeicherte Sitzung nicht teilweise veraendern.
 - Kampagne wird nur beim Schlussbericht archiviert. Freies Spiel verlangt `finish(true)`; offene Rettung verhindert den Abschluss. Archivierte Partien verweigern weitere Aktionen.
 - Neues, eigenstaendiges Sitzungsschema `pppoppi.endstate.session.proposal/1`; aktive und abgeschlossene Sitzungen werden unterschiedlich gespeichert. Import prueft den Vertrag, genau einen Zustand, unzulaessige Schluessel, Tiefe, Knotenanzahl und 5-MB-Grenze. Archiv-Import nutzt die bereits vorhandene Konsistenzpruefung aus PR #108.
-- `quality_v194/test_endstate_session_v194.cjs`: neun Tests, darunter echter V0.8.2-Kern, Monatsabschluss und Neuladen im GitHub-Repository. Eigener Schritt in der bestehenden Browser-CI.
+- `quality_v194/test_endstate_session_v194.cjs`: zehn Tests, darunter echter V0.8.2-Kern, Monatsabschluss, 12-Monats-Kampagne, Rettung und Neuladen im GitHub-Repository. Eigener Schritt in der bestehenden Browser-CI.
 
 **Keine Aenderung** der 110 geschuetzten Original-Spielquellen, keine neue historische C64-Behauptung, keine stille Aenderung des V0.8.2-Spielstandschemas.
 
@@ -26,7 +26,7 @@ node --check test_endstate_session_v194.cjs
 node --test test_endstate_session_v194.cjs
 ```
 
-Erster lokaler Durchlauf: **7 PASS / 2 FAIL** (Testattrappe pruefte negativen Monat nicht; erwarteter Fehlertext war zu eng). Beide Testfehler korrigiert. Zweiter lokaler Durchlauf: **8 PASS / 0 FAIL / 1 SKIP**. Der neunte Test benoetigt die Originaldateien aus dem Repository und wird im GitHub-CI-Schritt ausgefuehrt. Ein SKIP ist **kein PASS**.
+Erster lokaler Durchlauf: **7 PASS / 2 FAIL** (Testattrappe pruefte negativen Monat nicht; erwarteter Fehlertext war zu eng). Beide Testfehler korrigiert. Zweiter lokaler Durchlauf: **8 PASS / 0 FAIL / 1 SKIP**. Nach Ergaenzung des echten 12-Monats-Kampagnentests: **8 PASS / 0 FAIL / 2 SKIP**. Beide Integrationstests benoetigen die Originaldateien aus dem Repository und muessen im GitHub-CI-Schritt ohne SKIP laufen. Ein SKIP ist **kein PASS**.
 
 Die vorherige PR #108 wurde nachtraeglich verifiziert: [Browser-CI #40673008836](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40673008836) **PASS**, [Quellpruefung #40673008706](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40673008706) **PASS**, [Gesamtgate #40673008731](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40673008731) **FAIL/BLOCKED** wegen offener Releasepflichten. **CI des neuen Entwicklungszweigs separat pruefen.**
 
