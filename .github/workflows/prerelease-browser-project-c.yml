@@ -160,5 +160,7 @@ jobs:
         run: |
           python -m pip install playwright==1.56.0
           python -m playwright install --with-deps chromium
+      - name: MV3-Serviceworker-Race, Timeout und Zoom-API isoliert pruefen
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_zoom_worker_wait_v194.py
       - name: 216 Feldauswahlen in vier Dialogen bei echtem 175/200-Prozent-Zoom
         run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_dialog_select_stability_v194.py
