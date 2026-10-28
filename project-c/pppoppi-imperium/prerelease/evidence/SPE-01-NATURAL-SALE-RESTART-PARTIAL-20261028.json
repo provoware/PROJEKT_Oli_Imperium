@@ -1,0 +1,22 @@
+{
+  "gate_id": "SPE-01",
+  "related_gate_ids": [
+    "VER-03",
+    "LOG-04"
+  ],
+  "date": "2026-10-28",
+  "result": "PARTIAL",
+  "test_scope": "Natuerlicher Notverkauf nach 8 realen Browseraktionen, 2 Chromium-Prozesse, 1 JSON-Import, 2 Monatsabrechnungen, 800x600 und offline",
+  "command": "python3 project-c/pppoppi-imperium/quality_v194/test_browser_natural_sale_restart_v194.py",
+  "ci_run_url": null,
+  "ci_step_result": "PENDING",
+  "release_gate": "BLOCKED",
+  "initial_base_head": "2bef595184619b4a5128c79f41a44da9b1414e70",
+  "original_source_files_changed": 0,
+  "limitations": [
+    "Noch keine CI-Ausfuehrung bei Erstellung",
+    "Keine vollstaendige Sieg-/Niederlagenpartie",
+    "Keine Mehrgenerationen-Sanierung",
+    "Kein historischer C64-Vergleich"
+  ]
+}
