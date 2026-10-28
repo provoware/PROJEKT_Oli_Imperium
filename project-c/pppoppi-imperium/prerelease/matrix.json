@@ -128,7 +128,7 @@
       "status": "blocked",
       "evidence": [],
       "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "Verlustpfade testen"
+      "next": "Zwei-Menschen-Zwischensanierung aus PR #98 mit Browser-CI pruefen; danach regulare Verlust- und Endpartien samt Wiederherstellung nachweisen."
     },
     {
       "id": "VER-03",
@@ -139,7 +139,7 @@
       "status": "blocked",
       "evidence": [],
       "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "Neustart und Fortsetzung nach Monat 4, 8 und 12 in frischen Chromium-Prozessen nachweisen; vollstaendige Sieg-/Niederlagenpartien bleiben unabhaengig offen."
+      "next": "Browser-Neustart zwischen H1-Kredit und H2-Sanierungsneustart in PR #98 auswerten; anschliessend Neustarts in langen Endpartien pruefen."
     },
     {
       "id": "WIR-01",
@@ -231,10 +231,11 @@
       "status": "blocked",
       "evidence": [
         "project-c/pppoppi-imperium/prerelease/evidence/SPE-01-CLAIM-ROUNDTRIP-PARTIAL-20261027.json",
-        "project-c/pppoppi-imperium/prerelease/evidence/SPE-01-COMPLEX-MULTIFIRM-PARTIAL-20261028.json"
+        "project-c/pppoppi-imperium/prerelease/evidence/SPE-01-COMPLEX-MULTIFIRM-PARTIAL-20261028.json",
+        "project-c/pppoppi-imperium/prerelease/evidence/SPE-01-MID-RESCUE-PARTIAL-20261028.json"
       ],
-      "blocker": "Chromium-CI #40603795251 auf Code-HEAD 8ec7a177313136cb040dfe26c833e09b392e6b2a PASS (vier Browserjobs). Neuer Teiltest: zwei menschliche und zwei KI-Firmen, zwei Regionen, zwei Vertragsabschluesse, zwei Monatsabrechnungen, vier frische Browserkontexte, drei exakte Importe und unabhaengige wirtschaftliche Fortsetzung ohne Doppelbuchung. Weitere Spielphasen, beliebige Fremdeingaben, vollstaendige Endpartien und verbindliche Endregeln fehlen; SPE-01 und Gesamtgate BLOCKED.",
-      "next": "Weitere komplexe Speicher-/Buchungsfaelle (Sanierung, Vertragsbruch, mehrere Generationen) und komplette Endpartien testen; neues Teiltest-Ergebnis im Chromium-Job #40603795251 PASS, kein Gesamt-PASS."
+      "blocker": "Chromium-CI #40603795251 auf Code-HEAD 8ec7a177313136cb040dfe26c833e09b392e6b2a PASS (vier Browserjobs). Neuer Teiltest: zwei menschliche und zwei KI-Firmen, zwei Regionen, zwei Vertragsabschluesse, zwei Monatsabrechnungen, vier frische Browserkontexte, drei exakte Importe und unabhaengige wirtschaftliche Fortsetzung ohne Doppelbuchung. Weitere Spielphasen, beliebige Fremdeingaben, vollstaendige Endpartien und verbindliche Endregeln fehlen; SPE-01 und Gesamtgate BLOCKED. PR #98: Chromium-CI #40609519522 auf HEAD 4deb5c4e3f8f59f10012c710c23a7bd57d0a36f3 PASS in allen vier Jobs, einschliesslich echtem Zwei-Menschen-Sanierungszwischenstand mit Browserneustart. Frueherer Lauf #40609444650 mit unabhaengigem Serviceworker-Start-FLAKE; Ursache offen. Vollstaendige Endpartien und weitere Spielphasen weiterhin offen.",
+      "next": "Weitere echte Vertragsbruch-/Notverkauf-/Mehrgenerationen-Buchungen nach Export/Import pruefen, Serviceworker-Flake diagnostizieren und Endpartien absichern; Gesamtgate bleibt BLOCKED."
     },
     {
       "id": "SPE-02",

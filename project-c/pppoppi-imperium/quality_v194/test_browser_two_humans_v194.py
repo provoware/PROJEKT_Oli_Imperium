@@ -142,6 +142,41 @@ def main():
                 check("H1-Rettungskredit nur einmal im Journal",
                       len([x for x in after_loan["companies"][0]["ledger"]
                            if x["code"] == "RETTUNGSKREDIT"]) == 1)
+                # Kritischer Zwischenstand: H1 ist bereits gerettet, H2 noch nicht.
+                # Die offene zweite Sanierung muss einen Browser-Neustart ueberleben.
+                page.locator("#closeBtn").click()
+                with page.expect_download() as partial_download:
+                    page.locator("#saveGame").click()
+                partial = json.loads(
+                    Path(partial_download.value.path()).read_text(encoding="utf-8")
+                )
+                check("Offene H2-Sanierung vollstaendig exportiert",
+                      partial == after_loan
+                      and partial["rescueIds"] == ["H2"]
+                      and len(partial["reports"]) == 1)
+                context.close()
+
+                context, page = session()
+                check("Frischer Browserkontext ohne alte Sanierung",
+                      state(page) is None)
+                page.locator("#loadEconFile").set_input_files({
+                    "name": "zwei-menschen-zwischen-sanierungen.json",
+                    "mimeType": "application/json",
+                    "buffer": json.dumps(partial, ensure_ascii=False).encode("utf-8"),
+                })
+                page.wait_for_function(
+                    "NeoEconomy.getState()?.phase === 'RESCUE'"
+                )
+                check("H1-Kredit und H2-Sanierung exakt wiederhergestellt",
+                      state(page) == partial
+                      and page.evaluate(
+                          "NeoEconomy.engine.validate(NeoEconomy.getState())"
+                      ) is True
+                      and pending(page, 0) == 0
+                      and pending(page, 1) == 80_000
+                      and len([x for x in state(page)["companies"][0]["ledger"]
+                               if x["code"] == "RETTUNGSKREDIT"]) == 1)
+                page.evaluate("NeoEconomy.open('rescue')")
                 page.locator('[data-econ="RESTART"]').click()
                 recovered = state(page)
                 check("H2-Neustart beendet Sanierung, H1 unveraendert",
