@@ -288,10 +288,11 @@
         "project-c/pppoppi-imperium/quality_v194/BROWSER_ENDSTATE_BUNDLE_20261028.md",
         "project-c/pppoppi-imperium/quality_v194/LIVE_ENDSTATE_ADAPTER_20261028.md",
         "project-c/pppoppi-imperium/quality_v194/SESSION_UI_ROUNDTRIP_20261028.md",
-        "project-c/pppoppi-imperium/quality_v194/SESSION_IMPORT_RACE_20261028.md"
+        "project-c/pppoppi-imperium/quality_v194/SESSION_IMPORT_RACE_20261028.md",
+        "project-c/pppoppi-imperium/quality_v194/SESSION_NATIVE_ZOOM_20261028.md"
       ],
       "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "Neuer Browser-Regressionsfall fuer 5.000.001-Byte-Sitzung und verzoegerten Import nach Kampagnenneustart eingereicht; CI auf neuem HEAD auswerten. Vollstaendiger Speicherrueckfall und Endpartien offen; BLOCKED."
+      "next": "Teiltest: Sitzungsdatei bei echtem 175/200-%-Zoom nach 12→24→12-Monats-Neustart wiederhergestellt; CI #40746767519 native-zoom-regression PASS. Weitere Speicherfehler und komplette Endpartien offen; BLOCKED."
     },
     {
       "id": "SIC-01",
@@ -317,10 +318,11 @@
         "project-c/pppoppi-imperium/quality_v194/IMPORT_NESTED_SIZE_20261027.md",
         "project-c/pppoppi-imperium/quality_v194/ARCHIVE_ENGINE_VALIDATION_20261028.md",
         "project-c/pppoppi-imperium/quality_v194/SESSION_UI_ROUNDTRIP_20261028.md",
-        "project-c/pppoppi-imperium/quality_v194/SESSION_IMPORT_RACE_20261028.md"
+        "project-c/pppoppi-imperium/quality_v194/SESSION_IMPORT_RACE_20261028.md",
+        "project-c/pppoppi-imperium/quality_v194/SESSION_NATIVE_ZOOM_20261028.md"
       ],
       "blocker": "PR #96 Code-HEAD 27914652cc4933239b07841009b828e0f4d2f87a: GitHub-Browser-CI #40595443169 PASS (vier Jobs, Import-Schritt success), Quellpruefung #40595443211 PASS. Insgesamt 30 ungueltige JSON-Strukturen atomar abgewiesen, gueltige 5.000.000-Byte-Datei importiert, 5.000.001 Bytes sicher abgewiesen, HTML-Fremdname in acht Szenen text-sicher. Weiterhin nicht alle Fremdeingaben, beliebige Tiefen und Endpartien abgedeckt; SIC-02 und Gesamtgate BLOCKED.",
-      "next": "Neuer Browser-Regressionsfall prueft Uebergroesse und ImportRevision-Rennen im versionierten Sitzungsweg; CI auf neuem HEAD auswerten. Weitere Fremdeingaben und Endpartien offen; BLOCKED."
+      "next": "Teiltest: Datei-Auswahldialog per Enter bei 175/200 % in Chromium tatsächlich empfangen, validierter Sitzungsimport unverändert; CI #40746767519 Zoom-Job PASS. Vollständige Fremdeingabe- und Manipulationsmatrix offen; BLOCKED."
     },
     {
       "id": "SIC-03",
@@ -455,10 +457,11 @@
         "project-c/pppoppi-imperium/prerelease/evidence/BED-02-DIALOG-MATRIX-PARTIAL-20261027.json",
         "project-c/pppoppi-imperium/prerelease/evidence/BED-02-CLAIM-PARAMETERS-PARTIAL-20261027.json",
         "project-c/pppoppi-imperium/quality_v194/ENDSTATE_DIALOG_20261028.md",
-        "project-c/pppoppi-imperium/quality_v194/SESSION_UI_ROUNDTRIP_20261028.md"
+        "project-c/pppoppi-imperium/quality_v194/SESSION_UI_ROUNDTRIP_20261028.md",
+        "project-c/pppoppi-imperium/quality_v194/SESSION_NATIVE_ZOOM_20261028.md"
       ],
       "blocker": "Teilkette mit 15 echten Tab/Enter-Aktionen je Zoomstufe (175/200 %) und zwei Monatsabschluessen je Durchlauf in Chromium #40467829258 PASS, einschliesslich unzulaessiger Foerderung, Doppelkauf und Exportgleichheit. Andere Pflichtaktionen und vollstaendige Dialog-Endpartien bleiben ungetestet; Gate BLOCKED. Neuer Teiltest: Browser-CI #40505215686 PASS auf 95b393211465427c58c08a71ce35ffc2ce026573; bei echtem 175/200-%-Zoom je 39 Szenen, 13 per Tab/Enter aktivierte Wirtschaftsaktionen (12 unterschiedliche Kennungen), 26 Szenen ohne geeignete data-econ-Aktion, je 2 Zustandsaenderungen; 0 JS-Fehler/externe Anfragen. Keine vollstaendige fachliche Sollfolgen- oder Endpartienabnahme; Gate BLOCKED.",
-      "next": "Sitzungs-Schalter im Firmencomputer und Abschlussarchiv vorhanden; Tastatur-, Zoom- und Vollstaendigkeitsnachweis fuer alle Pflichtaktionen fehlen; BLOCKED."
+      "next": "Teiltest: Start, Spielart, Export, Import und Neustart mit echten Tab-/Enter-/Pfeiltasten bei nativem 175/200-%-Zoom; CI #40746767519 Zoom-Job PASS. Übrige Pflichtaktionen und Endpartien offen; BLOCKED."
     },
     {
       "id": "BED-03",
@@ -480,10 +483,11 @@
         "project-c/pppoppi-imperium/prerelease/evidence/BED-03-FLOW-DYNAMIC-PARTIAL-20261027.json",
         "project-c/pppoppi-imperium/prerelease/evidence/BED-03-PARTIAL-WORDS-20261027.json",
         "project-c/pppoppi-imperium/prerelease/evidence/BED-03-ANIMATION-PHASES-PARTIAL-20261027.json",
-        "project-c/pppoppi-imperium/prerelease/evidence/BED-03-DIALOG-ACTIONS-PARTIAL-20261027.json"
+        "project-c/pppoppi-imperium/prerelease/evidence/BED-03-DIALOG-ACTIONS-PARTIAL-20261027.json",
+        "project-c/pppoppi-imperium/quality_v194/SESSION_NATIVE_ZOOM_20261028.md"
       ],
       "blocker": "39 Szenen und Minispiele in frueheren Teilpruefungen getestet; neuer echter Wirtschafts-/Monatsbericht-Test: 200-%-Erstlauf #40467580953 FAIL (54 CSS-Pixel Ueberlauf), korrigierte Technikfassung in #40467829258 PASS mit 175/200 %, 27 Element-Vorkommen je Zoom, 0 Ueberlauf und 0 verdeckten Bedienelementen in Feldansicht/Monatsbericht. Vollstaendige Text-/Animationsueberdeckungen, weitere Dialogaktionen und reguläre Endpartien fehlen; Gate BLOCKED. Neuer Text-Teiltest: Chromium #40474144518 PASS, je 39 Szenen, 170 gemessene Ueberschriften-/Tabellen-Textstellen und 32 Zellen bei echtem 175/200-%-Zoom, 0 erkannte Abschneidungen oder vollstaendige Ueberdeckungen; synthetische Ueberdeckung korrekt erkannt. Nicht alle Textarten/Animationen oder Endpartien geprueft; Gate BLOCKED. Neuer Fliesstext-/Dynamik-Teiltest: Chromium #40481736341 PASS, je 39 Szenen und 98 Phasen-Momentaufnahmen bei 175/200 %, je 312 gemessene Fliesstextstellen, 0 erkannte Abschneidungen/Ueberdeckungen/unmessbare Stellen. 191 bzw. 194 Beobachtungen laufender Animationen sind keine vollstaendige Animationsabnahme. Weitere Dialogaktionen, Pixelvergleich und Endpartien fehlen; Gate BLOCKED. Neuer Wort-Teilueberdeckungstest auf 52aa1fd488b9e185d6180311cd361b95e58d9cb9: Browser-CI #40489364393 PASS, je 39 Szenen/196 Momentaufnahmen/624 Fliesstextmessungen; 15.576 bzw. 15.684 Wort-Treffpunkte, 0 erkannte Teil-/Vollueberdeckungen oder Abschneidungen. Synthetische Teilueberdeckung erkannt. Vier Zeitstichproben sind kein lueckenloser Animations- oder Endspielnachweis; Gate BLOCKED. Neuer deterministischer Animations-Teiltest: Chromium #40497893039 PASS auf 120bd650cea72f8be06582b5bcdba9e28d6455e4; je 39 Szenen, davon 11 mit geeigneten Animationen (29 Animations-Vorkommen), 88 gezielte Phasen, 352 Fliesstextmessungen, 7.488/7.536 Wort-Treffpunkte bei 175/200 %, 0 gemessene Textfehler. Kein lueckenloser Animations-/Pixelnachweis; andere Dialogaktionen und Endpartien fehlen, Gate BLOCKED. Neuer Teiltest: Browser-CI #40505215686 PASS auf 95b393211465427c58c08a71ce35ffc2ce026573; bei echtem 175/200-%-Zoom je 39 Szenen, 13 per Tab/Enter aktivierte Wirtschaftsaktionen (12 unterschiedliche Kennungen), 26 Szenen ohne geeignete data-econ-Aktion, je 2 Zustandsaenderungen; 0 JS-Fehler/externe Anfragen. Keine vollstaendige fachliche Sollfolgen- oder Endpartienabnahme; Gate BLOCKED.",
-      "next": "CI #40571243683: 216/216 Feldauswahlen PASS, native Claim-Parameter FAIL bei 175%/BERLIN-3. close-Ereignis-Synchronisierung gegen 180 Aktionen/18 Export-Import-Rundlaeufe pruefen; bei FAIL aktive Szene und DOM auswerten, dann Endpartien."
+      "next": "Teiltest: sichtbarer Fokus und horizontal treffbare Sitzungsschalter bei 175/200 % mit echtem Chromium-Tab-Zoom; CI #40746767519 Zoom-Job PASS. Vollständige Szenen-/Überlaufabnahme bleibt BLOCKED."
     },
     {
       "id": "BAR-01",
