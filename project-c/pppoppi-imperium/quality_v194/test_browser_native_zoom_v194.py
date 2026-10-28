@@ -9,8 +9,9 @@ import json
 import subprocess
 import tempfile
 from pathlib import Path
+from time import monotonic
 
-from playwright.sync_api import sync_playwright
+from playwright.sync_api import TimeoutError as PlaywrightTimeoutError, sync_playwright
 
 HERE = Path(__file__).resolve().parent
 ZOOMS = (1.75, 2.0)
@@ -43,6 +44,39 @@ def extension_at(folder):
     (folder / "background.js").write_text(
         "chrome.runtime.onInstalled.addListener(() => {});\n",
         encoding="utf-8")
+
+
+def wait_for_zoom_worker(context, timeout_ms=15000):
+    """Wait for the MV3 worker without a snapshot/event subscription race.
+
+    No restart or test retry: a missing extension still fails at the deadline.
+    """
+    deadline = monotonic() + timeout_ms / 1000
+
+    def ready(worker):
+        if not worker.evaluate("typeof chrome.tabs.setZoom === 'function'"):
+            raise AssertionError("Zoom-Serviceworker ohne tabs.setZoom")
+        return worker
+
+    while True:
+        candidates = [worker for worker in context.service_workers
+                      if worker.url.startswith("chrome-extension://")]
+        if candidates:
+            return ready(candidates[0])
+        remaining = int((deadline - monotonic()) * 1000)
+        if remaining <= 0:
+            raise AssertionError(
+                "Zoom-Serviceworker nicht gestartet (" + str(timeout_ms) +
+                " ms); vorhandene Worker: " +
+                repr([worker.url for worker in context.service_workers]))
+        try:
+            worker = context.wait_for_event(
+                "serviceworker", timeout=min(500, remaining))
+            if worker.url.startswith("chrome-extension://"):
+                return ready(worker)
+        except PlaywrightTimeoutError:
+            # Event may have arrived between snapshot and subscription.
+            continue
 
 
 def set_real_zoom(worker, url, factor):
@@ -206,8 +240,7 @@ def main():
                         if req.url.startswith(("http://", "https://")) else None)
                 page.goto((preview / "index.html").as_uri(), wait_until="load")
                 page.wait_for_function("typeof PPNavigation191 === 'object'")
-                worker = (context.service_workers[0] if context.service_workers
-                          else context.wait_for_event("serviceworker", timeout=15000))
+                worker = wait_for_zoom_worker(context)
                 check("MV3-Erweiterung ist geladen",
                       worker.url.startswith("chrome-extension://"))
                 check("Spielstart mit Tab", tab_to(page, "#startGame"))

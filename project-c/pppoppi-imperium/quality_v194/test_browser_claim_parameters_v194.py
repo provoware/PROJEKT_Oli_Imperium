@@ -9,6 +9,7 @@ import json
 import subprocess
 import tempfile
 from pathlib import Path
+from test_browser_native_zoom_v194 import wait_for_zoom_worker
 
 from playwright.sync_api import TimeoutError as PlaywrightTimeoutError, sync_playwright
 
@@ -274,9 +275,7 @@ def main():
                 args=["--disable-extensions-except=" + str(root / "extension"),
                       "--load-extension=" + str(root / "extension")])
             try:
-                worker = (context.service_workers[0] if context.service_workers
-                          else context.wait_for_event("serviceworker",
-                                                     timeout=15000))
+                worker = wait_for_zoom_worker(context)
                 check("Echte Chromium-Zoom-Erweiterung geladen",
                       worker.url.startswith("chrome-extension://"))
                 probe_errors, probe_external = [], []
