@@ -26,9 +26,9 @@ Zwei menschliche Firmen werden durch **echte Wirtschaftsklicks** erst im letzten
 |---|---|
 | Vorherige 8 Browserjobs auf #120 | PASS |
 | Vorherige Quellpruefung auf #120 | PASS |
-| Neuer Doppelsanierungs-Browsertest | PENDING bis GitHub-CI auf neuem HEAD |
-| Bestehende Regressionen auf neuem HEAD | PENDING |
-| Historische Originalreferenz | BLOCKED |
+| Neuer Doppelsanierungs-Browsertest | **PASS** – [isolierte Chromium-CI #40781823687](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40781823687) auf Commit `3a0d2c121c9f1d6e408429b99c52caac5670a687` |
+| Bestehende Regressionen auf neuem HEAD | Teilweise PASS, restliche Browserjobs noch in Arbeit: [CI #40781823655](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40781823655). Neue Commit-CI erneut pruefen. |
+| Quellnachweis | **PASS** – [Quell-CI #40781823636](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40781823636) auf Commit `3a0d2c1…` |\n| Historische Originalreferenz | BLOCKED |
 | Technische Vorrelease-Gesamtfreigabe | BLOCKED |
 
 **Pflichtmatrix:** unveraendert **6 PASS / 39 BLOCKED / 4 OPEN / 3 DEFERRED = 52**. Neuer Teilnachweis fuer `VER-01`, `VER-02`, `LOG-05`, `SPE-03`, `TES-03`; keine voreilige Statusaenderung.
