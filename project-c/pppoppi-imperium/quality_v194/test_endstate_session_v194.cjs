@@ -90,3 +90,35 @@ test('Echter V0.8.2-Kern: Monatswechsel, freiwilliger Abschluss und Archiv-Neula
  assert.throws(()=>loaded.apply({type:'END_TURN',companyId:'H1',requestId:'SESSION-3'}),/unveraenderbar/);
  assert.equal(E.validate(loaded.snapshot()),true);
 });
+test('Echter V0.8.2-Kern: 12 Monate Kampagne, Rettung und endgueltige Aktionssperre', t=>{
+ const fs=require('node:fs'),path=require('node:path');
+ if(!fs.existsSync(path.resolve(__dirname,'../SPIEL/src/v082_strategy_engine.js'))){t.skip('Originalquellen nur im GitHub-Repository vorhanden');return;}
+ require('../SPIEL/src/v07_engine.js');require('../SPIEL/src/v08_engine.js');
+ const E=require('../SPIEL/src/v082_strategy_engine.js');
+ const C=require('./endstate_candidate_v194.cjs');
+ const IO=require('./endstate_archive_io_v194.cjs');
+ const d={engine:E,candidate:C,io:IO,regions:E.REGIONS};
+ const s=S.createSession({...d,contract:C.rules({mode:'campaign',months:12}),
+   state:E.fresh({humans:2,ais:0,seed:'SESSION-CAMPAIGN-12'})});
+ let seq=0;
+ const action=(type,companyId)=>s.apply({type,companyId,requestId:'SESSION-CAMP-'+(++seq)});
+ for(let month=1;month<=12;month++){
+   assert.equal(s.status(),'active');
+   assert.equal(s.snapshot().month,month);
+   action('END_TURN','H1');action('END_TURN','H2');
+   while(s.status()==='active'&&s.snapshot().phase==='RESCUE'){
+     assert.ok(seq<100,'Rettungsschleife');
+     action('RESTART',s.snapshot().rescueIds[0]);
+   }
+   if(month<12){assert.equal(s.snapshot().phase,'REPORT');action('NEXT_MONTH');}
+ }
+ assert.equal(s.status(),'finished');
+ assert.equal(s.snapshot().month,12);
+ const archived=JSON.parse(s.exportArchive());
+ assert.ok(archived.winnerIds.length>=1);
+ assert.equal(archived.endMonth,12);
+ const restored=S.importSession(s.exportSession(),d);
+ assert.equal(restored.status(),'finished');
+ assert.throws(()=>restored.apply({type:'NEXT_MONTH',requestId:'SESSION-CAMP-POST'}),/unveraenderbar/);
+ assert.equal(E.validate(restored.snapshot()),true);
+});
