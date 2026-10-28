@@ -5,11 +5,11 @@
     "FEH-03"
   ],
   "date": "2026-10-28",
-  "result": "PENDING",
+  "result": "PARTIAL",
   "test_scope": "Natural browser contract partial delivery, four human players, 3 Chromium process starts, 2 monthly reports, 3 JSON imports, 800x600 and offline",
   "command": "python3 project-c/pppoppi-imperium/quality_v194/test_browser_partial_delivery_v194.py",
   "ci_run_url": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40638560076",
-  "ci_step_result": "IN_PROGRESS",
+  "ci_step_result": "PASS",
   "planned_assertions": {
     "initial_mode": "4-0",
     "initial_oil_milli": 100000,
@@ -31,5 +31,14 @@
     "No complete win/loss game",
     "No C64 historical reference comparison",
     "Does not cover every contract, refinery or storage boundary"
+  ],
+  "tested_code_head": "6394724d2b56b22806a7a8ee13cc3d64929b3a65",
+  "ci_full_run_at_documentation": "IN_PROGRESS",
+  "verified_properties": [
+    "Chromium job step 'Natuerliche Browser-Teillieferung mit zwei echten Chromium-Prozessneustarts' PASS on 6394724d2b56b22806a7a8ee13cc3d64929b3a65",
+    "4-0 start and natural 80000 NORD market sale after visible UI actions",
+    "20000/40000 BREACH after real month two, exact revenue, penalty and transport fee",
+    "3 distinct Chromium processes, 3 JSON imports, no duplicate booking",
+    "800x600 horizontal overflow, offline requests and JavaScript errors checked"
   ]
 }

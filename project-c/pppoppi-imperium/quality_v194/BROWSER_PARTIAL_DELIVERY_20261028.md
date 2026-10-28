@@ -14,7 +14,7 @@ PR #102 beweist die Teilmengenabrechnung nur im isolierten Node-Spielkern. Diese
 
 ## Nachweise und Grenzen
 - Neuer Test: `quality_v194/test_browser_partial_delivery_v194.py`; eingebunden in `.github/workflows/prerelease-browser-project-c.yml`.
-- Prüfung ist erst **PASS**, wenn der neue CI-Schritt auf dem konkreten Commit erfolgreich abgeschlossen wurde. Bis dahin **NOT_RUN / PENDING**.
+- **Tatsächlich PASS:** neuer Browser-Teillieferungs-Schritt in [Chromium-CI #40638625387](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40638625387) auf Code-HEAD `6394724d2b56b22806a7a8ee13cc3d64929b3a65`. Die gesamte Chromium-CI war beim Dokumentations-Commit noch **IN_PROGRESS**; die technische Gesamtfreigabe bleibt BLOCKED.
 - Dieser Fall ersetzt weder eine vollständige Partie bis Sieg/Niederlage noch C64-Originalverifikation, Raffinerie-/Transportgrenzfälle oder die Gesamtfreigabe. `WIR-03` und `SPE-01` bleiben **BLOCKED**.
 - Persönliche Sicht- und Kubuntu-Abnahme erst nach allen eigenständig möglichen technischen Pflichtgates.
 
