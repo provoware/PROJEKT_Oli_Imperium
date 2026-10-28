@@ -85,6 +85,34 @@ def main():
               month: NeoEconomy.getState().month
             })""")
             assert free == {"mode": "free", "status": "active", "month": 1}, free
+            # Echte Bedienfolge: freie Partie nicht versehentlich beenden, dann bestaetigen.
+            page.evaluate("window.NeoEconomy.open('computer')")
+            page.get_by_role("button", name="Spielende pruefen").click()
+            confirm = page.get_by_role("button", name="Ja, Partie endgueltig abschliessen")
+            assert confirm.is_visible(), "Bestaetigungsdialog fehlt"
+            confirm.focus()
+            confirm.press("Tab")
+            assert page.evaluate("document.activeElement?.dataset?.ui") == "finish-cancel", "Abbruch nicht per Tab erreichbar"
+            page.get_by_role("button", name="Nein, weiterspielen").click()
+            assert page.evaluate("NeoEconomy.endstate.status()") == "active", "Abbruch hat Partie beendet"
+            page.evaluate("window.NeoEconomy.open('computer')")
+            page.get_by_role("button", name="Spielende pruefen").click()
+            page.get_by_role("button", name="Ja, Partie endgueltig abschliessen").click()
+            archived = page.evaluate("""() => ({
+              status: NeoEconomy.endstate.status(),
+              archive: NeoEconomy.endstate.archive(),
+              text: document.getElementById('dialogContent').innerText,
+              state: JSON.stringify(NeoEconomy.getState())
+            })""")
+            assert archived["status"] == "finished", archived
+            assert archived["archive"]["reason"] == "voluntary-end", archived
+            assert archived["archive"]["endMonth"] == 1, archived
+            assert "NUR LESEN" in archived["text"], archived
+            assert "Weitere Wirtschaftsaktionen sind gesperrt" in archived["text"], archived
+            page.evaluate("window.NeoEconomy.send('END_TURN')")
+            assert page.evaluate("JSON.stringify(NeoEconomy.getState())") == archived["state"], "Archiv wurde veraendert"
+            page.evaluate("window.NeoEconomy.open('endstate')")
+            assert page.get_by_role("button", name="Neue Partie vorbereiten").is_visible()
             assert not errors, errors
             browser.close()
             print("PASS: Offline-Chromium 800x600, Live-Spielaktion, freiwilliger "
