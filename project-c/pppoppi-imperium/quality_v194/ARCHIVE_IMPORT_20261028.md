@@ -12,7 +12,7 @@ Der isolierte Endregel-Prototyp aus PR #107 erzeugt ein Archiv, dessen JSON-Kopi
 - Import begrenzt auf 4 MiB UTF-8, 64 Verschachtelungsebenen und 100000 JSON-Knoten; Ablehnung gefaehrlicher Objektschluessel und ungueltiger JSON-Daten.
 - Endabrechnung wird aus dem enthaltenen Spielstand mit dem vorhandenen isolierten Endregel-Prototyp **neu berechnet**. Sieger, Rangfolge, Modus, Endmonat, Quelle und alle weiteren Archivfelder muessen exakt zusammenpassen; die Reihenfolge von JSON-Objektschluesseln ist dabei unerheblich.
 - Eingelesene Archive werden rekursiv schreibgeschuetzt. Der bisherige `guardArchived` kann auf sie angewendet werden, ist aber weiterhin **nicht** mit der produktiven Spiel-Engine verbunden.
-- Neun neue automatisierte Node-Tests und ein zusaetzlicher CI-Schritt im bestehenden Chromium-Hauptjob.
+- Zehn neue automatisierte Node-Tests (neun isolierte plus ein Test gegen den echten V0.8.2-Monatsbericht) und ein zusaetzlicher CI-Schritt im bestehenden Chromium-Hauptjob.
 
 **Wichtige Grenze:** Diese Pruefung belegt nur **innere Konsistenz**, nicht Echtheit oder Unveraenderlichkeit gegen einen absichtlichen Angreifer, der Spielstand und Ergebnis gemeinsam passend faelscht. Es gibt **keine digitale Signatur**, keine Browser-Importoberflaeche und keinen belastbaren Endspielpfad. Archiv-JSON ist **nicht** automatisch ein gueltiger aktiver Spielstand.
 
@@ -26,7 +26,7 @@ node --check test_endstate_archive_io_v194.cjs
 node --test test_endstate_archive_io_v194.cjs
 ```
 
-**PASS 9/9** (9 Tests, 0 FAIL), Syntax beider neuen Dateien PASS. Geprueft: Kampagnen- und Freispiel-Archiv, JSON-Rundlauf, Schluesselreihenfolge, Sieger-/Wertungs-/Monatsmanipulation, veraenderter Spielstand, offene Rettungsphase, falsches Schema, zusaetzliche Felder, fehlerhaftes JSON, fehlender Feldwert, 4-MiB-Grenze, Tiefenlimit, Prototyp-Schluessel, Schreibschutz und Ablehnung eines aktiven Spielstands als Archiv.
+**PASS 9/9 lokal** (9 isolierte Tests, 0 FAIL), Syntax beider neuen Dateien PASS. Der zehnte Test benoetigt den echten V0.8.2-Spielkern und wird erst durch die GitHub-CI auf dem vollstaendigen Repository verifiziert. Geprueft: Kampagnen- und Freispiel-Archiv, JSON-Rundlauf, Schluesselreihenfolge, Sieger-/Wertungs-/Monatsmanipulation, veraenderter Spielstand, offene Rettungsphase, falsches Schema, zusaetzliche Felder, fehlerhaftes JSON, fehlender Feldwert, 4-MiB-Grenze, Tiefenlimit, Prototyp-Schluessel, Schreibschutz und Ablehnung eines aktiven Spielstands als Archiv.
 
 **GitHub-CI:** auf dem neuen Entwicklungszweig nach PR-Erstellung auszuwerten; vorliegende lokale Tests sind **kein** Ersatz fuer die CI. Die bestehende CI auf dem unveraenderten Ausgangs-HEAD `0e6fd588...` war: Browser-CI [#40665593887](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40665593887) PASS, Quellpruefung [#40665593738](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40665593738) PASS, Gesamtgate [#40665593823](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40665593823) FAIL/BLOCKED wegen weiterhin offener Vorrelease-Pflichten.
 
