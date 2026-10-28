@@ -29,6 +29,8 @@ jobs:
         run: node --test project-c/pppoppi-imperium/quality_v194/test_endstate_archive_io_v194.cjs
       - name: Endspiel-Sitzungsadapter - versionierter Zustand, Abschluss und echte Engine (Teiltest)
         run: node --test project-c/pppoppi-imperium/quality_v194/test_endstate_session_v194.cjs
+      - name: Browser-Endspielpaket - CJS-Quellen, VM-Isolation, Archiv und Sperre (Teiltest)
+        run: node --test project-c/pppoppi-imperium/quality_v194/test_endstate_browser_bundle_v194.cjs
       - name: Drei Generationen - zwei natuerliche Insolvenzen und JSON-Rundlauf (Teiltest)
         run: node project-c/pppoppi-imperium/quality_v194/test_multigeneration_rescue_v194.cjs
       - name: Zwei Menschen - Notverkauf, JSON-Rundlauf und Buchungsschutz (Teiltest)
@@ -160,6 +162,8 @@ jobs:
           python -m playwright install --with-deps chromium
       - name: Zwoelf Browser-Spielmonate mit drei echten Chromium-Prozessneustarts
         run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_longrun_v194.py
+      - name: Endspieladapter im echten Offline-Chromium und abgeleiteten Technikaufbau (Teiltest)
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_endstate_bundle_v194.py
 
   # Unabhaengige Regression fuer sporadisch fehlende Dialoginhalte.
   # Kein Retry: fehlende Feldauswahl bleibt CI-Fehler.
