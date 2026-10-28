@@ -24,13 +24,13 @@ Die bisherige Zwei-Menschen-Pruefung durchlief H1-Rettungskredit und H2-Sanierun
 - **Gezielte CI:** Job `chromium-roundtrip` in `.github/workflows/prerelease-browser-project-c.yml`.
 - **Basis:** `python3 tools/validate_project.py` und `python3 -m unittest discover -s tests -v`.
 - **Matrix:** `node project-c/pppoppi-imperium/prerelease/check.mjs --schema`; `--technical` muss bis zur Vollabnahme **BLOCKED** bleiben.
-- **Status bei Erstellung:** **PENDING**. Weder PASS noch FAIL behaupten, bevor die tatsaechliche GitHub-CI auf dem konkreten Zweig-HEAD vorliegt.
+- **Ergebnis (nach GitHub-Pruefung):** [Chromium-CI #40609519522](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40609519522) **PASS, alle vier Jobs** auf HEAD `4deb5c4e3f8f59f10012c710c23a7bd57d0a36f3`, einschliesslich des erweiterten Zwei-Menschen-Schritts. [Quellpruefung #40609519541](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40609519541) **PASS**. [Gesamtgate #40609519524](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40609519524) **BLOCKED** (erwartete technische Sperre, Schema/Regression und Quellenpruefung bestanden). Ein frueherer Lauf #40609444650 hatte einen unabhaengigen **FAIL** beim Start des Zoom-Erweiterungs-Serviceworkers; Ursache nicht dauerhaft beseitigt, als Restunsicherheit erfasst.
 - **Betroffene Pflichten:** VER-02, VER-03, SPE-01, FEH-03; nur **Teilabdeckung**, selbst bei gruener CI. Alle vier Pflichten und das Gesamtgate bleiben BLOCKED.
 
 ## Offen / naechste drei Schritte
 
-1. Chromium- und Quell-CI auf dem finalen Zweig-HEAD auswerten; bei Fehlern die konkrete Ursache beheben.
-2. Nach PASS den Teilnachweis mit exaktem Commit und CI-Link in der Matrix erfassen; zusaetzlich Vertragsbruch, Notverkauf und weitere Generationen pruefen.
+1. Den sporadischen Serviceworker-Startfehler der unabhaengigen Zoom-Pruefung gezielt diagnostizieren; keine stillschweigenden Wiederholungen als Ersatz fuer Ursachenbehebung.
+2. Vertragsbruch, Notverkauf und mehrere Sanierungsgenerationen mit echten Buchungen und Export/Import testen.
 3. Fehlende Endregelentscheidung und vollstaendige Sieg-/Niederlagenpartien technisch absichern; erst danach Release-Kandidat einfrieren.
 
 **Empfehlung:** Die persoenliche Sichtpruefung und den Kubuntu-Praxistest erst nach allen eigenstaendig moeglichen technischen Pflichten sammeln. Kein Merge, kein Release ohne ausdrueckliche Nutzerfreigabe.
