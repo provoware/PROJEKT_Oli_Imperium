@@ -139,10 +139,11 @@
       "status": "blocked",
       "evidence": [
         "project-c/pppoppi-imperium/prerelease/evidence/SPE-01-MULTIGEN-PARTIAL-20261028.json",
-        "project-c/pppoppi-imperium/prerelease/evidence/SPE-01-BROWSER-MULTIGEN-PARTIAL-20261028.json"
+        "project-c/pppoppi-imperium/prerelease/evidence/SPE-01-BROWSER-MULTIGEN-PARTIAL-20261028.json",
+        "project-c/pppoppi-imperium/quality_v194/LOSS_CAMPAIGN_BROWSER_20261028.md"
       ],
       "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "Isolierter Endregel-Prototyp behandelt offene RESCUE-Phase als Blockade, aber keine implementierte Ausscheidens-/Niederlagenregel. Insolvenz, Rettung, Spielende und Browser-Niederlagenpartie verbindlich spezifizieren und pruefen; Gate BLOCKED."
+      "next": "Eigenstaendiger Chromium-Verlustpfad mit natuerlicher H1-Insolvenz, Sanierungs-Neustart, 12-Monats-Endwertung und zwei Prozessneustarts in PR #119; finaler GitHub-CI-Nachweis PENDING. Weitere Insolvenz-/Ausscheidensregeln, Mehrfachverluste und historischer Originalvergleich offen; Gate BLOCKED."
     },
     {
       "id": "VER-03",
