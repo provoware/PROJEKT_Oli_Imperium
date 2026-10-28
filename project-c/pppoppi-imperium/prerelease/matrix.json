@@ -287,10 +287,11 @@
         "project-c/pppoppi-imperium/quality_v194/ARCHIVE_ENGINE_VALIDATION_20261028.md",
         "project-c/pppoppi-imperium/quality_v194/BROWSER_ENDSTATE_BUNDLE_20261028.md",
         "project-c/pppoppi-imperium/quality_v194/LIVE_ENDSTATE_ADAPTER_20261028.md",
-        "project-c/pppoppi-imperium/quality_v194/SESSION_UI_ROUNDTRIP_20261028.md"
+        "project-c/pppoppi-imperium/quality_v194/SESSION_UI_ROUNDTRIP_20261028.md",
+        "project-c/pppoppi-imperium/quality_v194/SESSION_IMPORT_RACE_20261028.md"
       ],
       "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "Versionierter UI-Import/-Export fuer aktive Kampagne und Abschlussarchiv mit echten Chromium-Prozessneustarts als Regression eingereicht; noch kein vollstaendiger Speicherrueckfall-/Stresstest. CI pruefen; BLOCKED."
+      "next": "Neuer Browser-Regressionsfall fuer 5.000.001-Byte-Sitzung und verzoegerten Import nach Kampagnenneustart eingereicht; CI auf neuem HEAD auswerten. Vollstaendiger Speicherrueckfall und Endpartien offen; BLOCKED."
     },
     {
       "id": "SIC-01",
@@ -315,10 +316,11 @@
         "project-c/pppoppi-imperium/prerelease/evidence/SIC-02-IMPORT-INPUT-PARTIAL-20261027.json",
         "project-c/pppoppi-imperium/quality_v194/IMPORT_NESTED_SIZE_20261027.md",
         "project-c/pppoppi-imperium/quality_v194/ARCHIVE_ENGINE_VALIDATION_20261028.md",
-        "project-c/pppoppi-imperium/quality_v194/SESSION_UI_ROUNDTRIP_20261028.md"
+        "project-c/pppoppi-imperium/quality_v194/SESSION_UI_ROUNDTRIP_20261028.md",
+        "project-c/pppoppi-imperium/quality_v194/SESSION_IMPORT_RACE_20261028.md"
       ],
       "blocker": "PR #96 Code-HEAD 27914652cc4933239b07841009b828e0f4d2f87a: GitHub-Browser-CI #40595443169 PASS (vier Jobs, Import-Schritt success), Quellpruefung #40595443211 PASS. Insgesamt 30 ungueltige JSON-Strukturen atomar abgewiesen, gueltige 5.000.000-Byte-Datei importiert, 5.000.001 Bytes sicher abgewiesen, HTML-Fremdname in acht Szenen text-sicher. Weiterhin nicht alle Fremdeingaben, beliebige Tiefen und Endpartien abgedeckt; SIC-02 und Gesamtgate BLOCKED.",
-      "next": "Sitzungsdatei: Groessengrenze, Schema, Engine-Validierung, manipulierter Archivimport und atomarer Zustandstausch im neuen Browser-Test; CI auswerten. Sonstige Fremdeingaben offen; BLOCKED."
+      "next": "Neuer Browser-Regressionsfall prueft Uebergroesse und ImportRevision-Rennen im versionierten Sitzungsweg; CI auf neuem HEAD auswerten. Weitere Fremdeingaben und Endpartien offen; BLOCKED."
     },
     {
       "id": "SIC-03",
