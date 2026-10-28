@@ -231,3 +231,23 @@ jobs:
           python -m playwright install --with-deps chromium
       - name: Zwei natuerliche Insolvenzen, drei Generationen und vier Chromium-Prozesse
         run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_multigeneration_rescue_v194.py
+
+  # Eigene Verlust-Endpartie: eine echte Insolvenz darf weder die
+  # Kampagne vorzeitig beenden noch nach Archivierung Buchungen zulassen.
+  browser-campaign-insolvency:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Chromium-Testumgebung installieren
+        run: |
+          python -m pip install playwright==1.56.0
+          python -m playwright install --with-deps chromium
+      - name: Natuerliche Insolvenz, Verlustwertung, drei Chromium-Prozesse und Archivschutz
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_campaign_insolvency_v194.py
