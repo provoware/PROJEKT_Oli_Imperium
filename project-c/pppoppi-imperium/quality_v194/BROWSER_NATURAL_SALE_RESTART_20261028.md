@@ -26,3 +26,13 @@ Teilbeleg fuer `SPE-01`, `VER-03` und `LOG-04`, alle **BLOCKED**, bis die CI die
 3. Endregelvertrag der eigenstaendigen PPPOPPI-Adaption konkretisieren und komplette Sieg-/Niederlagenpartien pruefen.
 
 Kein Merge, kein Release; persoenliche Endabnahme erst nach allen technischen Pflichten.
+
+## Tatsächliche GitHub-Prüfung auf Code-HEAD `cdf98ebef3520782580933dbe6405e2a9f958848`
+
+- [Browser-CI #40644920712](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40644920712): **PASS, alle vier Jobs**, einschließlich neuem Schritt „Natuerlicher Browser-Notverkauf mit echtem Chromium-Prozessneustart und Folgemonat“.
+- Aus [Chromium-Jobprotokoll](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40644920712): 8 sichtbare Aktionen, 80.000 Cent echter Rückstand, ein Notverkauf, zwei Chromium-Prozessstarts, ein JSON-Import, zwei Monatsabschlüsse, Start von Monat 3; sämtliche Prüfzeilen **PASS**.
+- [Quellprüfung #40644920666](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40644920666): **PASS**.
+- [Gesamtgate #40644920642](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40644920642): **FAIL/BLOCKED**, beabsichtigte harte Sperre wegen weiterer offener Pflichten.
+- Der abschließende Dokumentations-Commit löst eine **eigene neue CI** aus. Die obigen Prüfnachweise gelten für den genannten **Code-HEAD**; der endgültige Dokumentations-HEAD wird gesondert kontrolliert.
+
+**Teilnachweis:** `SPE-01`, `VER-03`, `LOG-04` weiterhin BLOCKED. Keine komplette Endpartie und keine historische Originaltreue nachgewiesen.
