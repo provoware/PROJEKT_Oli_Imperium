@@ -25,3 +25,11 @@ Dieser Test ist ein **Teilnachweis** für `BED-02`, `BED-03`, `SPE-03` und `SIC-
 3. Anschließend eine echte Kampagne bis zum Schlussbericht mit Export/Import und vollständiger Endwertung automatisieren.
 
 **Kein Merge, kein Release, keine Nutzer-Endabnahme vor eingefrorenem und technisch geprüftem Kandidaten.**
+
+## Tatsächlich ausgeführte GitHub-Prüfung
+
+**Implementierungs-HEAD:** `ddd033c18370642133f9dbe62b5e938553c2882e`. [Browser-CI #40746767519](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40746767519), Job `native-zoom-regression` **PASS**, insbesondere der neue Schritt `test_browser_session_native_zoom_v194.py` **PASS** bei beiden Zoomstufen. Der Test bestätigte für 175 % und 200 % jeweils echten `chrome.tabs.getZoom`, sichtbaren Fokus, Tab/Enter auf Start/Neustart/Export/Import, tatsächlich geöffneten Datei-Auswahldialog, 12→24→12-Monats-Vertragswechsel, identischen wiederhergestellten Wirtschaftszustand, gültige Engine und keine Netz-/JavaScript-Fehler. **Das ist ein Teilnachweis, keine Freigabe der 52 Pflichten.**
+
+**Fehlerbehebung im Prüfskript:** Ein früherer Versuch auf `7206db9aae5f39d3d1bd94ec30f89a1147e8cefc` scheiterte mit einem 15-Sekunden-Timeout beim blockierenden Warten auf das Datei-Auswahldialog-Ereignis. Die überarbeitete Prüfung beobachtet den echten Tastatur-Klick und das Datei-Auswahldialog-Ereignis getrennt; beide Dialog-Ereignisse wurden im erfolgreichen Lauf tatsächlich empfangen. Der Test weist einen fehlenden Dateidialog weiterhin ausdrücklich als `BLOCKED_HEADLESS` aus, statt ihn als PASS zu zählen. Die frühere rote Prüfung ist nicht als bestandener Lauf umgedeutet.
+
+**Weitere CI:** [Quellprüfung #40746767462](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40746767462), [Browser-CI #40746767519](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40746767519), [Gesamtgate #40746767465](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40746767465). Das Gesamtgate bleibt absichtlich **BLOCKED**, bis alle technischen Pflichten erfüllt sind. Abschließende Ergebnisse der übrigen Browserjobs und des endgültigen Dokumentations-HEAD sind gesondert zu kontrollieren.
