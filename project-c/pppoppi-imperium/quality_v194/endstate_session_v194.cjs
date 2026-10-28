@@ -36,6 +36,9 @@ function createSession({engine, candidate, io, regions, contract, state, archive
   if (archivedText !== undefined) {
     if (state !== undefined && state !== null) throw Error('Archiv und aktive Partie duerfen nicht gemischt werden');
     archived = io.importArchive(archivedText, regions);
+    // Archivkonsistenz allein beweist keinen gueltigen Engine-Spielstand.
+    // Auch schreibgeschuetzte Abschlussdaten muessen den echten Kernvertrag erfuellen.
+    engine.validate(archived.snapshot);
     if (archived.mode !== rule.mode || archived.durationMonths !== (rule.mode === 'free' ? null : rule.months))
       throw Error('Archiv und Endregelvertrag widersprechen sich');
   } else {

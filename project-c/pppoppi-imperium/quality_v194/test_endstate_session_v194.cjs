@@ -13,7 +13,7 @@ const candidate = {rules, evaluate(state,contract,regions,opts={}) {
   return {status:'finished',archive:{schema,mode:contract.mode,durationMonths:contract.mode==='free'?null:contract.months,
     snapshot:JSON.parse(JSON.stringify(state))}};
 }};
-const engine = {validate(state) {if (!state || !Number.isInteger(state.month) || state.month < 1 || !['TURN','REPORT','RESCUE'].includes(state.phase))throw Error('Spielstand ungueltig');return true;},
+const engine = {validate(state) {if (!state || state.integrity === 'broken' || !Number.isInteger(state.month) || state.month < 1 || !['TURN','REPORT','RESCUE'].includes(state.phase))throw Error('Spielstand ungueltig');return true;},
   transition(state,command) {if(command.type==='FAIL'){state.month=99;throw Error('Aktion gescheitert');}
     if(command.type==='CORRUPT')return {state:{month:-1,phase:'TURN'}};
     if(command.type==='MONTH'){state.month++;state.phase='REPORT';return {state};}
@@ -57,6 +57,12 @@ test('Unbekannte Vertragsfelder, falsche Archive und doppelte Zustandsarten abwe
  assert.throws(()=>S.importSession(JSON.stringify(raw),deps),/genau eine/);
  raw.state=null;raw.contract=rules({mode:'campaign',months:12});
  assert.throws(()=>S.importSession(JSON.stringify(raw),deps),/widersprechen/);
+});
+test('Archiv-Sitzung verwirft einen nur oberflaechlich konsistenten, aber ungueltigen Kernzustand',()=>{
+ const bad={schema,mode:'free',durationMonths:null,snapshot:{month:1,phase:'TURN',integrity:'broken'}};
+ assert.throws(()=>S.createSession({...deps,contract:rules({mode:'free'}),archivedText:JSON.stringify(bad)}),/Spielstand ungueltig/);
+ const wrapped={schema:S.SESSION_SCHEMA,contract:rules({mode:'free'}),state:null,archive:bad};
+ assert.throws(()=>S.importSession(JSON.stringify(wrapped),deps),/Spielstand ungueltig/);
 });
 test('Schluesselinjektion, ungueltiges JSON und Groessengrenze abweisen',()=>{
  const s=make();const raw=s.exportSession();
@@ -121,4 +127,27 @@ test('Echter V0.8.2-Kern: 12 Monate Kampagne, Rettung und endgueltige Aktionsspe
  assert.equal(restored.status(),'finished');
  assert.throws(()=>restored.apply({type:'NEXT_MONTH',requestId:'SESSION-CAMP-POST'}),/unveraenderbar/);
  assert.equal(E.validate(restored.snapshot()),true);
+});
+
+test('Echte Engine: in sich stimmiges Archiv mit defektem Markt wird nicht als Sitzung geladen', t=>{
+ const fs=require('node:fs'),path=require('node:path');
+ if(!fs.existsSync(path.resolve(__dirname,'../SPIEL/src/v082_strategy_engine.js'))){
+   t.skip('Originalquellen nur im GitHub-Repository vorhanden');return;
+ }
+ require('../SPIEL/src/v07_engine.js');require('../SPIEL/src/v08_engine.js');
+ const E=require('../SPIEL/src/v082_strategy_engine.js');
+ const C=require('./endstate_candidate_v194.cjs');
+ const IO=require('./endstate_archive_io_v194.cjs');
+ const d={engine:E,candidate:C,io:IO,regions:E.REGIONS};
+ const s=E.fresh({humans:2,ais:0,seed:'ARCHIVE-ENGINE-CHECK'});
+ const archive=JSON.parse(JSON.stringify(C.evaluate(s,C.rules({mode:'free'}),E.REGIONS,{confirmEnd:true}).archive));
+ archive.snapshot.prices={};
+ const raw=JSON.stringify(archive);
+ // Der isolierte Archivadapter prueft interne Endabrechnung, nicht die ganze Engine.
+ assert.doesNotThrow(()=>IO.importArchive(raw,E.REGIONS));
+ assert.throws(()=>E.validate(archive.snapshot),/Marktpreis/);
+ assert.throws(()=>S.createSession({...d,contract:C.rules({mode:'free'}),archivedText:raw}),/Marktpreis/);
+ assert.throws(()=>S.importSession(JSON.stringify({
+   schema:S.SESSION_SCHEMA,contract:C.rules({mode:'free'}),state:null,archive
+ }),d),/Marktpreis/);
 });

@@ -277,9 +277,11 @@
       "basis": "Nutzerauftrag",
       "stage": "technical",
       "status": "blocked",
-      "evidence": [],
+      "evidence": [
+        "project-c/pppoppi-imperium/quality_v194/ARCHIVE_ENGINE_VALIDATION_20261028.md"
+      ],
       "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "Versionierter aktiver Sitzungsstand und abgeschlossener Archivstand getrennt; Import prueft Schema, Vertrag, Struktur und 5-MB-Grenze. Browser-Speicherung, Neustarts und reale Altstaende fehlen, daher BLOCKED."
+      "next": "Versionierter aktiver Sitzungsstand und abgeschlossener Archivstand getrennt; Import prueft Schema, Vertrag, Struktur und 5-MB-Grenze. Archiv-Import validiert nun auch den kompletten Engine-Spielstand; Browser-Speicherung, Neustarts und reale Altstaende fehlen, daher BLOCKED."
     },
     {
       "id": "SIC-01",
@@ -302,10 +304,11 @@
       "evidence": [
         "project-c/pppoppi-imperium/quality_v194/IMPORT_INPUT_SECURITY_20261027.md",
         "project-c/pppoppi-imperium/prerelease/evidence/SIC-02-IMPORT-INPUT-PARTIAL-20261027.json",
-        "project-c/pppoppi-imperium/quality_v194/IMPORT_NESTED_SIZE_20261027.md"
+        "project-c/pppoppi-imperium/quality_v194/IMPORT_NESTED_SIZE_20261027.md",
+        "project-c/pppoppi-imperium/quality_v194/ARCHIVE_ENGINE_VALIDATION_20261028.md"
       ],
       "blocker": "PR #96 Code-HEAD 27914652cc4933239b07841009b828e0f4d2f87a: GitHub-Browser-CI #40595443169 PASS (vier Jobs, Import-Schritt success), Quellpruefung #40595443211 PASS. Insgesamt 30 ungueltige JSON-Strukturen atomar abgewiesen, gueltige 5.000.000-Byte-Datei importiert, 5.000.001 Bytes sicher abgewiesen, HTML-Fremdname in acht Szenen text-sicher. Weiterhin nicht alle Fremdeingaben, beliebige Tiefen und Endpartien abgedeckt; SIC-02 und Gesamtgate BLOCKED.",
-      "next": "Weitere Speicher-/Sicherheitsgrenzen und gueltige verschachtelte Spielstaende mit Buchungsfolgen pruefen; Endregelvertrag und vollstaendige Sieg-/Niederlagenpartien nachweisen."
+      "next": "Weitere Speicher-/Sicherheitsgrenzen und gueltige verschachtelte Spielstaende mit Buchungsfolgen pruefen; Archiv-Schnappschuesse gegen echte Engine validieren (neuer Teiltest); weitere Eingaben und vollstaendige Endpartien nachweisen."
     },
     {
       "id": "SIC-03",
