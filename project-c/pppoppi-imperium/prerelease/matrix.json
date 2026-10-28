@@ -121,7 +121,7 @@
       "status": "blocked",
       "evidence": [],
       "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "Gesamtdurchlauf protokollieren"
+      "next": "Isolierter Endregel-Prototyp mit Freispiel-/Kampagnenvorschlag und 9 Node-Tests auf neuem Entwicklungszweig; noch nicht in Engine/UI integriert. Vollstaendige Browser-Sieg-/Endpartien und verbindliche Endregel fehlen; Gate BLOCKED."
     },
     {
       "id": "VER-02",
@@ -135,7 +135,7 @@
         "project-c/pppoppi-imperium/prerelease/evidence/SPE-01-BROWSER-MULTIGEN-PARTIAL-20261028.json"
       ],
       "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "Zwei natuerliche Insolvenzen und Generation 3 mit echten Browseraktionen PASS; verbindliche Niederlagen- und Endspielregeln sowie vollstaendige Endpartien fehlen. Gate BLOCKED."
+      "next": "Isolierter Endregel-Prototyp behandelt offene RESCUE-Phase als Blockade, aber keine implementierte Ausscheidens-/Niederlagenregel. Insolvenz, Rettung, Spielende und Browser-Niederlagenpartie verbindlich spezifizieren und pruefen; Gate BLOCKED."
     },
     {
       "id": "VER-03",
