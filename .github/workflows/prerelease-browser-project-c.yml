@@ -71,6 +71,8 @@ jobs:
         run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_economy_v194.py
       - name: Vier Firmen mit zwei Regionen, zwei Vertraegen und wiederholter Spielstand-Fortsetzung
         run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_complex_roundtrip_v194.py
+      - name: Natuerliche Browser-Teillieferung mit zwei echten Chromium-Prozessneustarts
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_partial_delivery_v194.py
       - name: Sanierung mit Kredit, Notverkauf und Neustart im echten Browser
         run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_rescue_v194.py
       - name: Natuerliche Insolvenz durch acht Wirtschaftsklicks mit Kredit, Notverkauf und Neustart
