@@ -121,7 +121,7 @@
       "status": "blocked",
       "evidence": [],
       "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "Isolierter Endregel-Prototyp mit Freispiel-/Kampagnenvorschlag und 9 Node-Tests auf neuem Entwicklungszweig; noch nicht in Engine/UI integriert. Vollstaendige Browser-Sieg-/Endpartien und verbindliche Endregel fehlen; Gate BLOCKED."
+      "next": "Isolierter versionierter Sitzungsadapter mit explizitem Spielmodus, Abschluss-Sperre und automatischen Node-Tests vorhanden; Browser-UI und vollstaendige Endpartien fehlen, daher BLOCKED."
     },
     {
       "id": "VER-02",
@@ -279,7 +279,7 @@
       "status": "blocked",
       "evidence": [],
       "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "Isolierter Archiv-Import/-Export mit neun lokalen Node-Regressionen gegen veraenderte Wertungen, Schemas, Prototyp-Schluessel, 4-MiB-Grenze und tiefe Strukturen; noch kein Browser-Archivimport, keine kryptografische Herkunftssicherung. GitHub-CI und vollstaendige Endpartien nachweisen; Gate BLOCKED."
+      "next": "Versionierter aktiver Sitzungsstand und abgeschlossener Archivstand getrennt; Import prueft Schema, Vertrag, Struktur und 5-MB-Grenze. Browser-Speicherung, Neustarts und reale Altstaende fehlen, daher BLOCKED."
     },
     {
       "id": "SIC-01",
