@@ -77,6 +77,8 @@ jobs:
         run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_rescue_v194.py
       - name: Natuerliche Insolvenz durch acht Wirtschaftsklicks mit Kredit, Notverkauf und Neustart
         run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_natural_rescue_v194.py
+      - name: Natuerlicher Browser-Notverkauf mit echtem Chromium-Prozessneustart und Folgemonat
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_natural_sale_restart_v194.py
       - name: Zwei Menschen, Spielerwechsel, parallele Insolvenz und getrennte Sanierung
         run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_two_humans_v194.py
       - name: Wiederholte Spielstand-Imports, kaputte Dateien und Schutz vor Doppelbuchungen
