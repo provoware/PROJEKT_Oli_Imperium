@@ -23,6 +23,8 @@ jobs:
         run: node project-c/pppoppi-imperium/quality_v194/test_endstate_audit_v194.cjs
       - name: Monatsobergrenze, Duplikatschutz und sichere Ablehnung (kein Release-PASS)
         run: node project-c/pppoppi-imperium/quality_v194/test_endstate_boundaries_v194.cjs
+      - name: Endregel-Prototyp - Modi, Wertung, Gleichstand, Archiv und echter Monatsbericht (keine Freigabe)
+        run: node --test project-c/pppoppi-imperium/quality_v194/test_endstate_candidate_v194.cjs
       - name: Drei Generationen - zwei natuerliche Insolvenzen und JSON-Rundlauf (Teiltest)
         run: node project-c/pppoppi-imperium/quality_v194/test_multigeneration_rescue_v194.cjs
       - name: Zwei Menschen - Notverkauf, JSON-Rundlauf und Buchungsschutz (Teiltest)
