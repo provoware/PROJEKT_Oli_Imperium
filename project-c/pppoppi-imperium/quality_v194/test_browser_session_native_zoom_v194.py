@@ -110,17 +110,13 @@ def audit_session(page, worker, zoom, download_dir):
     page.wait_for_function("window.__sessionImportClicks === 1")
     check(label + ": Import-Schalter reagiert auf echte Enter-Taste",
           page.evaluate("window.__sessionImportClicks") == 1)
-    # Ein nativer Dateidialog ist in headless Chromium nicht garantiert
-    # beobachtbar. Der echte Dateieingang wird in jedem Fall geprueft;
-    # die Dateidialog-Abnahme bleibt getrennt, falls kein Ereignis kam.
+    # Ein fehlendes natives Datei-Auswahldialog-Ereignis ist ein echter
+    # Bedienfehler: niemals durch direkte Eingabefeld-Befuellung kaschieren.
     page.wait_for_timeout(200)
-    if file_choosers:
-        file_choosers[0].set_files(str(saved))
-        chooser_status = "PASS"
-    else:
-        page.locator("#loadSessionFile").set_input_files(str(saved))
-        chooser_status = "BLOCKED_HEADLESS"
-    print(label + ": Datei-Auswahldialog " + chooser_status, flush=True)
+    check(label + ": Datei-Auswahldialog durch Enter geoeffnet",
+          len(file_choosers) == 1)
+    file_choosers[0].set_files(str(saved))
+    chooser_status = "PASS"
     page.wait_for_function(
         "NeoEconomy.endstate.contract().months===12 && "
         "document.querySelector('#toast').textContent.includes("
