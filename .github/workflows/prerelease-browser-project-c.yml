@@ -171,6 +171,25 @@ jobs:
       - name: Live-Endspieladapter im echten Offline-Chromium mit Spielaktion und Abschluss (Teiltest)
         run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_endstate_live_v194.py
 
+  # Eigenstaendige echte Endpartie, damit ein Fehler nicht im Langlauf untergeht.
+  browser-campaign-endgame:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Chromium-Testumgebung installieren
+        run: |
+          python -m pip install playwright==1.56.0
+          python -m playwright install --with-deps chromium
+      - name: Echte 12-Monats-Kampagne, Wertung, zwei Chromium-Neustarts und Archivschutz
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_campaign_endgame_v194.py
+
   # Unabhaengige Regression fuer sporadisch fehlende Dialoginhalte.
   # Kein Retry: fehlende Feldauswahl bleibt CI-Fehler.
   claim-dialog-stability:
