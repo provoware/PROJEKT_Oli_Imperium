@@ -46,6 +46,12 @@ def audit_session(page, worker, zoom, download_dir):
     page.on("request", lambda request: external.append(request.url)
             if request.url.startswith(("http://", "https://")) else None)
     page.wait_for_function("window.NeoEconomy && window.NeoEconomy.endstate")
+    # Chromium kann die Zoomstufe einer file://-Seite fuer neue Tabs merken.
+    # Vor jeder Messung auf 100 % zuruecksetzen, damit 200 % nicht
+    # versehentlich relativ zur vorherigen 175-%-Stufe geprueft werden.
+    reset = set_real_zoom(worker, page.url, 1.0)
+    check(label + ": Ausgangszoom 100 %", abs(reset["factor"] - 1.0) < 0.01)
+    page.wait_for_function("innerWidth >= 790")
     baseline = page.evaluate("({width: innerWidth, dpr: devicePixelRatio})")
     check(label + ": 800 CSS-Pixel vor Zoom", baseline["width"] >= 790)
     actual = set_real_zoom(worker, page.url, zoom)
