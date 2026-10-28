@@ -53,4 +53,17 @@ test('Groessen-, Tiefen- und Prototyp-Schluesselschutz',()=>{
 test('Kein stilles Umdeuten eines aktiven Spielstandes zum Archiv',()=>{
   assert.throws(()=>IO.importArchive(JSON.stringify(snapshot()),regions),/Archivschema/);
 });
+test('Echter V0.8.2-Monatsbericht: Endarchiv-Export und erneuter Import',()=>{
+  require('../SPIEL/src/v07_engine.js');
+  require('../SPIEL/src/v08_engine.js');
+  const E=require('../SPIEL/src/v082_strategy_engine.js');
+  let s=E.fresh({humans:2,ais:0,seed:'END-ARCHIVE-REAL'});
+  s=E.transition(s,{type:'END_TURN',companyId:'H1',requestId:'END-ARCHIVE-H1'}).state;
+  s=E.transition(s,{type:'END_TURN',companyId:'H2',requestId:'END-ARCHIVE-H2'}).state;
+  assert.equal(s.phase,'REPORT');
+  const original=JSON.stringify(s);
+  const a=C.evaluate(s,C.rules({mode:'free'}),E.REGIONS,{confirmEnd:true}).archive;
+  assert.deepEqual(IO.importArchive(IO.exportArchive(a,E.REGIONS),E.REGIONS),a);
+  assert.equal(JSON.stringify(s),original);
+});
 console.log('HINWEIS: Nur isolierte Archiv-Konsistenzpruefung, keine Browserintegration, keine Signatur.');
