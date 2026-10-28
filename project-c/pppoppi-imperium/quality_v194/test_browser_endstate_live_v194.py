@@ -157,6 +157,57 @@ def main():
             assert page.evaluate("JSON.stringify(NeoEconomy.getState())") == restored["state"]
             assert page.evaluate("NeoEconomy.endstate.status()") == "finished"
 
+            # Groessenfehler im neuen Sitzungsweg darf das Abschlussarchiv nicht ersetzen.
+            size_result = page.evaluate("""() => {
+                const input = document.getElementById('loadSessionFile');
+                const file = new File([new Uint8Array(5_000_001)],
+                                      'zu-gross.json', {type: 'application/json'});
+                const transfer = new DataTransfer();
+                transfer.items.add(file);
+                input.files = transfer.files;
+                input.dispatchEvent(new Event('change', {bubbles: true}));
+                return {size: file.size, status: NeoEconomy.endstate.status()};
+            }""")
+            assert size_result == {"size": 5_000_001, "status": "finished"}, size_result
+            page.wait_for_function(
+                "document.querySelector('#toast').textContent.includes('Sitzungsimport abgelehnt')")
+            assert page.evaluate("JSON.stringify(NeoEconomy.getState())") == restored["state"]
+
+            # Ein spaet eintreffender Dateileser darf eine neu gestartete Partie
+            # nicht ueberschreiben. Der Test nutzt den echten Datei-Ereignispfad.
+            race = page.evaluate("""async (serialized) => {
+                const input = document.getElementById('loadSessionFile');
+                const file = new File([serialized], 'verzoegert.json',
+                                      {type: 'application/json'});
+                let resolveRead;
+                Object.defineProperty(file, 'text', {
+                    value: () => new Promise(resolve => { resolveRead = resolve; })
+                });
+                const transfer = new DataTransfer();
+                transfer.items.add(file);
+                input.files = transfer.files;
+                input.dispatchEvent(new Event('change', {bubbles: true}));
+                if (typeof resolveRead !== 'function') {
+                    throw Error('Asynchroner Dateileser wurde nicht gestartet');
+                }
+                NeoEconomy.start('1-2', 'campaign:24');
+                const expected = JSON.stringify(NeoEconomy.getState());
+                resolveRead(serialized);
+                await Promise.resolve();
+                await Promise.resolve();
+                return {
+                    unchanged: JSON.stringify(NeoEconomy.getState()) === expected,
+                    status: NeoEconomy.endstate.status(),
+                    months: NeoEconomy.endstate.contract().months,
+                    archive: NeoEconomy.endstate.archive()
+                };
+            }""", json.dumps(archive_payload))
+            assert race == {
+                "unchanged": True, "status": "active",
+                "months": 24, "archive": None
+            }, race
+            assert not errors, errors
+
             # Auch ein aktiver Kampagnenvertrag muss einen Prozessneustart ueberleben.
             page.evaluate("NeoEconomy.start('1-2','campaign:12')")
             page.evaluate("NeoEconomy.open('computer')")
