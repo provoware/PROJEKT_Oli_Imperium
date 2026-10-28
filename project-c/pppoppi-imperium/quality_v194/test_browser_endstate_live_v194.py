@@ -170,7 +170,7 @@ def main():
             }""")
             assert size_result == {"size": 5_000_001, "status": "finished"}, size_result
             page.wait_for_function(
-                "document.querySelector('#toast').textContent.includes('Sitzungsimport abgelehnt')")
+                "document.querySelector('#toast').textContent.includes('Sitzungsdatei zu gross')")
             assert page.evaluate("JSON.stringify(NeoEconomy.getState())") == restored["state"]
 
             # Ein spaet eintreffender Dateileser darf eine neu gestartete Partie
@@ -193,8 +193,7 @@ def main():
                 NeoEconomy.start('1-2', 'campaign:24');
                 const expected = JSON.stringify(NeoEconomy.getState());
                 resolveRead(serialized);
-                await Promise.resolve();
-                await Promise.resolve();
+                await new Promise(resolve => setTimeout(resolve, 0));
                 return {
                     unchanged: JSON.stringify(NeoEconomy.getState()) === expected,
                     status: NeoEconomy.endstate.status(),
