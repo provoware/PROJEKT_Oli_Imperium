@@ -96,8 +96,8 @@ def main():
                                               errors, external)
                     try:
                         scenes = inventory_page.evaluate("PPNavigation191.getScenes()")
-                        check(label + ": 39 eindeutige Spielszenen",
-                              len(scenes) == 39 and len(set(scenes)) == 39)
+                        check(label + ": 40 eindeutige Spielszenen",
+                              len(scenes) == 40 and len(set(scenes)) == 40)
                     finally:
                         inventory_page.close()
                     rows = []

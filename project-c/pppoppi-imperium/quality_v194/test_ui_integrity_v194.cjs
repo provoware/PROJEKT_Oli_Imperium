@@ -74,6 +74,17 @@ check('Sichtbare Spielartwahl verwendet ausschliesslich den versionierten Endspi
   assert.doesNotMatch(read('src/neo_bridge.js'), /econEndMode/, 'Original darf keine neue Spielart enthalten');
 });
 
+check('Enddialog, Abbruch und schreibgeschuetzte Archivansicht nur im Technikaufbau', () => {
+  assert.match(bridge, /function endstateView\(\)/);
+  assert.match(bridge, /data-ui="finish-confirm"/);
+  assert.match(bridge, /data-ui="finish-cancel"/);
+  assert.match(bridge, /PPPEndstateLive\.finish\(\)/);
+  assert.match(bridge, /ABSCHLUSSARCHIV · NUR LESEN/);
+  assert.match(bridge, /PPPEndstateLive\.status\(\)==='finished'/);
+  assert.match(bridge, /endstate:\{kind:'SPIELENDE'/);
+  assert.doesNotMatch(read('src/neo_bridge.js'), /finish-confirm|endstateView/);
+});
+
 check('V1.9.4-Berichte lesen den tatsächlichen V1.9.3-Kern; dessen Module bleiben bytegleich', () => {
   const runtimeModules = ['src/v082_strategy_engine.js', 'src/strategy_ai_v192.js',
     'src/strategy_logistics_v193.js', 'src/profi_economy.js', 'src/logistics_v17.js'];

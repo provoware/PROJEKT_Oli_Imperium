@@ -154,8 +154,8 @@ def main():
                     try:
                         before = state(page)
                         scenes = page.evaluate("PPNavigation191.getScenes()")
-                        check("Eindeutige 39 Spielszenen",
-                              len(scenes) == 39 and len(set(scenes)) == 39)
+                        check("Eindeutige 40 Spielszenen",
+                              len(scenes) == 40 and len(set(scenes)) == 40)
                         records = [inspect_scene(page, s,
                                    str(round(factor*100)) + "%") for s in scenes]
                         check("Szenenwechsel ohne Wirtschaftsaenderung",

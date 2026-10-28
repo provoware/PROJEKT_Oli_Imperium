@@ -122,10 +122,11 @@
       "evidence": [
         "project-c/pppoppi-imperium/quality_v194/BROWSER_ENDSTATE_BUNDLE_20261028.md",
         "project-c/pppoppi-imperium/quality_v194/LIVE_ENDSTATE_ADAPTER_20261028.md",
-        "project-c/pppoppi-imperium/quality_v194/ENDMODE_SELECTOR_20261028.md"
+        "project-c/pppoppi-imperium/quality_v194/ENDMODE_SELECTOR_20261028.md",
+        "project-c/pppoppi-imperium/quality_v194/ENDSTATE_DIALOG_20261028.md"
       ],
       "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "Sichtbare Spielartwahl in abgeleiteter Startoberflaeche (free, 12/24/60/120/240 Monate) und echte Browser-/Statiktests eingereicht. CI auf neuem PR-HEAD noch zu bestaetigen. Enddialog, versionierter Sitzungsimport/-export, vollstaendige Endpartien und Altstandmigration fehlen; BLOCKED."
+      "next": "Bestaetigten Enddialog, Abbruch und nur lesbare Abschlussansicht im abgeleiteten Browser umgesetzt; neuer 800x600-Chromium-Test und statische Pruefung eingereicht. CI fuer neuen HEAD auswerten. Versionierter UI-Sitzungsimport/-export, vollstaendige Endpartien, Neustarts und historische Originalreferenz fehlen; BLOCKED."
     },
     {
       "id": "VER-02",
@@ -447,10 +448,11 @@
         "project-c/pppoppi-imperium/prerelease/evidence/BED-02-NATIVE-ECONOMY-PARTIAL-20261027.json",
         "project-c/pppoppi-imperium/prerelease/evidence/BED-02-DIALOG-ACTIONS-PARTIAL-20261027.json",
         "project-c/pppoppi-imperium/prerelease/evidence/BED-02-DIALOG-MATRIX-PARTIAL-20261027.json",
-        "project-c/pppoppi-imperium/prerelease/evidence/BED-02-CLAIM-PARAMETERS-PARTIAL-20261027.json"
+        "project-c/pppoppi-imperium/prerelease/evidence/BED-02-CLAIM-PARAMETERS-PARTIAL-20261027.json",
+        "project-c/pppoppi-imperium/quality_v194/ENDSTATE_DIALOG_20261028.md"
       ],
       "blocker": "Teilkette mit 15 echten Tab/Enter-Aktionen je Zoomstufe (175/200 %) und zwei Monatsabschluessen je Durchlauf in Chromium #40467829258 PASS, einschliesslich unzulaessiger Foerderung, Doppelkauf und Exportgleichheit. Andere Pflichtaktionen und vollstaendige Dialog-Endpartien bleiben ungetestet; Gate BLOCKED. Neuer Teiltest: Browser-CI #40505215686 PASS auf 95b393211465427c58c08a71ce35ffc2ce026573; bei echtem 175/200-%-Zoom je 39 Szenen, 13 per Tab/Enter aktivierte Wirtschaftsaktionen (12 unterschiedliche Kennungen), 26 Szenen ohne geeignete data-econ-Aktion, je 2 Zustandsaenderungen; 0 JS-Fehler/externe Anfragen. Keine vollstaendige fachliche Sollfolgen- oder Endpartienabnahme; Gate BLOCKED.",
-      "next": "MV3-Startabfrage in PR #99 und 3 Worker-Regressionen auf finalem HEAD pruefen; danach Zoom- und Endpartien weiter absichern."
+      "next": "Neuer Tastaturpfad fuer Bestaetigung und Abbruch mit Tab im Offline-Chromium eingereicht; CI auf finalem HEAD auswerten. Weitere Pflichtaktionen und native Zoomstufen bleiben zu pruefen; BLOCKED."
     },
     {
       "id": "BED-03",
