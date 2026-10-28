@@ -108,9 +108,11 @@
       "basis": "docs/05_TESTS_FORTSCHRITT.md",
       "stage": "technical",
       "status": "blocked",
-      "evidence": [],
+      "evidence": [
+        "project-c/pppoppi-imperium/quality_v194/LASTMONTH_RESCUE_BROWSER_20261028.md"
+      ],
       "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "Zeitgrenzen simulieren"
+      "next": "PR #120: echte Chromium-Schlussmonatsinsolvenz mit 4 Menschen, 11 vorherigen Monatsabschluessen, RESCUE im Monat 12, Sitzungsexport/-import, Sanierung, Archiv und drei Chromium-Prozessen eingereicht; finaler CI-Nachweis PENDING. Weitere Pflichtfaelle offen; Gate BLOCKED."
     },
     {
       "id": "VER-01",
@@ -125,10 +127,11 @@
         "project-c/pppoppi-imperium/quality_v194/ENDMODE_SELECTOR_20261028.md",
         "project-c/pppoppi-imperium/quality_v194/ENDSTATE_DIALOG_20261028.md",
         "project-c/pppoppi-imperium/quality_v194/SESSION_UI_ROUNDTRIP_20261028.md",
-        "project-c/pppoppi-imperium/quality_v194/CAMPAIGN_BROWSER_ENDGAME_20261028.md"
+        "project-c/pppoppi-imperium/quality_v194/CAMPAIGN_BROWSER_ENDGAME_20261028.md",
+        "project-c/pppoppi-imperium/quality_v194/LASTMONTH_RESCUE_BROWSER_20261028.md"
       ],
       "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "Neuer isolierter Browser-Endpartientest: 12 Monate, Zwischenexport, zwei echte Chromium-Neustarts, Siegerwertung und Archiv-Manipulationsschutz eingereicht. CI auf finalem Entwicklungs-HEAD PENDING; Verlust-/Insolvenzpfade und weitere Pflichtfaelle offen; BLOCKED."
+      "next": "PR #120: echte Chromium-Schlussmonatsinsolvenz mit 4 Menschen, 11 vorherigen Monatsabschluessen, RESCUE im Monat 12, Sitzungsexport/-import, Sanierung, Archiv und drei Chromium-Prozessen eingereicht; finaler CI-Nachweis PENDING. Weitere Pflichtfaelle offen; Gate BLOCKED."
     },
     {
       "id": "VER-02",
@@ -140,10 +143,11 @@
       "evidence": [
         "project-c/pppoppi-imperium/prerelease/evidence/SPE-01-MULTIGEN-PARTIAL-20261028.json",
         "project-c/pppoppi-imperium/prerelease/evidence/SPE-01-BROWSER-MULTIGEN-PARTIAL-20261028.json",
-        "project-c/pppoppi-imperium/quality_v194/LOSS_CAMPAIGN_BROWSER_20261028.md"
+        "project-c/pppoppi-imperium/quality_v194/LOSS_CAMPAIGN_BROWSER_20261028.md",
+        "project-c/pppoppi-imperium/quality_v194/LASTMONTH_RESCUE_BROWSER_20261028.md"
       ],
       "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "Eigenstaendiger Chromium-Verlustpfad mit natuerlicher H1-Insolvenz, Sanierungs-Neustart, 12-Monats-Endwertung und zwei Prozessneustarts in PR #119; finaler GitHub-CI-Nachweis PENDING. Weitere Insolvenz-/Ausscheidensregeln, Mehrfachverluste und historischer Originalvergleich offen; Gate BLOCKED."
+      "next": "PR #120: echte Chromium-Schlussmonatsinsolvenz mit 4 Menschen, 11 vorherigen Monatsabschluessen, RESCUE im Monat 12, Sitzungsexport/-import, Sanierung, Archiv und drei Chromium-Prozessen eingereicht; finaler CI-Nachweis PENDING. Weitere Pflichtfaelle offen; Gate BLOCKED."
     },
     {
       "id": "VER-03",
@@ -292,10 +296,11 @@
         "project-c/pppoppi-imperium/quality_v194/SESSION_UI_ROUNDTRIP_20261028.md",
         "project-c/pppoppi-imperium/quality_v194/SESSION_IMPORT_RACE_20261028.md",
         "project-c/pppoppi-imperium/quality_v194/SESSION_NATIVE_ZOOM_20261028.md",
-        "project-c/pppoppi-imperium/quality_v194/CAMPAIGN_BROWSER_ENDGAME_20261028.md"
+        "project-c/pppoppi-imperium/quality_v194/CAMPAIGN_BROWSER_ENDGAME_20261028.md",
+        "project-c/pppoppi-imperium/quality_v194/LASTMONTH_RESCUE_BROWSER_20261028.md"
       ],
       "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "Neuer isolierter Browser-Endpartientest: 12 Monate, Zwischenexport, zwei echte Chromium-Neustarts, Siegerwertung und Archiv-Manipulationsschutz eingereicht. CI auf finalem Entwicklungs-HEAD PENDING; Verlust-/Insolvenzpfade und weitere Pflichtfaelle offen; BLOCKED."
+      "next": "PR #120: echte Chromium-Schlussmonatsinsolvenz mit 4 Menschen, 11 vorherigen Monatsabschluessen, RESCUE im Monat 12, Sitzungsexport/-import, Sanierung, Archiv und drei Chromium-Prozessen eingereicht; finaler CI-Nachweis PENDING. Weitere Pflichtfaelle offen; Gate BLOCKED."
     },
     {
       "id": "SIC-01",
@@ -587,10 +592,11 @@
       "stage": "technical",
       "status": "blocked",
       "evidence": [
-        "project-c/pppoppi-imperium/quality_v194/CAMPAIGN_BROWSER_ENDGAME_20261028.md"
+        "project-c/pppoppi-imperium/quality_v194/CAMPAIGN_BROWSER_ENDGAME_20261028.md",
+        "project-c/pppoppi-imperium/quality_v194/LASTMONTH_RESCUE_BROWSER_20261028.md"
       ],
       "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "Neuer isolierter Browser-Endpartientest: 12 Monate, Zwischenexport, zwei echte Chromium-Neustarts, Siegerwertung und Archiv-Manipulationsschutz eingereicht. CI auf finalem Entwicklungs-HEAD PENDING; Verlust-/Insolvenzpfade und weitere Pflichtfaelle offen; BLOCKED."
+      "next": "PR #120: echte Chromium-Schlussmonatsinsolvenz mit 4 Menschen, 11 vorherigen Monatsabschluessen, RESCUE im Monat 12, Sitzungsexport/-import, Sanierung, Archiv und drei Chromium-Prozessen eingereicht; finaler CI-Nachweis PENDING. Weitere Pflichtfaelle offen; Gate BLOCKED."
     },
     {
       "id": "TES-04",
