@@ -279,7 +279,7 @@
       "status": "blocked",
       "evidence": [],
       "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "Beschädigte Speicherstände testen"
+      "next": "Isolierter Archiv-Import/-Export mit neun lokalen Node-Regressionen gegen veraenderte Wertungen, Schemas, Prototyp-Schluessel, 4-MiB-Grenze und tiefe Strukturen; noch kein Browser-Archivimport, keine kryptografische Herkunftssicherung. GitHub-CI und vollstaendige Endpartien nachweisen; Gate BLOCKED."
     },
     {
       "id": "SIC-01",
