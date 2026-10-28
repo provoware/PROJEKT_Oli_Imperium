@@ -65,6 +65,15 @@ check('Nur die drei freigegebenen V1.9.4-Zusatzmodule werden im Browser geladen'
   assert.ok(!scripts.some(file => file.includes('evaluate_balance') || file.includes('analyze_stress')));
 });
 
+check('Sichtbare Spielartwahl verwendet ausschliesslich den versionierten Endspielvertrag', () => {
+  assert.equal(bridge.split('id="econEndMode"').length - 1, 1);
+  for (const mode of ['free', 'campaign:12', 'campaign:24', 'campaign:60', 'campaign:120', 'campaign:240']) {
+    assert.ok(bridge.includes('value="' + mode + '"'), 'Spielart fehlt: ' + mode);
+  }
+  assert.ok(bridge.includes("newPartie($('econMode')?.value||'1-2',$('econEndMode')?.value||'free')"));
+  assert.doesNotMatch(read('src/neo_bridge.js'), /econEndMode/, 'Original darf keine neue Spielart enthalten');
+});
+
 check('V1.9.4-Berichte lesen den tatsächlichen V1.9.3-Kern; dessen Module bleiben bytegleich', () => {
   const runtimeModules = ['src/v082_strategy_engine.js', 'src/strategy_ai_v192.js',
     'src/strategy_logistics_v193.js', 'src/profi_economy.js', 'src/logistics_v17.js'];

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Live-Endspieladapter im echten Offline-Chromium, noch ohne Enddialog."""
+"""Live-Endspieladapter mit sichtbarer Spielartwahl im Offline-Chromium; Enddialog folgt."""
 import json
 import subprocess
 import tempfile
@@ -57,6 +57,34 @@ def main():
             assert result["stillActive"] is True, result
             assert result["campaignPhase"] == "REPORT", result
             assert result["originalEngine"] is True, result
+            # Normale Bedienoberflaeche: Spielart sichtbar, beschriftet und per Tastatur erreichbar.
+            page.evaluate("window.NeoEconomy.open('startup')")
+            mode_select = page.get_by_label("Spielart", exact=True)
+            assert mode_select.count() == 1, "Spielart-Auswahl nicht sichtbar"
+            assert mode_select.is_visible()
+            assert mode_select.input_value() == "free"
+            assert page.locator("#econEndMode option").count() == 6
+            mode_select.focus()
+            mode_select.press("Tab")
+            assert page.evaluate("document.activeElement?.dataset?.ui") == "newgame", "Tab-Reihenfolge unterbrochen"
+            mode_select.select_option("campaign:12")
+            page.locator("#dialogContent button[data-ui='newgame']").click()
+            chosen = page.evaluate("""() => ({
+              mode: NeoEconomy.endstate.contract().mode,
+              months: NeoEconomy.endstate.contract().months,
+              status: NeoEconomy.endstate.status(),
+              month: NeoEconomy.getState().month
+            })""")
+            assert chosen == {"mode": "campaign", "months": 12, "status": "active", "month": 1}, chosen
+            page.evaluate("window.NeoEconomy.open('startup')")
+            page.get_by_label("Spielart", exact=True).select_option("free")
+            page.locator("#dialogContent button[data-ui='newgame']").click()
+            free = page.evaluate("""() => ({
+              mode: NeoEconomy.endstate.contract().mode,
+              status: NeoEconomy.endstate.status(),
+              month: NeoEconomy.getState().month
+            })""")
+            assert free == {"mode": "free", "status": "active", "month": 1}, free
             assert not errors, errors
             browser.close()
             print("PASS: Offline-Chromium 800x600, Live-Spielaktion, freiwilliger "

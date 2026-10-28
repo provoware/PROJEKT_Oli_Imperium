@@ -121,6 +121,13 @@ const changes = [
   ["src/neo_bridge.js",
     "engine:E};",
     "engine:E,endstate:window.PPPEndstateLive};"],
+  // Sichtbare Spielartwahl nur in der abgeleiteten Technikfassung; keine Originalquelle.
+  ['src/neo_bridge.js',
+    "<div class=\"econ-actions\"><button data-ui=\"newgame\">▶ Neue Partie starten</button><button data-ui=\"restore-backup\">💾 Lokale Zwischensicherung wiederherstellen</button></div>",
+    "<label for=\"econEndMode\">Spielart</label><select class=\"econ-select\" id=\"econEndMode\"><option value=\"free\">Freies Spiel – Abschluss auf Wunsch</option><option value=\"campaign:12\">Kampagne – 12 Monate</option><option value=\"campaign:24\">Kampagne – 24 Monate</option><option value=\"campaign:60\">Kampagne – 60 Monate</option><option value=\"campaign:120\">Kampagne – 120 Monate</option><option value=\"campaign:240\">Kampagne – 240 Monate</option></select><div class=\"econ-actions\"><button data-ui=\"newgame\">▶ Neue Partie starten</button><button data-ui=\"restore-backup\">💾 Lokale Zwischensicherung wiederherstellen</button></div>"],
+  ['src/neo_bridge.js',
+    "case 'newgame':newPartie($('econMode')?.value||'1-2');break;",
+    "case 'newgame':newPartie($('econMode')?.value||'1-2',$('econEndMode')?.value||'free');break;"],
 ];
 
 function replaceExactlyOnce(text, before, after, relative) {
