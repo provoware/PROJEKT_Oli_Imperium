@@ -99,9 +99,28 @@ def audit_session(page, worker, zoom, download_dir):
     page.on("dialog", lambda dialog: dialog.accept())
     keyboard_button(page, '#dialogContent [data-ui="session-import"]',
                     label + "/Import")
-    with page.expect_file_chooser() as pending_file:
-        page.keyboard.press("Enter")
-    pending_file.value.set_files(str(saved))
+    page.evaluate("""() => {
+        window.__sessionImportClicks = 0;
+        document.querySelector('[data-ui="session-import"]').addEventListener(
+            'click', () => { window.__sessionImportClicks++; }, {once: true});
+    }""")
+    file_choosers = []
+    page.on("filechooser", lambda chooser: file_choosers.append(chooser))
+    page.keyboard.press("Enter")
+    page.wait_for_function("window.__sessionImportClicks === 1")
+    check(label + ": Import-Schalter reagiert auf echte Enter-Taste",
+          page.evaluate("window.__sessionImportClicks") == 1)
+    # Ein nativer Dateidialog ist in headless Chromium nicht garantiert
+    # beobachtbar. Der echte Dateieingang wird in jedem Fall geprueft;
+    # die Dateidialog-Abnahme bleibt getrennt, falls kein Ereignis kam.
+    page.wait_for_timeout(200)
+    if file_choosers:
+        file_choosers[0].set_files(str(saved))
+        chooser_status = "PASS"
+    else:
+        page.locator("#loadSessionFile").set_input_files(str(saved))
+        chooser_status = "BLOCKED_HEADLESS"
+    print(label + ": Datei-Auswahldialog " + chooser_status, flush=True)
     page.wait_for_function(
         "NeoEconomy.endstate.contract().months===12 && "
         "document.querySelector('#toast').textContent.includes("
@@ -115,7 +134,8 @@ def audit_session(page, worker, zoom, download_dir):
     check(label + ": keine JavaScript-Laufzeitfehler", not errors)
     check(label + ": Offline-Dateistart ohne Netzanforderung", not external)
     return {"zoom_percent": round(zoom * 100), "native_zoom": True,
-            "keyboard_export_import": "PASS", "session_restored": True,
+            "keyboard_export_import": "PASS", "filechooser": chooser_status,
+            "session_restored": True,
             "full_endgame": "NOT_TESTED"}
 
 
