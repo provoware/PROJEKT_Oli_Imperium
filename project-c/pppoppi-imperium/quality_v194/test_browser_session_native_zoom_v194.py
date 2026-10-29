@@ -101,6 +101,14 @@ def audit_session(page, worker, zoom, download_dir):
                     label + "/Import")
     page.evaluate("""() => {
         window.__sessionImportClicks = 0;
+        window.__sessionFileInputClicks = 0;
+        window.__sessionInputActivation = null;
+        window.__sessionInputTrusted = null;
+        document.getElementById('loadSessionFile').addEventListener('click', event => {
+            window.__sessionFileInputClicks++;
+            window.__sessionInputActivation = navigator.userActivation?.isActive ?? null;
+            window.__sessionInputTrusted = event.isTrusted;
+        }, {once: true});
         document.querySelector('[data-ui="session-import"]').addEventListener(
             'click', () => { window.__sessionImportClicks++; }, {once: true});
     }""")
@@ -119,6 +127,10 @@ def audit_session(page, worker, zoom, download_dir):
             const inputs = [...document.querySelectorAll('input[type="file"]')];
             return {
                 clicks: window.__sessionImportClicks,
+                fileInputClicks: window.__sessionFileInputClicks,
+                userActivationAtInputClick: window.__sessionInputActivation,
+                inputClickTrusted: window.__sessionInputTrusted,
+                toast: document.querySelector('#toast')?.textContent?.slice(0, 200),
                 focusOnImport: focused === button,
                 focusedTag: focused?.tagName || null,
                 dialogOpen: document.querySelector('#dialog')?.open,
@@ -136,6 +148,8 @@ def audit_session(page, worker, zoom, download_dir):
     page.wait_for_function("window.__sessionImportClicks === 1")
     check(label + ": Import-Schalter reagiert auf echte Enter-Taste",
           page.evaluate("window.__sessionImportClicks") == 1)
+    check(label + ": versteckter Datei-Eingang erhielt genau einen Klick",
+          page.evaluate("window.__sessionFileInputClicks") == 1)
     check(label + ": Datei-Auswahldialog durch Enter geoeffnet",
           chooser_event.value is not None)
     chooser_event.value.set_files(str(saved))
@@ -170,14 +184,14 @@ def main():
         extension_at(extension)
         with sync_playwright() as playwright:
             results = []
-            # Jede Zoomstufe beginnt in einem eigenen Chromium-Prozess und
-            # Profil. Ein vorheriger nativer Dateidialog darf die naechste
-            # Messung nicht beeinflussen; innerhalb der Stufe bleibt der
-            # echte Tab-/Enter- und Dateidialog-Pfad unveraendert streng.
-            for zoom in ZOOMS:
+            # Drei voneinander unabhaengige Messpaare auf demselben Commit.
+            # Jeder Versuch startet einen neuen Chromium-Prozess mit eigenem
+            # Profil. Ein fehlgeschlagener Versuch wird NICHT wiederholt
+            # oder durch spaetere Erfolge verdeckt: sofort FAIL.
+            for trial, zoom in enumerate(ZOOMS * 3, 1):
                 label = str(round(zoom * 100))
                 context = playwright.chromium.launch_persistent_context(
-                    str(root / ("profile-" + label)), channel="chromium",
+                    str(root / ("profile-" + label + "-" + str(trial))), channel="chromium",
                     headless=True, viewport={"width": 800, "height": 600},
                     reduced_motion="reduce",
                     accept_downloads=True,
@@ -190,13 +204,13 @@ def main():
                         page.set_default_timeout(15000)
                         page.goto((preview / "index.html").as_uri(),
                                   wait_until="load")
-                        results.append(audit_session(page, worker, zoom, root))
+                        results.append({"trial": trial, **audit_session(page, worker, zoom, root)})
                     finally:
                         page.close()
                 finally:
                     context.close()
-            check("Beide nativen Zoomstufen erfolgreich",
-                  [r["zoom_percent"] for r in results] == [175, 200])
+            check("Sechs unabhaengige native Zoom-Messungen erfolgreich",
+                  [r["zoom_percent"] for r in results] == [175, 200] * 3)
             print("SESSION-NATIVE-ZOOM:",
                   json.dumps(results, ensure_ascii=False), flush=True)
             print("GRENZE: technische Teilpruefung; keine Endpartie, "
