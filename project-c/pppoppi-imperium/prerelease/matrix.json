@@ -246,10 +246,11 @@
       "stage": "technical",
       "status": "blocked",
       "evidence": [
-        "project-c/pppoppi-imperium/quality_v194/AI_ECONOMY_BROWSER_12MONTHS_20261029.md"
+        "project-c/pppoppi-imperium/quality_v194/AI_ECONOMY_BROWSER_12MONTHS_20261029.md",
+        "project-c/pppoppi-imperium/quality_v194/AI_STRATEGY_BASELINE_20261029.md"
       ],
       "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "Teilnachweis PR #134: 12-Monats-Chromium-Kampagne 2 Menschen/2 KI, 24 KI-Zuege und 148 KI-Entscheidungen, 129/129 PASS in CI #40866371739 auf 5ff936fdc12464e874444f4ef4ed3a221695960f. Naechster Pflichtschritt: Liquiditaet, Gewinn, Risiko, Schulden und Wettbewerbsfaehigkeit beider KI-Strategien mit messbarer Baseline vergleichen; Originalreferenz/Rechte fehlen. BLOCKED."
+      "next": "Quantitative BAL-01-Baseline (4 Szenarien x 3 feste Starts x 36 Monate, je zweimal) in PR nachpruefen; GitHub-Artefakt mit liquider Nettoposition, Schuldenspitze, Kassenminimum, Rueckgang, Sanierungen und Feldbestand auswerten. Kein bilanzieller Gewinn oder kausaler A/B-Beleg. Strategie-Gegenprobe, weitere KI-Stressfaelle und Rechte-/C64-Nachweise fehlen; BLOCKED."
     },
     {
       "id": "BAL-02",
