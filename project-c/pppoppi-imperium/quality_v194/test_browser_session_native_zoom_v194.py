@@ -104,18 +104,17 @@ def audit_session(page, worker, zoom, download_dir):
         document.querySelector('[data-ui="session-import"]').addEventListener(
             'click', () => { window.__sessionImportClicks++; }, {once: true});
     }""")
-    file_choosers = []
-    page.on("filechooser", lambda chooser: file_choosers.append(chooser))
-    page.keyboard.press("Enter")
+    # Das Ereignis vor dem Tastendruck abonnieren und wirklich abwarten.
+    # Die alte 200-ms-Wartezeit konnte bei Chromium-Zoom zu frueh enden.
+    # Kein direkter Eingabefeld-Ersatz: ohne nativen Dateidialog FAIL.
+    with page.expect_file_chooser(timeout=5000) as chooser_event:
+        page.keyboard.press("Enter")
     page.wait_for_function("window.__sessionImportClicks === 1")
     check(label + ": Import-Schalter reagiert auf echte Enter-Taste",
           page.evaluate("window.__sessionImportClicks") == 1)
-    # Ein fehlendes natives Datei-Auswahldialog-Ereignis ist ein echter
-    # Bedienfehler: niemals durch direkte Eingabefeld-Befuellung kaschieren.
-    page.wait_for_timeout(200)
     check(label + ": Datei-Auswahldialog durch Enter geoeffnet",
-          len(file_choosers) == 1)
-    file_choosers[0].set_files(str(saved))
+          chooser_event.value is not None)
+    chooser_event.value.set_files(str(saved))
     chooser_status = "PASS"
     page.wait_for_function(
         "NeoEconomy.endstate.contract().months===12 && "
