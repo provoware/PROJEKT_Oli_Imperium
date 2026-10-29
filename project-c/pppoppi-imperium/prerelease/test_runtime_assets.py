@@ -2,6 +2,10 @@
 import hashlib
 import tempfile
 import unittest
+import json
+import subprocess
+import sys
+from unittest.mock import patch
 from pathlib import Path
 from audit_runtime_assets import GAME, audit
 
@@ -95,6 +99,61 @@ class RuntimeAssetAuditTests(unittest.TestCase):
         self.assertIn('Rechtenachweis nicht vorhanden', ' '.join(
             audit(self.root, self.tracked + ['docs/link.txt'], {'schema_version': 1, 'assets': [bad]})[0]))
 
+
+
+    def test_large_media_hash_is_streamed_without_read_bytes(self):
+        target = self.root / self.file
+        target.write_bytes(b'large-media-fixture-' * 70000)
+        entry = {**self.entry, 'sha256': hashlib.sha256(target.read_bytes()).hexdigest()}
+        with patch.object(Path, 'read_bytes', side_effect=AssertionError('unbounded read')):
+            self.assertEqual(audit(self.root, self.tracked,
+                                   {'schema_version': 1, 'assets': [entry]}), ([], 1))
+
+    def test_media_read_error_is_reported_without_crashing(self):
+        target = self.root / self.file
+        original_open = Path.open
+
+        def fail_asset_open(path, *args, **kwargs):
+            if path == target:
+                raise PermissionError('simulated denied read')
+            return original_open(path, *args, **kwargs)
+
+        with patch.object(Path, 'open', fail_asset_open):
+            errors, count = audit(self.root, self.tracked,
+                                  {'schema_version': 1, 'assets': [self.entry]})
+        self.assertEqual(count, 1)
+        self.assertIn('Laufzeitmedium nicht lesbar', ' '.join(errors))
+
+    def test_symlinked_media_is_rejected_even_inside_repository(self):
+        target = self.root / self.file
+        target.unlink()
+        target.symlink_to(self.root / self.proof)
+        errors, count = audit(self.root, self.tracked,
+                              {'schema_version': 1, 'assets': [self.entry]})
+        self.assertEqual(count, 1)
+        self.assertIn('Unzulaessige Laufzeitdatei', ' '.join(errors))
+
+    def test_malformed_manifest_returns_clean_failure_from_cli(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            directory = root / 'project-c/pppoppi-imperium/prerelease'
+            directory.mkdir(parents=True)
+            script = directory / 'audit_runtime_assets.py'
+            script.write_text(Path(__file__).with_name('audit_runtime_assets.py').read_text(
+                encoding='utf-8'), encoding='utf-8')
+            manifest = directory / 'runtime_asset_manifest.json'
+            manifest.write_text('{}', encoding='utf-8')
+            subprocess.run(['git', 'init', '-q'], cwd=root, check=True, capture_output=True)
+            subprocess.run(['git', 'add', '.'], cwd=root, check=True, capture_output=True)
+            for invalid in ({}, {'schema_version': 1, 'assets': None},
+                            {'schema_version': 1, 'assets': {}}):
+                with self.subTest(invalid=invalid):
+                    manifest.write_text(json.dumps(invalid), encoding='utf-8')
+                    result = subprocess.run([sys.executable, str(script)], cwd=root,
+                                            capture_output=True, text=True, timeout=10)
+                    self.assertEqual(result.returncode, 1, result.stderr)
+                    self.assertIn('Ungueltiges Manifest', result.stderr)
+                    self.assertNotIn('Traceback', result.stderr)
 
 
 if __name__ == '__main__':
