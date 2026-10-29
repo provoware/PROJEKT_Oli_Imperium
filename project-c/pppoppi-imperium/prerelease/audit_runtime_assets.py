@@ -12,23 +12,31 @@ from pathlib import Path, PurePosixPath
 
 GAME = 'project-c/pppoppi-imperium/SPIEL/'
 MEDIA = {'.png', '.jpg', '.jpeg', '.webp', '.gif', '.svg', '.bmp', '.ico',
-         '.mp3', '.wav', '.ogg', '.flac', '.mp4', '.webm', '.woff', '.woff2',
-         '.ttf', '.otf'}
+         '.avif', '.apng', '.jfif', '.mp3', '.wav', '.ogg', '.flac', '.m4a',
+         '.aac', '.opus', '.aiff', '.mp4', '.webm', '.mov', '.mkv', '.woff',
+         '.woff2', '.ttf', '.otf', '.eot', '.pdf', '.glb', '.gltf'}
 MANIFEST = 'project-c/pppoppi-imperium/prerelease/runtime_asset_manifest.json'
+# Formale Dokumentationsklassen, keine automatische juristische Freigabe.
+RIGHTS = {'own-work', 'public-domain', 'cc0-1.0', 'cc-by-4.0',
+          'cc-by-sa-4.0', 'third-party-license'}
 
 
 def safe_path(value):
     if not isinstance(value, str) or not value or '\\' in value:
         return False
     p = PurePosixPath(value)
-    return not p.is_absolute() and all(part not in ('.', '..') for part in value.split('/')) and '//' not in value
+    return (not p.is_absolute()
+            and all(part not in ('.', '..') for part in value.split('/'))
+            and '//' not in value
+            and not any(ord(char) < 32 or ord(char) == 127 for char in value))
 
 
 def audit(root, tracked, manifest):
-    """Return (errors, count); rights are checked for documentation, not legally certified."""
+    """Return (errors, count); evidence is checked, not legally certified."""
     errors = []
     if not isinstance(manifest, dict) or manifest.get('schema_version') != 1 or not isinstance(manifest.get('assets'), list):
         return ['Ungueltiges Manifest (Schema 1, assets-Liste erforderlich).'], 0
+    tracked = set(tracked)
     media = {p for p in tracked if p.startswith(GAME) and PurePosixPath(p).suffix.lower() in MEDIA}
     entries = {}
     for i, entry in enumerate(manifest['assets']):
@@ -57,21 +65,25 @@ def audit(root, tracked, manifest):
             errors.append(f'Falscher SHA-256: {p}')
         rights = entry.get('rights')
         evidence = entry.get('rights_evidence')
-        if not isinstance(rights, str) or not rights.strip() or rights.lower() in ('unknown', 'unbekannt', 'todo'):
+        if not isinstance(rights, str) or rights not in RIGHTS:
             errors.append(f'Keine dokumentierte Nutzungsgrundlage: {p}')
-        if not safe_path(evidence):
+        if not safe_path(evidence) or evidence == p:
             errors.append(f'Fehlender sicherer Rechtenachweis: {p}')
         else:
             proof = root / evidence
             if proof.is_symlink() or not proof.is_file() or not proof.resolve().is_relative_to(root.resolve()):
                 errors.append(f'Rechtenachweis nicht vorhanden: {p}')
+            elif evidence not in tracked:
+                errors.append(f'Rechtenachweis nicht versioniert: {p}')
+            elif proof.stat().st_size == 0:
+                errors.append(f'Rechtenachweis leer: {p}')
     return errors, len(media)
 
 
 def main():
     root = Path(__file__).resolve().parents[3]
     try:
-        tracked = subprocess.run(['git', 'ls-files', '-z', '--', GAME], cwd=root,
+        tracked = subprocess.run(['git', 'ls-files', '-z'], cwd=root,
                                  check=True, capture_output=True).stdout.decode('utf-8').split('\0')
         manifest = json.loads((root / MANIFEST).read_text(encoding='utf-8'))
     except (OSError, ValueError, subprocess.CalledProcessError) as exc:
