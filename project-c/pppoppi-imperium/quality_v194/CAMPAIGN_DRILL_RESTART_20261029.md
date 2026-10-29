@@ -28,9 +28,9 @@ Die bisherigen Browser-Tests belegten entweder ein Bohr-Minispiel bis zum Export
 ## Prüfstand und offene Pflichten
 
 - **Ausführung:** `python3 project-c/pppoppi-imperium/quality_v194/test_browser_campaign_drill_recovery_v194.py`.
-- **GitHub-CI:** `.github/workflows/prerelease-campaign-drill.yml`; Ergebnis auf endgültigem Commit erst nach tatsächlicher Ausführung nachtragen.
+- **GitHub-CI:** [Bohrspiel-Kampagne #40807756950](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40807756950) auf `9e157a47f9aaee400144831e14cb383744ecbc88`: **PASS**, 142 einzelne PASS-Ausgaben, 0 FAIL; drei Chromium-Prozesse, Druckziele 39/67/51, zwölf Monatsberichte, zwei Sitzungsdateien. Nach diesem Dokumentationsnachtrag ist der neue HEAD erneut zu prüfen; das endgültige Ergebnis wird im PR dokumentiert.
 - **Basis-CI:** [PR #124](https://github.com/provoware/PROJEKT_Oli_Imperium/pull/124) hatte auf `3016c518149ac9ff12f6f0b10e1a93029d7cf9b1` Quellschutz und Browserregressionen PASS, aber integrierte Vorrelease-Sperre BLOCKED.
-- **Matrix:** 6 PASS / 39 BLOCKED / 4 OPEN / 3 persönliche DEFERRED = 52; keine Statusänderung durch dieses Teilpaket.
+- **Matrix:** 6 PASS / 39 BLOCKED / 4 OPEN / 3 persönliche DEFERRED = 52; trotz bestandenem Teiltest **keine Statusänderung**. [Quellschutz #40807756700](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40807756700) PASS; [Doppelrettung #40807756813](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40807756813) PASS; [Dreifachrettung #40807756805](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40807756805) PASS; [integrierte Vorrelease-Sperre #40807756789](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40807756789) weiterhin erwartungsgemäß FAIL/BLOCKED wegen offener Pflichten.
 - **Noch offen:** andere Minispiele mitten in einer Kampagne, mehrere Insolvenz-/Wirtschaftsgrenzfälle, Ressourcenrechte, vollständige technische Freigabe, verifizierter historischer Originalvergleich. Persönliche Sichtprüfung/Kubuntu-Endabnahme erst nach technischem Kandidaten-Freeze.
 
 ## Nächste drei Schritte
