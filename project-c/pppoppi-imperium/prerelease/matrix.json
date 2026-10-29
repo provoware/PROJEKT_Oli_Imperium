@@ -46,8 +46,10 @@
       "basis": "AGENTS.md",
       "stage": "technical",
       "status": "open",
-      "evidence": [],
-      "next": "Dateiliste und Lizenzen prüfen"
+      "evidence": [
+        "project-c/pppoppi-imperium/quality_v194/RUNTIME_ASSET_INVENTORY_20261029.md"
+      ],
+      "next": "GitHub-Inventarpruefung fuer versionierte Laufzeitmedien am finalen PR-HEAD bestaetigen; 77 ausgeschlossene Archivdateien einzeln auf Herkunft, Rechte und Spielnotwendigkeit pruefen. Inventar-PASS ist keine Rechtefreigabe."
     },
     {
       "id": "LOG-01",
