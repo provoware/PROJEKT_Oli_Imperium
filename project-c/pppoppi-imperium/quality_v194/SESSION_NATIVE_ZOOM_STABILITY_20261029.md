@@ -29,3 +29,13 @@ GitHub führt diesen Schritt im Auftrag `native-zoom-regression` aus `.github/wo
 3. Anschließend strategischen und logistischen KI-Reihenfolgeeffekt getrennt untersuchen; Rechteprüfung der 77 ausgeschlossenen Dateien und C64-Originalreferenz bleiben gesondert offen.
 
 **Kein Merge, kein Release, keine persönliche Kubuntu- oder Sichtabnahme vor vollständig grünem, eingefrorenem Kandidaten.**
+
+## Zusatzprüfung – sechs unabhängige Browserläufe (29.10.2026)
+
+**Anlass:** Der native Datei-Auswahldialog ist sporadisch ausgeblieben, obwohl der Import-Schalter sichtbar, fokussiert und per Tab erreichbar war. Die letzte vollständige [Browser-CI #40943032463](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40943032463) auf `b6f46d4bad8fc1c2de041a257c10942e795088f9` ist inzwischen in allen acht Aufträgen **PASS**; dies beweist keine dauerhafte Fehlerfreiheit.
+
+**Neuer, enger Pflichtversuch:** Der vorhandene echte Chromium-Tastaturtest durchläuft nun **drei vollständige Paare 175 % / 200 %**, also sechs unabhängige Browserprozesse mit sechs eigenen Profilen, jeweils neu gestarteter 12-/24-Monats-Partie, echtem Tab/Enter, nativem Datei-Auswahldialog, JSON-Import, exakter Spielstandsgleichheit und Offlinekontrolle. Bei jedem fehlgeschlagenen Einzelversuch stoppt der Test sofort mit **FAIL**; keine automatische Wiederholung, kein Ersatz durch direktes Befüllen des Datei-Inputs. Die zusätzliche Diagnose erfasst getrennt die Anzahl der Schalterklicks, die Klickereignisse am verborgenen Datei-Eingang, die Nutzeraktivierung beim Datei-Eingangsklick, dessen `isTrusted`-Kennzeichen und die Toast-Meldung. So lässt sich bei erneutem Timeout unterscheiden, ob die Ereigniskette vor dem Eingabefeld abreißt oder der Browser trotz ausgelöstem Dateieingang keinen Dialog öffnet.
+
+**Reproduktion:** `python3 project-c/pppoppi-imperium/quality_v194/test_browser_session_native_zoom_v194.py` (benötigt Playwright/Chromium). Der vorhandene Workflow `.github/workflows/prerelease-browser-project-c.yml` führt genau diesen Test im Auftrag `native-zoom-regression` aus. **CI-Status dieser Änderung: PENDING, bis der neue Commit geprüft ist.** Ein PASS über sechs Messungen belegt nur diese sechs Versuche, nicht die dauerhafte Beseitigung der Ursache.
+
+**Pflichtmatrix:** `BED-02`, `BED-03`, `SPE-03`, `SIC-02` und `TES-04` bleiben **BLOCKED**. Weiter offen: reale Fehlerursache bei erneuter Reproduktion, vollständige Barrierefreiheit, Balance, Rechte für 77 Archivdateien und historischer C64-Vergleich. Keine Änderung am Spielkern oder den 110 geschützten Originaldateien, kein Merge, kein Release, keine vorgezogene persönliche Abnahme.
