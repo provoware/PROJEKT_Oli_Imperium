@@ -5,6 +5,8 @@ on:
       - 'project-c/pppoppi-imperium/quality_v194/test_ai_strategy_metrics_v194.cjs'
       - 'project-c/pppoppi-imperium/quality_v194/test_ai_strategy_metrics_unit_v194.cjs'
       - 'project-c/pppoppi-imperium/quality_v194/AI_STRATEGY_BASELINE_20261029.md'
+      - 'project-c/pppoppi-imperium/quality_v194/test_ai_profile_rotation_v194.cjs'
+      - 'project-c/pppoppi-imperium/quality_v194/AI_PROFILE_ROTATION_20261029.md'
       - 'project-c/pppoppi-imperium/prerelease/matrix.json'
       - '.github/workflows/prerelease-ai-strategy-metrics.yml'
   workflow_dispatch:
@@ -29,11 +31,19 @@ jobs:
           set -o pipefail
           node project-c/pppoppi-imperium/quality_v194/test_ai_strategy_metrics_v194.cjs | tee ai_strategy_baseline.json
           node -e "const r=require('./ai_strategy_baseline.json'); if(r.rows.length!==12 || r.summary.length!==12 || r.totalSimulatedMonths!==864 || r.prereleaseGate!=='BLOCKED') process.exit(1);"
+      - name: Zwei Szenarien und drei strategische Profilzuordnungen kontrollieren
+        run: |
+          set -o pipefail
+          node --check project-c/pppoppi-imperium/quality_v194/test_ai_profile_rotation_v194.cjs
+          node project-c/pppoppi-imperium/quality_v194/test_ai_profile_rotation_v194.cjs | tee ai_profile_rotation.json
+          node -e "const r=require('./ai_profile_rotation.json'); if(r.rows.length!==6 || r.comparisons.length!==12 || r.totalSimulatedMonths!==432 || r.prereleaseGate!=='BLOCKED') process.exit(1);"
       - name: Reproduzierbaren Zahlenbericht sichern
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: ai-strategy-baseline
-          path: ai_strategy_baseline.json
+          path: |
+            ai_strategy_baseline.json
+            ai_profile_rotation.json
           if-no-files-found: warn
           retention-days: 14
