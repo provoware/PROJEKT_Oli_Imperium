@@ -100,7 +100,7 @@
         "project-c/pppoppi-imperium/quality_v194/CAMPAIGN_DRILL_RESTART_20261029.md"
       ],
       "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "Bohr-Minispiel in 12-Monats-Kampagne: Sitzungsdownload bei laufendem Minispiel, echter Chromium-Neustart, drei Tastatur-Bohrabschnitte, zwölf Monatsberichte und Archiv-Wiederherstellung als neuer CI-Test in PR #125; bis zum PASS auf finalem HEAD und weiteren Pflichtfaellen BLOCKED."
+      "next": "Teiltest Bohr-Minispiel waehrend 12-Monats-Kampagne mit Sitzungsexport, drei Chromium-Prozessen, Tastatur-Fortsetzung und Archiv: 142 PASS/0 FAIL auf 9e157a47 (CI #40807756950). Weitere Minispiele, Wirtschaftsfunktionen und Gesamtfreigaben fehlen; Gate bleibt BLOCKED."
     },
     {
       "id": "LOG-05",
@@ -137,7 +137,7 @@
         "project-c/pppoppi-imperium/quality_v194/CAMPAIGN_DRILL_RESTART_20261029.md"
       ],
       "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "Bohr-Minispiel in 12-Monats-Kampagne: Sitzungsdownload bei laufendem Minispiel, echter Chromium-Neustart, drei Tastatur-Bohrabschnitte, zwölf Monatsberichte und Archiv-Wiederherstellung als neuer CI-Test in PR #125; bis zum PASS auf finalem HEAD und weiteren Pflichtfaellen BLOCKED."
+      "next": "Teiltest Bohr-Minispiel waehrend 12-Monats-Kampagne mit Sitzungsexport, drei Chromium-Prozessen, Tastatur-Fortsetzung und Archiv: 142 PASS/0 FAIL auf 9e157a47 (CI #40807756950). Weitere Minispiele, Wirtschaftsfunktionen und Gesamtfreigaben fehlen; Gate bleibt BLOCKED."
     },
     {
       "id": "VER-02",
@@ -173,7 +173,7 @@
         "project-c/pppoppi-imperium/quality_v194/CAMPAIGN_DRILL_RESTART_20261029.md"
       ],
       "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "Bohr-Minispiel in 12-Monats-Kampagne: Sitzungsdownload bei laufendem Minispiel, echter Chromium-Neustart, drei Tastatur-Bohrabschnitte, zwölf Monatsberichte und Archiv-Wiederherstellung als neuer CI-Test in PR #125; bis zum PASS auf finalem HEAD und weiteren Pflichtfaellen BLOCKED."
+      "next": "Teiltest Bohr-Minispiel waehrend 12-Monats-Kampagne mit Sitzungsexport, drei Chromium-Prozessen, Tastatur-Fortsetzung und Archiv: 142 PASS/0 FAIL auf 9e157a47 (CI #40807756950). Weitere Minispiele, Wirtschaftsfunktionen und Gesamtfreigaben fehlen; Gate bleibt BLOCKED."
     },
     {
       "id": "WIR-01",
@@ -281,7 +281,7 @@
         "project-c/pppoppi-imperium/quality_v194/CAMPAIGN_DRILL_RESTART_20261029.md"
       ],
       "blocker": "Chromium-CI #40603795251 auf Code-HEAD 8ec7a177313136cb040dfe26c833e09b392e6b2a PASS (vier Browserjobs). Neuer Teiltest: zwei menschliche und zwei KI-Firmen, zwei Regionen, zwei Vertragsabschluesse, zwei Monatsabrechnungen, vier frische Browserkontexte, drei exakte Importe und unabhaengige wirtschaftliche Fortsetzung ohne Doppelbuchung. Weitere Spielphasen, beliebige Fremdeingaben, vollstaendige Endpartien und verbindliche Endregeln fehlen; SPE-01 und Gesamtgate BLOCKED. PR #98: Chromium-CI #40609519522 auf HEAD 4deb5c4e3f8f59f10012c710c23a7bd57d0a36f3 PASS in allen vier Jobs, einschliesslich echtem Zwei-Menschen-Sanierungszwischenstand mit Browserneustart. Frueherer Lauf #40609444650 mit unabhaengigem Serviceworker-Start-FLAKE; Ursache offen. Vollstaendige Endpartien und weitere Spielphasen weiterhin offen. PR #100: neuer Engine-Teiltest auf ba19ccade47e48a98c63ea56dae6e7b99ca66469 in Chromium-Workflow #40622159262 als isolierter Node-Schritt PASS: zwei natuerliche Insolvenzen, H1-Notverkauf, H2-offene Sanierung, Fremdfeld- und Doppelbuchungsschutz, JSON-Rundlauf und H2-Neustart. Kein Browser-Live-Test dieses Pfades und keine vollstaendige Endpartie; Gate bleibt BLOCKED. PR #101: isolierter Node-Schritt in Chromium-CI #40627244010 auf 5a27df95a37fea43096d8be3b67238a1109f48c1 PASS: zwei natuerliche Vertraege, ein BREACH und ein DONE, exakte Straf-/Erloesbuchungen, JSON-Fortsetzung und Duplikatschutz. Keine Browser-Partie dieses Vertragswegs und keine Endpartie; Gate BLOCKED. PR #102: natürlicher Teilmengen-Vertragsfall mit Marktverkauf, JSON-Rundlauf und Duplikatschutz als neuer Test eingereicht; neuer Node-Schritt in CI #40633158227 auf d7fd6c44b059b80189ad1be922c792769d33c20f PASS; vollständige Chromium-CI zum Prüfzeitpunkt noch IN_PROGRESS, keine Browser-Endpartie, Gate weiterhin BLOCKED. PR #103: neuer echter Chromium-Browser-Teillieferungsschritt in CI #40638625387 auf 6394724d2b56b22806a7a8ee13cc3d64929b3a65 PASS: 4 Menschen, 80.000 Marktverkauf, 20.000/40.000 BREACH, zwei echte Chromium-Prozessneustarts, drei JSON-Importe und Duplikatschutz. Gesamte Chromium-CI zum Dokumentationszeitpunkt noch IN_PROGRESS; vollständige Endpartien fehlen, Gate BLOCKED.",
-      "next": "Bohr-Minispiel in 12-Monats-Kampagne: Sitzungsdownload bei laufendem Minispiel, echter Chromium-Neustart, drei Tastatur-Bohrabschnitte, zwölf Monatsberichte und Archiv-Wiederherstellung als neuer CI-Test in PR #125; bis zum PASS auf finalem HEAD und weiteren Pflichtfaellen BLOCKED."
+      "next": "Teiltest Bohr-Minispiel waehrend 12-Monats-Kampagne mit Sitzungsexport, drei Chromium-Prozessen, Tastatur-Fortsetzung und Archiv: 142 PASS/0 FAIL auf 9e157a47 (CI #40807756950). Weitere Minispiele, Wirtschaftsfunktionen und Gesamtfreigaben fehlen; Gate bleibt BLOCKED."
     },
     {
       "id": "SPE-02",
@@ -618,7 +618,7 @@
         "project-c/pppoppi-imperium/quality_v194/CAMPAIGN_DRILL_RESTART_20261029.md"
       ],
       "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "Bohr-Minispiel in 12-Monats-Kampagne: Sitzungsdownload bei laufendem Minispiel, echter Chromium-Neustart, drei Tastatur-Bohrabschnitte, zwölf Monatsberichte und Archiv-Wiederherstellung als neuer CI-Test in PR #125; bis zum PASS auf finalem HEAD und weiteren Pflichtfaellen BLOCKED."
+      "next": "Teiltest Bohr-Minispiel waehrend 12-Monats-Kampagne mit Sitzungsexport, drei Chromium-Prozessen, Tastatur-Fortsetzung und Archiv: 142 PASS/0 FAIL auf 9e157a47 (CI #40807756950). Weitere Minispiele, Wirtschaftsfunktionen und Gesamtfreigaben fehlen; Gate bleibt BLOCKED."
     },
     {
       "id": "TES-04",
