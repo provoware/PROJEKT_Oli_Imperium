@@ -13,6 +13,8 @@ on:
       - 'project-c/pppoppi-imperium/quality_v194/test_ai_order_isolation_v194.cjs'
       - 'project-c/pppoppi-imperium/quality_v194/test_ai_turn_rotation_v194.cjs'
       - 'project-c/pppoppi-imperium/quality_v194/test_ai_turn_rotation_unit_v194.cjs'
+      - 'project-c/pppoppi-imperium/quality_v194/test_ai_turn_rotation_stress_v194.cjs'
+      - 'project-c/pppoppi-imperium/quality_v194/AI_TURN_ROTATION_STRESS_20261029.md'
       - 'project-c/pppoppi-imperium/quality_v194/AI_TURN_ROTATION_20261029.md'
       - 'project-c/pppoppi-imperium/quality_v194/AI_ORDER_ISOLATION_20261029.md'
       - 'project-c/pppoppi-imperium/quality_v194/AI_TURN_ORDER_20261029.md'
@@ -88,6 +90,12 @@ jobs:
           node --test project-c/pppoppi-imperium/quality_v194/test_ai_turn_rotation_unit_v194.cjs
           node project-c/pppoppi-imperium/quality_v194/test_ai_turn_rotation_v194.cjs | tee ai_turn_rotation.json
           node -e "const r=require('./ai_turn_rotation.json'); if(r.rows.length!==18 || r.comparisons.length!==36 || r.totalCampaigns!==38 || r.totalSimulatedMonths!==1368 || r.prereleaseGate!=='BLOCKED') process.exit(1);"
+      - name: KI-Monatsrotation unter passivem Spieler und Nachfrageeinbruch pruefen
+        run: |
+          set -o pipefail
+          node --check project-c/pppoppi-imperium/quality_v194/test_ai_turn_rotation_stress_v194.cjs
+          node project-c/pppoppi-imperium/quality_v194/test_ai_turn_rotation_stress_v194.cjs | tee ai_turn_rotation_stress.json
+          node -e "const r=require('./ai_turn_rotation_stress.json'); const a=r.aggregate; if(r.rows.length!==18 || r.comparisons.length!==12 || r.exactRepeats!==18 || r.totalCampaigns!==38 || r.totalSimulatedMonths!==1368 || r.prereleaseGate!=='BLOCKED' || a.moreFields+a.equalFields+a.fewerFields!==12 || a.moreLiquidNet+a.equalLiquidNet+a.lessLiquidNet!==12) process.exit(1);"
       - name: Reproduzierbaren Zahlenbericht sichern
         if: always()
         uses: actions/upload-artifact@v4
@@ -102,5 +110,6 @@ jobs:
             ai_turn_order.json
             ai_order_isolation.json
             ai_turn_rotation.json
+            ai_turn_rotation_stress.json
           if-no-files-found: warn
           retention-days: 14
