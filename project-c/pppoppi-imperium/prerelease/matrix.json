@@ -75,7 +75,7 @@
         "project-c/pppoppi-imperium/quality_v194/ECONOMY_ACTIONS_12MONTHS_20261029.md"
       ],
       "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "Teiltest 29.10.2026: 12 Monate mit 2 Menschen, 129 echten Engine-Uebergaengen (Foerderung, Transport, Markt, Vertrag, Brand), 76 JS-Vorchecks PASS, 12 JSON-Rundlaeufe. GitHub-Node-CI #40851223794 auf f6924c9965f3f7669034d4e073300a6cab9cff47 noch IN_PROGRESS. Weiter: echte Browser-Prozessneustarts und Ex-/Import, KI/weitere Wirtschaftsgrenzfaelle, Rechte und C64-Referenz; Gate bleibt BLOCKED."
+      "next": "Teiltest 29.10.2026: 12 Monate mit 2 Menschen, 129 echten Engine-Uebergaengen (Foerderung, Transport, Markt, Vertrag, Brand), 76/76 PASS in GitHub-Node-CI #40851223794 auf f6924c9965f3f7669034d4e073300a6cab9cff47, 12 JSON-Rundlaeufe. Weiter: echte Browser-Prozessneustarts und Ex-/Import, KI/weitere Wirtschaftsgrenzfaelle, Rechte und C64-Referenz; Gate bleibt BLOCKED."
     },
     {
       "id": "LOG-03",
@@ -89,7 +89,7 @@
         "project-c/pppoppi-imperium/quality_v194/ECONOMY_ACTIONS_12MONTHS_20261029.md"
       ],
       "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "Teiltest 29.10.2026: 12 Monate mit 2 Menschen, 129 echten Engine-Uebergaengen (Foerderung, Transport, Markt, Vertrag, Brand), 76 JS-Vorchecks PASS, 12 JSON-Rundlaeufe. GitHub-Node-CI #40851223794 auf f6924c9965f3f7669034d4e073300a6cab9cff47 noch IN_PROGRESS. Weiter: echte Browser-Prozessneustarts und Ex-/Import, KI/weitere Wirtschaftsgrenzfaelle, Rechte und C64-Referenz; Gate bleibt BLOCKED."
+      "next": "Teiltest 29.10.2026: 12 Monate mit 2 Menschen, 129 echten Engine-Uebergaengen (Foerderung, Transport, Markt, Vertrag, Brand), 76/76 PASS in GitHub-Node-CI #40851223794 auf f6924c9965f3f7669034d4e073300a6cab9cff47, 12 JSON-Rundlaeufe. Weiter: echte Browser-Prozessneustarts und Ex-/Import, KI/weitere Wirtschaftsgrenzfaelle, Rechte und C64-Referenz; Gate bleibt BLOCKED."
     },
     {
       "id": "LOG-04",
@@ -232,7 +232,7 @@
         "project-c/pppoppi-imperium/quality_v194/ECONOMY_ACTIONS_12MONTHS_20261029.md"
       ],
       "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "Teiltest 29.10.2026: 12 Monate mit 2 Menschen, 129 echten Engine-Uebergaengen (Foerderung, Transport, Markt, Vertrag, Brand), 76 JS-Vorchecks PASS, 12 JSON-Rundlaeufe. GitHub-Node-CI #40851223794 auf f6924c9965f3f7669034d4e073300a6cab9cff47 noch IN_PROGRESS. Weiter: echte Browser-Prozessneustarts und Ex-/Import, KI/weitere Wirtschaftsgrenzfaelle, Rechte und C64-Referenz; Gate bleibt BLOCKED."
+      "next": "Teiltest 29.10.2026: 12 Monate mit 2 Menschen, 129 echten Engine-Uebergaengen (Foerderung, Transport, Markt, Vertrag, Brand), 76/76 PASS in GitHub-Node-CI #40851223794 auf f6924c9965f3f7669034d4e073300a6cab9cff47, 12 JSON-Rundlaeufe. Weiter: echte Browser-Prozessneustarts und Ex-/Import, KI/weitere Wirtschaftsgrenzfaelle, Rechte und C64-Referenz; Gate bleibt BLOCKED."
     },
     {
       "id": "BAL-01",
