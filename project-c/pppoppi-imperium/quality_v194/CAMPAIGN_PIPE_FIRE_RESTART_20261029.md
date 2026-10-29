@@ -24,7 +24,7 @@
 python3 project-c/pppoppi-imperium/quality_v194/test_browser_campaign_pipe_fire_recovery_v194.py
 ```
 
-**Eigenstaendiger Workflow:** [prerelease-campaign-pipe-fire.yml](../../../../.github/workflows/prerelease-campaign-pipe-fire.yml).
+**Eigenstaendiger Workflow:** [prerelease-campaign-pipe-fire.yml](../../../.github/workflows/prerelease-campaign-pipe-fire.yml).
 
 ## Tatsachliche Pruefbeobachtungen
 
