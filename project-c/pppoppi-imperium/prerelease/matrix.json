@@ -76,7 +76,7 @@
         "project-c/pppoppi-imperium/quality_v194/ECONOMY_BROWSER_12MONTHS_20261029.md"
       ],
       "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "Neuer Teiltest PR #133: echte 12-Monats-Wirtschaftspartie mit sichtbaren Aktionen und Chromium-Prozessneustarts. Erster Lauf #40858543740 FAIL wegen falscher Test-Szenenwahl fuer FIRE_EXPERT (security statt workshop); korrigiert auf 77dd6498ca8d14adede4af50ae1c33de15fdf1d3. Wiederholung #40858709316 zum Dokumentationszeitpunkt ausstehend. KI-Endpartien, Ressourcenrechte und C64-Referenz fehlen; Gate bleibt BLOCKED."
+      "next": "Teilnachweis PR #133: echte 12-Monats-Kampagne mit sichtbaren Wirtschaftsaktionen, 179/179 PASS, 0 FAIL in GitHub-Chromium-CI #40858709316 auf unveraendertem Test-HEAD 77dd6498ca8d14adede4af50ae1c33de15fdf1d3; 5 getrennte Browserprozesse, 4 versionierte Exporte/Importe, 12 Berichte, Abschlussarchiv, 800x600 und Offline. Erster Lauf #40858543740 FAIL wegen falscher Test-Szenenwahl; korrigiert. KI-Endpartien, weitere Regionen/Extremwerte, Rechte und C64-Referenz offen; Gate bleibt BLOCKED."
     },
     {
       "id": "LOG-03",
@@ -91,7 +91,7 @@
         "project-c/pppoppi-imperium/quality_v194/ECONOMY_BROWSER_12MONTHS_20261029.md"
       ],
       "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "Neuer Teiltest PR #133: echte 12-Monats-Wirtschaftspartie mit sichtbaren Aktionen und Chromium-Prozessneustarts. Erster Lauf #40858543740 FAIL wegen falscher Test-Szenenwahl fuer FIRE_EXPERT (security statt workshop); korrigiert auf 77dd6498ca8d14adede4af50ae1c33de15fdf1d3. Wiederholung #40858709316 zum Dokumentationszeitpunkt ausstehend. KI-Endpartien, Ressourcenrechte und C64-Referenz fehlen; Gate bleibt BLOCKED."
+      "next": "Teilnachweis PR #133: echte 12-Monats-Kampagne mit sichtbaren Wirtschaftsaktionen, 179/179 PASS, 0 FAIL in GitHub-Chromium-CI #40858709316 auf unveraendertem Test-HEAD 77dd6498ca8d14adede4af50ae1c33de15fdf1d3; 5 getrennte Browserprozesse, 4 versionierte Exporte/Importe, 12 Berichte, Abschlussarchiv, 800x600 und Offline. Erster Lauf #40858543740 FAIL wegen falscher Test-Szenenwahl; korrigiert. KI-Endpartien, weitere Regionen/Extremwerte, Rechte und C64-Referenz offen; Gate bleibt BLOCKED."
     },
     {
       "id": "LOG-04",
@@ -235,7 +235,7 @@
         "project-c/pppoppi-imperium/quality_v194/ECONOMY_BROWSER_12MONTHS_20261029.md"
       ],
       "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "Neuer Teiltest PR #133: echte 12-Monats-Wirtschaftspartie mit sichtbaren Aktionen und Chromium-Prozessneustarts. Erster Lauf #40858543740 FAIL wegen falscher Test-Szenenwahl fuer FIRE_EXPERT (security statt workshop); korrigiert auf 77dd6498ca8d14adede4af50ae1c33de15fdf1d3. Wiederholung #40858709316 zum Dokumentationszeitpunkt ausstehend. KI-Endpartien, Ressourcenrechte und C64-Referenz fehlen; Gate bleibt BLOCKED."
+      "next": "Teilnachweis PR #133: echte 12-Monats-Kampagne mit sichtbaren Wirtschaftsaktionen, 179/179 PASS, 0 FAIL in GitHub-Chromium-CI #40858709316 auf unveraendertem Test-HEAD 77dd6498ca8d14adede4af50ae1c33de15fdf1d3; 5 getrennte Browserprozesse, 4 versionierte Exporte/Importe, 12 Berichte, Abschlussarchiv, 800x600 und Offline. Erster Lauf #40858543740 FAIL wegen falscher Test-Szenenwahl; korrigiert. KI-Endpartien, weitere Regionen/Extremwerte, Rechte und C64-Referenz offen; Gate bleibt BLOCKED."
     },
     {
       "id": "BAL-01",
@@ -297,7 +297,7 @@
         "project-c/pppoppi-imperium/quality_v194/ECONOMY_BROWSER_12MONTHS_20261029.md"
       ],
       "blocker": "Chromium-CI #40603795251 auf Code-HEAD 8ec7a177313136cb040dfe26c833e09b392e6b2a PASS (vier Browserjobs). Neuer Teiltest: zwei menschliche und zwei KI-Firmen, zwei Regionen, zwei Vertragsabschluesse, zwei Monatsabrechnungen, vier frische Browserkontexte, drei exakte Importe und unabhaengige wirtschaftliche Fortsetzung ohne Doppelbuchung. Weitere Spielphasen, beliebige Fremdeingaben, vollstaendige Endpartien und verbindliche Endregeln fehlen; SPE-01 und Gesamtgate BLOCKED. PR #98: Chromium-CI #40609519522 auf HEAD 4deb5c4e3f8f59f10012c710c23a7bd57d0a36f3 PASS in allen vier Jobs, einschliesslich echtem Zwei-Menschen-Sanierungszwischenstand mit Browserneustart. Frueherer Lauf #40609444650 mit unabhaengigem Serviceworker-Start-FLAKE; Ursache offen. Vollstaendige Endpartien und weitere Spielphasen weiterhin offen. PR #100: neuer Engine-Teiltest auf ba19ccade47e48a98c63ea56dae6e7b99ca66469 in Chromium-Workflow #40622159262 als isolierter Node-Schritt PASS: zwei natuerliche Insolvenzen, H1-Notverkauf, H2-offene Sanierung, Fremdfeld- und Doppelbuchungsschutz, JSON-Rundlauf und H2-Neustart. Kein Browser-Live-Test dieses Pfades und keine vollstaendige Endpartie; Gate bleibt BLOCKED. PR #101: isolierter Node-Schritt in Chromium-CI #40627244010 auf 5a27df95a37fea43096d8be3b67238a1109f48c1 PASS: zwei natuerliche Vertraege, ein BREACH und ein DONE, exakte Straf-/Erloesbuchungen, JSON-Fortsetzung und Duplikatschutz. Keine Browser-Partie dieses Vertragswegs und keine Endpartie; Gate BLOCKED. PR #102: natürlicher Teilmengen-Vertragsfall mit Marktverkauf, JSON-Rundlauf und Duplikatschutz als neuer Test eingereicht; neuer Node-Schritt in CI #40633158227 auf d7fd6c44b059b80189ad1be922c792769d33c20f PASS; vollständige Chromium-CI zum Prüfzeitpunkt noch IN_PROGRESS, keine Browser-Endpartie, Gate weiterhin BLOCKED. PR #103: neuer echter Chromium-Browser-Teillieferungsschritt in CI #40638625387 auf 6394724d2b56b22806a7a8ee13cc3d64929b3a65 PASS: 4 Menschen, 80.000 Marktverkauf, 20.000/40.000 BREACH, zwei echte Chromium-Prozessneustarts, drei JSON-Importe und Duplikatschutz. Gesamte Chromium-CI zum Dokumentationszeitpunkt noch IN_PROGRESS; vollständige Endpartien fehlen, Gate BLOCKED.",
-      "next": "Neuer Teiltest PR #133: echte 12-Monats-Wirtschaftspartie mit sichtbaren Aktionen und Chromium-Prozessneustarts. Erster Lauf #40858543740 FAIL wegen falscher Test-Szenenwahl fuer FIRE_EXPERT (security statt workshop); korrigiert auf 77dd6498ca8d14adede4af50ae1c33de15fdf1d3. Wiederholung #40858709316 zum Dokumentationszeitpunkt ausstehend. KI-Endpartien, Ressourcenrechte und C64-Referenz fehlen; Gate bleibt BLOCKED."
+      "next": "Teilnachweis PR #133: echte 12-Monats-Kampagne mit sichtbaren Wirtschaftsaktionen, 179/179 PASS, 0 FAIL in GitHub-Chromium-CI #40858709316 auf unveraendertem Test-HEAD 77dd6498ca8d14adede4af50ae1c33de15fdf1d3; 5 getrennte Browserprozesse, 4 versionierte Exporte/Importe, 12 Berichte, Abschlussarchiv, 800x600 und Offline. Erster Lauf #40858543740 FAIL wegen falscher Test-Szenenwahl; korrigiert. KI-Endpartien, weitere Regionen/Extremwerte, Rechte und C64-Referenz offen; Gate bleibt BLOCKED."
     },
     {
       "id": "SPE-02",
