@@ -134,7 +134,7 @@ def main():
                     if month > 1:
                         claim = before["claims"][CLAIM]
                         if claim["burning"]:
-                            click_action(page, "security", "FIRE_EXPERT", actions)
+                            click_action(page, "workshop", "FIRE_EXPERT", actions)
                         if state(page)["claims"][CLAIM]["damaged"]:
                             click_action(page, "security", "REPAIR", actions)
                         claim = state(page)["claims"][CLAIM]
