@@ -228,7 +228,7 @@
         "project-c/pppoppi-imperium/quality_v194/MONEY_BOUNDARIES_20261029.md"
       ],
       "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "Teiltest fuer Geld-/Schuldengrenzen und abgewiesene Rettungskredite auf GitHub-CI des neuen PR-HEAD pruefen (29.10.2026); danach Zins-/Tilgungsrundung, Mehrfachrechnungen und vollstaendige 12-Monats-Wirtschaftspartie mit Speicherneustart. WIR-04 bleibt BLOCKED."
+      "next": "GitHub-Node-CI #40836382217 auf Implementierungs-HEAD c6bce477bfafc9a3de8e1688cf9c35d8e612319b: 42/42 Geldgrenzen-Teilpruefungen PASS. WIR-04 bleibt BLOCKED: Zins-/Tilgungsrundung mit Extremwerten, Mehrfachrechnungen, volle 12-Monats-Wirtschaftspartie mit Speicherneustart, Rechte und Originalvergleich noch nicht abgenommen."
     },
     {
       "id": "BAL-01",
