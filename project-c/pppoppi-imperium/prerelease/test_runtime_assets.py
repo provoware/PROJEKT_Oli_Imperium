@@ -19,43 +19,82 @@ class RuntimeAssetAuditTests(unittest.TestCase):
         (self.root / 'docs').mkdir()
         (self.root / self.proof).write_text('Nur Testdatei.', encoding='utf-8')
         self.entry = {'path': self.file, 'sha256': hashlib.sha256(target.read_bytes()).hexdigest(),
-                      'rights': 'test-only', 'rights_evidence': self.proof}
+                      'rights': 'own-work', 'rights_evidence': self.proof}
+        self.tracked = [self.file, self.proof]
 
     def test_empty_inventory_is_valid_but_not_legal_clearance(self):
         self.assertEqual(audit(self.root, [], {'schema_version': 1, 'assets': []}), ([], 0))
 
     def test_complete_entry_matches_bytes_and_document(self):
-        self.assertEqual(audit(self.root, [self.file], {'schema_version': 1, 'assets': [self.entry]}), ([], 1))
+        self.assertEqual(audit(self.root, self.tracked, {'schema_version': 1, 'assets': [self.entry]}), ([], 1))
 
     def test_unlisted_media_is_blocked(self):
-        errors, count = audit(self.root, [self.file], {'schema_version': 1, 'assets': []})
+        errors, count = audit(self.root, self.tracked, {'schema_version': 1, 'assets': []})
         self.assertEqual(count, 1)
         self.assertIn('Nicht dokumentiertes', ' '.join(errors))
 
     def test_wrong_hash_is_blocked(self):
         bad = {**self.entry, 'sha256': '0' * 64}
-        self.assertIn('Falscher SHA-256', ' '.join(audit(self.root, [self.file], {'schema_version': 1, 'assets': [bad]})[0]))
+        self.assertIn('Falscher SHA-256', ' '.join(audit(self.root, self.tracked, {'schema_version': 1, 'assets': [bad]})[0]))
 
     def test_missing_rights_evidence_is_blocked(self):
         bad = {**self.entry, 'rights_evidence': 'docs/absent.txt'}
-        self.assertIn('Rechtenachweis nicht vorhanden', ' '.join(audit(self.root, [self.file], {'schema_version': 1, 'assets': [bad]})[0]))
+        self.assertIn('Rechtenachweis nicht vorhanden', ' '.join(audit(self.root, self.tracked, {'schema_version': 1, 'assets': [bad]})[0]))
 
     def test_unknown_rights_are_blocked(self):
         bad = {**self.entry, 'rights': 'unknown'}
-        self.assertIn('Keine dokumentierte Nutzungsgrundlage', ' '.join(audit(self.root, [self.file], {'schema_version': 1, 'assets': [bad]})[0]))
+        self.assertIn('Keine dokumentierte Nutzungsgrundlage', ' '.join(audit(self.root, self.tracked, {'schema_version': 1, 'assets': [bad]})[0]))
 
     def test_path_traversal_is_blocked(self):
         bad = {**self.entry, 'path': GAME + '../secret.png'}
-        self.assertIn('unzulaessiger Medienpfad', ' '.join(audit(self.root, [self.file], {'schema_version': 1, 'assets': [bad]})[0]))
+        self.assertIn('unzulaessiger Medienpfad', ' '.join(audit(self.root, self.tracked, {'schema_version': 1, 'assets': [bad]})[0]))
 
     def test_extra_manifest_entry_is_blocked(self):
         self.assertIn('ohne versionierte Laufzeitdatei', ' '.join(audit(self.root, [], {'schema_version': 1, 'assets': [self.entry]})[0]))
 
     def test_duplicate_entry_is_blocked(self):
-        self.assertIn('Doppelter Medienpfad', ' '.join(audit(self.root, [self.file], {'schema_version': 1, 'assets': [self.entry, self.entry]})[0]))
+        self.assertIn('Doppelter Medienpfad', ' '.join(audit(self.root, self.tracked, {'schema_version': 1, 'assets': [self.entry, self.entry]})[0]))
 
     def test_bad_schema_is_blocked(self):
         self.assertIn('Ungueltiges Manifest', ' '.join(audit(self.root, [], {'schema_version': 2, 'assets': []})[0]))
+
+
+    def test_untracked_proof_is_blocked(self):
+        self.assertIn('Rechtenachweis nicht versioniert', ' '.join(
+            audit(self.root, [self.file], {'schema_version': 1, 'assets': [self.entry]})[0]))
+
+    def test_empty_proof_is_blocked(self):
+        (self.root / self.proof).write_bytes(b'')
+        self.assertIn('Rechtenachweis leer', ' '.join(
+            audit(self.root, self.tracked, {'schema_version': 1, 'assets': [self.entry]})[0]))
+
+    def test_placeholder_rights_are_blocked(self):
+        for value in ('test-only', 'pending', 'unknown', 'todo', 'unlicensed', 'own-work TBD'):
+            with self.subTest(rights=value):
+                bad = {**self.entry, 'rights': value}
+                self.assertIn('Keine dokumentierte Nutzungsgrundlage', ' '.join(
+                    audit(self.root, self.tracked, {'schema_version': 1, 'assets': [bad]})[0]))
+
+    def test_control_characters_in_proof_path_are_blocked(self):
+        bad = {**self.entry, 'rights_evidence': 'docs/proof\n.txt'}
+        self.assertIn('Fehlender sicherer Rechtenachweis', ' '.join(
+            audit(self.root, self.tracked, {'schema_version': 1, 'assets': [bad]})[0]))
+
+    def test_new_media_extensions_are_audited(self):
+        for suffix in ('.avif', '.m4a', '.pdf', '.glb'):
+            with self.subTest(suffix=suffix):
+                asset = GAME + 'assets/test' + suffix
+                errors, count = audit(self.root, [asset], {'schema_version': 1, 'assets': []})
+                self.assertEqual(count, 1)
+                self.assertIn('Nicht dokumentiertes', ' '.join(errors))
+
+    def test_symlinked_proof_is_blocked(self):
+        link = self.root / 'docs/link.txt'
+        link.symlink_to(self.root / self.proof)
+        bad = {**self.entry, 'rights_evidence': 'docs/link.txt'}
+        self.assertIn('Rechtenachweis nicht vorhanden', ' '.join(
+            audit(self.root, self.tracked + ['docs/link.txt'], {'schema_version': 1, 'assets': [bad]})[0]))
+
 
 
 if __name__ == '__main__':
