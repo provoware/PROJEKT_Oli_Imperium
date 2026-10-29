@@ -1,6 +1,6 @@
 # BAL-01 – KI-Zugfolge und tatsächlich ausführbare Vorschläge (29.10.2026)
 
-**Status: Test implementiert; GitHub-CI auf endgültigem Entwicklungs-HEAD ist abzuwarten. BAL-01 bleibt BLOCKED.**
+**Status: neuer KI-Test auf Test-HEAD `436f2c9b78ed60f16de02a658b6fa3dafde268b2` in [GitHub-CI #40913613740](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40913613740) PASS. Der nachfolgende Dokumentations-HEAD muss gesondert geprüft werden. BAL-01 bleibt BLOCKED.**
 
 ## Problem und Testgrenze
 
@@ -27,6 +27,19 @@ node project-c/pppoppi-imperium/prerelease/check.mjs --schema
 ```
 
 Workflow: `.github/workflows/prerelease-ai-strategy-metrics.yml`. Der Workflow prüft auch die vorherigen KI-Baselines, Profil-/Reservevergleiche und Investitionsschranken. **PASS** bezeichnet nur die konkret durchlaufenen Prüfungen; die integrierte Vorrelease-Sperre bleibt bis zum Abschluss aller technischen Pflichten aktiv.
+
+## Tatsächlich gemessene Ergebnisse (GitHub-CI #40913613740)
+
+- Zwei Märkte × 36 Monate × drei KI-Firmen = **216 beobachtete Firmen-/Monatszustände** je instrumentiertem Durchlauf. Die zwei instrumentierten Läufe je Markt und die beiden unveränderten Kontrollläufe lieferten exakt gleiche wirtschaftliche Ergebnisse (**216 simulierte Monate insgesamt**).
+- **Normalmarkt:** A1 führte 81 Strategieaktionen aus und besaß am Ende 3 Felder; A2 26 Aktionen und 1 Feld; A3 **0 Aktionen und 0 Felder**. A3 hatte in **36 von 36 Monaten keinen einzigen Vorschlag**. Bei den ersten Ranglisten wurden **0 technisch abgelehnte Vorschläge** festgestellt.
+- **Niedrigpreismarkt:** A1 81 Aktionen / 3 Felder; A2 24 Aktionen / 1 Feld; A3 erneut **0 Aktionen / 0 Felder / 36 von 36 Monaten ohne Vorschlag**. Auch hier keine technisch abgelehnten Erst-Ranglisten-Vorschläge.
+- **Monat 1, direkt vor A3:** Obwohl noch **vier freie Felder** existierten, scheiterten **alle vier ausschließlich an der Rückflussprognose** (`insufficientPayback`), nicht an Startkasse, Tagen, ungelösten Eigenfeldern oder Dreifeldergrenze. A1 und A2 hatten unmittelbar zuvor je elf strategische Aktionen ausgeführt. Bereits der menschliche Spieler hatte zuvor Felder erworben.
+- Bei normalem Markt hatte die freie Konzession BRANDENBURG-1 für A3 nur 85.500 € prognostizierten Rückfluss bei 104.000 € Gesamtinvestition; der Planer fordert zusätzlich einen Sicherheitsaufschlag von 15 %. Die Prognose ist ein **internes Modell**, kein belegter tatsächlicher Gewinn.
+- Die freien Felder schrumpften im Normalmarkt bis Monat 10 auf null, im Niedrigpreismarkt bis Monat 11 auf null. A3 blieb zuvor jeweils ohne rentablen Investitionsvorschlag.
+
+**Eingrenzung der Ursache:** In diesen beiden konkret geskripteten Kampagnen ist A3 nicht wegen abgelehnter Ausführungen untätig. Die vorgeschalteten Käufe und die verbleibenden unrentablen Konzessionen führen dazu, dass der Planer keine Aktion vorschlägt. Ob eine andere Zugfolge, ein anderes menschliches Verhalten oder andere Startfelder das Ergebnis umkehren, ist **noch nicht geprüft**. Die Daten begründen keine pauschale KI-Unfairness oder allgemeine Spielbalance-Aussage.
+
+[Maschinenlesbares GitHub-Artefakt](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40913613740/artifacts) · [KI-CI PASS](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40913613740)
 
 ## Noch nicht beantwortet
 
