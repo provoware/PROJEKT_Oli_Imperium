@@ -1,0 +1,39 @@
+name: Projekt C – KI-Strategie-Kennzahlen und Reproduzierbarkeit
+on:
+  pull_request:
+    paths:
+      - 'project-c/pppoppi-imperium/quality_v194/test_ai_strategy_metrics_v194.cjs'
+      - 'project-c/pppoppi-imperium/quality_v194/test_ai_strategy_metrics_unit_v194.cjs'
+      - 'project-c/pppoppi-imperium/quality_v194/AI_STRATEGY_BASELINE_20261029.md'
+      - 'project-c/pppoppi-imperium/prerelease/matrix.json'
+      - '.github/workflows/prerelease-ai-strategy-metrics.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  ai-strategy-baseline:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax und Rechenregression
+        run: |
+          node --check project-c/pppoppi-imperium/quality_v194/test_ai_strategy_metrics_v194.cjs
+          node --check project-c/pppoppi-imperium/quality_v194/test_ai_strategy_metrics_unit_v194.cjs
+          node --test project-c/pppoppi-imperium/quality_v194/test_ai_strategy_metrics_unit_v194.cjs
+      - name: 4 Szenarien, 3 Starts, 36 Monate, je zweimal
+        run: |
+          set -o pipefail
+          node project-c/pppoppi-imperium/quality_v194/test_ai_strategy_metrics_v194.cjs | tee ai_strategy_baseline.json
+          node -e "const r=require('./ai_strategy_baseline.json'); if(r.rows.length!==12 || r.summary.length!==12 || r.totalSimulatedMonths!==864 || r.prereleaseGate!=='BLOCKED') process.exit(1);"
+      - name: Reproduzierbaren Zahlenbericht sichern
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ai-strategy-baseline
+          path: ai_strategy_baseline.json
+          if-no-files-found: warn
+          retention-days: 14
