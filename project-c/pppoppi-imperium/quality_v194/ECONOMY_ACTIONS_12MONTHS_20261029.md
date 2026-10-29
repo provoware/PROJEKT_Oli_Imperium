@@ -29,7 +29,7 @@ Separater GitHub-Workflow: `.github/workflows/prerelease-economy-actions.yml`, N
 
 **Isolierter JavaScript-Vorcheck auf Implementierungs-HEAD `f6924c9965f3f7669034d4e073300a6cab9cff47`: 76/76 Prüfausgaben PASS, 129 Übergänge, 12 Monate, 12 JSON-Rundläufe, drei Brandbehandlungen.** Dieser Vorcheck verwendet eine isolierte CommonJS-Ladeumgebung mit Assertions und ersetzt nicht den echten Node-/GitHub-Lauf.
 
-**GitHub-CI:** [Wirtschaftsaktionen #40851223794](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40851223794) auf `f6924c9965f3f7669034d4e073300a6cab9cff47` zum Dokumentationszeitpunkt **IN_PROGRESS**, daher noch kein behauptetes CI-PASS. Der erste Workflow-Lauf [#40851159142](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40851159142) scheiterte an der zu strengen Restbestandsannahme im Test; der Test wurde angepasst und im Vorcheck erneut bestanden.
+**GitHub-CI:** [Wirtschaftsaktionen #40851223794](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40851223794) auf Implementierungs-HEAD `f6924c9965f3f7669034d4e073300a6cab9cff47`: **PASS**, Job `economy-actions`, Node 22 auf Ubuntu 24.04, **76/76 protokollierte PASS-Prüfungen, 129 Engine-Übergänge, zwölf Monate, zwölf JSON-Rundläufe, drei Brandbehandlungen** (GitHub-Jobprotokoll geprüft). Der spätere Dokumentations-HEAD ändert weder Engine noch Test. Der erste Workflow-Lauf [#40851159142](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40851159142) scheiterte an der zu strengen Restbestandsannahme im Test; der Test wurde angepasst und im Vorcheck erneut bestanden.
 
 ## Nicht abgedeckt und nächster Schritt
 
