@@ -10,6 +10,8 @@ on:
       - 'project-c/pppoppi-imperium/quality_v194/test_ai_investment_gates_v194.cjs'
       - 'project-c/pppoppi-imperium/quality_v194/test_ai_turn_trace_v194.cjs'
       - 'project-c/pppoppi-imperium/quality_v194/test_ai_turn_order_v194.cjs'
+      - 'project-c/pppoppi-imperium/quality_v194/test_ai_order_isolation_v194.cjs'
+      - 'project-c/pppoppi-imperium/quality_v194/AI_ORDER_ISOLATION_20261029.md'
       - 'project-c/pppoppi-imperium/quality_v194/AI_TURN_ORDER_20261029.md'
       - 'project-c/pppoppi-imperium/quality_v194/AI_TURN_TRACE_20261029.md'
       - 'project-c/pppoppi-imperium/quality_v194/AI_INVESTMENT_GATES_20261029.md'
@@ -69,6 +71,12 @@ jobs:
           node --check project-c/pppoppi-imperium/quality_v194/test_ai_turn_order_v194.cjs
           node project-c/pppoppi-imperium/quality_v194/test_ai_turn_order_v194.cjs | tee ai_turn_order.json
           node -e "const r=require('./ai_turn_order.json'); if(r.rows.length!==12 || r.comparisons.length!==6 || r.repeatedCampaigns!==24 || r.totalSimulatedMonths!==936 || r.prereleaseGate!=='BLOCKED') process.exit(1);"
+      - name: Strategische KI-Zugfolge und Logistik-Reihenfolge getrennt pruefen
+        run: |
+          set -o pipefail
+          node --check project-c/pppoppi-imperium/quality_v194/test_ai_order_isolation_v194.cjs
+          node project-c/pppoppi-imperium/quality_v194/test_ai_order_isolation_v194.cjs | tee ai_order_isolation.json
+          node -e "const r=require('./ai_order_isolation.json'); if(r.rows.length!==24 || r.comparisons.length!==36 || r.totalCampaigns!==62 || r.totalSimulatedMonths!==2232 || r.prereleaseGate!=='BLOCKED') process.exit(1);"
       - name: Reproduzierbaren Zahlenbericht sichern
         if: always()
         uses: actions/upload-artifact@v4
@@ -81,5 +89,6 @@ jobs:
             ai_investment_gates.json
             ai_turn_trace.json
             ai_turn_order.json
+            ai_order_isolation.json
           if-no-files-found: warn
           retention-days: 14
