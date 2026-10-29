@@ -33,7 +33,19 @@ Alle Zahlen sind **Liquiditätsreserven**, keine Gebühren und keine belegten C6
 
 GitHub-Prüfablauf: .github/workflows/prerelease-ai-strategy-metrics.yml. Er bewahrt die JSON-Ausgabe zusammen mit Baseline und strategischem Profiltausch als zeitlich begrenztes Prüfarbeitsprodukt auf.
 
-**Ergebnisstatus bei Erstellung:** GitHub-CI und exakte Gegenvergleichswerte **PENDING**, nicht PASS. Nach dem endgültigen CI-Lauf HEAD-SHA, Lauf-Link, PASS/FAIL und messbare Differenzen nachtragen. BAL-01 bleibt **BLOCKED**, auch bei erfolgreichem technischen Einzeltest.
+**Erster tatsächlich geprüfter GitHub-Lauf:** [KI-Strategie-CI #40892632809](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40892632809) auf HEAD b57e40a97bb0fa7eca750d6d6c3dde69d2ebd3dd: **PASS** für Rechentests, 864 Baseline-Monate, 432 Profilrotations-Monate, den neuen Reservevergleich (16 Läufe / 576 Monate) und Artefakt-Upload. [Maschinenlesbare Ergebnisse](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40892632809/artifacts/12904849318). Dieser CI-Lauf belegt den ersten Test-HEAD, **nicht automatisch den nachfolgenden Dokumentations-HEAD**. BAL-01 bleibt BLOCKED.
+
+### Tatsächliche Gegenvergleichsergebnisse
+
+Gegenüber dem unveränderten Logistikadapter wurden **18 Firmen-/Szenario-/Zuordnungs-Vergleiche** berechnet. Die Kontrollzuordnung war in beiden Szenarien **exakt identisch** mit dem unveränderten Produktionsadapter; alle 16 Simulationsläufe bestanden die Wiederholbarkeitsprüfung. Bei der ersten Reserve-Rotation und bei der neutralen 40.000-€-Reserve waren sämtliche Ergebnisdifferenzen null. Nur die zweite Rotation zeigte messbare Abweichungen:
+
+| Markt / Rotation 2 | A1 (40.000 €) | A2 (58.000 €) | A3 (30.000 €) |
+|---|---:|---:|---:|
+| Normal: Änderung Kasse minus Schulden | +2.347,95 € | −130,25 € | 0 € |
+| Niedriger Preis: Änderung Kasse minus Schulden | +6.155,19 € | −12.191,81 € | 0 € |
+| Änderung Feldbesitz, beide Märkte | 0 | 0 | 0 |
+
+**14 von 18 Vergleichszeilen hatten null Änderung** der liquiden Nettoposition. Die Logistikreserve ist unter diesen Ausgangsbedingungen **für A1/A2 teilweise wirksam**, erklärt aber die fehlenden A3-Feldkäufe nicht. Die Zahlen beweisen weder, dass die Reserve die alleinige Ursache ist, noch eine allgemeine Strategieüberlegenheit. Weitere Versuche müssen Startposition, Kapital, Investitionsrentabilität und Konkurrenzverhalten voneinander abgrenzen.
 
 ## Grenzen und offene Pflichten
 
