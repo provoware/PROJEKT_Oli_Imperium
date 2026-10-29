@@ -36,3 +36,13 @@ GitHub Actions: [`prerelease-ai-strategy-metrics.yml`](../../../.github/workflow
 3. Rechte-/Ressourcennachweis der 77 ausgeschlossenen Archivdateien und historische C64-Referenz gesondert klären. Persönliche Sicht- und Kubuntu-Abnahme ausschließlich nach allen technischen Freigaben und eingefrorenem Kandidaten.
 
 **Kein Merge, kein Release, keine vorgezogene Benutzerabnahme.**
+
+## Nachweis: abgeschlossener GitHub-CI-Lauf
+
+[**KI-CI #40941593060 – PASS**](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40941593060) auf dem getesteten HEAD `7a171207ab2517afa7e0a94771f71d29cf778651`. Der neue Prüfschritt sowie alle vorherigen KI-Strategie-Prüfschritte bestanden. [JSON-Artefakt](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40941593060/artifacts/12927213466) enthält die vollständigen Einzelresultate.
+
+**Messbefund:** In allen **36 firmenbezogenen Vergleichen** (zwei Märkte × sechs strategische Reihenfolgen × drei Firmen) ergab der Wechsel zwischen fester Logistikreihenfolge A1→A2→A3 und einer an die strategische Reihenfolge angepassten Logistikreihenfolge **keine Änderung** bei Strategieaktionen, Logistikaktionen, Feldern, liquider Nettoposition oder Endschulden. Alle zwölf Gegenproben mit dem geschützten Originaladapter waren ergebnisgleich; alle 48 isolierten Läufe waren wiederholbar. **62 vollständige 36-Monats-Kampagnen / 2.232 Monate: PASS.**
+
+**Schlussfolgerung innerhalb dieser Testbedingungen:** Der zuvor gemessene KI-Positionsunterschied wird **nicht** durch die bloße Reihenfolge der Logistikvorbereitung erklärt. Die strategische Zugfolge und ihre Konkurrenz-/Feldbelegungseffekte sind die deutlich plausiblere Erklärung. Das gilt nur für diese beiden deterministischen Märkte und das geskriptete menschliche Verhalten. Es beweist weder allgemeine Balance noch die Unbedenklichkeit der Logistikreihenfolge in anderen Spielständen. BAL-01 bleibt BLOCKED.
+
+**Prüfstand nach Dokumentationsänderung:** Der genannte CI-PASS gehört ausdrücklich zum vorherigen Code-HEAD; der neue reine Dokumentations-HEAD ist gesondert zu kontrollieren. Kein Merge, kein Release.
