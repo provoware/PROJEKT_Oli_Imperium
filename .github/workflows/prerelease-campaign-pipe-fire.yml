@@ -1,0 +1,32 @@
+name: Projekt C – Rohrnetz und Feuerwehr in kompletter Kampagne
+on:
+  pull_request:
+    paths:
+      - 'project-c/pppoppi-imperium/**'
+      - '.github/workflows/prerelease-campaign-pipe-fire.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  browser-campaign-pipe-fire-recovery:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Python-Syntax der betroffenen Browserprogramme pruefen
+        run: |
+          python3 -m py_compile project-c/pppoppi-imperium/quality_v194/test_browser_campaign_pipe_fire_recovery_v194.py
+          python3 -m py_compile project-c/pppoppi-imperium/quality_v194/test_browser_keyboard_pipe_fire_v194.py
+          python3 -m py_compile project-c/pppoppi-imperium/quality_v194/test_browser_campaign_lastmonth_rescue_v194.py
+      - name: Chromium installieren
+        run: |
+          python -m pip install playwright==1.56.0
+          python -m playwright install --with-deps chromium
+      - name: Rohrnetz und Feuerwehr ueber Prozessneustarts bis Kampagnenende
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_campaign_pipe_fire_recovery_v194.py
