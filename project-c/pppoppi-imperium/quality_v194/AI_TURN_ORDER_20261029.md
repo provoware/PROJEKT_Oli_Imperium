@@ -1,6 +1,6 @@
 # BAL-01 – Kontrollierter KI-Zugreihenfolge-Gegenvergleich (29.10.2026)
 
-**Status:** neuer Test und CI-Prüfschritt auf dem bestehenden Entwurfszweig von [PR #137](https://github.com/provoware/PROJEKT_Oli_Imperium/pull/137). **Ergebnisse noch PENDING bis zum tatsächlichen GitHub-CI-Lauf auf endgültigem HEAD.** Kein BAL-01-Gesamtpass, kein Release.
+**Status:** neuer Test und CI-Prüfschritt auf dem bestehenden Entwurfszweig von [PR #137](https://github.com/provoware/PROJEKT_Oli_Imperium/pull/137). **Neuer KI-Test PASS im GitHub-CI-Lauf #40923398654 auf Code- und Matrix-HEAD `6b3237f69658daf6ec55ef3a00f91440f2fb8dc5`.** Der nachfolgende reine Dokumentations-HEAD wird erneut geprüft. Kein BAL-01-Gesamtpass, kein Release.
 
 ## Hypothese und Prüfansatz
 
@@ -22,6 +22,20 @@ node -e "const r=require('./ai_turn_order.json'); if(r.rows.length!==12 || r.com
 ```
 
 Der GitHub-Prüfablauf `.github/workflows/prerelease-ai-strategy-metrics.yml` prüft den Test und archiviert das vollständige JSON. **PASS** erst nach erfolgreicher Ausführung, nicht aufgrund dieser Planung.
+
+## Tatsächlich gemessene Ergebnisse
+
+[GitHub-KI-CI #40923398654](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40923398654) **PASS**: Node-Syntaxprüfung, alle 24 wiederholten Kampagnen und zwei Kontrollkampagnen (**936 Spielmonate**), sechs Firmen-ID-Vergleiche und unveränderte Ausgangsdaten außer der Zugposition. Die Originalreihenfolge lieferte exakt das Ergebnis des nicht instrumentierten Kontrolllaufs. Die übrigen KI-Baseline-/Profil-/Reserve-/Investitions-/Trace-Prüfungen waren im selben Auftrag erfolgreich. Der Gesamt-Vorrelease-Test bleibt BLOCKED.
+
+| KI-Position nach H1 | Normalmarkt: Aktionen / Felder | Niedrigpreismarkt: Aktionen / Felder |
+| --- | --- | --- |
+| Erste KI | 81 / 3 (alle drei Firmen-IDs) | 71–81 / 3 |
+| Zweite KI | 26–30 / 1 | 24–30 / 1 |
+| Dritte KI | **0 / 0 (alle drei Firmen-IDs)** | **0 / 0 (alle drei Firmen-IDs)** |
+
+Die Werte gelten für die **jeweiligen Firmenpositionen in sechs festen Reihenfolgen**, nicht für sechs unabhängige Zufallswelten. Die zunächst inaktive A3 führte im Normalmarkt als erste KI **81 Aktionen** aus und hielt am Ende **drei Felder**, als zweite KI **26–30 Aktionen / ein Feld**, als dritte KI **0 Aktionen / null Felder**. Im Niedrigpreismarkt waren es als erste KI **71 Aktionen / drei Felder**, als zweite KI **24–30 / ein Feld**, als dritte KI **0 / null**.
+
+**Wesentliche Eingrenzung:** Die beobachtete Null-Aktivität hängt in diesen zwei Kampagnen deutlich mit dem **letzten KI-Zugplatz** zusammen und nicht mit der festen Identität A3. Der Vergleich ändert allerdings zugleich die Reihenfolge der strategischen und logistischen KI-Vorbereitung; er trennt diese Wirkungen noch nicht. Die Ergebnisse rechtfertigen noch keine Änderung der Produktions-Spielregeln ohne einen separaten Wirkungs-/Regressionsvergleich.
 
 ## Interpretation und Grenzen
 
