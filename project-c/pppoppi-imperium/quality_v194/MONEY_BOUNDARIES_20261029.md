@@ -19,7 +19,7 @@ Geld wird in ganzen Cent gespeichert. Ungültige oder zu große Werte dürfen we
 
 ## Prüfstatus und offene Pflichten
 
-- **Vor PR-Erstellung:** neuer Test noch nicht auf GitHub ausgeführt, deshalb kein behauptetes PASS. Die CI des neuen Entwicklungs-HEADs muss separat geprüft werden.
+- **GitHub-Nachweis:** [Geldgrenzen-Workflow #40836382217](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40836382217) auf Implementierungs-HEAD `c6bce477bfafc9a3de8e1688cf9c35d8e612319b`: **PASS, 42/42 ausgegebene Einzelprüfungen, 0 FAIL**, Node 22 / Ubuntu 24.04. Die abschließende Dokumentationsaktualisierung verändert keine Wirtschaftsregeln.
 - **Abnahmekriterium für dieses Teilpaket:** Workflow erfolgreich; alle Einzelprüfungen als PASS protokolliert; Ausgangsstand nach abgewiesenen Aktionen unverändert; unveränderte Quelloriginale durch Quellworkflow bestätigt.
 - **WIR-04 bleibt BLOCKED:** Das Teilpaket deckt keine vollständige Wirtschaftskampagne, nicht alle Rechnungs-/Preis-/Schuldzinsen-Extremwerte, keine Browser-Eingabe für Grenzwerte und keine historische Originaltreue ab.
 - **Vorrelease:** 6 PASS / 39 BLOCKED / 4 OPEN / 3 DEFERRED = 52; die 77 ausgeschlossenen Archivdateien haben keine Rechtefreigabe.
