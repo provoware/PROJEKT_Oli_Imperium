@@ -71,7 +71,8 @@ for (let month = 1; month <= 12; month++) {
       assert.equal(c.owner, companyId);
       assert.equal(c.drilled, true);
       assert.equal(c.order, true);
-      assert.equal(c.preparedMilli, E.CFG.pumpMilli);
+      assert.ok(c.preparedMilli >= E.CFG.pumpMilli && c.preparedMilli <= c.tankMilli,
+        'Restbestand aus dem Vormonat muss im Angebot enthalten bleiben');
       assert.equal(f.monthProducedMilli, E.CFG.pumpMilli);
     });
     cmd('END_TURN');
