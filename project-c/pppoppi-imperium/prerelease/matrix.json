@@ -165,10 +165,11 @@
       "evidence": [
         "project-c/pppoppi-imperium/prerelease/evidence/SPE-01-NATURAL-SALE-RESTART-PARTIAL-20261028.json",
         "project-c/pppoppi-imperium/prerelease/evidence/SPE-01-MULTIGEN-PARTIAL-20261028.json",
-        "project-c/pppoppi-imperium/prerelease/evidence/SPE-01-BROWSER-MULTIGEN-PARTIAL-20261028.json"
+        "project-c/pppoppi-imperium/prerelease/evidence/SPE-01-BROWSER-MULTIGEN-PARTIAL-20261028.json",
+        "project-c/pppoppi-imperium/quality_v194/TRIPLE_RESCUE_IMPORT_INTERRUPTION_20261029.md"
       ],
       "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "Neustarts und Fortsetzung ueber vier Chromium-Prozesse und drei JSON-Importe PASS; weitere Abbruch- und Endpartien fehlen. Gate BLOCKED."
+      "next": "Drei offene Schlussmonatsinsolvenzen: abgebrochener, widerspruechlicher und uebergrosser Sitzungsimport sowie verzoegertes Dateilesen nach H1-Notverkauf neu in Chromium-Regression; CI auf neuem HEAD ausstehend. Weitere Pflichtfaelle offen; Gate BLOCKED."
     },
     {
       "id": "WIR-01",
@@ -305,10 +306,11 @@
         "project-c/pppoppi-imperium/quality_v194/CAMPAIGN_BROWSER_ENDGAME_20261028.md",
         "project-c/pppoppi-imperium/quality_v194/LASTMONTH_RESCUE_BROWSER_20261028.md",
         "project-c/pppoppi-imperium/quality_v194/DUAL_LASTMONTH_RESCUE_BROWSER_20261028.md",
-        "project-c/pppoppi-imperium/quality_v194/TRIPLE_LASTMONTH_RESCUE_BROWSER_20261029.md"
+        "project-c/pppoppi-imperium/quality_v194/TRIPLE_LASTMONTH_RESCUE_BROWSER_20261029.md",
+        "project-c/pppoppi-imperium/quality_v194/TRIPLE_RESCUE_IMPORT_INTERRUPTION_20261029.md"
       ],
       "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "Dreifach-Schlussmonatsinsolvenz mit Notverkauf, Kredit, Neustart und vier echten Chromium-Prozessen: isolierter Browsertest PASS auf a7d4f965 (CI #40789090475); Gesamtregression am finalen HEAD sowie weitere Pflichtfaelle bleiben offen. Gate BLOCKED."
+      "next": "Drei offene Schlussmonatsinsolvenzen: abgebrochener, widerspruechlicher und uebergrosser Sitzungsimport sowie verzoegertes Dateilesen nach H1-Notverkauf neu in Chromium-Regression; CI auf neuem HEAD ausstehend. Weitere Pflichtfaelle offen; Gate BLOCKED."
     },
     {
       "id": "SIC-01",
@@ -335,10 +337,11 @@
         "project-c/pppoppi-imperium/quality_v194/ARCHIVE_ENGINE_VALIDATION_20261028.md",
         "project-c/pppoppi-imperium/quality_v194/SESSION_UI_ROUNDTRIP_20261028.md",
         "project-c/pppoppi-imperium/quality_v194/SESSION_IMPORT_RACE_20261028.md",
-        "project-c/pppoppi-imperium/quality_v194/SESSION_NATIVE_ZOOM_20261028.md"
+        "project-c/pppoppi-imperium/quality_v194/SESSION_NATIVE_ZOOM_20261028.md",
+        "project-c/pppoppi-imperium/quality_v194/TRIPLE_RESCUE_IMPORT_INTERRUPTION_20261029.md"
       ],
       "blocker": "PR #96 Code-HEAD 27914652cc4933239b07841009b828e0f4d2f87a: GitHub-Browser-CI #40595443169 PASS (vier Jobs, Import-Schritt success), Quellpruefung #40595443211 PASS. Insgesamt 30 ungueltige JSON-Strukturen atomar abgewiesen, gueltige 5.000.000-Byte-Datei importiert, 5.000.001 Bytes sicher abgewiesen, HTML-Fremdname in acht Szenen text-sicher. Weiterhin nicht alle Fremdeingaben, beliebige Tiefen und Endpartien abgedeckt; SIC-02 und Gesamtgate BLOCKED.",
-      "next": "Teiltest: Datei-Auswahldialog per Enter bei 175/200 % in Chromium tatsächlich empfangen, validierter Sitzungsimport unverändert; CI #40746767519 Zoom-Job PASS. Vollständige Fremdeingabe- und Manipulationsmatrix offen; BLOCKED."
+      "next": "Drei offene Schlussmonatsinsolvenzen: abgebrochener, widerspruechlicher und uebergrosser Sitzungsimport sowie verzoegertes Dateilesen nach H1-Notverkauf neu in Chromium-Regression; CI auf neuem HEAD ausstehend. Weitere Pflichtfaelle offen; Gate BLOCKED."
     },
     {
       "id": "SIC-03",
@@ -603,10 +606,11 @@
         "project-c/pppoppi-imperium/quality_v194/CAMPAIGN_BROWSER_ENDGAME_20261028.md",
         "project-c/pppoppi-imperium/quality_v194/LASTMONTH_RESCUE_BROWSER_20261028.md",
         "project-c/pppoppi-imperium/quality_v194/DUAL_LASTMONTH_RESCUE_BROWSER_20261028.md",
-        "project-c/pppoppi-imperium/quality_v194/TRIPLE_LASTMONTH_RESCUE_BROWSER_20261029.md"
+        "project-c/pppoppi-imperium/quality_v194/TRIPLE_LASTMONTH_RESCUE_BROWSER_20261029.md",
+        "project-c/pppoppi-imperium/quality_v194/TRIPLE_RESCUE_IMPORT_INTERRUPTION_20261029.md"
       ],
       "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "Dreifach-Schlussmonatsinsolvenz mit Notverkauf, Kredit, Neustart und vier echten Chromium-Prozessen: isolierter Browsertest PASS auf a7d4f965 (CI #40789090475); Gesamtregression am finalen HEAD sowie weitere Pflichtfaelle bleiben offen. Gate BLOCKED."
+      "next": "Drei offene Schlussmonatsinsolvenzen: abgebrochener, widerspruechlicher und uebergrosser Sitzungsimport sowie verzoegertes Dateilesen nach H1-Notverkauf neu in Chromium-Regression; CI auf neuem HEAD ausstehend. Weitere Pflichtfaelle offen; Gate BLOCKED."
     },
     {
       "id": "TES-04",

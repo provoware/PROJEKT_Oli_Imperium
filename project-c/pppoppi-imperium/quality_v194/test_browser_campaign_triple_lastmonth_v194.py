@@ -31,6 +31,23 @@ def count_ledger(snapshot, index, code):
     return sum(x["code"] == code for x in snapshot["companies"][index]["ledger"])
 
 
+def reject_session_import(page, filename, payload, message, expected):
+    """Ungueltiger Dateiimport darf offene Sanierungen nicht ersetzen."""
+    page.evaluate("document.querySelector('#toast').textContent = ''")
+    page.locator("#loadSessionFile").set_input_files({
+        "name": filename, "mimeType": "application/json", "buffer": payload,
+    })
+    page.wait_for_function(
+        "(text) => document.querySelector('#toast').textContent.includes(text)",
+        arg=message,
+    )
+    check(filename + ": alle drei Sanierungen und Buchungen bleiben erhalten",
+          state(page) == expected
+          and state(page)["rescueIds"] == ["H1", "H2", "H3"]
+          and page.evaluate("NeoEconomy.endstate.status()") == "active"
+          and page.evaluate("NeoEconomy.endstate.archive()") is None)
+
+
 def main():
     with tempfile.TemporaryDirectory(prefix="pppoppi-triple-lastmonth-") as tmp:
         root = Path(tmp)
@@ -56,6 +73,7 @@ def main():
                 page = context.new_page()
                 page.set_default_timeout(15000)
                 page.on("pageerror", lambda error: errors.append(str(error)))
+                page.on("dialog", lambda dialog: dialog.accept())
                 page.on("request", lambda req: external.append(req.url)
                         if req.url.startswith(("http://", "https://")) else None)
                 page.goto((preview / "index.html").as_uri(), wait_until="load")
@@ -151,9 +169,60 @@ def main():
                       page.evaluate("NeoEconomy.endstate.status()") == "active"
                       and page.evaluate("NeoEconomy.endstate.archive()") is None)
 
+                # Fehlende/abgebrochene und widerspruechliche Sitzungsdateien
+                # ueber den echten Dateieingang pruefen, solange drei
+                # Insolvenzen gleichzeitig offen sind.
+                session = json.loads(page.evaluate(
+                    "NeoEconomy.endstate.exportSession()"))
+                check("Gueltiger Ausgangsstand mit drei offenen Rettungen",
+                      session["schema"] == SCHEMA
+                      and session["state"] == insolvent
+                      and session["archive"] is None)
+                reject_session_import(
+                    page, "abgebrochener-export.json", b'{"schema":',
+                    "Sitzungsimport abgelehnt", insolvent)
+                forged = {**session, "archive": {"forged": True}}
+                reject_session_import(
+                    page, "widerspruechliche-sitzung.json",
+                    json.dumps(forged).encode("utf-8"),
+                    "Sitzungsimport abgelehnt", insolvent)
+                reject_session_import(
+                    page, "uebergrosse-sitzung.json", b" " * 5_000_001,
+                    "Sitzungsdatei zu gross", insolvent)
+                check("Wirtschaftskern nach drei Importfehlern gueltig",
+                      page.evaluate("NeoEconomy.engine.validate(NeoEconomy.getState())")
+                      is True)
+
+                # Ein noch lesender, aelterer Import darf einen inzwischen
+                # ausgefuehrten echten Rettungsklick nicht zurueckrollen.
+                serialized = json.dumps(session, ensure_ascii=False)
+                page.evaluate("""() => {
+                    const nativeText = File.prototype.text;
+                    window.__delayedSessionReads = [];
+                    File.prototype.text = function() {
+                        if (this.name !== 'verzoegerte-sitzung.json')
+                            return nativeText.call(this);
+                        return new Promise(resolve =>
+                            window.__delayedSessionReads.push(resolve));
+                    };
+                }""")
+                page.locator("#loadSessionFile").set_input_files({
+                    "name": "verzoegerte-sitzung.json",
+                    "mimeType": "application/json",
+                    "buffer": serialized.encode("utf-8"),
+                })
+                page.wait_for_function("window.__delayedSessionReads.length === 1")
                 page.evaluate("NeoEconomy.open('rescue')")
                 page.locator('[data-econ="RESCUE_SALE"]').click()
                 sold = state(page)
+                page.evaluate("""async (text) => {
+                    window.__delayedSessionReads.shift()(text);
+                    await new Promise(resolve => setTimeout(resolve, 0));
+                }""", serialized)
+                check("Spaeter Import darf H1-Notverkauf nicht rueckgaengig machen",
+                      state(page) == sold
+                      and sold["rescueIds"] == ["H2", "H3"]
+                      and count_ledger(sold, 0, "NOTVERKAUF") == 1)
                 check("H1-Notverkauf laesst H2 und H3 unberuehrt",
                       sold["phase"] == "RESCUE"
                       and sold["rescueIds"] == ["H2", "H3"]
@@ -236,6 +305,7 @@ def main():
                     "natural_insolvencies": 3,
                     "paths": ["H1: Notverkauf", "H2: Kredit", "H3: Neustart"],
                     "chromium_processes": process_count, "session_exports": 3,
+                    "rejected_session_imports": 3, "delayed_import_guard": True,
                     "historical_c64_verified": False,
                     "prerelease_gate": "BLOCKED",
                 }, ensure_ascii=False, sort_keys=True), flush=True)
