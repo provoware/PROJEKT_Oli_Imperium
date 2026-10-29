@@ -224,9 +224,11 @@
       "basis": "docs/05_TESTS_FORTSCHRITT.md",
       "stage": "technical",
       "status": "blocked",
-      "evidence": [],
+      "evidence": [
+        "project-c/pppoppi-imperium/quality_v194/MONEY_BOUNDARIES_20261029.md"
+      ],
       "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "Extremwerte und Rundung testen"
+      "next": "Teiltest fuer Geld-/Schuldengrenzen und abgewiesene Rettungskredite auf GitHub-CI des neuen PR-HEAD pruefen (29.10.2026); danach Zins-/Tilgungsrundung, Mehrfachrechnungen und vollstaendige 12-Monats-Wirtschaftspartie mit Speicherneustart. WIR-04 bleibt BLOCKED."
     },
     {
       "id": "BAL-01",
