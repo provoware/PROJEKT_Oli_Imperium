@@ -225,10 +225,11 @@
       "stage": "technical",
       "status": "blocked",
       "evidence": [
-        "project-c/pppoppi-imperium/quality_v194/MONEY_BOUNDARIES_20261029.md"
+        "project-c/pppoppi-imperium/quality_v194/MONEY_BOUNDARIES_20261029.md",
+        "project-c/pppoppi-imperium/quality_v194/DEBT_INVOICES_12MONTHS_20261029.md"
       ],
       "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "GitHub-Node-CI #40836382217 auf Implementierungs-HEAD c6bce477bfafc9a3de8e1688cf9c35d8e612319b: 42/42 Geldgrenzen-Teilpruefungen PASS. WIR-04 bleibt BLOCKED: Zins-/Tilgungsrundung mit Extremwerten, Mehrfachrechnungen, volle 12-Monats-Wirtschaftspartie mit Speicherneustart, Rechte und Originalvergleich noch nicht abgenommen."
+      "next": "PR #130: 42/42 Geldgrenzen PASS; neuer 12-Monats-Zins-/Tilgungs-/Rechnungstest auf eigenem Zweig eingereicht, GitHub-CI noch auswerten. Weiter BLOCKED: aktive Wirtschaftskampagne mit Browserneustarts, Extremwerte, Ressourcenrechte, C64-Originalvergleich."
     },
     {
       "id": "BAL-01",
