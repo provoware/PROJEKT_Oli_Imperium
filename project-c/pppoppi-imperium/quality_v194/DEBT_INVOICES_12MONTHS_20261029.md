@@ -27,7 +27,7 @@
 node project-c/pppoppi-imperium/quality_v194/test_debt_invoice_12months_v194.cjs
 ```
 
-GitHub-Workflow: `.github/workflows/prerelease-debt-invoices.yml`, Node 22 auf Ubuntu 24.04. **Status bei Anlage:** CI noch ausstehend; PASS nur nach tatsächlichem erfolgreichen Lauf behaupten. Unabhängige Vorrelease-Sperre bleibt aktiv.
+GitHub-Workflow: `.github/workflows/prerelease-debt-invoices.yml`, Node 22 auf Ubuntu 24.04. **Tatsächlich ausgeführt:** [GitHub-Actions-Lauf #40843890616](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40843890616) auf Implementierungs-HEAD `31b9670ec67fc272b943220ea765c0c0a8838a30`: **PASS, 122/122 protokollierte Einzelprüfungen, 0 FAIL**; Job `debt-invoices`, Node 22, Ubuntu 24.04. Der abschließende Dokumentationscommit ändert weder Test noch Engine. Unabhängige Vorrelease-Sperre [#40843890341](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40843890341) **FAIL/BLOCKED erwartungsgemäß**, weil weitere Pflichtnachweise fehlen.
 
 ## Offene Arbeit und Freigabe
 
