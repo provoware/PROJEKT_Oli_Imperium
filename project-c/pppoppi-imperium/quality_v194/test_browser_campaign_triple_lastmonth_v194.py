@@ -169,6 +169,51 @@ def main():
                       page.evaluate("NeoEconomy.endstate.status()") == "active"
                       and page.evaluate("NeoEconomy.endstate.archive()") is None)
 
+                # Ein vom Browser verweigerter Dateidownload darf weder die
+                # drei offenen Sanierungen veraendern noch einen Blob-Link
+                # oder einen unsichtbaren Download-Anker hinterlassen.
+                page.evaluate("""() => {
+                    const nativeClick = HTMLAnchorElement.prototype.click;
+                    const nativeCreate = URL.createObjectURL.bind(URL);
+                    const nativeRevoke = URL.revokeObjectURL.bind(URL);
+                    window.__exportFailureProbe = {created: [], revoked: []};
+                    URL.createObjectURL = blob => {
+                        const url = nativeCreate(blob);
+                        window.__exportFailureProbe.created.push(url);
+                        return url;
+                    };
+                    URL.revokeObjectURL = url => {
+                        window.__exportFailureProbe.revoked.push(url);
+                        return nativeRevoke(url);
+                    };
+                    HTMLAnchorElement.prototype.click = function() {
+                        if (this.download.startsWith('PPPOPPI-SITZUNG-')) {
+                            HTMLAnchorElement.prototype.click = nativeClick;
+                            throw new Error('DOWNLOAD_BLOCKED_TEST');
+                        }
+                        return nativeClick.call(this);
+                    };
+                }""")
+                page.evaluate("NeoEconomy.open('computer')")
+                page.locator('#dialogContent [data-ui="session-export"]').click()
+                page.wait_for_function(
+                    "() => document.querySelector('#toast').textContent"
+                    ".includes('Sitzungsexport abgelehnt: DOWNLOAD_BLOCKED_TEST')")
+                probe = page.evaluate("""() => ({
+                    created: window.__exportFailureProbe.created,
+                    revoked: window.__exportFailureProbe.revoked,
+                    dangling: document.querySelectorAll(
+                        'a[download^="PPPOPPI-SITZUNG-"]').length
+                })""")
+                check("Verweigerter Sitzungsexport raeumt Blob und Anker auf",
+                      len(probe["created"]) == 1
+                      and probe["revoked"] == probe["created"]
+                      and probe["dangling"] == 0)
+                check("Verweigerter Export laesst drei Sanierungen unveraendert",
+                      state(page) == insolvent
+                      and page.evaluate("NeoEconomy.endstate.status()") == "active"
+                      and page.evaluate("NeoEconomy.endstate.archive()") is None)
+
                 # Fehlende/abgebrochene und widerspruechliche Sitzungsdateien
                 # ueber den echten Dateieingang pruefen, solange drei
                 # Insolvenzen gleichzeitig offen sind.
