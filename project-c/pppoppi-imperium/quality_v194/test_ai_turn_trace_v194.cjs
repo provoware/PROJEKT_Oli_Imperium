@@ -3,6 +3,7 @@
 // Protected V1.9.3 sources are read only. No rule changes or historical claims.
 const assert = require('node:assert/strict');
 const { run, SCENARIOS, MONTHS } = require('./test_ai_strategy_metrics_v194.cjs');
+const { diagnose } = require('./test_ai_investment_gates_v194.cjs');
 const E = globalThis.OliV082;
 const IDS = ['A1', 'A2', 'A3'];
 const CASES = SCENARIOS.filter(s => ['active_normal', 'active_low_price'].includes(s.name));
@@ -28,6 +29,7 @@ function traceRun(scenario) {
         let row = records.get(k);
         if (!row) {
           const firm = state.companies.find(f => f.id === id);
+          const investment = diagnose(state, id);
           const attempts = [];
           for (const proposal of proposals) {
             assert.ok(proposal && proposal.cmd && proposal.cmd.type);
@@ -60,6 +62,9 @@ function traceRun(scenario) {
             freeClaims: Object.values(state.claims).filter(c => c.owner === null).length,
             ownedClaims: Object.values(state.claims).filter(c => c.owner === id).length,
             firstRankCount: proposals.length, rankCalls: 0,
+            eligibleInvestments: investment.eligibleInvestments,
+            investmentGateReasons: investment.rejectedByGate,
+            investmentTopCandidates: investment.topPaybackCandidates,
             firstProposals: proposals.slice(0, 3).map(p => ({
               type: p.cmd.type, claimId: p.cmd.claimId || null, score: p.score
             })),
