@@ -31,6 +31,15 @@ def safe_path(value):
             and not any(ord(char) < 32 or ord(char) == 127 for char in value))
 
 
+def sha256_stream(path):
+    """Hash files in bounded chunks instead of loading entire media into RAM."""
+    digest = hashlib.sha256()
+    with path.open('rb') as source:
+        for chunk in iter(lambda: source.read(1024 * 1024), b''):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
 def audit(root, tracked, manifest):
     """Return (errors, count); evidence is checked, not legally certified."""
     errors = []
@@ -60,7 +69,11 @@ def audit(root, tracked, manifest):
         if asset.is_symlink() or not asset.is_file() or not asset.resolve().is_relative_to(root.resolve()):
             errors.append(f'Unzulaessige Laufzeitdatei: {p}')
             continue
-        digest = hashlib.sha256(asset.read_bytes()).hexdigest()
+        try:
+            digest = sha256_stream(asset)
+        except OSError as exc:
+            errors.append(f'Laufzeitmedium nicht lesbar: {p} ({type(exc).__name__})')
+            continue
         if entry.get('sha256') != digest:
             errors.append(f'Falscher SHA-256: {p}')
         rights = entry.get('rights')
@@ -75,8 +88,12 @@ def audit(root, tracked, manifest):
                 errors.append(f'Rechtenachweis nicht vorhanden: {p}')
             elif evidence not in tracked:
                 errors.append(f'Rechtenachweis nicht versioniert: {p}')
-            elif proof.stat().st_size == 0:
-                errors.append(f'Rechtenachweis leer: {p}')
+            else:
+                try:
+                    if proof.stat().st_size == 0:
+                        errors.append(f'Rechtenachweis leer: {p}')
+                except OSError as exc:
+                    errors.append(f'Rechtenachweis nicht lesbar: {p} ({type(exc).__name__})')
     return errors, len(media)
 
 
@@ -92,7 +109,9 @@ def main():
     errors, count = audit(root, tracked, manifest)
     for error in errors:
         print('FAIL:', error, file=sys.stderr)
-    print(f'Inventar: {count} versionierte Laufzeitmedien, {len(manifest["assets"])} dokumentiert; '
+    assets = manifest.get('assets') if isinstance(manifest, dict) else None
+    documented = len(assets) if isinstance(assets, list) else 0
+    print(f'Inventar: {count} versionierte Laufzeitmedien, {documented} dokumentiert; '
           f'{len(errors)} Abweichungen')
     print('HINWEIS: Rechte an ausgeschlossenen Archiven und externen Ressourcen sind NICHT freigegeben.')
     return 1 if errors else 0
