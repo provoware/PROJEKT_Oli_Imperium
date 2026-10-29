@@ -9,7 +9,7 @@ import subprocess
 import tempfile
 from pathlib import Path
 
-from playwright.sync_api import sync_playwright
+from playwright.sync_api import TimeoutError as PlaywrightTimeoutError, sync_playwright
 from test_browser_native_zoom_v194 import (
     extension_at, set_real_zoom, tab_to, wait_for_zoom_worker,
 )
@@ -107,8 +107,32 @@ def audit_session(page, worker, zoom, download_dir):
     # Das Ereignis vor dem Tastendruck abonnieren und wirklich abwarten.
     # Die alte 200-ms-Wartezeit konnte bei Chromium-Zoom zu frueh enden.
     # Kein direkter Eingabefeld-Ersatz: ohne nativen Dateidialog FAIL.
-    with page.expect_file_chooser(timeout=5000) as chooser_event:
-        page.keyboard.press("Enter")
+    try:
+        with page.expect_file_chooser(timeout=5000) as chooser_event:
+            page.keyboard.press("Enter")
+    except PlaywrightTimeoutError:
+        # Strikter Fehler: keine direkte Befuellung des Datei-Inputs und
+        # kein zweiter Tastendruck, der einen echten Bedienfehler verdeckt.
+        diagnostics = page.evaluate("""() => {
+            const button = document.querySelector('[data-ui="session-import"]');
+            const focused = document.activeElement;
+            const inputs = [...document.querySelectorAll('input[type="file"]')];
+            return {
+                clicks: window.__sessionImportClicks,
+                focusOnImport: focused === button,
+                focusedTag: focused?.tagName || null,
+                dialogOpen: document.querySelector('#dialog')?.open,
+                fileInputs: inputs.map(input => ({
+                    connected: input.isConnected,
+                    disabled: input.disabled,
+                    files: input.files?.length ?? null
+                }))
+            };
+        }""")
+        print("SESSION-FILECHOOSER-FAIL:", json.dumps(
+            {"zoom_percent": round(zoom * 100), **diagnostics},
+            ensure_ascii=False), flush=True)
+        raise
     page.wait_for_function("window.__sessionImportClicks === 1")
     check(label + ": Import-Schalter reagiert auf echte Enter-Taste",
           page.evaluate("window.__sessionImportClicks") == 1)
@@ -145,17 +169,22 @@ def main():
         extension = root / "zoom-extension"
         extension_at(extension)
         with sync_playwright() as playwright:
-            context = playwright.chromium.launch_persistent_context(
-                str(root / "profile"), channel="chromium",
-                headless=True, viewport={"width": 800, "height": 600},
-                reduced_motion="reduce",
-                accept_downloads=True,
-                args=["--disable-extensions-except=" + str(extension),
-                      "--load-extension=" + str(extension)])
-            try:
-                worker = wait_for_zoom_worker(context)
-                results = []
-                for zoom in ZOOMS:
+            results = []
+            # Jede Zoomstufe beginnt in einem eigenen Chromium-Prozess und
+            # Profil. Ein vorheriger nativer Dateidialog darf die naechste
+            # Messung nicht beeinflussen; innerhalb der Stufe bleibt der
+            # echte Tab-/Enter- und Dateidialog-Pfad unveraendert streng.
+            for zoom in ZOOMS:
+                label = str(round(zoom * 100))
+                context = playwright.chromium.launch_persistent_context(
+                    str(root / ("profile-" + label)), channel="chromium",
+                    headless=True, viewport={"width": 800, "height": 600},
+                    reduced_motion="reduce",
+                    accept_downloads=True,
+                    args=["--disable-extensions-except=" + str(extension),
+                          "--load-extension=" + str(extension)])
+                try:
+                    worker = wait_for_zoom_worker(context)
                     page = context.new_page()
                     try:
                         page.set_default_timeout(15000)
@@ -164,14 +193,14 @@ def main():
                         results.append(audit_session(page, worker, zoom, root))
                     finally:
                         page.close()
-                check("Beide nativen Zoomstufen erfolgreich",
-                      [r["zoom_percent"] for r in results] == [175, 200])
-                print("SESSION-NATIVE-ZOOM:",
-                      json.dumps(results, ensure_ascii=False), flush=True)
-                print("GRENZE: technische Teilpruefung; keine Endpartie, "
-                      "keine Nutzerabnahme, kein Release.", flush=True)
-            finally:
-                context.close()
+                finally:
+                    context.close()
+            check("Beide nativen Zoomstufen erfolgreich",
+                  [r["zoom_percent"] for r in results] == [175, 200])
+            print("SESSION-NATIVE-ZOOM:",
+                  json.dumps(results, ensure_ascii=False), flush=True)
+            print("GRENZE: technische Teilpruefung; keine Endpartie, "
+                  "keine Nutzerabnahme, kein Release.", flush=True)
 
 
 if __name__ == "__main__":
