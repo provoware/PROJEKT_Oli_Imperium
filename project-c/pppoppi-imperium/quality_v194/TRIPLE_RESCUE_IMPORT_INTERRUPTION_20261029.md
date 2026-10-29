@@ -25,6 +25,7 @@ Die vorhandene Endpartie beweist drei Rettungswege und drei gueltige Exporte. No
 - Gueltigen alten Sitzungsimport gezielt beim asynchronen `File.text()` anhalten, **H1 durch echten sichtbaren Notverkauf retten**, verspätetes Dateilesen freigeben und unveraenderten Notverkauf samt genau einer Journalbuchung pruefen.
 - Danach die vorhandenen H2-Kredit-, H3-Neustart-, Export-, Browserneustart-, Archiv- und Offlinepruefungen unveraendert fortsetzen.
 - Die Dateileser-Verzoegerung ist nur eine kontrollierte Browser-Testinstrumentierung, **kein echter Stromausfalltest**.
+- Beim ersten CI-Lauf schlug ein bestehender Zoomtest fehl: bei 200 % wurde das native Datei-Auswahldialog-Ereignis nach starren 200 ms noch nicht beobachtet. Der Test wartet jetzt ereignisbasiert bis maximal 5 Sekunden; ein wirklich fehlender Dialog bleibt ein Fehler.
 
 ## Pruefstand beim Einreichen
 
@@ -32,7 +33,11 @@ Die vorhandene Endpartie beweist drei Rettungswege und drei gueltige Exporte. No
 |---|---|
 | Vorheriger Entwicklungs-HEAD `2b91b5e...`: 8 Browserjobs | **PASS 8/8** (Link oben) |
 | Vorheriger Dreifachrettungs- und Quellschutz-Workflow | **PASS** (Links oben) |
-| Neuer Importunterbrechungs- und Wettlauftest | **PENDING** bis CI auf neuem HEAD |
+| Neuer Importunterbrechungs- und Wettlauftest auf `39aa9118...` | **PASS** – [Dreifachrettung #40795063821](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40795063821) |
+| Quellschutz und Doppelsanierung auf `39aa9118...` | **PASS** – [Quellschutz #40795063768](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40795063768), [Doppelsanierung #40795063707](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40795063707) |
+| Gesamtbrowser auf `39aa9118...` | **FAIL:** [#40795063868](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40795063868), `native-zoom-regression` bei 200 %: 200-ms-Dateidialogwartezeit verstrichen; restliche Jobs bei Diagnose noch laufend |
+| Fehlerbehebung `bc78aeb8...` | **PENDING:** Dateidialog-Ereignis wird vor Enter abonniert und bis zu 5 Sekunden abgewartet; fehlender Dialog bleibt FAIL, kein Ersatz durch verstecktes Dateifeld |
+| CI auf finalem Dokumentations-HEAD | **PENDING** – keine Freigabe vor vollstaendigem Gruen |
 | Gesamte 52er-Vorrelease-Matrix | **6 PASS / 39 BLOCKED / 4 OPEN / 3 DEFERRED** |
 | Historische Originalreferenz und Rechtepruefung | **BLOCKED/OPEN** |
 | Benutzer-Sichtpruefung / Kubuntu-Endabnahme | **DEFERRED**, erst unmittelbar vor Release |
