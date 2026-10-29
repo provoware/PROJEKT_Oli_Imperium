@@ -97,10 +97,11 @@
         "project-c/pppoppi-imperium/prerelease/evidence/SPE-01-NATURAL-SALE-RESTART-PARTIAL-20261028.json",
         "project-c/pppoppi-imperium/prerelease/evidence/SPE-01-MULTIGEN-PARTIAL-20261028.json",
         "project-c/pppoppi-imperium/prerelease/evidence/SPE-01-BROWSER-MULTIGEN-PARTIAL-20261028.json",
-        "project-c/pppoppi-imperium/quality_v194/CAMPAIGN_DRILL_RESTART_20261029.md"
+        "project-c/pppoppi-imperium/quality_v194/CAMPAIGN_DRILL_RESTART_20261029.md",
+        "project-c/pppoppi-imperium/quality_v194/CAMPAIGN_PIPE_FIRE_RESTART_20261029.md"
       ],
       "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "Teiltest Bohr-Minispiel waehrend 12-Monats-Kampagne mit Sitzungsexport, drei Chromium-Prozessen, Tastatur-Fortsetzung und Archiv: 142 PASS/0 FAIL auf 9e157a47 (CI #40807756950). Weitere Minispiele, Wirtschaftsfunktionen und Gesamtfreigaben fehlen; Gate bleibt BLOCKED."
+      "next": "29.10.2026: Neuer 12-Monats-Chromium-Pflichtfall Rohrnetz/Feuerwehr mit zwei Sitzungsunterbrechungen, vier Prozessstarts und Archiv; erster Lauf #40812981714 FAIL wegen falscher Testszenenwahl, Korrektur auf Folge-HEAD; CI #40813079428 PENDING. Weitere Endpartien und Gesamtfreigaben offen; Gate bleibt BLOCKED."
     },
     {
       "id": "LOG-05",
@@ -170,10 +171,11 @@
         "project-c/pppoppi-imperium/prerelease/evidence/SPE-01-BROWSER-MULTIGEN-PARTIAL-20261028.json",
         "project-c/pppoppi-imperium/quality_v194/TRIPLE_RESCUE_IMPORT_INTERRUPTION_20261029.md",
         "project-c/pppoppi-imperium/quality_v194/SESSION_EXPORT_FAILURE_20261029.md",
-        "project-c/pppoppi-imperium/quality_v194/CAMPAIGN_DRILL_RESTART_20261029.md"
+        "project-c/pppoppi-imperium/quality_v194/CAMPAIGN_DRILL_RESTART_20261029.md",
+        "project-c/pppoppi-imperium/quality_v194/CAMPAIGN_PIPE_FIRE_RESTART_20261029.md"
       ],
       "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "Teiltest Bohr-Minispiel waehrend 12-Monats-Kampagne mit Sitzungsexport, drei Chromium-Prozessen, Tastatur-Fortsetzung und Archiv: 142 PASS/0 FAIL auf 9e157a47 (CI #40807756950). Weitere Minispiele, Wirtschaftsfunktionen und Gesamtfreigaben fehlen; Gate bleibt BLOCKED."
+      "next": "29.10.2026: Neuer 12-Monats-Chromium-Pflichtfall Rohrnetz/Feuerwehr mit zwei Sitzungsunterbrechungen, vier Prozessstarts und Archiv; erster Lauf #40812981714 FAIL wegen falscher Testszenenwahl, Korrektur auf Folge-HEAD; CI #40813079428 PENDING. Weitere Endpartien und Gesamtfreigaben offen; Gate bleibt BLOCKED."
     },
     {
       "id": "WIR-01",
@@ -278,10 +280,11 @@
         "project-c/pppoppi-imperium/prerelease/evidence/SPE-01-NATURAL-SALE-RESTART-PARTIAL-20261028.json",
         "project-c/pppoppi-imperium/prerelease/evidence/SPE-01-MULTIGEN-PARTIAL-20261028.json",
         "project-c/pppoppi-imperium/prerelease/evidence/SPE-01-BROWSER-MULTIGEN-PARTIAL-20261028.json",
-        "project-c/pppoppi-imperium/quality_v194/CAMPAIGN_DRILL_RESTART_20261029.md"
+        "project-c/pppoppi-imperium/quality_v194/CAMPAIGN_DRILL_RESTART_20261029.md",
+        "project-c/pppoppi-imperium/quality_v194/CAMPAIGN_PIPE_FIRE_RESTART_20261029.md"
       ],
       "blocker": "Chromium-CI #40603795251 auf Code-HEAD 8ec7a177313136cb040dfe26c833e09b392e6b2a PASS (vier Browserjobs). Neuer Teiltest: zwei menschliche und zwei KI-Firmen, zwei Regionen, zwei Vertragsabschluesse, zwei Monatsabrechnungen, vier frische Browserkontexte, drei exakte Importe und unabhaengige wirtschaftliche Fortsetzung ohne Doppelbuchung. Weitere Spielphasen, beliebige Fremdeingaben, vollstaendige Endpartien und verbindliche Endregeln fehlen; SPE-01 und Gesamtgate BLOCKED. PR #98: Chromium-CI #40609519522 auf HEAD 4deb5c4e3f8f59f10012c710c23a7bd57d0a36f3 PASS in allen vier Jobs, einschliesslich echtem Zwei-Menschen-Sanierungszwischenstand mit Browserneustart. Frueherer Lauf #40609444650 mit unabhaengigem Serviceworker-Start-FLAKE; Ursache offen. Vollstaendige Endpartien und weitere Spielphasen weiterhin offen. PR #100: neuer Engine-Teiltest auf ba19ccade47e48a98c63ea56dae6e7b99ca66469 in Chromium-Workflow #40622159262 als isolierter Node-Schritt PASS: zwei natuerliche Insolvenzen, H1-Notverkauf, H2-offene Sanierung, Fremdfeld- und Doppelbuchungsschutz, JSON-Rundlauf und H2-Neustart. Kein Browser-Live-Test dieses Pfades und keine vollstaendige Endpartie; Gate bleibt BLOCKED. PR #101: isolierter Node-Schritt in Chromium-CI #40627244010 auf 5a27df95a37fea43096d8be3b67238a1109f48c1 PASS: zwei natuerliche Vertraege, ein BREACH und ein DONE, exakte Straf-/Erloesbuchungen, JSON-Fortsetzung und Duplikatschutz. Keine Browser-Partie dieses Vertragswegs und keine Endpartie; Gate BLOCKED. PR #102: natürlicher Teilmengen-Vertragsfall mit Marktverkauf, JSON-Rundlauf und Duplikatschutz als neuer Test eingereicht; neuer Node-Schritt in CI #40633158227 auf d7fd6c44b059b80189ad1be922c792769d33c20f PASS; vollständige Chromium-CI zum Prüfzeitpunkt noch IN_PROGRESS, keine Browser-Endpartie, Gate weiterhin BLOCKED. PR #103: neuer echter Chromium-Browser-Teillieferungsschritt in CI #40638625387 auf 6394724d2b56b22806a7a8ee13cc3d64929b3a65 PASS: 4 Menschen, 80.000 Marktverkauf, 20.000/40.000 BREACH, zwei echte Chromium-Prozessneustarts, drei JSON-Importe und Duplikatschutz. Gesamte Chromium-CI zum Dokumentationszeitpunkt noch IN_PROGRESS; vollständige Endpartien fehlen, Gate BLOCKED.",
-      "next": "Teiltest Bohr-Minispiel waehrend 12-Monats-Kampagne mit Sitzungsexport, drei Chromium-Prozessen, Tastatur-Fortsetzung und Archiv: 142 PASS/0 FAIL auf 9e157a47 (CI #40807756950). Weitere Minispiele, Wirtschaftsfunktionen und Gesamtfreigaben fehlen; Gate bleibt BLOCKED."
+      "next": "29.10.2026: Neuer 12-Monats-Chromium-Pflichtfall Rohrnetz/Feuerwehr mit zwei Sitzungsunterbrechungen, vier Prozessstarts und Archiv; erster Lauf #40812981714 FAIL wegen falscher Testszenenwahl, Korrektur auf Folge-HEAD; CI #40813079428 PENDING. Weitere Endpartien und Gesamtfreigaben offen; Gate bleibt BLOCKED."
     },
     {
       "id": "SPE-02",
@@ -483,10 +486,11 @@
         "project-c/pppoppi-imperium/prerelease/evidence/BED-02-CLAIM-PARAMETERS-PARTIAL-20261027.json",
         "project-c/pppoppi-imperium/quality_v194/ENDSTATE_DIALOG_20261028.md",
         "project-c/pppoppi-imperium/quality_v194/SESSION_UI_ROUNDTRIP_20261028.md",
-        "project-c/pppoppi-imperium/quality_v194/SESSION_NATIVE_ZOOM_20261028.md"
+        "project-c/pppoppi-imperium/quality_v194/SESSION_NATIVE_ZOOM_20261028.md",
+        "project-c/pppoppi-imperium/quality_v194/CAMPAIGN_PIPE_FIRE_RESTART_20261029.md"
       ],
       "blocker": "Teilkette mit 15 echten Tab/Enter-Aktionen je Zoomstufe (175/200 %) und zwei Monatsabschluessen je Durchlauf in Chromium #40467829258 PASS, einschliesslich unzulaessiger Foerderung, Doppelkauf und Exportgleichheit. Andere Pflichtaktionen und vollstaendige Dialog-Endpartien bleiben ungetestet; Gate BLOCKED. Neuer Teiltest: Browser-CI #40505215686 PASS auf 95b393211465427c58c08a71ce35ffc2ce026573; bei echtem 175/200-%-Zoom je 39 Szenen, 13 per Tab/Enter aktivierte Wirtschaftsaktionen (12 unterschiedliche Kennungen), 26 Szenen ohne geeignete data-econ-Aktion, je 2 Zustandsaenderungen; 0 JS-Fehler/externe Anfragen. Keine vollstaendige fachliche Sollfolgen- oder Endpartienabnahme; Gate BLOCKED.",
-      "next": "Teiltest: Start, Spielart, Export, Import und Neustart mit echten Tab-/Enter-/Pfeiltasten bei nativem 175/200-%-Zoom; CI #40746767519 Zoom-Job PASS. Übrige Pflichtaktionen und Endpartien offen; BLOCKED."
+      "next": "29.10.2026: Neuer 12-Monats-Chromium-Pflichtfall Rohrnetz/Feuerwehr mit zwei Sitzungsunterbrechungen, vier Prozessstarts und Archiv; erster Lauf #40812981714 FAIL wegen falscher Testszenenwahl, Korrektur auf Folge-HEAD; CI #40813079428 PENDING. Weitere Endpartien und Gesamtfreigaben offen; Gate bleibt BLOCKED."
     },
     {
       "id": "BED-03",
@@ -615,10 +619,11 @@
         "project-c/pppoppi-imperium/quality_v194/TRIPLE_LASTMONTH_RESCUE_BROWSER_20261029.md",
         "project-c/pppoppi-imperium/quality_v194/TRIPLE_RESCUE_IMPORT_INTERRUPTION_20261029.md",
         "project-c/pppoppi-imperium/quality_v194/SESSION_EXPORT_FAILURE_20261029.md",
-        "project-c/pppoppi-imperium/quality_v194/CAMPAIGN_DRILL_RESTART_20261029.md"
+        "project-c/pppoppi-imperium/quality_v194/CAMPAIGN_DRILL_RESTART_20261029.md",
+        "project-c/pppoppi-imperium/quality_v194/CAMPAIGN_PIPE_FIRE_RESTART_20261029.md"
       ],
       "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "Teiltest Bohr-Minispiel waehrend 12-Monats-Kampagne mit Sitzungsexport, drei Chromium-Prozessen, Tastatur-Fortsetzung und Archiv: 142 PASS/0 FAIL auf 9e157a47 (CI #40807756950). Weitere Minispiele, Wirtschaftsfunktionen und Gesamtfreigaben fehlen; Gate bleibt BLOCKED."
+      "next": "29.10.2026: Neuer 12-Monats-Chromium-Pflichtfall Rohrnetz/Feuerwehr mit zwei Sitzungsunterbrechungen, vier Prozessstarts und Archiv; erster Lauf #40812981714 FAIL wegen falscher Testszenenwahl, Korrektur auf Folge-HEAD; CI #40813079428 PENDING. Weitere Endpartien und Gesamtfreigaben offen; Gate bleibt BLOCKED."
     },
     {
       "id": "TES-04",
