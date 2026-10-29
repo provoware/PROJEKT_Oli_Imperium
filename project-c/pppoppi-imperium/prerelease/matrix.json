@@ -71,10 +71,11 @@
       "stage": "technical",
       "status": "blocked",
       "evidence": [
-        "project-c/pppoppi-imperium/quality_v194/BROWSER_NATIVE_ZOOM_ECONOMY_20261027.md"
+        "project-c/pppoppi-imperium/quality_v194/BROWSER_NATIVE_ZOOM_ECONOMY_20261027.md",
+        "project-c/pppoppi-imperium/quality_v194/ECONOMY_ACTIONS_12MONTHS_20261029.md"
       ],
       "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "Vollstaendige Liefer-/Produktionskette inklusive weiterer Regionen, Fehler- und Grenzfaelle nachweisen; Teiltest der 2-Monats-Kette liegt vor."
+      "next": "Teiltest 29.10.2026: 12 Monate mit 2 Menschen, 129 echten Engine-Uebergaengen (Foerderung, Transport, Markt, Vertrag, Brand), 76 JS-Vorchecks PASS, 12 JSON-Rundlaeufe. GitHub-Node-CI #40851223794 auf f6924c9965f3f7669034d4e073300a6cab9cff47 noch IN_PROGRESS. Weiter: echte Browser-Prozessneustarts und Ex-/Import, KI/weitere Wirtschaftsgrenzfaelle, Rechte und C64-Referenz; Gate bleibt BLOCKED."
     },
     {
       "id": "LOG-03",
@@ -84,10 +85,11 @@
       "stage": "technical",
       "status": "blocked",
       "evidence": [
-        "project-c/pppoppi-imperium/quality_v194/BROWSER_NATIVE_ZOOM_ECONOMY_20261027.md"
+        "project-c/pppoppi-imperium/quality_v194/BROWSER_NATIVE_ZOOM_ECONOMY_20261027.md",
+        "project-c/pppoppi-imperium/quality_v194/ECONOMY_ACTIONS_12MONTHS_20261029.md"
       ],
       "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "Vollstaendige Liefer-/Produktionskette inklusive weiterer Regionen, Fehler- und Grenzfaelle nachweisen; Teiltest der 2-Monats-Kette liegt vor."
+      "next": "Teiltest 29.10.2026: 12 Monate mit 2 Menschen, 129 echten Engine-Uebergaengen (Foerderung, Transport, Markt, Vertrag, Brand), 76 JS-Vorchecks PASS, 12 JSON-Rundlaeufe. GitHub-Node-CI #40851223794 auf f6924c9965f3f7669034d4e073300a6cab9cff47 noch IN_PROGRESS. Weiter: echte Browser-Prozessneustarts und Ex-/Import, KI/weitere Wirtschaftsgrenzfaelle, Rechte und C64-Referenz; Gate bleibt BLOCKED."
     },
     {
       "id": "LOG-04",
@@ -226,10 +228,11 @@
       "status": "blocked",
       "evidence": [
         "project-c/pppoppi-imperium/quality_v194/MONEY_BOUNDARIES_20261029.md",
-        "project-c/pppoppi-imperium/quality_v194/DEBT_INVOICES_12MONTHS_20261029.md"
+        "project-c/pppoppi-imperium/quality_v194/DEBT_INVOICES_12MONTHS_20261029.md",
+        "project-c/pppoppi-imperium/quality_v194/ECONOMY_ACTIONS_12MONTHS_20261029.md"
       ],
       "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "GitHub-Node-CI #40843890616 auf 31b9670ec67fc272b943220ea765c0c0a8838a30: 122/122 Abrechnungspruefungen ueber 12 Monate mit zwei Firmen PASS, einschliesslich Zins-/Tilgungsrundung, Mehrfachrechnungen und JSON-Rundlauf. WIR-04 bleibt BLOCKED: echte Wirtschaftsaktionen und Browserprozessneustarts, Grenzwerte, Ressourcenrechte, historische C64-Referenz."
+      "next": "Teiltest 29.10.2026: 12 Monate mit 2 Menschen, 129 echten Engine-Uebergaengen (Foerderung, Transport, Markt, Vertrag, Brand), 76 JS-Vorchecks PASS, 12 JSON-Rundlaeufe. GitHub-Node-CI #40851223794 auf f6924c9965f3f7669034d4e073300a6cab9cff47 noch IN_PROGRESS. Weiter: echte Browser-Prozessneustarts und Ex-/Import, KI/weitere Wirtschaftsgrenzfaelle, Rechte und C64-Referenz; Gate bleibt BLOCKED."
     },
     {
       "id": "BAL-01",
