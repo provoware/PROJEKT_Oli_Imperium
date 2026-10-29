@@ -22,7 +22,9 @@ SCHEMA = "pppoppi.endstate.session.proposal/1"
 
 
 def finish_pipe_stage(page, stage):
-    page.evaluate("NeoEconomy.open('pipeline')")
+    # Der Spielkern zeigt ein laufendes Minispiel in der Werkstatt an.
+    # Die Pipeline-Szene zeigt nur das Startmenue und keine Drehfelder.
+    page.evaluate("NeoEconomy.open('workshop')")
     current = state(page)
     check("Rohrabschnitt %d nach Neustart aktiv" % (stage + 1),
           current["minigame"] is not None
