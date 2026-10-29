@@ -229,7 +229,7 @@
         "project-c/pppoppi-imperium/quality_v194/DEBT_INVOICES_12MONTHS_20261029.md"
       ],
       "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "PR #130: 42/42 Geldgrenzen PASS; neuer 12-Monats-Zins-/Tilgungs-/Rechnungstest auf eigenem Zweig eingereicht, GitHub-CI noch auswerten. Weiter BLOCKED: aktive Wirtschaftskampagne mit Browserneustarts, Extremwerte, Ressourcenrechte, C64-Originalvergleich."
+      "next": "GitHub-Node-CI #40843890616 auf 31b9670ec67fc272b943220ea765c0c0a8838a30: 122/122 Abrechnungspruefungen ueber 12 Monate mit zwei Firmen PASS, einschliesslich Zins-/Tilgungsrundung, Mehrfachrechnungen und JSON-Rundlauf. WIR-04 bleibt BLOCKED: echte Wirtschaftsaktionen und Browserprozessneustarts, Grenzwerte, Ressourcenrechte, historische C64-Referenz."
     },
     {
       "id": "BAL-01",
