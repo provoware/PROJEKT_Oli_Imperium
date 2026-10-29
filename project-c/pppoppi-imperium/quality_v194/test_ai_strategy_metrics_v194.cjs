@@ -146,7 +146,8 @@ function aggregate(rows) {
         maximumNetDrawdownCent: range('maximumNetDrawdownCent'),
         rescueCount: subset.reduce((n, x) => n + x.rescueCount, 0),
         finalFields: range('finalFields'),
-        monthsBelowProfileBuffer: range('monthsBelowProfileBuffer')
+        monthsBelowProfileBuffer: range('monthsBelowProfileBuffer'),
+        distinctFirmOutcomes: new Set(subset.map(x => JSON.stringify(x))).size
       });
     }
   }
@@ -176,7 +177,18 @@ function main() {
       'AI profiles are bound to company IDs and turn order; results are not a causal A/B test.',
       'Human behavior is scripted; no historical C64 or human playtest evidence.'
     ],
-    rows, summary: aggregate(rows), prereleaseGate: 'BLOCKED'
+    rows, summary: aggregate(rows),
+    seedOutcomeDiversity: SCENARIOS.map(scenario => ({
+      scenario: scenario.name,
+      seedsTested: SEEDS.length,
+      distinctEconomicOutcomes: new Set(rows.filter(row => row.scenario === scenario.name)
+        .map(row => JSON.stringify({
+          acceptedHumanActions: row.acceptedHumanActions,
+          rejectedHumanActions: row.rejectedHumanActions,
+          firms: row.firms
+        }))).size
+    })),
+    prereleaseGate: 'BLOCKED'
   };
   console.log(JSON.stringify(report, null, 2));
 }
