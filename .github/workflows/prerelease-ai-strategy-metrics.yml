@@ -8,6 +8,8 @@ on:
       - 'project-c/pppoppi-imperium/quality_v194/test_ai_profile_rotation_v194.cjs'
       - 'project-c/pppoppi-imperium/quality_v194/test_ai_logistics_reserves_v194.cjs'
       - 'project-c/pppoppi-imperium/quality_v194/test_ai_investment_gates_v194.cjs'
+      - 'project-c/pppoppi-imperium/quality_v194/test_ai_turn_trace_v194.cjs'
+      - 'project-c/pppoppi-imperium/quality_v194/AI_TURN_TRACE_20261029.md'
       - 'project-c/pppoppi-imperium/quality_v194/AI_INVESTMENT_GATES_20261029.md'
       - 'project-c/pppoppi-imperium/quality_v194/AI_LOGISTICS_RESERVES_20261029.md'
       - 'project-c/pppoppi-imperium/quality_v194/AI_PROFILE_ROTATION_20261029.md'
@@ -53,6 +55,12 @@ jobs:
           node --check project-c/pppoppi-imperium/quality_v194/test_ai_investment_gates_v194.cjs
           node project-c/pppoppi-imperium/quality_v194/test_ai_investment_gates_v194.cjs | tee ai_investment_gates.json
           node -e "const r=require('./ai_investment_gates.json'); if(r.rows.length!==18 || r.rows.filter(x=>x.companyId==='A3').length!==6 || r.prereleaseGate!=='BLOCKED') process.exit(1);"
+      - name: Tatsächliche KI-Zugreihenfolge und Ausführungsablehnungen diagnostizieren
+        run: |
+          set -o pipefail
+          node --check project-c/pppoppi-imperium/quality_v194/test_ai_turn_trace_v194.cjs
+          node project-c/pppoppi-imperium/quality_v194/test_ai_turn_trace_v194.cjs | tee ai_turn_trace.json
+          node -e "const r=require('./ai_turn_trace.json'); if(r.reports.length!==2 || r.totalSimulatedMonths!==216 || r.reports.some(x=>x.firstTwelveMonths.length!==36 || !x.baselineParity) || r.prereleaseGate!=='BLOCKED') process.exit(1);"
       - name: Reproduzierbaren Zahlenbericht sichern
         if: always()
         uses: actions/upload-artifact@v4
@@ -63,5 +71,6 @@ jobs:
             ai_profile_rotation.json
             ai_logistics_reserves.json
             ai_investment_gates.json
+            ai_turn_trace.json
           if-no-files-found: warn
           retention-days: 14
