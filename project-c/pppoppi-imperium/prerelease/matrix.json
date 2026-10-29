@@ -247,10 +247,11 @@
       "status": "blocked",
       "evidence": [
         "project-c/pppoppi-imperium/quality_v194/AI_ECONOMY_BROWSER_12MONTHS_20261029.md",
-        "project-c/pppoppi-imperium/quality_v194/AI_STRATEGY_BASELINE_20261029.md"
+        "project-c/pppoppi-imperium/quality_v194/AI_STRATEGY_BASELINE_20261029.md",
+        "project-c/pppoppi-imperium/quality_v194/AI_PROFILE_ROTATION_20261029.md"
       ],
       "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "Erster CI-Baseline-Lauf #40875012540 PASS (3 Rechentests, 24 Simulationen/864 Monate), aber drei Startkennungen erzeugen je Szenario identische Wirtschaftskennzahlen: nur vier unterschiedliche Szenario-Ergebnisse, keine unabhaengigen Stichproben. Neue Diversitaetsdiagnose auf finalem HEAD nachpruefen; A3 hat in aktiven Szenarien 0 Felder, A2 verliert bei niedrigem Preis liquide Nettoposition. Kausale Profil-/Startreihenfolge-Gegenprobe, echte Gewinn-/Asset-Bewertung, KI-Schulden/Sanierung und C64-/Rechte-Nachweise fehlen. BLOCKED."
+      "next": "Erster CI-Baseline-Lauf #40875012540 PASS (3 Rechentests, 24 Simulationen/864 Monate), aber drei Startkennungen erzeugen je Szenario identische Wirtschaftskennzahlen: nur vier unterschiedliche Szenario-Ergebnisse, keine unabhaengigen Stichproben. Neue Diversitaetsdiagnose auf finalem HEAD nachpruefen; A3 hat in aktiven Szenarien 0 Felder, A2 verliert bei niedrigem Preis liquide Nettoposition. Kausale Profil-/Startreihenfolge-Gegenprobe, echte Gewinn-/Asset-Bewertung, KI-Schulden/Sanierung und C64-/Rechte-Nachweise fehlen. BLOCKED. PR #136: kontrollierter Strategietausch (3 Profilzuordnungen × 2 Szenarien × 36 Monate, je doppelt) auf separatem Zweig eingereicht; GitHub-CI und Ergebnisvergleich noch offen. Logistikreserven sind weiterhin an Firmen-IDs gebunden; daraus keine vollstaendige Kausal- oder Gewinnbehauptung ableiten. BAL-01 bleibt BLOCKED."
     },
     {
       "id": "BAL-02",
