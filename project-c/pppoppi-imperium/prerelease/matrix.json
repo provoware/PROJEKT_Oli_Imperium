@@ -49,7 +49,7 @@
       "evidence": [
         "project-c/pppoppi-imperium/quality_v194/RUNTIME_ASSET_INVENTORY_20261029.md"
       ],
-      "next": "GitHub-Inventarpruefung fuer versionierte Laufzeitmedien am finalen PR-HEAD bestaetigen; 77 ausgeschlossene Archivdateien einzeln auf Herkunft, Rechte und Spielnotwendigkeit pruefen. Inventar-PASS ist keine Rechtefreigabe."
+      "next": "GitHub-CI fuer versionierte, nichtleere Rechtenachweise und explizite Rechteklassen auf finalem PR-HEAD pruefen (Teilpaket 29.10.2026); 77 ausgeschlossene Archivdateien einzeln auf Herkunft, Rechte und Spielnotwendigkeit pruefen. Inventar-PASS ist keine Rechtefreigabe."
     },
     {
       "id": "LOG-01",
