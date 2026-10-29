@@ -1,7 +1,7 @@
 'use strict';
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { net, summarize, SCENARIOS, SEEDS, MONTHS } = require('./test_ai_strategy_metrics_v194.cjs');
+const { net, summarize, aggregate, SCENARIOS, SEEDS, MONTHS } = require('./test_ai_strategy_metrics_v194.cjs');
 const point = (cashCent, debtCent = 0) => ({
   cashCent, debtCent, netCent: cashCent - debtCent, fields: 2, rescues: 0
 });
@@ -31,4 +31,18 @@ test('scenario coverage and incomplete time series are rejected', () => {
   ]);
   assert.equal(SEEDS.length, 3);
   assert.throws(() => summarize([point(100)], 'vorsichtig', 0, 0), /snapshots/);
+});
+
+test('same economic outcome for different seeds is counted once', () => {
+  const rows = SCENARIOS.flatMap(scenario => SEEDS.map(seed => ({
+    scenario: scenario.name, seed,
+    firms: ['A1', 'A2', 'A3'].map(id => ({
+      id, liquidNetChangeCent: 100, finalCashCent: 100,
+      maximumDebtCent: 0, maximumNetDrawdownCent: 10,
+      rescueCount: 0, finalFields: 1, monthsBelowProfileBuffer: 0
+    }))
+  })));
+  assert.equal(aggregate(rows).find(x => x.id === 'A1').distinctFirmOutcomes, 1);
+  rows[1].firms[0].liquidNetChangeCent = 101;
+  assert.equal(aggregate(rows).find(x => x.id === 'A1').distinctFirmOutcomes, 2);
 });
