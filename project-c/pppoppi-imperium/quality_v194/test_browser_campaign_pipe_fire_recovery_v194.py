@@ -219,11 +219,13 @@ def main():
                 page.wait_for_function("NeoEconomy.endstate.status()==='finished'")
                 final = state(page)
                 archive = page.evaluate("NeoEconomy.endstate.archive()")
-                check("Endarchiv enthaelt beide Minispiele und 12 Berichte",
+                check("Endarchiv enthaelt Rohrnetz, Brandhistorie und 12 Berichte",
                       final["month"] == 12
                       and len(final["reports"]) == 12
                       and final["claims"][CLAIM]["pipeline"]
-                      and not final["claims"][CLAIM]["burning"]
+                      and any(event["type"] == "BRAND"
+                              and event.get("claimId") == CLAIM
+                              for event in final["events"])
                       and archive["endMonth"] == 12
                       and archive["snapshot"] == final
                       and len(archive["ranking"]) == 4)
