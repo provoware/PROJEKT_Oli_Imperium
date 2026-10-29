@@ -343,7 +343,7 @@
         "project-c/pppoppi-imperium/quality_v194/SESSION_EXPORT_FAILURE_20261029.md"
       ],
       "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "Drei offene Sanierungen: Browser-Download-Verweigerung mit sofortiger Blob-/Ankerbereinigung und unveraendertem Zustand als neue Chromium-Regression auf PR #124; finale CI noch nachzuweisen. Weitere Export-, Wirtschafts- und Minispielgrenzfaelle offen, Gate BLOCKED."
+      "next": "Drei offene Sanierungen: Browser-Download-Verweigerung mit sofortiger Blob-/Ankerbereinigung und unveraendertem Zustand als neue Chromium-Regression auf PR #124; finale CI noch nachzuweisen. Weitere Export-, Wirtschafts- und Minispielgrenzfaelle offen, Gate BLOCKED. Nativer Sitzungsimport 175/200 Prozent in sechs getrennten Browserprozessen; CI auf finalem HEAD pruefen, kein vollstaendiger Endspielnachweis."
     },
     {
       "id": "SIC-01",
@@ -374,7 +374,7 @@
         "project-c/pppoppi-imperium/quality_v194/TRIPLE_RESCUE_IMPORT_INTERRUPTION_20261029.md"
       ],
       "blocker": "PR #96 Code-HEAD 27914652cc4933239b07841009b828e0f4d2f87a: GitHub-Browser-CI #40595443169 PASS (vier Jobs, Import-Schritt success), Quellpruefung #40595443211 PASS. Insgesamt 30 ungueltige JSON-Strukturen atomar abgewiesen, gueltige 5.000.000-Byte-Datei importiert, 5.000.001 Bytes sicher abgewiesen, HTML-Fremdname in acht Szenen text-sicher. Weiterhin nicht alle Fremdeingaben, beliebige Tiefen und Endpartien abgedeckt; SIC-02 und Gesamtgate BLOCKED.",
-      "next": "Drei offene Schlussmonatsinsolvenzen: abgebrochener, widerspruechlicher und uebergrosser Sitzungsimport sowie verzoegertes Dateilesen nach H1-Notverkauf neu in Chromium-Regression; CI auf neuem HEAD ausstehend. Weitere Pflichtfaelle offen; Gate BLOCKED."
+      "next": "Drei offene Schlussmonatsinsolvenzen: abgebrochener, widerspruechlicher und uebergrosser Sitzungsimport sowie verzoegertes Dateilesen nach H1-Notverkauf neu in Chromium-Regression; CI auf neuem HEAD ausstehend. Weitere Pflichtfaelle offen; Gate BLOCKED. Neuer sechsteiliger nativer Dateiimport-Stresstest darf Fehler nicht durch Wiederholungen verdecken; CI und weitere Sicherheitsfaelle offen."
     },
     {
       "id": "SIC-03",
@@ -514,7 +514,7 @@
         "project-c/pppoppi-imperium/quality_v194/CAMPAIGN_PIPE_FIRE_RESTART_20261029.md"
       ],
       "blocker": "Teilkette mit 15 echten Tab/Enter-Aktionen je Zoomstufe (175/200 %) und zwei Monatsabschluessen je Durchlauf in Chromium #40467829258 PASS, einschliesslich unzulaessiger Foerderung, Doppelkauf und Exportgleichheit. Andere Pflichtaktionen und vollstaendige Dialog-Endpartien bleiben ungetestet; Gate BLOCKED. Neuer Teiltest: Browser-CI #40505215686 PASS auf 95b393211465427c58c08a71ce35ffc2ce026573; bei echtem 175/200-%-Zoom je 39 Szenen, 13 per Tab/Enter aktivierte Wirtschaftsaktionen (12 unterschiedliche Kennungen), 26 Szenen ohne geeignete data-econ-Aktion, je 2 Zustandsaenderungen; 0 JS-Fehler/externe Anfragen. Keine vollstaendige fachliche Sollfolgen- oder Endpartienabnahme; Gate BLOCKED.",
-      "next": "Teiltest 29.10.2026: Rohrnetz und Feuerwehr in 12-Monats-Kampagne, zwei aktive Sitzungsunterbrechungen, vier Chromium-Prozesse und Archiv. 273 PASS/0 FAIL auf Code-HEAD b27cf029fb142f51c88bc9ba6c557383c5094300, CI #40813079428. Vollstaendige Pflichtabdeckung, historische C64-Referenz und Ressourcenrechte fehlen; Gate bleibt BLOCKED."
+      "next": "Teiltest 29.10.2026: Rohrnetz und Feuerwehr in 12-Monats-Kampagne, zwei aktive Sitzungsunterbrechungen, vier Chromium-Prozesse und Archiv. 273 PASS/0 FAIL auf Code-HEAD b27cf029fb142f51c88bc9ba6c557383c5094300, CI #40813079428. Vollstaendige Pflichtabdeckung, historische C64-Referenz und Ressourcenrechte fehlen; Gate bleibt BLOCKED. Dateiimport-Teilpfad bei 175/200 Prozent wird jetzt dreimal unabhaengig geprueft; ein fehlender Dialog bleibt FAIL, keine persoenliche Endabnahme."
     },
     {
       "id": "BED-03",
@@ -540,7 +540,7 @@
         "project-c/pppoppi-imperium/quality_v194/SESSION_NATIVE_ZOOM_20261028.md"
       ],
       "blocker": "39 Szenen und Minispiele in frueheren Teilpruefungen getestet; neuer echter Wirtschafts-/Monatsbericht-Test: 200-%-Erstlauf #40467580953 FAIL (54 CSS-Pixel Ueberlauf), korrigierte Technikfassung in #40467829258 PASS mit 175/200 %, 27 Element-Vorkommen je Zoom, 0 Ueberlauf und 0 verdeckten Bedienelementen in Feldansicht/Monatsbericht. Vollstaendige Text-/Animationsueberdeckungen, weitere Dialogaktionen und reguläre Endpartien fehlen; Gate BLOCKED. Neuer Text-Teiltest: Chromium #40474144518 PASS, je 39 Szenen, 170 gemessene Ueberschriften-/Tabellen-Textstellen und 32 Zellen bei echtem 175/200-%-Zoom, 0 erkannte Abschneidungen oder vollstaendige Ueberdeckungen; synthetische Ueberdeckung korrekt erkannt. Nicht alle Textarten/Animationen oder Endpartien geprueft; Gate BLOCKED. Neuer Fliesstext-/Dynamik-Teiltest: Chromium #40481736341 PASS, je 39 Szenen und 98 Phasen-Momentaufnahmen bei 175/200 %, je 312 gemessene Fliesstextstellen, 0 erkannte Abschneidungen/Ueberdeckungen/unmessbare Stellen. 191 bzw. 194 Beobachtungen laufender Animationen sind keine vollstaendige Animationsabnahme. Weitere Dialogaktionen, Pixelvergleich und Endpartien fehlen; Gate BLOCKED. Neuer Wort-Teilueberdeckungstest auf 52aa1fd488b9e185d6180311cd361b95e58d9cb9: Browser-CI #40489364393 PASS, je 39 Szenen/196 Momentaufnahmen/624 Fliesstextmessungen; 15.576 bzw. 15.684 Wort-Treffpunkte, 0 erkannte Teil-/Vollueberdeckungen oder Abschneidungen. Synthetische Teilueberdeckung erkannt. Vier Zeitstichproben sind kein lueckenloser Animations- oder Endspielnachweis; Gate BLOCKED. Neuer deterministischer Animations-Teiltest: Chromium #40497893039 PASS auf 120bd650cea72f8be06582b5bcdba9e28d6455e4; je 39 Szenen, davon 11 mit geeigneten Animationen (29 Animations-Vorkommen), 88 gezielte Phasen, 352 Fliesstextmessungen, 7.488/7.536 Wort-Treffpunkte bei 175/200 %, 0 gemessene Textfehler. Kein lueckenloser Animations-/Pixelnachweis; andere Dialogaktionen und Endpartien fehlen, Gate BLOCKED. Neuer Teiltest: Browser-CI #40505215686 PASS auf 95b393211465427c58c08a71ce35ffc2ce026573; bei echtem 175/200-%-Zoom je 39 Szenen, 13 per Tab/Enter aktivierte Wirtschaftsaktionen (12 unterschiedliche Kennungen), 26 Szenen ohne geeignete data-econ-Aktion, je 2 Zustandsaenderungen; 0 JS-Fehler/externe Anfragen. Keine vollstaendige fachliche Sollfolgen- oder Endpartienabnahme; Gate BLOCKED.",
-      "next": "Teiltest: sichtbarer Fokus und horizontal treffbare Sitzungsschalter bei 175/200 % mit echtem Chromium-Tab-Zoom; CI #40746767519 Zoom-Job PASS. Vollständige Szenen-/Überlaufabnahme bleibt BLOCKED."
+      "next": "Teiltest: sichtbarer Fokus und horizontal treffbare Sitzungsschalter bei 175/200 % mit echtem Chromium-Tab-Zoom; CI #40746767519 Zoom-Job PASS. Vollständige Szenen-/Überlaufabnahme bleibt BLOCKED. Neuer nativer Zoom-Stabilitaetstest: sechs getrennte Chromium-Prozesse mit Tastatur-Import und Diagnose des Datei-Eingangsklicks; CI auf finalem HEAD noch auswerten, Gate BLOCKED."
     },
     {
       "id": "BAR-01",
@@ -658,7 +658,7 @@
       "status": "blocked",
       "evidence": [],
       "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "Alle Workflows auf demselben Commit prüfen"
+      "next": "CI auf finalem HEAD: nativer Sitzungsexport/-import bei 175/200 Prozent in drei unabhaengigen Browserpaaren ohne verdeckte Wiederholung; Datei-Eingangsklick und Nutzeraktivierung bei Timeout diagnostizieren. Danach alle Workflows auf demselben Commit pruefen; Gesamtgate bleibt BLOCKED."
     },
     {
       "id": "DOK-01",
