@@ -17,7 +17,15 @@ const SALES = new Set(['MARKTERLÖS', 'VERTRAGSERLÖS', 'AUSSENMARKT', 'RAFFINIE
 const INVESTMENTS = new Set(['FELDKAUF', 'FACHBOHRUNG', 'TANKAUSBAU',
   'STRECKENBAU', 'RAFFINERIE_BAU', 'VERTRIEBSROUTE', 'PUBLIC_CONNECT']);
 const LOANS = new Set(['RETTUNGSKREDIT', 'KI_RETTUNGSKREDIT']);
+// Known action costs are cash payments, NOT accounting expenses or profit.
+const ACTION_COSTS = new Set([
+  'GUTACHTEN', 'FOERDERUNG', 'TRANSPORT', 'FRACHT',
+  'RAFFINERIE_VERARBEITUNG', 'TRANSPORT_REPARATUR',
+  'BRANDBEKÄMPFUNG_PROFI', 'ZAHLUNG_PERSONAL', 'ZAHLUNG_WARTUNG'
+]);
+// Public freight holds are prepayments; their refunds are not sales.
 const CATEGORIES = ['salesCent', 'investmentCent', 'loanCent', 'principalCent',
+  'actionCostCent', 'freightHoldCent', 'freightRefundCent',
   'otherIncomingCent', 'otherOutgoingCent'];
 function classify(entry) {
   const amount = entry.deltaCent;
@@ -36,6 +44,18 @@ function classify(entry) {
   if (entry.code === 'ZAHLUNG_TILGUNG') {
     assert.ok(amount <= 0, 'principal repayment has positive sign');
     return 'principalCent';
+  }
+  if (ACTION_COSTS.has(entry.code)) {
+    assert.ok(amount <= 0, 'action cost has positive sign');
+    return 'actionCostCent';
+  }
+  if (entry.code === 'PUBLIC_FREIGHT_HOLD') {
+    assert.ok(amount <= 0, 'freight hold has positive sign');
+    return 'freightHoldCent';
+  }
+  if (entry.code === 'FRACHT_RUECKGABE') {
+    assert.ok(amount >= 0, 'freight refund has negative sign');
+    return 'freightRefundCent';
   }
   return amount >= 0 ? 'otherIncomingCent' : 'otherOutgoingCent';
 }
@@ -83,8 +103,10 @@ function reconcile(before, after) {
     'cash delta does not match ledger');
   assert.equal(incoming - outgoing, net, 'cash-flow totals do not reconcile');
   assert.equal(categories.salesCent + categories.loanCent +
-    categories.otherIncomingCent - categories.investmentCent -
-    categories.principalCent - categories.otherOutgoingCent, net,
+    categories.freightRefundCent + categories.otherIncomingCent -
+    categories.investmentCent - categories.principalCent -
+    categories.actionCostCent - categories.freightHoldCent -
+    categories.otherOutgoingCent, net,
     'classified cash-flow does not reconcile');
   return {bookings: entries.length, netCent: net, incomingCent: incoming,
     outgoingCent: outgoing, ...categories, codeCounts};
@@ -164,10 +186,12 @@ function run(config) {
     assert.equal(row.reconciledMonths + row.restartMonths, MONTHS);
     assert.equal(row.salesCent, row.reportedRevenueCent,
       'cumulative sales and reported revenue differ');
-    assert.equal(row.salesCent + row.loanCent + row.otherIncomingCent,
-      row.incomingCent, 'classified incoming cash differs');
-    assert.equal(row.investmentCent + row.principalCent + row.otherOutgoingCent,
-      row.outgoingCent, 'classified outgoing cash differs');
+    assert.equal(row.salesCent + row.loanCent + row.freightRefundCent +
+      row.otherIncomingCent, row.incomingCent,
+      'classified incoming cash differs');
+    assert.equal(row.investmentCent + row.principalCent + row.actionCostCent +
+      row.freightHoldCent + row.otherOutgoingCent, row.outgoingCent,
+      'classified outgoing cash differs');
   }
   return {name: config.name, months: MONTHS, companies: Object.keys(stats).length,
     accountingChecks: checks, humanRescues, stats};
@@ -195,6 +219,15 @@ assert.throws(() => classify({code: 'FELDKAUF', deltaCent: 1}),
   /investment booking has positive sign/);
 assert.throws(() => classify({code: 'RETTUNGSKREDIT', deltaCent: -1}),
   /loan booking has negative sign/);
+assert.throws(() => classify({code: 'ZAHLUNG_PERSONAL', deltaCent: 1}),
+  /action cost has positive sign/);
+assert.throws(() => classify({code: 'PUBLIC_FREIGHT_HOLD', deltaCent: 1}),
+  /freight hold has positive sign/);
+assert.throws(() => classify({code: 'FRACHT_RUECKGABE', deltaCent: -1}),
+  /freight refund has negative sign/);
+// Unknown codes must never silently become sales or confirmed costs.
+assert.equal(classify({code: 'UNBEKANNT', deltaCent: 1}), 'otherIncomingCent');
+assert.equal(classify({code: 'UNBEKANNT', deltaCent: -1}), 'otherOutgoingCent');
 const rows = CONFIGS.map(config => {
   const first = run(config);
   assert.deepEqual(run(config), first, 'non-reproducible ' + config.name);
@@ -206,7 +239,8 @@ console.log(JSON.stringify({
   configurations: CONFIGS.length, repeatedRuns: 2,
   monthsPerRun: MONTHS, totalSimulatedMonths: 96,
   accountingChecks: rows.reduce((n, r) => n + r.accountingChecks, 0),
-  negativeTests: 5, noInjectedCashOrDebt: true,
+  negativeTests: 8, classificationUnitChecks: 2,
+  knownActionCostCodes: ACTION_COSTS.size, noInjectedCashOrDebt: true,
   revenueChecks: rows.reduce((n, r) => n + r.accountingChecks, 0),
   classifications: Object.fromEntries(CATEGORIES.map(key =>
     [key, rows.reduce((n, r) => n + Object.values(r.stats)
@@ -215,6 +249,7 @@ console.log(JSON.stringify({
   limitations: [
     'Sales are independently matched to booking codes and monthly revenue reports.',
     'Investment means selected acquisition/build bookings, not an approved asset value.',
+    'Known action cash costs, public freight prepayments and refunds are separate cash categories, not profit.',
     'Other inflows and outflows remain separately visible, with exact booking-code counts.',
     'Ledger/cash reconciliation measures cash flow, not accounting profit.',
     'Field value, inventory valuation and historical C64 rules are not established.',

@@ -146,7 +146,7 @@ jobs:
           set -o pipefail
           node --check project-c/pppoppi-imperium/quality_v194/test_ai_cashflow_audit_v194.cjs
           node project-c/pppoppi-imperium/quality_v194/test_ai_cashflow_audit_v194.cjs | tee ai_cashflow_audit.json
-          node -e "const r=require('./ai_cashflow_audit.json'); if(r.configurations!==2 || r.repeatedRuns!==2 || r.totalSimulatedMonths!==96 || r.accountingChecks<120 || r.revenueChecks!==r.accountingChecks || r.negativeTests!==5 || !r.classifications || !r.noInjectedCashOrDebt || r.prereleaseGate!=='BLOCKED') process.exit(1);"
+          node -e "const r=require('./ai_cashflow_audit.json'); if(r.configurations!==2 || r.repeatedRuns!==2 || r.totalSimulatedMonths!==96 || r.accountingChecks<120 || r.revenueChecks!==r.accountingChecks || r.negativeTests!==8 || r.classificationUnitChecks!==2 || r.knownActionCostCodes!==9 || !Number.isSafeInteger(r.classifications.actionCostCent) || !Number.isSafeInteger(r.classifications.freightHoldCent) || !Number.isSafeInteger(r.classifications.freightRefundCent) || !r.classifications || !r.noInjectedCashOrDebt || r.prereleaseGate!=='BLOCKED') process.exit(1);"
       - name: Reproduzierbaren Zahlenbericht sichern
         if: always()
         uses: actions/upload-artifact@v4
