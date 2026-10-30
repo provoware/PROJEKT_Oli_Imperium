@@ -5,6 +5,9 @@ on:
       - 'data/**'
       - 'tools/**'
       - 'tests/**'
+      - 'docs/**'
+      - 'vorlagen/**'
+      - '*.md'
       - '.github/workflows/validate.yml'
   workflow_dispatch:
 jobs:
@@ -21,3 +24,33 @@ jobs:
         run: python3 tools/validate_project.py
       - name: Negativ- und Grenztests
         run: python3 -m unittest discover -s tests -v
+      - name: Markdown-Dateien und lokale Verweise prüfen
+        run: |
+          python3 - <<'PY'
+          import re
+          from pathlib import Path
+          from urllib.parse import unquote
+
+          root = Path.cwd().resolve()
+          problems = []
+          docs = sorted(path for path in root.rglob("*.md") if ".git" not in path.parts)
+          if not docs:
+              raise SystemExit("Keine Markdown-Dateien gefunden")
+          for doc in docs:
+              content = doc.read_text(encoding="utf-8")
+              if not content.strip():
+                  problems.append(f"{doc.relative_to(root)}: leer")
+              for link in re.findall(r"!?(?:\\[[^\\]]*\\])\\(([^)\\n]+)\\)", content):
+                  target = link.strip().split(" ", 1)[0].strip("<>")
+                  if not target or target.startswith(("#", "//")) or re.match(r"^[a-zA-Z][a-zA-Z0-9+.-]*:", target):
+                      continue
+                  target = unquote(target.split("#", 1)[0].split("?", 1)[0])
+                  if not target:
+                      continue
+                  destination = ((root / target.lstrip("/")) if target.startswith("/") else (doc.parent / target)).resolve()
+                  if not destination.is_relative_to(root) or not destination.exists():
+                      problems.append(f"{doc.relative_to(root)}: ungueltiger lokaler Link {target}")
+          if problems:
+              raise SystemExit("\\n".join(problems))
+          print(f"PASS: {len(docs)} Markdown-Dateien und ihre lokalen Verweise")
+          PY
