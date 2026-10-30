@@ -90,6 +90,32 @@ def main():
                                  label + ": Bohr-Minispiel starten")
                         check(label + ": Bohr-Minispiel aktiv",
                               state(page)["minigame"]["kind"] == "DRILL")
+                        # SPE-01 aus PR #27: laufendes Minispiel inklusive
+                        # Reglerstand durch echte Browser-Datei speichern/laden.
+                        # Kein zweites Testprogramm oder Eingriff in den Spielkern.
+                        page.evaluate("NeoEconomy.send('MINI_ADJUST', 'BERLIN-1', {delta:10})")
+                        before_midgame = state(page)
+                        check(label + ": laufender Drehregler auf 60",
+                              before_midgame["minigame"]["stage"] == 0
+                              and before_midgame["minigame"]["dial"] == 60)
+                        activate(page, "#closeBtn", label + ": Minispieldialog zum Speichern schliessen")
+                        with page.expect_download() as active_save:
+                            activate(page, "#saveGame", label + ": aktives Minispiel exportieren")
+                        active_payload = Path(active_save.value.path()).read_bytes()
+                        check(label + ": Export enthaelt aktiven Drehreglerzustand",
+                              json.loads(active_payload) == before_midgame)
+                        page.locator("#loadEconFile").set_input_files({
+                            "name": "laufendes-bohrminispiel.json",
+                            "mimeType": "application/json",
+                            "buffer": active_payload,
+                        })
+                        page.wait_for_function(
+                            "document.querySelector('#toast')?.textContent?.includes('Spielstand geprüft und übernommen')"
+                        )
+                        check(label + ": Aktives Minispiel nach Dateiimport unveraendert",
+                              state(page) == before_midgame
+                              and page.evaluate("NeoEconomy.engine.validate(NeoEconomy.getState())") is True)
+                        page.evaluate("NeoEconomy.open('workshop')")
                         stages = []
                         for stage in range(3):
                             current = state(page)
