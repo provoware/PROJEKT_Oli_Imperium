@@ -1,0 +1,557 @@
+{
+  "source_sha256": "94f41725f1d1addaa07505302a4f448e3410df0bcebe68bfb24fc07b72d433ca",
+  "source_entries": 187,
+  "total_files": 110,
+  "files": [
+    {
+      "path": "SPIEL/00_START_HIER_V161.txt",
+      "sha256": "23457b43b7b072a72d7aa3377dcca0310204126b9cdf0bd4f0a05cb6c1a6701f",
+      "size": 1347
+    },
+    {
+      "path": "SPIEL/BROWSER_NACHWEIS_V16.json",
+      "sha256": "78a48177dc6d1acd05f48e332140dd840f1176407e97fc30d41382bf7827c927",
+      "size": 3137
+    },
+    {
+      "path": "SPIEL/BROWSER_V17_NACHWEIS.json",
+      "sha256": "31078c73300ed3322ba72a676b98026e51a7fc4f2fc816ded759c7d2392f41f0",
+      "size": 1717
+    },
+    {
+      "path": "SPIEL/README_START.txt",
+      "sha256": "fb757aa0c71103a2955ea1ad7a32c59d84647418aef3c9af38fe70c5c0c7708e",
+      "size": 1643
+    },
+    {
+      "path": "SPIEL/README_START_V171.txt",
+      "sha256": "ce4d060304aea14c0b3e7190b502e62fbfd3fc71f785b2c3b3cc5e6ca5563d8d",
+      "size": 2036
+    },
+    {
+      "path": "SPIEL/README_V14.txt",
+      "sha256": "761865ef01775ad1ccf6f6bfcd838664794cf93e34727b07ecdc432f86e297ea",
+      "size": 1029
+    },
+    {
+      "path": "SPIEL/README_V191.txt",
+      "sha256": "dd65feb7775fbc859a4acac07b4eed9b82abb405dc6d8342efbd772ba37b9229",
+      "size": 2388
+    },
+    {
+      "path": "SPIEL/RELEASE_NACHWEIS.json",
+      "sha256": "119a4dd2b606de48025659ac407858383e3e57d99dd444057e35d6d6220d9403",
+      "size": 2063
+    },
+    {
+      "path": "SPIEL/STARTEN_KUBUNTU.sh",
+      "sha256": "0df438cbae8ad7b92bc32b5450bf433ae088bdda6e25eded9a61256b1ba3249d",
+      "size": 702
+    },
+    {
+      "path": "SPIEL/START_HIER_V16.txt",
+      "sha256": "f7f7b91c6c781f8fbea4b4a6c6ccec37db5dec2beeb4f1a623f9ffe7690cb113",
+      "size": 1094
+    },
+    {
+      "path": "SPIEL/advanced_results.json",
+      "sha256": "d5d4eaf67fceadc1c995bc2db16ded053dac3684603d3e0bc292681b86b205ba",
+      "size": 1231
+    },
+    {
+      "path": "SPIEL/advanced_tests.py",
+      "sha256": "c194cc3b08960f504c26869e4a85109449ff9e9fdfb1ef370bbfa7eb4b50eb12",
+      "size": 3535
+    },
+    {
+      "path": "SPIEL/analyze_longrun_v193.cjs",
+      "sha256": "d41d62b0ad1b862736a03743dfa16e0846262e9fb06246ddd741c75e362ae8e4",
+      "size": 2722
+    },
+    {
+      "path": "SPIEL/analyze_stress_v194.cjs",
+      "sha256": "c71234dea0689ebc27ada5c5f1da3ccf855fa091848d3373008df5237fb6da50",
+      "size": 3040
+    },
+    {
+      "path": "SPIEL/archivierte_v16_pruefskripte/README.txt",
+      "sha256": "a2b3095010a8b680fc88fb090428e1eef4e27ed5930d70dfcb52359528d37738",
+      "size": 278
+    },
+    {
+      "path": "SPIEL/archivierte_v16_pruefskripte/test_browser_v16.py",
+      "sha256": "aba60e76512de98f484f9e3aae1e4a7761faecded9ac7a8fbd0f030b87995803",
+      "size": 6658
+    },
+    {
+      "path": "SPIEL/archivierte_v16_pruefskripte/test_profi_v16.cjs",
+      "sha256": "541b1bd62b8f21fa106ad28c346cb0be8b3959990788583f11fadcc36c024e22",
+      "size": 3894
+    },
+    {
+      "path": "SPIEL/browser_acceptance.py",
+      "sha256": "217ea9c029c99948744526447455b624ba445d4b511839caab1cf53696f2c24b",
+      "size": 6706
+    },
+    {
+      "path": "SPIEL/browser_result.json",
+      "sha256": "88e0837428398f61d7b957b1240e2d043f0993c1b907662abe1abd3107fabd86",
+      "size": 3736
+    },
+    {
+      "path": "SPIEL/browser_v193.py",
+      "sha256": "29bdedfa66d9333fefa7a452932694540f35b78830f9d15d2ccaeb3bdfe60397",
+      "size": 5100
+    },
+    {
+      "path": "SPIEL/create_test_save_v193.cjs",
+      "sha256": "dac38c0c348b9e4e8c80cd412d35f6a0ce3e7bc0941f37b3b59695c8cde6d9a1",
+      "size": 1037
+    },
+    {
+      "path": "SPIEL/docs/EXPERTENBERICHT.txt",
+      "sha256": "4d6ed38097f6b3a3b835e6ce5d197e9fd75ba3b96f8e00044a2b6c54539f6567",
+      "size": 5395
+    },
+    {
+      "path": "SPIEL/evaluate_balance_v194.cjs",
+      "sha256": "badf48dafbad4ed0a63d821416bd2d6d33fbd3acc0f7b5a70c99e2827ac1e2e0",
+      "size": 3511
+    },
+    {
+      "path": "SPIEL/evidence/MANIFEST.json",
+      "sha256": "94b6ced56bc250453a244edf106407bee4bafb61375f1710dec11f44686410af",
+      "size": 2467
+    },
+    {
+      "path": "SPIEL/evidence/qa_summary.json",
+      "sha256": "92d4ab4035c1c3c065542a1e699d290d1477e4159194dee0f75f8f8c5ad4399b",
+      "size": 5417
+    },
+    {
+      "path": "SPIEL/evidence/qa_v171_browser.json",
+      "sha256": "4874bc0757c3f583a0325485281a28cb8b941e63febc599ba3e66bedf1f3f83e",
+      "size": 2467
+    },
+    {
+      "path": "SPIEL/evidence_v17_intransit_save.json",
+      "sha256": "dc48d7d35c9852a5c120e02634a270ee4d4fc629d7dc18b6e4f309494049f10c",
+      "size": 25493
+    },
+    {
+      "path": "SPIEL/evidence_v191/LIEFERMANIFEST_V191.json",
+      "sha256": "e33d36d064e861852b587f4b1cd3f11b4b86c25a20ed7f324fbe6f866b8a2230",
+      "size": 1407
+    },
+    {
+      "path": "SPIEL/evidence_v191/NAVIGATIONSGRAPH_V191.json",
+      "sha256": "d77d88cbf6039d1d046a2295c6b1802e8ff61321d7cd1838c7c646a1c19d4363",
+      "size": 4336
+    },
+    {
+      "path": "SPIEL/evidence_v191/QA_V191.json",
+      "sha256": "625b6e97189dd7f1837bb4e6d17bf953bb4291322813eb6e051712da2e4a6fdc",
+      "size": 11096
+    },
+    {
+      "path": "SPIEL/evidence_v192/BROWSER_QA_V192.json",
+      "sha256": "c49d242fa1db876aa324e874b906f95962a2d268e28f25802b0723d01bc618d7",
+      "size": 2658
+    },
+    {
+      "path": "SPIEL/evidence_v192/LANGZEITVERGLEICH_V193.json",
+      "sha256": "4a590d926af4d48eee47c805b6fda3ab957a6eb5822262a2ce13c29e1c6136fd",
+      "size": 4410
+    },
+    {
+      "path": "SPIEL/evidence_v193/BELEGSPIELSTAND_V193.json",
+      "sha256": "292b1fb84bbb270f658aa4163d07db8bf31941b500eee20a9c2be933b5665b4e",
+      "size": 50274
+    },
+    {
+      "path": "SPIEL/evidence_v193/BROWSER_QA_V193.json",
+      "sha256": "d67ac053cfbdd2d2d5c12141611e3f3b0a824278a332974b560d3043be36c9e3",
+      "size": 2758
+    },
+    {
+      "path": "SPIEL/evidence_v193/KRISEN_LANGZEIT_V194.json",
+      "sha256": "937b5bab3ae5ae26cf59d90bc71964430aed82dc05b7b08eb5460441e1eab6b4",
+      "size": 1111
+    },
+    {
+      "path": "SPIEL/evidence_v194/BALANCE_V194.json",
+      "sha256": "3a14bfb770a730dc8bd765845c63d9a6e05ec735785ec2a2c3f760f747a00d77",
+      "size": 15019
+    },
+    {
+      "path": "SPIEL/graph_navigation_v191.py",
+      "sha256": "7d3411c95bed25567694951da1939ee76562df91d6e6f44a29090e48388db26e",
+      "size": 2445
+    },
+    {
+      "path": "SPIEL/index.html",
+      "sha256": "59316279ab44533b39ff64d43ac344a916d8149e94594d9d5f037e48886a1e81",
+      "size": 58875
+    },
+    {
+      "path": "SPIEL/legacy_v06/README.md",
+      "sha256": "02561e79410588cddc4116f7eac967204d1a7eab3ab5bbb6791604130603836d",
+      "size": 3893
+    },
+    {
+      "path": "SPIEL/legacy_v06/config/navigation_v05.json",
+      "sha256": "3a90e3dfbccbac53240e82d0a59f27f720331405b0bbca5a3e1ba6e14a5db76f",
+      "size": 24684
+    },
+    {
+      "path": "SPIEL/legacy_v06/config/profile_v04.json",
+      "sha256": "593f2342dd2893d2910fdb67597529a7db4dc248fce16d447fa848023dae8484",
+      "size": 1848
+    },
+    {
+      "path": "SPIEL/legacy_v06/config/schema_navigation_v05.json",
+      "sha256": "8df1068e4bb21544a6a4eca72767141494e48480e82967713e0dcc197b93e88b",
+      "size": 1569
+    },
+    {
+      "path": "SPIEL/legacy_v06/config/schema_save_v04.json",
+      "sha256": "2c2b827b4292fdb6bf3326d831cb2da4e110ad2be5210185c0ee12bb76a20ab0",
+      "size": 4463
+    },
+    {
+      "path": "SPIEL/legacy_v06/docs/EXPERTEN_V04_V06.md",
+      "sha256": "f4b1ec663ad09e20b0f026310b9f0f1cb2d2aca64ff2e573a85cdd08b8b4632d",
+      "size": 23840
+    },
+    {
+      "path": "SPIEL/legacy_v06/docs/QA_NACHWEIS.json",
+      "sha256": "1d6de1575bb83b5deb7dd34866fbf4a6e6fc25957091b6bc5d7bdbfb1f301b70",
+      "size": 905
+    },
+    {
+      "path": "SPIEL/legacy_v06/docs/pdf_quelle.html",
+      "sha256": "8d9b5e17343653b94d9c5e909ae243ec22db8fe598e2b956b6d7276aa2f81ec6",
+      "size": 31330
+    },
+    {
+      "path": "SPIEL/legacy_v06/docs/test_save.json",
+      "sha256": "a0fd534bfc32ad02a44eb1bb15cba5dad696b8022b9257ae8e5cebe17ede4ed7",
+      "size": 3095
+    },
+    {
+      "path": "SPIEL/legacy_v06/index.html",
+      "sha256": "d953c485d0cc383b320b5328dc1d265d91c6fd91bf5699304bdf9242ac7ee06d",
+      "size": 1346
+    },
+    {
+      "path": "SPIEL/legacy_v06/reference/actions.json",
+      "sha256": "a486b117d4692bd0dd49c22601209ba89a54b02e9e43643de34025d4b0bca335",
+      "size": 6419
+    },
+    {
+      "path": "SPIEL/legacy_v06/reference/navigation.json",
+      "sha256": "d4153bd3cff15e48b58bfc95ef5a2b32a0415dab01556861f1d2f21b5096b300",
+      "size": 13607
+    },
+    {
+      "path": "SPIEL/legacy_v06/reference/rules.json",
+      "sha256": "494764fd92c05f33f86a26f59b8aad9cca8d20f45c0ac897925b55eed40324fe",
+      "size": 2207
+    },
+    {
+      "path": "SPIEL/legacy_v06/reference/screens.json",
+      "sha256": "685d33926b88378687cb3cb4cb0189c7697083e6ba1c09892eba66d1035cf090",
+      "size": 2696
+    },
+    {
+      "path": "SPIEL/legacy_v06/reference/sources.json",
+      "sha256": "7e2eed212d8c8382158f7f7084403c7d9e912a41be2f1cf399b7210d4c816747",
+      "size": 617
+    },
+    {
+      "path": "SPIEL/legacy_v06/reference/tests.json",
+      "sha256": "b429177067a4021aad4c873891a811aeaecae7a97863360711e1ed41c0eb1fb9",
+      "size": 2481
+    },
+    {
+      "path": "SPIEL/legacy_v06/reference/units.json",
+      "sha256": "66fbf4fb3ab10c6cad087f60605ec77874af59e77d954cf9f2715d6fb75994db",
+      "size": 1292
+    },
+    {
+      "path": "SPIEL/legacy_v06/src/engine.js",
+      "sha256": "30ed5845755f377299b66cd18a0798e7e2bc36cba320616344b32c641b295984",
+      "size": 14611
+    },
+    {
+      "path": "SPIEL/legacy_v06/src/nav.js",
+      "sha256": "c31d40db80bae0b04813e58d7df9d4c1d5afda52d74497855756de67fc1b3648",
+      "size": 19493
+    },
+    {
+      "path": "SPIEL/legacy_v06/src/style.css",
+      "sha256": "89aee3e8c0f174bed91f937042844c53062f95803d92c0db6aaeaa1dd9e1e9e5",
+      "size": 2473
+    },
+    {
+      "path": "SPIEL/legacy_v06/src/ui.js",
+      "sha256": "24cabdae1bbe5e52d43808d38a554c33b788f36a6c826cf57ae783f1bb76865f",
+      "size": 13913
+    },
+    {
+      "path": "SPIEL/legacy_v06/tests/browser_smoke.py",
+      "sha256": "43c9eda244c51113334ac100bacfa92e60d6259d0565643ad42d2e4f3dec3ab1",
+      "size": 3656
+    },
+    {
+      "path": "SPIEL/legacy_v06/tests/test_engine.cjs",
+      "sha256": "c3f85fbddc1b9c314359eab305b880483d41026cc6638fb4574cab9543050003",
+      "size": 7085
+    },
+    {
+      "path": "SPIEL/legacy_v06/tests/test_navigation.cjs",
+      "sha256": "f863e30cdacaf4d5d05ab7d017a865b5420432cade306b98ef130d7a93ba310f",
+      "size": 2154
+    },
+    {
+      "path": "SPIEL/legacy_v06/tests/test_profile.cjs",
+      "sha256": "2f671320fa662be14e5fa94b2bc42a86fdb49fc9425cfc8a35412389d6da35dd",
+      "size": 1222
+    },
+    {
+      "path": "SPIEL/qa_auftrag_v161.json",
+      "sha256": "ac2dd4414f867d70fa39bb235b8fbc7b68e1fd62170959ff43218c86ae811c9e",
+      "size": 11179
+    },
+    {
+      "path": "SPIEL/qa_browser_v161.json",
+      "sha256": "ff9b6e1c85477b3b2faf0168361c85777dc1984007ceb609ba5ed999d4dd3f27",
+      "size": 2478
+    },
+    {
+      "path": "SPIEL/qa_v12.json",
+      "sha256": "b5654e4cd36d5f0d40c2805d1c926971c31177247c580d6e5072e5ba89c87025",
+      "size": 3665
+    },
+    {
+      "path": "SPIEL/sample_save_v11.json",
+      "sha256": "f49eef3c4bb96062b75d4cb68ea98e0f20325384d5f34fe544898c9968471702",
+      "size": 16119
+    },
+    {
+      "path": "SPIEL/src/logistics_v17.css",
+      "sha256": "71d84a681ec1cf589bbcf1eb2a989bd5805ad6cfb1b1bc49d32d635b3ad98015",
+      "size": 1259
+    },
+    {
+      "path": "SPIEL/src/logistics_v17.js",
+      "sha256": "bb5cde813e3038e6f051765f6dded7720f04587e99ee3954a0f0a99df10d5cee",
+      "size": 10952
+    },
+    {
+      "path": "SPIEL/src/navigation_v191.css",
+      "sha256": "c15d881c904037fc7ec0d18bbacb2047179b6c8ecfebb7891c01eb77b808a34d",
+      "size": 1062
+    },
+    {
+      "path": "SPIEL/src/navigation_v191.js",
+      "sha256": "a083859da3a92c3c0ca106f638ae3987aaab0a7ffb1115013cdeb714f8bed548",
+      "size": 4674
+    },
+    {
+      "path": "SPIEL/src/neo_bridge.css",
+      "sha256": "87984c807d5c8c3f46d61398cb75790980eb6a8f1b6b2fd77ed82d821af667a1",
+      "size": 8554
+    },
+    {
+      "path": "SPIEL/src/neo_bridge.js",
+      "sha256": "26a9690d9bbcdaadd79d7985a71b87ce2dffd0b469331b1602ad183d4f93dd0d",
+      "size": 58498
+    },
+    {
+      "path": "SPIEL/src/profi_economy.js",
+      "sha256": "b08bfd4a28d5f9b9c362e667f5b3741ef1e6bcf375349042eaa2ba061e2bb60b",
+      "size": 9593
+    },
+    {
+      "path": "SPIEL/src/public_network_v171.css",
+      "sha256": "892ab46e80fde10f679860655cf93e312c89386cce07e74b5db3a361174ca8f9",
+      "size": 1444
+    },
+    {
+      "path": "SPIEL/src/public_network_v171.js",
+      "sha256": "e7d3083208cf8a95f51a869bff87eae39f780766ee98e9e77770336f6f7aca7e",
+      "size": 12080
+    },
+    {
+      "path": "SPIEL/src/skill_arcade.css",
+      "sha256": "ae3f43bdcfa7ff3024b38b08c823eb554908558de64be52cb3d5940d864b4143",
+      "size": 6270
+    },
+    {
+      "path": "SPIEL/src/skill_arcade.js",
+      "sha256": "6a01b6d5ab14b36a22c51c8bb23e57f63ffcc553bf98e07134b29f11c9695999",
+      "size": 7683
+    },
+    {
+      "path": "SPIEL/src/skill_profi.js",
+      "sha256": "54f5a2e922ff74cc284c178911026e4148d53b9c62721db382f6a915d99fec80",
+      "size": 2663
+    },
+    {
+      "path": "SPIEL/src/strategy_ai_v192.js",
+      "sha256": "2123ef0cdeb71498ecc85a9860edcb1353e5a681a53e78ca4a52feb32236538f",
+      "size": 5725
+    },
+    {
+      "path": "SPIEL/src/strategy_logistics_v193.js",
+      "sha256": "12661a7e48c4f9b1ed771895f7e81c5a5de56e6802629bd42e33a5ca2b434b99",
+      "size": 8507
+    },
+    {
+      "path": "SPIEL/src/strategy_ui_v192.css",
+      "sha256": "44bcd492df99f25e2e718f7472c07a7cc96bfbae0a4c4a0d851dfa788337488f",
+      "size": 1303
+    },
+    {
+      "path": "SPIEL/src/strategy_ui_v192.js",
+      "sha256": "51496ea4a1def02bb028f0eb9135dad12176df655b617e9c715c62b4e1c5dbf3",
+      "size": 2721
+    },
+    {
+      "path": "SPIEL/src/style.css",
+      "sha256": "c600a8e3862ebd14650e36cad2bf0fa95fa0fbc404c3d11b6190f91453d72c02",
+      "size": 6330
+    },
+    {
+      "path": "SPIEL/src/v07_engine.js",
+      "sha256": "d450095c0cf1bc67577a76f5f0c06168d2b5d5dabf1054e01172d401cca0065e",
+      "size": 19419
+    },
+    {
+      "path": "SPIEL/src/v07_ui.js",
+      "sha256": "2b6c3434bdacc1b4c495f0476719a4d2eac0e914f01e9a34a54fe552e0f5cc26",
+      "size": 16423
+    },
+    {
+      "path": "SPIEL/src/v082_engine.js",
+      "sha256": "368e2f44b10dd78e1aaea97247906d25a1416096f48c09a912728f933c0f7d44",
+      "size": 24505
+    },
+    {
+      "path": "SPIEL/src/v082_strategy_engine.js",
+      "sha256": "b633c313fe196a6d60ade0bc4839bd4ffe41d1e3037483e0123443f361f17cbd",
+      "size": 25697
+    },
+    {
+      "path": "SPIEL/src/v082_ui.js",
+      "sha256": "739974d54ca0800cd0ae85b6bdd24e5346a39917afee01c8892483cec9b8759f",
+      "size": 22337
+    },
+    {
+      "path": "SPIEL/src/v08_engine.js",
+      "sha256": "bd94326e672897ce1bb526c83c6e6dc1f6a1a9510aeab1478db964a1881ed59a",
+      "size": 9293
+    },
+    {
+      "path": "SPIEL/src/v08_ui.js",
+      "sha256": "200b3b6d0e88278089ee467033f15bb76b206ae43fa4bcb35033a45e45e91106",
+      "size": 20976
+    },
+    {
+      "path": "SPIEL/test_browser_v161.py",
+      "sha256": "cadd1bae28c2fb920fc750793f6b9405a531690378f4f8ddcde9fa62eda59aa7",
+      "size": 6689
+    },
+    {
+      "path": "SPIEL/test_browser_v17.py",
+      "sha256": "fb6e3a2a8acb14efd6de2114b7c151f0538accb336c555b1e0aaa525e1f5fb66",
+      "size": 6999
+    },
+    {
+      "path": "SPIEL/test_browser_v171.py",
+      "sha256": "2d2eae04cc0ea376a7b7c2232f6266d344743d02ae4e5fb8d5be2ad5ab62cf6c",
+      "size": 8473
+    },
+    {
+      "path": "SPIEL/test_browser_v192.py",
+      "sha256": "7fe089f8bd6af3c13ac696a5cc7d78c2bf501b6def035fc5fe8e9e652ead589f",
+      "size": 4734
+    },
+    {
+      "path": "SPIEL/test_export_v16.json",
+      "sha256": "5cd583ed9aa139c806448b7bc173e4162909d55cd40ca0e24569b0987d478123",
+      "size": 11173
+    },
+    {
+      "path": "SPIEL/test_fair_market_v161.cjs",
+      "sha256": "e7e6e6501786d75f4caa25eff75adc37442a953b24ff923c28f36e051406c1d6",
+      "size": 7212
+    },
+    {
+      "path": "SPIEL/test_human_parity_v192.cjs",
+      "sha256": "b987f37a58b585f49604f4dc7db4ad0780c6a263bac02ac787611c631ad2ea13",
+      "size": 1460
+    },
+    {
+      "path": "SPIEL/test_logistics_ai_v193.cjs",
+      "sha256": "5a9e37c94f8ce427e0f0708d58c5503309fa8fb795b3f8a0d71cd9afd35a725b",
+      "size": 6878
+    },
+    {
+      "path": "SPIEL/test_mid_mini_v16.json",
+      "sha256": "39ab1ca5465565bafe76d0ebce029acd704422d437b58a6a1266bc7c874dc95b",
+      "size": 8849
+    },
+    {
+      "path": "SPIEL/test_navigation_v191.py",
+      "sha256": "54c663e8de0cb02a27e54c144edadf695e701902ee7530c4b068c9a7a674d36d",
+      "size": 9563
+    },
+    {
+      "path": "SPIEL/test_public_network_v171.cjs",
+      "sha256": "e5c69b22a87d58fbaa980bc15db8e01b4661f62e71ef1d78f60390ced550d95f",
+      "size": 9611
+    },
+    {
+      "path": "SPIEL/test_strategy_v192.cjs",
+      "sha256": "a156a9218dc50dfeb205e35218d02b49bc050bd2ac12ffce68115e928b8a94b1",
+      "size": 4700
+    },
+    {
+      "path": "SPIEL/test_transport_v17.cjs",
+      "sha256": "5116bd3bdd928a7905c9a5ecaa34bc751b6af451f328d5b6718eb8fc2351d059",
+      "size": 6975
+    },
+    {
+      "path": "SPIEL/tests_v12.py",
+      "sha256": "9b226d4b0d517f0fd23e7f67da98599e6f9facdf6e5b7212dc16441949ee89c9",
+      "size": 6291
+    },
+    {
+      "path": "SPIEL/tests_v14/acceptance.json",
+      "sha256": "898742223c1ff8d5f175e822d6725dad26afdd9b3bbf0a282b36bc40bb8b9c0d",
+      "size": 4129
+    },
+    {
+      "path": "SPIEL/tests_v14/brand_szenario.json",
+      "sha256": "ab44fe36f5422944dd8667278fb26c994bcfc18e0aef70f698bcc4fde66cb413",
+      "size": 8263
+    },
+    {
+      "path": "SPIEL/tests_v14/exported_save.json",
+      "sha256": "e487ecf3634f28a58110ec646dd2d1d21d198918df537d1ef96b6172e54ec976",
+      "size": 12400
+    },
+    {
+      "path": "SPIEL/tests_v14/test_profi_v14.py",
+      "sha256": "3a0b3f9f8093f2d1ee1da0bebe5c0359e8796c7120753e3ea581c1db91a753c1",
+      "size": 8577
+    },
+    {
+      "path": "SPIEL/vergleiche/ORIGINAL_SICHERUNG.txt",
+      "sha256": "e74fcef19d90ae0e60d19853f59e33d02e3fe81bc75e4edb10aadb8beede51a6",
+      "size": 160
+    }
+  ]
+}

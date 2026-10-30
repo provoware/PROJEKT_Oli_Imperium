@@ -1,0 +1,68 @@
+[
+  {
+    "id": "UNIT-MONEY",
+    "name": "Geld",
+    "internal": "EUR_cent",
+    "display": "EUR",
+    "smallest_unit": "1 Cent",
+    "status": "DESIGN"
+  },
+  {
+    "id": "UNIT-CRUDE",
+    "name": "Rohoel",
+    "internal": "milli_bbl",
+    "display": "bbl",
+    "smallest_unit": "0.001 bbl",
+    "status": "DESIGN"
+  },
+  {
+    "id": "UNIT-CRUDE-L",
+    "name": "Volumen",
+    "internal": "Liter",
+    "display": "l",
+    "conversion": "1 bbl = 158.987294928 l",
+    "status": "REFERENCE"
+  },
+  {
+    "id": "UNIT-DAY",
+    "name": "Spielzeit",
+    "internal": "day",
+    "display": "Spieltage",
+    "status": "DESIGN"
+  },
+  {
+    "id": "UNIT-MONTH",
+    "name": "Kalender",
+    "internal": "month_id",
+    "display": "Monat",
+    "status": "DESIGN"
+  },
+  {
+    "id": "UNIT-PRICE",
+    "name": "Oelpreis",
+    "internal": "cent_per_bbl",
+    "display": "EUR/bbl",
+    "status": "DESIGN"
+  },
+  {
+    "id": "UNIT-DISTANCE",
+    "name": "Entfernung",
+    "internal": "km",
+    "display": "km",
+    "status": "DESIGN"
+  },
+  {
+    "id": "UNIT-DEPTH",
+    "name": "Bohrtiefe",
+    "internal": "m",
+    "display": "m",
+    "status": "DESIGN"
+  },
+  {
+    "id": "UNIT-RATE",
+    "name": "Foerderrate",
+    "internal": "milli_bbl_per_day",
+    "display": "bbl/Tag",
+    "status": "DESIGN"
+  }
+]

@@ -1,0 +1,37 @@
+{
+  "gate_id": "BED-03",
+  "date": "2026-10-27",
+  "result": "PARTIAL",
+  "implementation_commit": "a9f9df2b4f598a3928860a314249a16eae7b9281",
+  "verified_ci_head": "1e964e892fce09f2b6330387b9fcf89dc00ea154",
+  "ci_url": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40481736341",
+  "ci_result": "PASS",
+  "source_ci_url": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40481736421",
+  "matrix_ci_url": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40481736348",
+  "matrix_schema": "PASS",
+  "release_gate": "BLOCKED",
+  "command": "python3 project-c/pppoppi-imperium/quality_v194/test_browser_native_zoom_flow_v194.py",
+  "native_zoom_percent": [
+    175,
+    200
+  ],
+  "scenes_per_zoom": 39,
+  "frames_per_zoom": 98,
+  "flow_text_samples_per_zoom": 312,
+  "running_animation_observations": {
+    "175": 191,
+    "200": 194
+  },
+  "clipped_per_zoom": 0,
+  "covered_per_zoom": 0,
+  "unmeasurable_per_zoom": 0,
+  "synthetic_occlusion_detected": true,
+  "synthetic_clipping_detected": true,
+  "original_source_files_changed": 0,
+  "limitations": [
+    "Nur p/li/label/blockquote/figcaption und zwei Momentaufnahmen pro Phase",
+    "Animationszaehler belegt keine vollstaendige Animation oder visuelle Pixelabnahme",
+    "Szenenwahl ueber bestehende API; Minispiel- und Wirtschaftsaktionen per Tab/Enter",
+    "Keine vollstaendigen Endpartien oder persoenliche Sicht-/Kubuntu-Abnahme"
+  ]
+}

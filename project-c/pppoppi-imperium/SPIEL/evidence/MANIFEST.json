@@ -1,0 +1,71 @@
+{
+  "package": "PPPOPPI IMPERIUM NEO V1.1",
+  "baseline": "V0.8.2 unverändert",
+  "engine_shas": {
+    "v07_engine.js": {
+      "baseline_v082": "d450095c0cf1bc67577a76f5f0c06168d2b5d5dabf1054e01172d401cca0065e",
+      "neu_v11": "d450095c0cf1bc67577a76f5f0c06168d2b5d5dabf1054e01172d401cca0065e"
+    },
+    "v08_engine.js": {
+      "baseline_v082": "bd94326e672897ce1bb526c83c6e6dc1f6a1a9510aeab1478db964a1881ed59a",
+      "neu_v11": "bd94326e672897ce1bb526c83c6e6dc1f6a1a9510aeab1478db964a1881ed59a"
+    },
+    "v082_engine.js": {
+      "baseline_v082": "368e2f44b10dd78e1aaea97247906d25a1416096f48c09a912728f933c0f7d44",
+      "neu_v11": "368e2f44b10dd78e1aaea97247906d25a1416096f48c09a912728f933c0f7d44"
+    }
+  },
+  "browser_main": 25,
+  "browser_advanced": 13,
+  "browser_success": true,
+  "screenshots": [
+    {
+      "name": "05_Foerderanlage_live.png",
+      "bytes": 203767,
+      "sha256": "aaa6455b885273f8c9af7644b012dab7ce7b668110c03f7f81ea7e1db8044498"
+    },
+    {
+      "name": "02_Firmencomputer_live.png",
+      "bytes": 199091,
+      "sha256": "27b5ff60af4c184a58116193eca43c51dedb6cc8d610063eb63199eba5b62a4f"
+    },
+    {
+      "name": "08_Abrechnung_live.png",
+      "bytes": 182774,
+      "sha256": "e842ea542722231feedc743a828036690f7bd0d860e7b7b23af92a84b1a9608b"
+    },
+    {
+      "name": "04_Region_live.png",
+      "bytes": 196115,
+      "sha256": "dac3a344d946f866e62bb0c22717537c24b847386a97bb40ef9251d58dba4ee3"
+    },
+    {
+      "name": "09_Mobilansicht_live.png",
+      "bytes": 220443,
+      "sha256": "6537d8968eeafcc872023236804f5753ddc6898a8823a853467c4df6912fc709"
+    },
+    {
+      "name": "01_Buero_live.png",
+      "bytes": 1354715,
+      "sha256": "82662d6dc60a3b1d3e2b17eb776d588e2ea3d7d42eefda981b986af7124d20f1"
+    },
+    {
+      "name": "03_Deutschlandkarte_live.png",
+      "bytes": 216702,
+      "sha256": "8de7b50d8467cd0da764355589fb35c2c97b29f4e35d20df4f268133ae115187"
+    },
+    {
+      "name": "06_Tanks_live.png",
+      "bytes": 207650,
+      "sha256": "9f05b12c30c03abd7172c982ae380a99ceceea2c8a67ff2e428aa085d365e7ca"
+    },
+    {
+      "name": "07_Regionalmarkt_live.png",
+      "bytes": 220250,
+      "sha256": "98cce87c2fb3f406597c9082eb3b72daf61d68d3f6ecca2880f0927b308e725d"
+    }
+  ],
+  "c64_original_test": "NICHT AUSGEFUEHRT",
+  "kubunut_doppelklick": "NICHT AUSGEFUEHRT",
+  "ui_test_method": "Chromium mit vollständig eingebetteten lokalen HTML/CSS/JS wegen file:// Blockade der Testumgebung"
+}

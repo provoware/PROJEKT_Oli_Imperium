@@ -1,0 +1,101 @@
+#!/usr/bin/env python3
+"""Reproducible Chromium scene/dialog smoke tests. Runs on inlined offline HTML."""
+import json,re,hashlib
+from pathlib import Path
+from playwright.sync_api import sync_playwright
+root=Path(__file__).parent
+html=(root/'index.html').read_text(encoding='utf8')
+html=re.sub(r'<link rel="stylesheet" href="([^"]+)">',lambda m:'<style>'+(root/m.group(1)).read_text(encoding='utf8')+'</style>',html)
+html=re.sub(r'<script src="([^"]+)"></script>',lambda m:'<script>'+(root/m.group(1)).read_text(encoding='utf8')+'</script>',html)
+out=root/'screenshots_v12';out.mkdir(exist_ok=True)
+checks=[];shots=[]
+def check(name,x):
+ checks.append({'name':name,'ok':bool(x)})
+ if not x:raise AssertionError(name)
+def photo(page,name):
+ f=out/(name+'.png');page.screenshot(path=str(f),animations='disabled');shots.append({'file':str(f.relative_to(root)),'sha256':hashlib.sha256(f.read_bytes()).hexdigest()})
+with sync_playwright() as p:
+ browser=p.chromium.launch(executable_path='/usr/bin/chromium',headless=True,args=['--no-sandbox'])
+ page=browser.new_page(viewport={'width':1500,'height':950},device_scale_factor=1)
+ page.set_default_timeout(5000)
+ errors=[];network=[]
+ page.on('pageerror',lambda e:errors.append(str(e)))
+ page.on('request',lambda r:network.append(r.url))
+ page.set_content(html,wait_until='load')
+ check('Chefbüro sichtbar',page.locator('#stage').count()==1)
+ photo(page,'01_Buero_V12')
+ page.locator('#startGame').click()
+ page.locator('[data-ui="newgame"]').click()
+ state=page.evaluate('NeoEconomy.getState()')
+ check('Neue Partie mit 9 Claims',len(state['claims'])==9)
+ check('Drei regionale Märkte',len(state['prices'])==3)
+ page.evaluate('NeoEconomy.open("map")')
+ check('Kartenmarker drei Regionen',page.locator('.neo-spotbar button[data-region]').count()==3)
+ check('Illustration der Deutschlandkarte',page.locator('.neo-scenery').count()>=1)
+ photo(page,'02_Karte_V12')
+ page.evaluate('NeoEconomy.open("claim")')
+ check('Industrie-Kurzwege an Claim',page.locator('.neo-spotbar button[data-go="factory"]').count()==1)
+ page.locator('button[data-go="factory"]').first.click()
+ check('Industriehof erreichbar',page.locator('#dialogTitle').inner_text().find('Fabrik')>=0)
+ check('Darstellung weist Fabrik als Kulisse aus','Spielkulisse' in page.locator('#dialogContent').inner_text())
+ photo(page,'03_Industriehof_V12')
+ page.locator('.neo-spotbar button[data-go="claim"]').first.click()
+ check('Rückweg von Industrie zu Claim',page.locator('#dialogTitle').inner_text().find('Ölfeld')>=0)
+ before=page.evaluate('JSON.stringify(NeoEconomy.getState())')
+ page.evaluate('NeoEconomy.open("boardroom")')
+ check('Drei Spielfiguren vorhanden',page.locator('article.neo-person').count()==3)
+ page.locator('button[data-advice="pete"]').click()
+ check('Pete reagiert auf Wirtschaftsdaten','Pete:' in page.locator('#advice-output').inner_text())
+ page.locator('button[data-advice="edna"]').click()
+ check('Edna reagiert auf Wirtschaftsdaten','Edna:' in page.locator('#advice-output').inner_text())
+ page.locator('button[data-advice="pppoppi"]').click()
+ check('PPPOPPI reagiert auf Wirtschaftsdaten','PPPOPPI:' in page.locator('#advice-output').inner_text())
+ check('Dialoge verändern Spielstand nicht',before==page.evaluate('JSON.stringify(NeoEconomy.getState())'))
+ photo(page,'04_Vorstand_V13')
+ page.evaluate('NeoEconomy.open("claim")')
+ page.locator('button[data-econ="SURVEY"]').click()
+ page.locator('button[data-econ="BUY"]').click()
+ game=page.evaluate('NeoEconomy.getState()')
+ check('Claim gekauft, Status im selben Kern',game['claims']['BERLIN-1']['owner'] is not None)
+ page.evaluate('NeoEconomy.open("workshop")')
+ page.locator('button[data-econ="DRILL_SELF_START"]').click()
+ for i in range(3):
+  m=page.evaluate('NeoEconomy.getState().minigame')
+  check('Minispiel Abschnitt '+str(i+1),m is not None)
+  goal=page.evaluate('OliV082.target(NeoEconomy.getState(),NeoEconomy.getState().minigame)')
+  diff=goal-m['dial']
+  while diff:
+   d=10 if diff>=10 else 1 if diff>0 else -10 if diff<=-10 else -1
+   page.locator(f'button[data-delta="{d}"]').click();diff-=d
+  page.locator('button[data-econ="MINI_CHECK"]').click()
+ game=page.evaluate('NeoEconomy.getState()')
+ check('Drei Prüfungen schalten Bohrturm frei',game['claims']['BERLIN-1']['drilled'] is True)
+ page.evaluate('NeoEconomy.open("field")')
+ check('Pumpenanimation nur bei erschlossenem Feld',page.locator('.neo-pump').count()==1)
+ photo(page,'05_Foerderung_V12')
+ page.locator('.neo-spotbar button[data-go="warehouse"]').first.click()
+ check('Direktweg Tanklager erfolgreich','LAGER' in page.locator('#dialogKind').inner_text().upper() or 'LAGER' in page.locator('#dialogTitle').inner_text().upper())
+ photo(page,'06_Tanklager_V12')
+ page.evaluate('NeoEconomy.open("newsroom")')
+ check('Ereignischronik zeigt reale Simulation',page.locator('.neo-news').count()>0)
+ check('Ereignisarchiv besitzt Rückwege',page.locator('button[data-go="calendar"]').count()>0)
+ check('Meldungen belasten keine Wirtschaft',game==page.evaluate('NeoEconomy.getState()'))
+ photo(page,'08_Ereignisse_V13')
+ page.evaluate('NeoEconomy.open("phone")')
+ check('Telefon bietet Vorstandszimmer',page.locator('button[data-go="boardroom"]').count()==1)
+ check('Keine Browser-Laufzeitfehler',len(errors)==0)
+ check('Keine Netzwerkanfragen',len(network)==0)
+ # Mobile compact presentation; one column characters, no horizontal scroll.
+ small=browser.new_page(viewport={'width':390,'height':844},device_scale_factor=1)
+ small.set_content(html)
+ small.evaluate("NeoEconomy.start('1-2')")
+ small.evaluate('NeoEconomy.open("boardroom")')
+ check('Mobilansicht ohne horizontale Seitenleiste',small.evaluate('document.documentElement.scrollWidth <= innerWidth+2'))
+ check('Mobile Dialogfiguren vollständig',small.locator('.neo-person').count()==3)
+ photo(small,'07_Mobil_V13')
+ small.close()
+ browser.close()
+assert len(checks)>=18
+report={'checks':checks,'passed':sum(x['ok'] for x in checks),'total':len(checks),'screenshots':shots,'console_errors':errors,'network_requests':network,'source':'Chromium, inline offline files; no Kubuntu double-click test'}
+(root/'qa_v12.json').write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding='utf8')
+print('V12',report['passed'],'/',report['total'],' screenshots',len(shots))

@@ -1,0 +1,28 @@
+{
+  "gate_id": "BED-03",
+  "result": "PARTIAL",
+  "date": "2026-10-27",
+  "implementation_commit": "55a7359da8986233992956f58296abe6f08117dc",
+  "test": "python3 project-c/pppoppi-imperium/quality_v194/test_browser_focus_contrast_v194.py",
+  "browser_ci": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40456804550",
+  "source_ci": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40456804591",
+  "release_matrix_ci": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40456804536",
+  "actual_checks": {
+    "native_zoom_percent": [
+      175,
+      200
+    ],
+    "scenes_per_zoom": 39,
+    "tab_controls_checked": 903,
+    "missing": 0,
+    "no_ring": 0,
+    "weak_contrast": 0,
+    "unknown_backgrounds": 0,
+    "min_contrast_ratio": 6.9
+  },
+  "limits": [
+    "Nur Fokuskontrast, nicht alle Aktionen und Zwischenbilder",
+    "Kein pixelbasierter Ueberdeckungstest",
+    "BAR-01/BED-03 bleiben BLOCKED"
+  ]
+}

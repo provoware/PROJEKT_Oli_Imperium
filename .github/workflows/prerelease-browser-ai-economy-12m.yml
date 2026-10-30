@@ -1,0 +1,32 @@
+name: Projekt C – KI-Wirtschaftskampagne mit Browserneustarts
+on:
+  pull_request:
+    paths:
+      - 'project-c/pppoppi-imperium/quality_v194/test_browser_ai_economy_12months_v194.py'
+      - '.github/workflows/prerelease-browser-ai-economy-12m.yml'
+      - 'project-c/pppoppi-imperium/quality_v194/AI_ECONOMY_BROWSER_12MONTHS_20261029.md'
+      - 'project-c/pppoppi-imperium/prerelease/matrix.json'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  ai-economy-browser-12m:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Python-Syntax pruefen
+        run: |
+          python3 -m py_compile project-c/pppoppi-imperium/quality_v194/test_browser_ai_economy_12months_v194.py
+      - name: Chromium installieren
+        run: |
+          python -m pip install playwright==1.56.0
+          python -m playwright install --with-deps chromium
+      - name: Zwei Menschen und zwei KI-Firmen ueber zwoelf Monate
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_ai_economy_12months_v194.py

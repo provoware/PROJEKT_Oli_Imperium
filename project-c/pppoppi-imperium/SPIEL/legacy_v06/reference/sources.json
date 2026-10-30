@@ -1,0 +1,26 @@
+[
+  {
+    "id": "SRC-001",
+    "type": "secondary",
+    "title": "C64-Wiki Oil Imperium",
+    "url": "https://www.c64-wiki.de/wiki/Oil_Imperium"
+  },
+  {
+    "id": "SRC-002",
+    "type": "archive_catalog",
+    "title": "Preservation64 Oil Imperium",
+    "url": "https://preservation64.de/index.php?title=Oil_Imperium"
+  },
+  {
+    "id": "SRC-003",
+    "type": "forum_comments",
+    "title": "Lemon64 Oil Imperium",
+    "url": "https://www.lemon64.com/game/oil-imperium"
+  },
+  {
+    "id": "SRC-004",
+    "type": "player_report",
+    "title": "AngryFlo Infos",
+    "url": "https://www.angryflo.de/strat-oil.htm"
+  }
+]

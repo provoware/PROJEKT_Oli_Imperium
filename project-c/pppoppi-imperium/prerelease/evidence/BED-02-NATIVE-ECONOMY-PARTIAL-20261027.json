@@ -1,0 +1,29 @@
+{
+  "gate_id": "BED-02",
+  "date": "2026-10-27",
+  "result": "PARTIAL",
+  "implementation_commit": "23ecb9f42522cc872c8ec0334e3ca590d2beab83",
+  "ci_url": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40467829258",
+  "ci_result": "PASS",
+  "test_command": "python3 project-c/pppoppi-imperium/quality_v194/test_browser_native_zoom_economy_v194.py",
+  "zoom_percent": [
+    175,
+    200
+  ],
+  "browser": "Chromium mit chrome.tabs.setZoom/getZoom",
+  "keyboard_actions_per_zoom": 15,
+  "months_settled_per_zoom": 2,
+  "negative_cases": [
+    "Foerderung vor Bohrung",
+    "Doppelkauf ohne Doppelbuchung"
+  ],
+  "contract_fulfilled": true,
+  "export_matches_state": true,
+  "original_sources_changed": 0,
+  "release_gate": "BLOCKED",
+  "limits": [
+    "Szenenwahl ueber vorhandene API, Aktionen per echten Tab/Enter-Tasten",
+    "Nicht alle Spielaktionen oder Tastaturpfade erfasst",
+    "Kein persoenlicher Test und kein Release-PASS"
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "gate_id": "BED-03",
+  "result": "PARTIAL",
+  "date": "2026-10-27",
+  "commit": "bd3fc32227e544aa83778eb45df9304c67224be9",
+  "command": "python3 project-c/pppoppi-imperium/quality_v194/test_browser_native_zoom_v194.py",
+  "ci_url": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40433519507",
+  "source_ci_url": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40433519500",
+  "matrix_ci_url": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40433519447",
+  "checks": {
+    "native_chrome_tabs_zoom_percent": [
+      175,
+      200
+    ],
+    "browser_css_inner_width": [
+      457,
+      400
+    ],
+    "device_pixel_ratio": [
+      1.75,
+      2
+    ],
+    "keyboard_help_dialog_open_close": "2/2 PASS",
+    "escape_focus_return": "2/2 PASS",
+    "page_horizontal_overflow_px": [
+      0,
+      0
+    ],
+    "help_dialog_horizontal_overflow_px": [
+      0,
+      0
+    ],
+    "economic_state_unchanged": true,
+    "no_external_http_requests": true,
+    "complete_browser_workflow": "PASS",
+    "source_workflow": "PASS",
+    "technical_release_gate": "BLOCKED"
+  },
+  "test_setup_correction": "Erster CI-Lauf #40433332941 scheiterte, weil der modale Startdialog nicht geschlossen wurde; korrigiert vor erfolgreichem Wiederholungslauf.",
+  "limits": [
+    "Nur der Hilfe-Dialog bei echtem Zoom, keine vollstaendige 39-Szenen-Pruefung.",
+    "Keine vollstaendige Fokuskontrastmessung oder visuelle Endabnahme.",
+    "Kein Spielende-Nachweis, kein Release."
+  ]
+}

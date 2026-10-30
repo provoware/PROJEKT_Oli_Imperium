@@ -1,0 +1,37 @@
+{
+  "gate_id": "BED-02",
+  "result": "PARTIAL",
+  "date": "2026-10-27",
+  "commit": "731deb03703c23ba3472145e20cee78e4de0109b",
+  "command": "python3 project-c/pppoppi-imperium/quality_v194/test_browser_keyboard_economy_v194.py",
+  "ci_url": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40420513353",
+  "source_ci_url": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40420513326",
+  "checks": {
+    "full_browser_workflow": "PASS",
+    "source_workflow": "PASS",
+    "viewports": [
+      "800x600",
+      "CSS-200"
+    ],
+    "keyboard_economy_actions_per_viewport": 15,
+    "months_settled_per_viewport": 2,
+    "contract_fulfilled_both": true,
+    "duplicate_buy_rejected": true,
+    "unavailable_pump_rejected": true,
+    "export_import_equal": true,
+    "offline_no_http": true,
+    "no_javascript_errors": true
+  },
+  "limits": [
+    "15 Eintraege pro Viewport sind Testschritte, keine 15 unabhaengigen Funktionen.",
+    "Szenenwahl ueber Navigations-API; Dateiimport ueber Playwright, nicht per Tastatur.",
+    "CSS-200 (400x300) ist kein nativer Browserzoom; Kontrast nicht visuell bewertet.",
+    "Weitere Dialogaktionen, Sieg-/Niederlagenpartien und Freigabegates bleiben BLOCKED."
+  ],
+  "failed_first_attempt": {
+    "commit": "fd657db8f1fca84d69ce006be91513ada3fdf081",
+    "ci_url": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40420309399",
+    "cause": "Test-Hilfsfunktion hatte das Feld bereits gekauft und gebohrt; daher war die Ausgangslage fuer die Negativpruefung nicht frisch.",
+    "correction": "Eigenen Start einer unbearbeiteten Partie implementiert und erneute CI erfolgreich."
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "gate_id": "SPE-01",
+  "related_gate_ids": [
+    "VER-03",
+    "LOG-04"
+  ],
+  "date": "2026-10-28",
+  "result": "PARTIAL",
+  "test_scope": "Natuerlicher Notverkauf nach 8 realen Browseraktionen, 2 Chromium-Prozesse, 1 JSON-Import, 2 Monatsabrechnungen, 800x600 und offline",
+  "command": "python3 project-c/pppoppi-imperium/quality_v194/test_browser_natural_sale_restart_v194.py",
+  "ci_run_url": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40644920712",
+  "ci_step_result": "PASS",
+  "release_gate": "BLOCKED",
+  "initial_base_head": "2bef595184619b4a5128c79f41a44da9b1414e70",
+  "original_source_files_changed": 0,
+  "limitations": [
+    "Keine vollstaendige Sieg-/Niederlagenpartie",
+    "Keine Mehrgenerationen-Sanierung",
+    "Kein historischer C64-Vergleich"
+  ],
+  "tested_code_head": "cdf98ebef3520782580933dbe6405e2a9f958848",
+  "ci_jobs": {
+    "chromium_roundtrip": "PASS",
+    "native_zoom_regression": "PASS",
+    "claim_dialog_stability": "PASS",
+    "browser_process_restart": "PASS"
+  },
+  "source_ci_url": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40644920666",
+  "source_ci_result": "PASS",
+  "technical_gate_ci_url": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40644920642",
+  "technical_gate_result": "BLOCKED",
+  "verified_properties": [
+    "8 reale Wirtschaftsaktionen; 80000 Cent Rueckstand nach echtem Monatsabschluss",
+    "1 Notverkauf, BERLIN-1 frei und NORD-1 weiter H1",
+    "Export und JSON-Import in frischem Chromium-Prozess exakt gleich",
+    "2 Monatsabrechnungen, Monat 3 startet, keine doppelte Verkaufsgutschrift",
+    "800x600 kein horizontaler Ueberlauf, 0 externe HTTP-Anfragen, 0 JavaScript-Fehler"
+  ]
+}

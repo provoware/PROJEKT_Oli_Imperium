@@ -1,0 +1,35 @@
+name: Projekt C – zwei natuerliche Raffinerie- und Frachtketten
+on:
+  pull_request:
+    paths:
+      - 'project-c/pppoppi-imperium/quality_v194/test_natural_multifirm_refinery_v194.cjs'
+      - 'project-c/pppoppi-imperium/quality_v194/NATURAL_MULTIFIRM_REFINERY_20261030.md'
+      - 'project-c/pppoppi-imperium/SPIEL/src/**'
+      - 'project-c/pppoppi-imperium/prerelease/matrix.json'
+      - '.github/workflows/prerelease-natural-multifirm.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  natural-multifirm:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Zwei reale Felder, Raffinerien, Roh-/Produkt-/Oeffentlichtransport
+        run: |
+          set -o pipefail
+          node --check project-c/pppoppi-imperium/quality_v194/test_natural_multifirm_refinery_v194.cjs
+          node project-c/pppoppi-imperium/quality_v194/test_natural_multifirm_refinery_v194.cjs | tee natural_multifirm_refinery.json
+          node -e "const r=require('./natural_multifirm_refinery.json');if(r.schema!=='pppoppi.natural-multifirm-refinery/1'||r.scenarios!==1||r.repeatedRuns!==2||r.simulatedMonths!==10||r.companyMonthChecks!==20||r.jsonRoundtrips!==20||r.duplicateQueuesRejected!==4||r.negativeCorruptionsCaught!==12||r.noInjectedOilOrCash!==true||r.result?.totals?.soldTotal!==18000||r.result?.totals?.inventoryTotal!==180000||r.result?.foreignRejections!==1||r.result?.jsonRoundtrips!==10||r.result?.negativeChecks!==6||r.result?.freight?.H1?.acceptedMilli!==9000||r.result?.freight?.H2?.acceptedMilli!==9000||r.result?.allocation?.H1?.soldMilli!==9000||r.result?.allocation?.H2?.soldMilli!==9000||r.prereleaseGate!=='BLOCKED')process.exit(1);"
+      - name: Nachweisdatei sichern
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: natural-multifirm-refinery
+          path: natural_multifirm_refinery.json
+          if-no-files-found: warn
+          retention-days: 14

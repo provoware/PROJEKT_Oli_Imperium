@@ -1,0 +1,23 @@
+{
+  "gate_id": "TES-01",
+  "result": "PASS",
+  "commit": "160c460cbe1f833ce5f8ee18c74b6b4e06589e3a",
+  "command": "GitHub Actions: .github/workflows/pppoppi-imperium-recovery.yml > Wirtschaftliche Fachprüfungen",
+  "date": "2026-10-25",
+  "ci_run": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40159267861",
+  "ci_event": "push",
+  "ci_conclusion": "success",
+  "ci_job_id": 121067189357,
+  "suites": [
+    {"file":"test_fair_market_v161.cjs","cases":18},
+    {"file":"test_human_parity_v192.cjs","cases":1},
+    {"file":"test_logistics_ai_v193.cjs","cases":19},
+    {"file":"test_public_network_v171.cjs","cases":28},
+    {"file":"test_strategy_v192.cjs","cases":17},
+    {"file":"test_transport_v17.cjs","cases":22}
+  ],
+  "total_cases": 105,
+  "human_parity_sha256": "e9cea8fd1e3320900a31c91bcda27d3400cd06a20cb2ebd26b648cb98f52524a",
+  "additional_ci_hardening": "Im naechsten CI-Lauf wird auch die reparierte Vergleichsdatei aus dem isolierten Technikaufbau ausgefuehrt. Die unveraenderten Originaldateien im Ordner SPIEL bleiben unangetastet.",
+  "limits": "Erfolg der sechs spezifischen Fachtestprogramme, keine vollstaendige End-to-End-Partie, Browserfreigabe, historische C64-Originaltreue oder Releasefreigabe."
+}

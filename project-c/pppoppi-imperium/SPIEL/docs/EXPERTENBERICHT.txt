@@ -1,0 +1,53 @@
+PPPOPPI IMPERIUM — NEO-RETRO V1.1
+ENTWICKLUNGS-, INTEGRATIONS- UND BILDNACHWEIS
+Stand: 20. Oktober 2026
+
+ECKDATEN: 25/25 Haupt-Browserprüfungen, 13/13 Sonderfallprüfungen, 9 echte Chromium-Screenshots.
+BASIS: V0.8.2-Simulationskern byteidentisch; originale Ausgangsfassung im Lieferpaket archiviert.
+ABGRENZUNG: Kein realer Kubuntu-Start und kein C64-Emulatorvergleich nachgewiesen.
+
+## Projekt & Ziel
+Das frühere Neo-Retro-Büro V1.0 ist nun mit dem unveränderten Simulationskern V0.8.2 verbunden. Die Oberfläche verwendet eine authentisch wirkende Chefbüro-Inszenierung mit interaktiven Gegenständen. Die originalen C64-Abläufe dienen als Forschungsreferenz; Spielzahlen und Berlin-Fassung sind eigenständig.
+
+## Funktionale Anbindung
+Gegenstände öffnen echte Daten: Computer = Kapital, Firmenübersicht, Finanzjournal; Weltkarte = drei regionale Märkte; Claim = Gutachten, Kauf, Bohrung und Förderung; Koffer = drei wirkende Minispiele; Telefon = Verträge und situationsabhängige Kommentare; Kalender = Zugende, Bericht, Folgemonat; Schublade = Finanzakten und eigenständiges Pausenspiel.
+
+## Bespielbare Wirtschaftskette
+Browserablauf durchgeführt: Spiel starten -> Deutschlandkarte -> Region -> BERLIN-1 -> Gutachten -> Feldkauf -> Fachbohrung -> 100 Barrel fördern -> Lager -> verladen -> Angebot abgeben -> Zug beenden -> KI abrechnet -> Bericht -> Folgemonat. Alle Actions werden über OliV082.transition verarbeitet.
+
+## Dynamische Grafikwelt
+Neue, lokal eingebettete SVG-Szenen illustrieren regionsbezogene Landschaft, Bohrturm, Förderpumpe, Tanklager, Pipelineverlauf, städtische Silhouette und Industriefabrik. Ölstand, Bohrstatus und Brandzustand stammen aus dem aktuellen Spielstand. Illustration ist eigenständig, keine Originalgrafik des C64.
+
+## Lebendiges Büro
+Das bestehende Büro zeigt Lichteffekte und eine lokale Tageshelligkeit. Der Kalender spiegelt den realen Spielmonat wider; Meldungen von Milchmädchen Pete und Edna Ruppen reagieren auf Kontostand und Ereignisse. Die Rendite-Ente, Berliner Bär, Pflanze und Papierkorb bleiben rein kosmetisch; sie verändern weder Spieltage noch Finanzen.
+
+## Daten- und Testschutz
+Die V0.8.2-Rechenmodule sind byteidentisch mit der Ausgangsversion. Der UI-Adapter verfügt über keinen eigenen Buchungskern. Jeder Wirtschaftsübergang wird mit dem bestehenden Validator geprüft. Entgegengesetzte Spieler dürfen erst nach bestätigtem Wechsel Firmendaten auf der Statusleiste sehen. Beschädigte Spielstände werden abgelehnt.
+
+## Browser-Abnahme
+Hauptlauf: 25/25 erfolgreich, Sonderfälle: 13/13 erfolgreich. Testmethodik: Chromium führt dieselben lokalen Dateien als in HTML eingebetteten Offline-Inhalt aus, da direktes file:// im Prüfcontainer vom Administrator gesperrt ist. Echte Klicks, Zustandsprüfungen, Export/Import, Mobilansicht und JS-Fehlerprüfung. Null externe Webanfragen im Hauptlauf.
+
+## Rückwärtsverträglichkeit
+Die Ausgabe enthält einen getrennten unveränderten V0.8.2-Originalstand als ZIP. Vorhandene Basistests aus V0.6 (37), V0.7 (27) und ältere UI-Strukturprüfungen (9) wurden erneut ausgeführt und bestanden; bestehende alte Spielstände können bei gültigem Format importiert werden. Ein V0.8-Import ist nur im vorgesehenen Migrationszustand zulässig.
+
+## Grenzen
+Nicht nachgewiesen sind: direkter Doppelklick-Start auf einem realen Kubuntu-PC; originalgetreuer C64-Emulatorvergleich; vollständige historisch genaue Minispiele; anspruchsvolle Figurenanimation mit synchronisierter Sprache; professionelles Balancing über sämtliche Varianten. Die aktuellen Szenen sind stilisierte Vektorgrafiken, keine photorealistische 3D-Engine.
+
+## Nächster Entwicklungsabschnitt
+1) Original-C64-Referenzpilot mit VICE und eindeutig identifiziertem Diskettenabbild. 2) Verbindliche grafische Navigation/Abnahmematrix mit Arbeitsabläufen und visueller Stabilitätsprüfung. 3) Produktionsreife: Soundoptionen, weitere Animationszustände, anspruchsvollere Interaktionen und Langzeitbalancing; echte Kubuntu-Doppelklick-Abnahme bleibt bei Nutzer.
+
+## Screenshot-Nachweise
+05_Foerderanlage_live.png SHA256 aaa6455b885273f8c9af7644b012dab7ce7b668110c03f7f81ea7e1db8044498
+02_Firmencomputer_live.png SHA256 27b5ff60af4c184a58116193eca43c51dedb6cc8d610063eb63199eba5b62a4f
+08_Abrechnung_live.png SHA256 e842ea542722231feedc743a828036690f7bd0d860e7b7b23af92a84b1a9608b
+04_Region_live.png SHA256 dac3a344d946f866e62bb0c22717537c24b847386a97bb40ef9251d58dba4ee3
+09_Mobilansicht_live.png SHA256 6537d8968eeafcc872023236804f5753ddc6898a8823a853467c4df6912fc709
+01_Buero_live.png SHA256 82662d6dc60a3b1d3e2b17eb776d588e2ea3d7d42eefda981b986af7124d20f1
+03_Deutschlandkarte_live.png SHA256 8de7b50d8467cd0da764355589fb35c2c97b29f4e35d20df4f268133ae115187
+06_Tanks_live.png SHA256 9f05b12c30c03abd7172c982ae380a99ceceea2c8a67ff2e428aa085d365e7ca
+07_Regionalmarkt_live.png SHA256 98cce87c2fb3f406597c9082eb3b72daf61d68d3f6ecca2880f0927b308e725d
+
+## Reproduzierbare Prüfung
+Spiel: ZIP entpacken, index.html in Chromium/Firefox öffnen, neue Partie starten.
+Automatisierung (optional mit vorhandenen Entwicklertools): python3 browser_acceptance.py sowie python3 advanced_tests.py. Testskripte betten die lokalen Dateien im Browser ein, weil die Testumgebung file:// blockiert.
+Spiel benötigt nur einen lokalen Browser; Python, Node oder Internet sind für das Spielen nicht erforderlich.

@@ -1,0 +1,25 @@
+PPPOPPI IMPERIUM V1.6.1 – FAIRER FERTIGWARENMARKT
+==============================================
+1. SPIEL/index.html im vorhandenen Webbrowser öffnen. Keine zusätzlichen Pakete
+   sind für normale Spieler nötig. Im Chromium-Test wurde die Anwendung aus
+   identischen, eingebetteten Dateien offline ausgeführt. Kubuntu-Doppelklick-
+   Start ist noch persönlich zu prüfen.
+2. Neue Partie starten; mindestens zwei Firmen wählen.
+3. Eigenen Claim begutachten, kaufen, bohren, fördern; Raffinerie und
+   Vertriebsroute bauen, Rohöl verarbeiten.
+4. In der Raffinerie Fertigware mit "zum Monatsmarkt anmelden" vormerken.
+5. Züge abschließen; nach der gemeinsamen Abrechnung zeigt der Geschäftsbericht
+   sämtliche Verkäufe und die Rückgabe nicht verkaufter Ware.
+6. Mit Spielstand exportieren/importieren offene Aufträge erhalten.
+
+Was ist neu? Kein Sofortverkauf der Fertigware! Alle Firmen teilen die 27 bbl
+pro Region fair. Der echte Rohölkern V0.8.2 bleibt unverändert.
+
+Spieleinheiten: 1 Barrel wird mit 1000 Milli-Barrel intern berechnet;
+Geldbeträge sind in Cent gespeichert. Anzeige: 13,5 bbl bleibt 13,5 bbl.
+
+Entwicklerprüfung (optional):
+  node test_fair_market_v161.cjs
+  python test_browser_v161.py (nur mit bereits installiertem Playwright)
+
+Wichtig: Historischer C64-Emulatortest und Kubuntu-Endabnahme sind OFFEN.

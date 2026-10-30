@@ -1,0 +1,70 @@
+name: PPPOPPI IMPERIUM – GitHub-Quellnachweis
+on:
+  push:
+    branches:
+      - 'recovery/pppoppi-imperium-v194-*'
+      - 'restore/v194-verified-sources-*'
+      - 'fix/v194-tech-consistency-*'
+      - 'agent/prerelease-recovery-*'
+    paths:
+      - 'project-c/pppoppi-imperium/**'
+      - '.github/workflows/pppoppi-imperium-recovery.yml'
+  pull_request:
+    paths:
+      - 'project-c/pppoppi-imperium/**'
+      - '.github/workflows/pppoppi-imperium-recovery.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  check-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Forschungs- und Datenvertragscheck
+        run: |
+          python3 tools/validate_project.py
+          python3 -m unittest discover -s tests -v
+      - name: Sicherheits- und Wiederherstellungsregressionen
+        run: python3 -m unittest discover -s project-c/pppoppi-imperium/recovery -p 'test_*.py' -v
+      - name: Vollständige GitHub-Quellen gegen das geprüfte Originalinventar
+        run: python3 project-c/pppoppi-imperium/recovery/verify_sources.py
+      - name: Technische Spielabläufe und statische Oberflächenverträge
+        run: |
+          node project-c/pppoppi-imperium/quality_v194/test_build_safety_v194.cjs
+          node project-c/pppoppi-imperium/quality_v194/test_ui_integrity_v194.cjs
+          node project-c/pppoppi-imperium/quality_v194/test_gameflow_v194.cjs
+          node project-c/pppoppi-imperium/quality_v194/test_market_ledger_v194.cjs
+          node project-c/pppoppi-imperium/quality_v194/test_logistics_costs_v194.cjs
+          node project-c/pppoppi-imperium/quality_v194/test_monthly_idempotence_v194.cjs
+          node project-c/pppoppi-imperium/quality_v194/test_refinery_contracts_v194.cjs
+          node project-c/pppoppi-imperium/quality_v194/build.cjs "$RUNNER_TEMP/PPPOPPI-V194-TECH"
+          node --check "$RUNNER_TEMP/PPPOPPI-V194-TECH/src/neo_bridge.js"
+          node --check "$RUNNER_TEMP/PPPOPPI-V194-TECH/test_human_parity_v192.cjs"
+          node project-c/pppoppi-imperium/quality_v194/test_financial_limits_v194.cjs "$RUNNER_TEMP/PPPOPPI-V194-TECH/src"
+          node project-c/pppoppi-imperium/quality_v194/test_legacy_survey_allocation_v194.cjs "$RUNNER_TEMP/PPPOPPI-V194-TECH/src"
+          node project-c/pppoppi-imperium/quality_v194/test_import_filename_guard_v194.cjs
+      - name: Wirtschaftliche Fachprüfungen
+        working-directory: project-c/pppoppi-imperium/SPIEL
+        run: |
+          set -e
+          node test_fair_market_v161.cjs
+          node test_human_parity_v192.cjs
+          # Die historische Variante kann einen leeren Unterprozess faelschlich
+          # als PASS melden; die separat erzeugte Technikfassung muss ebenfalls bestehen.
+          node "$RUNNER_TEMP/PPPOPPI-V194-TECH/test_human_parity_v192.cjs"
+          node test_logistics_ai_v193.cjs
+          node test_public_network_v171.cjs
+          node test_strategy_v192.cjs
+          node test_transport_v17.cjs
+          node evaluate_balance_v194.cjs
+          node ../quality_v194/test_balance_report_v194.cjs
+          node analyze_stress_v194.cjs
+          node ../quality_v194/test_stress_report_v194.cjs
+          # Beide Programme muessen exakt die versionierten Langzeitbelege
+          # reproduzieren; nur gueltige Szenarien ohne Drift sind ausreichend.
+          git diff --exit-code -- evidence_v194/BALANCE_V194.json evidence_v193/KRISEN_LANGZEIT_V194.json

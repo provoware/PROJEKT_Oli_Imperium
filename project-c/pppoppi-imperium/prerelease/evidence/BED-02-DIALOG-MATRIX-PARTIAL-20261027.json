@@ -1,0 +1,43 @@
+{
+  "gate_id": "BED-02",
+  "date": "2026-10-27",
+  "result": "PARTIAL",
+  "tested_code_head": "748a5735f9bc00f350d0bb3f65333d3667d8f35b",
+  "command": "python3 project-c/pppoppi-imperium/quality_v194/test_browser_dialog_action_matrix_v194.py",
+  "ci_url": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40513698535",
+  "ci_result": "PASS",
+  "source_ci_url": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40513698787",
+  "source_ci_result": "PASS",
+  "matrix_ci_url": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40513698484",
+  "matrix_release_gate": "BLOCKED",
+  "browser": "Chromium, 800x600 Startfenster, chrome.tabs.setZoom/getZoom",
+  "native_zoom_percent": [
+    175,
+    200
+  ],
+  "scenes_per_zoom": 39,
+  "distinct_scene_action_pairs_per_zoom": 37,
+  "distinct_action_codes_per_zoom": 29,
+  "state_changes_per_zoom": 2,
+  "state_unchanged_per_zoom": 35,
+  "fachlich_checked_success": [
+    "SURVEY",
+    "END_TURN"
+  ],
+  "fachlich_checked_rejection": [
+    "PUMP",
+    "DRILL",
+    "PIPE_START",
+    "REFINERY_BUILD"
+  ],
+  "javascript_errors": 0,
+  "external_http_requests": 0,
+  "original_source_files_changed": 0,
+  "release_gate": "BLOCKED",
+  "limitations": [
+    "Je Szene nur ein Vertreter je Aktionskennung; weitere Feld- und Regionsparameter ungetestet",
+    "Nur zwei positive Sollfolgen und vier sichere Ablehnungen im frischen Startzustand fachlich geprueft",
+    "35 nicht veraenderte Zustaende je Zoom sind nicht automatisch 35 korrekt abgelehnte Aktionen",
+    "Dynamisch spaeter verfuegbare Aktionen, Endpartien und persoenliche Endabnahmen fehlen"
+  ]
+}

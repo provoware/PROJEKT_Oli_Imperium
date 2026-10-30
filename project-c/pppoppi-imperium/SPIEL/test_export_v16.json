@@ -1,0 +1,471 @@
+{
+  "schema": "pppoppi.berlin.save/0.8.2",
+  "ruleset": "berlin-economy/0.8.2.0",
+  "seed": "PPPOPPI-2026",
+  "month": 1,
+  "phase": "TURN",
+  "turnIndex": 0,
+  "companies": [
+    {
+      "id": "H1",
+      "name": "PPPOPPI",
+      "type": "human",
+      "generation": 1,
+      "cashCent": 4654000,
+      "debtCent": 0,
+      "daysUsed": 21,
+      "contracts": [],
+      "obligations": [],
+      "ledger": [
+        {
+          "id": "B1-1-0",
+          "month": 1,
+          "deltaCent": -200000,
+          "code": "GUTACHTEN",
+          "info": "BERLIN-1"
+        },
+        {
+          "id": "B1-2-1",
+          "month": 1,
+          "deltaCent": -5000000,
+          "code": "FELDKAUF",
+          "info": "BERLIN-1"
+        },
+        {
+          "id": "B1-3-2",
+          "month": 1,
+          "deltaCent": -7000000,
+          "code": "FACHBOHRUNG",
+          "info": "BERLIN-1"
+        },
+        {
+          "id": "B1-4-3",
+          "month": 1,
+          "deltaCent": -100000,
+          "code": "FOERDERUNG",
+          "info": "BERLIN-1"
+        },
+        {
+          "id": "R1-4-4",
+          "month": 1,
+          "deltaCent": -3000000,
+          "code": "RAFFINERIE_BAU",
+          "info": "BERLIN"
+        },
+        {
+          "id": "R1-5-5",
+          "month": 1,
+          "deltaCent": -65000,
+          "code": "RAFFINERIE_VERARBEITUNG",
+          "info": "BERLIN-1"
+        },
+        {
+          "id": "R1-6-6",
+          "month": 1,
+          "deltaCent": -800000,
+          "code": "VERTRIEBSROUTE",
+          "info": "BERLIN"
+        },
+        {
+          "id": "R1-7-7",
+          "month": 1,
+          "deltaCent": 819000,
+          "code": "RAFFINIERT_VERKAUF",
+          "info": "BERLIN 9 bbl × 91000 Cent"
+        }
+      ],
+      "stats": {
+        "contractsDone": 0,
+        "contractsOnTime": 0,
+        "contractsProfitable": 0,
+        "contractsProfitCent": 0,
+        "marketStreak": 0,
+        "awards": [],
+        "rescues": 0
+      },
+      "loanUsed": false,
+      "monthRevenueCent": 819000,
+      "monthSoldMilli": 0,
+      "monthProducedMilli": 100000,
+      "monthContractMilli": 0
+    },
+    {
+      "id": "A1",
+      "name": "Milchmädchen Pete GmbH",
+      "type": "ai",
+      "generation": 1,
+      "cashCent": 20000000,
+      "debtCent": 0,
+      "daysUsed": 0,
+      "contracts": [],
+      "obligations": [],
+      "ledger": [],
+      "stats": {
+        "contractsDone": 0,
+        "contractsOnTime": 0,
+        "contractsProfitable": 0,
+        "contractsProfitCent": 0,
+        "marketStreak": 0,
+        "awards": [],
+        "rescues": 0
+      },
+      "loanUsed": false,
+      "monthRevenueCent": 0,
+      "monthSoldMilli": 0,
+      "monthProducedMilli": 0,
+      "monthContractMilli": 0
+    },
+    {
+      "id": "A2",
+      "name": "Edna Ruppen & Co.",
+      "type": "ai",
+      "generation": 1,
+      "cashCent": 20000000,
+      "debtCent": 0,
+      "daysUsed": 0,
+      "contracts": [],
+      "obligations": [],
+      "ledger": [],
+      "stats": {
+        "contractsDone": 0,
+        "contractsOnTime": 0,
+        "contractsProfitable": 0,
+        "contractsProfitCent": 0,
+        "marketStreak": 0,
+        "awards": [],
+        "rescues": 0
+      },
+      "loanUsed": false,
+      "monthRevenueCent": 0,
+      "monthSoldMilli": 0,
+      "monthProducedMilli": 0,
+      "monthContractMilli": 0
+    }
+  ],
+  "claims": {
+    "BERLIN-1": {
+      "id": "BERLIN-1",
+      "region": "BERLIN",
+      "name": "Berlin-Mitte (Satirezone) / Claim 1",
+      "owner": "H1",
+      "surveyedBy": [
+        "H1"
+      ],
+      "drilled": true,
+      "reserveMilli": 400000,
+      "inventoryMilli": 90000,
+      "preparedMilli": 0,
+      "order": false,
+      "tankLevel": 1,
+      "tankMilli": 250000,
+      "pipeline": false,
+      "burning": false,
+      "damaged": false,
+      "securityUntil": 0
+    },
+    "BERLIN-2": {
+      "id": "BERLIN-2",
+      "region": "BERLIN",
+      "name": "Berlin-Mitte (Satirezone) / Claim 2",
+      "owner": null,
+      "surveyedBy": [],
+      "drilled": false,
+      "reserveMilli": 555000,
+      "inventoryMilli": 0,
+      "preparedMilli": 0,
+      "order": false,
+      "tankLevel": 1,
+      "tankMilli": 250000,
+      "pipeline": false,
+      "burning": false,
+      "damaged": false,
+      "securityUntil": 0
+    },
+    "BERLIN-3": {
+      "id": "BERLIN-3",
+      "region": "BERLIN",
+      "name": "Berlin-Mitte (Satirezone) / Claim 3",
+      "owner": null,
+      "surveyedBy": [],
+      "drilled": false,
+      "reserveMilli": 610000,
+      "inventoryMilli": 0,
+      "preparedMilli": 0,
+      "order": false,
+      "tankLevel": 1,
+      "tankMilli": 250000,
+      "pipeline": false,
+      "burning": false,
+      "damaged": false,
+      "securityUntil": 0
+    },
+    "BRANDENBURG-1": {
+      "id": "BRANDENBURG-1",
+      "region": "BRANDENBURG",
+      "name": "Brandenburg-Nord (fiktiv) / Claim 1",
+      "owner": null,
+      "surveyedBy": [],
+      "drilled": false,
+      "reserveMilli": 600000,
+      "inventoryMilli": 0,
+      "preparedMilli": 0,
+      "order": false,
+      "tankLevel": 1,
+      "tankMilli": 250000,
+      "pipeline": false,
+      "burning": false,
+      "damaged": false,
+      "securityUntil": 0
+    },
+    "BRANDENBURG-2": {
+      "id": "BRANDENBURG-2",
+      "region": "BRANDENBURG",
+      "name": "Brandenburg-Nord (fiktiv) / Claim 2",
+      "owner": null,
+      "surveyedBy": [],
+      "drilled": false,
+      "reserveMilli": 655000,
+      "inventoryMilli": 0,
+      "preparedMilli": 0,
+      "order": false,
+      "tankLevel": 1,
+      "tankMilli": 250000,
+      "pipeline": false,
+      "burning": false,
+      "damaged": false,
+      "securityUntil": 0
+    },
+    "BRANDENBURG-3": {
+      "id": "BRANDENBURG-3",
+      "region": "BRANDENBURG",
+      "name": "Brandenburg-Nord (fiktiv) / Claim 3",
+      "owner": null,
+      "surveyedBy": [],
+      "drilled": false,
+      "reserveMilli": 710000,
+      "inventoryMilli": 0,
+      "preparedMilli": 0,
+      "order": false,
+      "tankLevel": 1,
+      "tankMilli": 250000,
+      "pipeline": false,
+      "burning": false,
+      "damaged": false,
+      "securityUntil": 0
+    },
+    "NORD-1": {
+      "id": "NORD-1",
+      "region": "NORD",
+      "name": "Norddeutsche Küste (fiktiv) / Claim 1",
+      "owner": null,
+      "surveyedBy": [],
+      "drilled": false,
+      "reserveMilli": 420000,
+      "inventoryMilli": 0,
+      "preparedMilli": 0,
+      "order": false,
+      "tankLevel": 1,
+      "tankMilli": 250000,
+      "pipeline": false,
+      "burning": false,
+      "damaged": false,
+      "securityUntil": 0
+    },
+    "NORD-2": {
+      "id": "NORD-2",
+      "region": "NORD",
+      "name": "Norddeutsche Küste (fiktiv) / Claim 2",
+      "owner": null,
+      "surveyedBy": [],
+      "drilled": false,
+      "reserveMilli": 475000,
+      "inventoryMilli": 0,
+      "preparedMilli": 0,
+      "order": false,
+      "tankLevel": 1,
+      "tankMilli": 250000,
+      "pipeline": false,
+      "burning": false,
+      "damaged": false,
+      "securityUntil": 0
+    },
+    "NORD-3": {
+      "id": "NORD-3",
+      "region": "NORD",
+      "name": "Norddeutsche Küste (fiktiv) / Claim 3",
+      "owner": null,
+      "surveyedBy": [],
+      "drilled": false,
+      "reserveMilli": 530000,
+      "inventoryMilli": 0,
+      "preparedMilli": 0,
+      "order": false,
+      "tankLevel": 1,
+      "tankMilli": 250000,
+      "pipeline": false,
+      "burning": false,
+      "damaged": false,
+      "securityUntil": 0
+    }
+  },
+  "prices": {
+    "BERLIN": 70000,
+    "BRANDENBURG": 63000,
+    "NORD": 78000
+  },
+  "demand": {
+    "BERLIN": 120000,
+    "BRANDENBURG": 110000,
+    "NORD": 80000
+  },
+  "processedIds": [
+    "neo-1-1792513522281",
+    "neo-2-1792513522420",
+    "neo-3-1792513522428",
+    "neo-4-1792513522434",
+    "neo-5-1792513523023",
+    "neo-6-1792513523164",
+    "neo-7-1792513523686",
+    "neo-8-1792513523786"
+  ],
+  "sequence": 8,
+  "reports": [],
+  "events": [
+    {
+      "month": 1,
+      "type": "RAFFINERIE_REFINERY_BUILD",
+      "company": "H1",
+      "region": "BERLIN",
+      "source": "berlin-adaption"
+    },
+    {
+      "month": 1,
+      "type": "RAFFINERIE_REFINE_BATCH",
+      "company": "H1",
+      "region": "BERLIN",
+      "source": "berlin-adaption"
+    },
+    {
+      "month": 1,
+      "type": "RAFFINERIE_ROUTE_BUILD",
+      "company": "H1",
+      "region": "BERLIN",
+      "source": "berlin-adaption"
+    },
+    {
+      "month": 1,
+      "type": "RAFFINERIE_REFINED_SELL",
+      "company": "H1",
+      "region": "BERLIN",
+      "source": "berlin-adaption"
+    }
+  ],
+  "rescueIds": [],
+  "lastReport": null,
+  "minigame": null,
+  "lineage": null,
+  "refinery": {
+    "version": "pppoppi.refinery/1.0",
+    "plants": {
+      "H1": {
+        "BERLIN": {
+          "built": true,
+          "route": true,
+          "productMilli": 0,
+          "processedMilli": 10000
+        },
+        "BRANDENBURG": {
+          "built": false,
+          "route": false,
+          "productMilli": 0,
+          "processedMilli": 0
+        },
+        "NORD": {
+          "built": false,
+          "route": false,
+          "productMilli": 0,
+          "processedMilli": 0
+        }
+      },
+      "A1": {
+        "BERLIN": {
+          "built": false,
+          "route": false,
+          "productMilli": 0,
+          "processedMilli": 0
+        },
+        "BRANDENBURG": {
+          "built": false,
+          "route": false,
+          "productMilli": 0,
+          "processedMilli": 0
+        },
+        "NORD": {
+          "built": false,
+          "route": false,
+          "productMilli": 0,
+          "processedMilli": 0
+        }
+      },
+      "A2": {
+        "BERLIN": {
+          "built": false,
+          "route": false,
+          "productMilli": 0,
+          "processedMilli": 0
+        },
+        "BRANDENBURG": {
+          "built": false,
+          "route": false,
+          "productMilli": 0,
+          "processedMilli": 0
+        },
+        "NORD": {
+          "built": false,
+          "route": false,
+          "productMilli": 0,
+          "processedMilli": 0
+        }
+      }
+    },
+    "salesMilli": {
+      "BERLIN": 9000,
+      "BRANDENBURG": 0,
+      "NORD": 0
+    },
+    "story": [
+      {
+        "month": 1,
+        "company": "H1",
+        "character": "PPPOPPI",
+        "action": "REFINERY_BUILD",
+        "region": "BERLIN",
+        "text": "Neues Werk: Ein Grund mehr, dass Edna den Gewerbeschein sucht."
+      },
+      {
+        "month": 1,
+        "company": "H1",
+        "character": "Milchmädchen Pete",
+        "action": "REFINE_BATCH",
+        "region": "BERLIN",
+        "text": "10 Barrel rein, 9 Barrel raus. Pete nennt das effiziente Mathematik."
+      },
+      {
+        "month": 1,
+        "company": "H1",
+        "character": "Edna Ruppen",
+        "action": "ROUTE_BUILD",
+        "region": "BERLIN",
+        "text": "Eine Vertriebsroute ist fertig. Ein Anwalt fährt sicherheitshalber mit."
+      },
+      {
+        "month": 1,
+        "company": "H1",
+        "character": "PPPOPPI",
+        "action": "REFINED_SELL",
+        "region": "BERLIN",
+        "text": "Fertigware verkauft. Nur die Bürokratie bleibt unverarbeitet."
+      }
+    ]
+  }
+}

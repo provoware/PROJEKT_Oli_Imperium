@@ -1,0 +1,84 @@
+{
+  "id": "BERLIN-SLICE-040",
+  "version": "0.4.0",
+  "status": "BINDING_FOR_V06_PROTOTYPE_ONLY",
+  "historical_reference": "NOT_VERIFIED",
+  "month_days": 30,
+  "money_unit": "EUR_cent",
+  "oil_unit": "milli_bbl",
+  "currency": "EUR",
+  "market": {
+    "priority": [
+      "contract",
+      "spot"
+    ],
+    "within_tier": "pro_rata_largest_remainder_id",
+    "pilot_spot_only": true,
+    "demand_milli": 120000,
+    "rival_milli": 50000,
+    "price_cent_per_bbl": 70000
+  },
+  "payment": {
+    "tiers": [
+      {
+        "id": 1,
+        "name": "PERSONAL_SICHERHEIT"
+      },
+      {
+        "id": 2,
+        "name": "VERTRAG"
+      },
+      {
+        "id": 3,
+        "name": "DARLEHEN"
+      },
+      {
+        "id": 4,
+        "name": "SONSTIGE"
+      },
+      {
+        "id": 5,
+        "name": "OPTIONAL"
+      }
+    ],
+    "method": "pro_rata_largest_remainder_id"
+  },
+  "financial": {
+    "cash_start_cent": 20000000,
+    "debt_interest_bps": 100,
+    "debt_due_principal_bps": 500,
+    "rescue_loan_cent": 4000000,
+    "rescue_loan_once_per_generation": true,
+    "restart_cash_cent": 15000000
+  },
+  "milestones": {
+    "marketleader": {
+      "threshold_bps": 6000,
+      "months": 6,
+      "min_effective_demand_milli": 100000,
+      "min_suppliers": 2,
+      "implementation": "PARTIAL_MARKET_STREAK"
+    },
+    "contract_master": {
+      "required_contracts": 20,
+      "on_time_percent": 95,
+      "profit_positive": true,
+      "implementation": "PLANNED_NOT_CODED"
+    },
+    "endless": {
+      "enabled": true,
+      "implementation": "MONTH_REPEAT_PILOT"
+    }
+  },
+  "time_accounting": "ONLY_COMMANDS_COST_DAYS",
+  "not_in_pilot": [
+    "contract_engine",
+    "four_original_c64_goals",
+    "four_players",
+    "mini_games",
+    "industrial_ai",
+    "multiple_regions",
+    "pipeline_simulation",
+    "full_lifecycle"
+  ]
+}
