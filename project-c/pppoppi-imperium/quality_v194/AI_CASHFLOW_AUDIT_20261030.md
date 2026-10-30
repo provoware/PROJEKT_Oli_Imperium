@@ -67,3 +67,12 @@ Drei neue Negativproben muessen falsch positive Aktionskosten/Frachtvorauszahlun
 **Grenzen:** Frachtvorauszahlung ist keine bestaetigte Aufwendung; Gutachten, Produktion und Reparaturen sind Kassenabfluesse, keine abschliessend periodengerechten Aufwendungen. Lager, Forderungen, Anlagen und Abschreibungen sind nicht bewertet. WIR-01, WIR-04, BAL-01 und TES-04 bleiben BLOCKED; 6/52 PASS, 39 BLOCKED, 4 OPEN, 3 DEFERRED. Keine Aenderung am Spielkern, an den 110 Originaldateien oder an Spielstaenden. Kein Merge, kein Release.
 
 **Naechste drei Schritte:** (1) CI auf neuem HEAD und den erneut gestarteten Browser-Job auswerten, Fehlersignatur dokumentieren; (2) Frachtvorauszahlungen und Rueckgaben ueber echte Monatswechsel sowie weitere unbekannte Buchungscodes pruefen; (3) erst mit fachlich belegter Vermoegens- und Periodenabgrenzung einen Gewinn-/Vermoegensnachweis erarbeiten. Persoenliche Endabnahme bleibt bis zum eingefrorenen Kandidaten zurueckgestellt.
+
+
+## Technischer Nachtrag 30.10.2026 – Oeffentliche Fracht: Zahlung, Rueckgabe, Monatswechsel
+
+Neuer isolierter Pflichtteiltest `quality_v194/test_public_freight_monthly_audit_v194.cjs`: echte unveraenderte V1.7.1-Netz-Engine, zwei menschliche Firmen mit kontrolliert bereitgestellter Ware/Kasse, zwei Faelle (gemeinsamer Kapazitaetsengpass 12/12 Barrel; gesperrte Strecke 0/0 Barrel), jeweils zweimal identisch wiederholt. **Geplant:** 4 Zwei-Monats-Kampagnen / 8 Monate, 16 Firmen-Monatsbeobachtungen, 8 abgewiesene doppelte Vormerkungen und 8 JSON-Rundlaeufe. Bei jeder Firma werden die tatsaechlichen Buchungen `PUBLIC_FREIGHT_HOLD` und `FRACHT_RUECKGABE`, Nettokosten, Lagerbestand, Monatsabschluss, Ankunft und fehlende Doppelbuchung im Folgemonat gegengeprueft.
+
+**Status beim Commit: PENDING** (nicht PASS), bis der neue GitHub-Prueflauf auf dem finalen Entwicklungs-HEAD erfolgreich ist. Es wurden keine Spielregeln, Originaldateien oder Nutzerspielstaende veraendert. Der Test belegt weder eine natuerlich erwirtschaftete Frachtkette noch Gewinn, Vermoegen oder historische C64-Treue. WIR-01/WIR-04/BAL-01 bleiben BLOCKED; Matrix unveraendert **6/52 PASS, 39 BLOCKED, 4 OPEN, 3 DEFERRED**. Kein Merge/Release.
+
+**Naechste Schritte:** (1) neue CI und JSON-Daten auswerten und Fehler korrigieren; (2) mehrstufige Frachtrouten, Lieferausfaelle und Marktverkaeufe mit unabhaengiger Bestandsrechnung testen; (3) offene Vermoegensbewertung, Browser-Dateidialog und Quellenrechte getrennt abarbeiten. Persoenliche Endabnahme erst am eingefrorenen Kandidaten.
