@@ -1,6 +1,6 @@
 # WIR-02/WIR-01 – Zweistufige Frachtkette bis zum Außenmarktverkauf (30.10.2026)
 
-**Status: PENDING – kein bestandener Test behauptet, bis GitHub-CI auf dem finalen Commit erfolgreich ist.**
+**Teiltest PASS auf dem unveränderten Test-HEAD `f69ea985bbb88be6dd1fa299432e95924e42546f`**, [gezielte GitHub-CI #41035085332](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41035085332), 30.10.2026, Job `freight-chain` einschließlich Syntax, 12 Spielmonaten, 24 Firmen-Monatsbeobachtungen, 8 Duplikat-Abweisungen, 12 JSON-Rundläufen und 4 verfrühten Verkaufsabweisungen. Der offene Zweikantenfall erzielte je Firma **759.591 Cent** Außenmarkterlös; bei Sperrung der zweiten Kante gab es **0 Cent**. Beide Fälle waren jeweils zweimal reproduzierbar. Die integrierte Vorrelease-Sperre bleibt ausdrücklich BLOCKED. Ein späterer reiner Dokumentations-Commit erfordert weiterhin eigene CI-Kontrolle auf seinem HEAD.
 
 ## Zweck und Änderung
 
