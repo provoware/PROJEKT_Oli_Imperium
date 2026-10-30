@@ -41,6 +41,8 @@ jobs:
           node project-c/pppoppi-imperium/quality_v194/build.cjs "$RUNNER_TEMP/PPPOPPI-V194-TECH"
           node --check "$RUNNER_TEMP/PPPOPPI-V194-TECH/src/neo_bridge.js"
           node --check "$RUNNER_TEMP/PPPOPPI-V194-TECH/test_human_parity_v192.cjs"
+          node project-c/pppoppi-imperium/quality_v194/test_financial_limits_v194.cjs "$RUNNER_TEMP/PPPOPPI-V194-TECH/src"
+          node project-c/pppoppi-imperium/quality_v194/test_import_filename_guard_v194.cjs
       - name: Wirtschaftliche Fachprüfungen
         working-directory: project-c/pppoppi-imperium/SPIEL
         run: |
