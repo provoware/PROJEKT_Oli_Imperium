@@ -24,7 +24,7 @@ jobs:
           set -o pipefail
           node --check project-c/pppoppi-imperium/quality_v194/test_natural_multifirm_refinery_v194.cjs
           node project-c/pppoppi-imperium/quality_v194/test_natural_multifirm_refinery_v194.cjs | tee natural_multifirm_refinery.json
-          node -e "const r=require('./natural_multifirm_refinery.json');if(r.schema!=='pppoppi.natural-multifirm-refinery/1'||r.scenarios!==1||r.repeatedRuns!==2||r.simulatedMonths!==10||r.companyMonthChecks!==20||r.jsonRoundtrips!==20||r.duplicateQueuesRejected!==4||r.negativeCorruptionsCaught!==12||r.noInjectedOilOrCash!==true||r.result?.totals?.soldTotal<0||r.prereleaseGate!=='BLOCKED')process.exit(1);"
+          node -e "const r=require('./natural_multifirm_refinery.json');if(r.schema!=='pppoppi.natural-multifirm-refinery/1'||r.scenarios!==1||r.repeatedRuns!==2||r.simulatedMonths!==10||r.companyMonthChecks!==20||r.jsonRoundtrips!==20||r.duplicateQueuesRejected!==4||r.negativeCorruptionsCaught!==12||r.noInjectedOilOrCash!==true||r.result?.totals?.soldTotal!==18000||r.result?.totals?.inventoryTotal!==180000||r.result?.foreignRejections!==1||r.result?.jsonRoundtrips!==10||r.result?.negativeChecks!==6||r.result?.freight?.H1?.acceptedMilli!==9000||r.result?.freight?.H2?.acceptedMilli!==9000||r.result?.allocation?.H1?.soldMilli!==9000||r.result?.allocation?.H2?.soldMilli!==9000||r.prereleaseGate!=='BLOCKED')process.exit(1);"
       - name: Nachweisdatei sichern
         if: always()
         uses: actions/upload-artifact@v4
