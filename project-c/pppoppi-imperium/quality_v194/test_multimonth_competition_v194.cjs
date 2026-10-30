@@ -13,7 +13,7 @@ const company = (s, id) => {
   return f;
 };
 // Independent cross-company accounting oracle. Corrupted copies are never fed to the engine.
-function auditIndependent(s, initial, cumulativeSold, month) {
+function auditIndependent(s, initial, cumulativeSold, cumulativeRevenue, saleMonths, month) {
   const report = s.lastReport;
   assert.equal(report.month, month, 'audit: wrong report month');
   const demand = report.regions.BERLIN.demandMilli;
@@ -36,6 +36,12 @@ function auditIndependent(s, initial, cumulativeSold, month) {
     assert.equal(firm.monthRevenueCent,
       Math.floor((sold * s.prices.BERLIN + 500) / 1000),
       'audit: market revenue mismatch');
+    // Cash can reconcile even if a market sale was misclassified or duplicated.
+    const saleRows = firm.ledger.filter(row => row.code === 'MARKTERLÖS');
+    assert.equal(saleRows.length, saleMonths[i],
+      'audit: missing or duplicate market ledger entry');
+    assert.equal(saleRows.reduce((sum, row) => sum + row.deltaCent, 0),
+      cumulativeRevenue[i], 'audit: cumulative market ledger revenue mismatch');
     assert.equal(firm.cashCent - initial[i].cashCent,
       firm.ledger.reduce((n, row) => n + row.deltaCent, 0),
       'audit: cash ledger mismatch');
@@ -45,8 +51,8 @@ function auditIndependent(s, initial, cumulativeSold, month) {
   assert.equal(soldTotal, Math.min(offeredTotal, demand),
     'audit: market allocation does not match available supply and demand');
 }
-function negativeAuditProbes(s, initial, cumulativeSold, month) {
-  auditIndependent(s, initial, cumulativeSold, month);
+function negativeAuditProbes(s, initial, cumulativeSold, cumulativeRevenue, saleMonths, month) {
+  auditIndependent(s, initial, cumulativeSold, cumulativeRevenue, saleMonths, month);
   let caught = 0;
   for (let i = 0; i < 2; i++) {
     const id = 'H' + (i + 1), claimId = CLAIMS[i];
@@ -57,12 +63,18 @@ function negativeAuditProbes(s, initial, cumulativeSold, month) {
       state => { company(state, id).monthSoldMilli += 1000; },
       state => { company(state, id).monthRevenueCent += 1; },
       state => { state.lastReport.allocations.BERLIN[claimId] =
-        (state.lastReport.allocations.BERLIN[claimId] || 0) + 1000; }
+        (state.lastReport.allocations.BERLIN[claimId] || 0) + 1000; },
+      // These keep the total cash ledger unchanged; only sale provenance detects them.
+      state => { const sale = company(state, id).ledger.find(row => row.code === 'MARKTERLÖS');
+        assert.ok(sale); sale.code = 'UNBEKANNT'; },
+      state => { const ledger = company(state, id).ledger;
+        const sale = ledger.find(row => row.code === 'MARKTERLÖS');
+        assert.ok(sale); ledger.push({...sale, deltaCent: 0}); }
     ];
     for (const mutate of corruptions) {
       const altered = clone(s);
       mutate(altered);
-      assert.throws(() => auditIndependent(altered, initial, cumulativeSold, month),
+      assert.throws(() => auditIndependent(altered, initial, cumulativeSold, cumulativeRevenue, saleMonths, month),
         /audit:/, 'undetected cross-company corruption ' + id + ' month ' + month);
       caught++;
     }
@@ -77,7 +89,7 @@ function negativeAuditProbes(s, initial, cumulativeSold, month) {
   for (const mutate of marketCorruptions) {
     const altered = clone(s);
     mutate(altered);
-    assert.throws(() => auditIndependent(altered, initial, cumulativeSold, month),
+    assert.throws(() => auditIndependent(altered, initial, cumulativeSold, cumulativeRevenue, saleMonths, month),
       /audit:/, 'undetected global market corruption month ' + month);
     caught++;
   }
@@ -101,6 +113,7 @@ function play() {
     cashCent: company(s, 'H' + (i + 1)).cashCent
   }));
   const cumulativeSold = [0, 0];
+  const cumulativeRevenue = [0, 0], saleMonths = [0, 0];
   const reports = [];
   let jsonRoundtrips = 0, duplicateChecks = 0, companyMonthChecks = 0;
   let deliberateCorruptionsCaught = 0, foreignActionRejections = 0;
@@ -167,6 +180,8 @@ function play() {
       assert.equal(f.monthSoldMilli, soldByClaim[i], 'wrong monthly sales counter');
       const expectedRevenue = Math.floor((soldByClaim[i] * s.prices.BERLIN + 500) / 1000);
       assert.equal(f.monthRevenueCent, expectedRevenue, 'wrong monthly revenue');
+      cumulativeRevenue[i] += expectedRevenue;
+      if (soldByClaim[i] > 0) saleMonths[i]++;
       assert.equal(f.cashCent - initial[i].cashCent,
         f.ledger.reduce((n, row) => n + row.deltaCent, 0),
         'cash ledger differs from actual cash');
@@ -177,7 +192,8 @@ function play() {
         'known first-month competition baseline changed');
       assert.deepEqual(CLAIMS.map(id => s.claims[id].inventoryMilli), [40000, 40000]);
     }
-    deliberateCorruptionsCaught += negativeAuditProbes(s, initial, cumulativeSold, month);
+    deliberateCorruptionsCaught += negativeAuditProbes(
+      s, initial, cumulativeSold, cumulativeRevenue, saleMonths, month);
     const snapshot = clone(s);
     assert.equal(E.validate(snapshot), true, 'report JSON roundtrip invalid');
     assert.deepEqual(snapshot, s);
@@ -212,11 +228,12 @@ console.log(JSON.stringify({
   schema: 'pppoppi.multimonth-competition/1', scenarios: 1,
   repeatedRuns: 2, simulatedMonths: 6, companyMonthChecks: 12,
   duplicateChecks: 12, jsonRoundtrips: 10,
-  foreignActionRejections: 40, deliberateCorruptionsCaught: 96,
+  foreignActionRejections: 40, deliberateCorruptionsCaught: 120,
   noInjectedCashOrInventory: true, result: first,
   limitations: ['Two human firms and two Berlin claims; three completed market months.',
     'No refinery or public freight in this targeted test.',
-    '48 independent negative corruption probes per repeated run (both firms and market, three months).',
+    '60 independent negative corruption probes per repeated run (both firms and market, three months).',
+    'Sale posting count and cumulative market revenue are checked separately from cash balance.',
     '20 foreign-field PUMP/SHIP/OFFER/CANCEL actions rejected per run after rival ownership; 40 in total.',
     'Cash reconciliation is not a profit or asset valuation.',
     'Browser file dialog, historic C64 and personal acceptance remain open.'],
