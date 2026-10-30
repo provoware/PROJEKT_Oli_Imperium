@@ -16,6 +16,46 @@ function firm(s,id) {
   assert.ok(f, 'missing company '+id);
   return f;
 }
+// Independent ledger/cash oracle: compare against the synthetic fixture baseline,
+// never against a balance copied from the state under examination.
+function ledgerSum(f) {
+  return f.ledger.reduce((sum, row) => {
+    assert.ok(Number.isSafeInteger(row.deltaCent), 'ledger: non-integer posting');
+    return sum + row.deltaCent;
+  }, 0);
+}
+function auditCashBridge(s, baselines, label) {
+  for (const id of ['H1', 'H2']) {
+    const f = firm(s, id), baseline = baselines[id];
+    assert.ok(Number.isSafeInteger(f.cashCent), 'ledger: invalid cash '+id);
+    assert.equal(f.cashCent - baseline.cashCent,
+      ledgerSum(f) - baseline.ledgerCent,
+      'ledger: cash/posting mismatch '+label+' '+id);
+  }
+}
+function negativeCashBridgeProbes(s, baselines, label) {
+  auditCashBridge(s, baselines, label);
+  let caught = 0;
+  for (const id of ['H1', 'H2']) {
+    const corruptions = [
+      state => { firm(state, id).cashCent += 1; },
+      state => { const rows = firm(state, id).ledger;
+        assert.ok(rows.length, 'ledger: expected real posting');
+        rows[0].deltaCent += 1; },
+      state => { const rows = firm(state, id).ledger;
+        assert.ok(rows.length, 'ledger: expected real posting');
+        rows[0].deltaCent = 0.5; }
+    ];
+    for (const mutate of corruptions) {
+      const altered = clone(s);
+      mutate(altered);
+      assert.throws(() => auditCashBridge(altered, baselines, label),
+        /ledger:/, 'ledger corruption escaped '+label+' '+id);
+      caught++;
+    }
+  }
+  return caught;
+}
 function command(type,id,label,tag,extra={}) {
   return {type,companyId:id,requestId:'FREIGHT-CHAIN-'+label+'-'+tag,...extra};
 }
@@ -61,11 +101,16 @@ function play(tc) {
   }
   if(tc.closed) s.publicNetwork.links['BB-N'].downUntil=4;
   assert.equal(E.validate(s),true,'invalid starting fixture');
+  const baselines = Object.fromEntries(['H1','H2'].map(id => {
+    const f = firm(s,id);
+    return [id, {cashCent:f.cashCent, ledgerCent:ledgerSum(f)}];
+  }));
   const initialInventory=30000;
   const hold=P.freight(18000,route);
   const refund=P.freight(18000-tc.accepted,route);
   const rows=[];
   let duplicates=0, jsonRoundtrips=0, rejectedEarlyOffers=0;
+  let cashBridgeNegativeTests=0, cashBridgeCheckpoints=0;
   for(const id of ['H1','H2']) {
     s=step(s,command('PUBLIC_CONNECT',id,label,id+'-CONNECT',
       {from:'BERLIN',to:'NORD'}));
@@ -120,6 +165,8 @@ function play(tc) {
     rows.push({companyId:id,acceptedMilli:tc.accepted,heldCent:hold,
       refundedCent:refund,netFreightCent:hold-refund});
   }
+  cashBridgeNegativeTests += negativeCashBridgeProbes(s, baselines, label+'-M1');
+  cashBridgeCheckpoints += 2;
   s=roundtrip(s);jsonRoundtrips++;
   s=nextMonth(s,label,2);
   for(const id of ['H1','H2']) {
@@ -177,6 +224,8 @@ function play(tc) {
     assert.equal(s.transport.firms[id].BERLIN.marketMilli+tc.accepted,
       initialInventory,'stock conservation failed');
   }
+  cashBridgeNegativeTests += negativeCashBridgeProbes(s, baselines, label+'-M3');
+  cashBridgeCheckpoints += 2;
   s=roundtrip(s);jsonRoundtrips++;
   s=nextMonth(s,label,4);
   assert.equal(s.publicNetwork.inTransit.length,0);
@@ -190,6 +239,7 @@ function play(tc) {
   }
   return {scenario:label,closed:tc.closed,months:3,rows,expectedRevenueCent:expectedRevenue,
     duplicatesRejected:duplicates,jsonRoundtrips,rejectedEarlyOffers,
+    cashBridgeNegativeTests,cashBridgeCheckpoints,
     arrivalMonth:tc.accepted?3:null,finalMonth:s.month};
 }
 const rows=CASES.map(tc=>{
@@ -202,11 +252,15 @@ console.log(JSON.stringify({
   scenarios:2,repeatedRuns:2,totalSimulatedMonths:12,
   checkedCompanyMonths:24,duplicatesRejected:8,jsonRoundtrips:12,
   rejectedEarlyOffers:4,rows,
+  cashBridgeNegativeTests:rows.reduce((n,x)=>n+x.cashBridgeNegativeTests,0)*2,
+  cashBridgeCheckpoints:rows.reduce((n,x)=>n+x.cashBridgeCheckpoints,0)*2,
   noProductionSourceChanges:true,
   limitations:[
     'Synthetic starting inventory and cash; no naturally produced oil or refinery production is established.',
     'Only the Berlin–Brandenburg–Nord route, one shared bottleneck and one blocked-link scenario are covered.',
     'Freight is a cash expense and sales are cash inflows, not proof of profit or asset valuation.',
+    'Cash/ledger bridge checked for both firms after freight settlement and after export sale.',
+    '48 deliberately corrupted copies are rejected by the independent cash/ledger oracle; not an import-validation test.',
     'No browser/800x600 validation and no historical C64 authenticity established.'
   ],prereleaseGate:'BLOCKED'
 },null,2));
