@@ -103,7 +103,7 @@ function play() {
   const cumulativeSold = [0, 0];
   const reports = [];
   let jsonRoundtrips = 0, duplicateChecks = 0, companyMonthChecks = 0;
-  let deliberateCorruptionsCaught = 0;
+  let deliberateCorruptionsCaught = 0, foreignActionRejections = 0;
   for (let month = 1; month <= 3; month++) {
     assert.equal(s.month, month);
     assert.equal(s.phase, 'TURN');
@@ -113,6 +113,24 @@ function play() {
         ? ['SURVEY', 'BUY', 'DRILL', 'PUMP', 'SHIP', 'OFFER']
         : (s.claims[claimId].inventoryMilli > 0
           ? ['SHIP', 'OFFER'] : ['PUMP', 'SHIP', 'OFFER']);
+      // Foreign claims must remain inaccessible through every production/market action.
+      // Only probe when the rival has already acquired its field; no fake ownership.
+      const rivalClaim = CLAIMS[1 - i];
+      if (s.claims[rivalClaim].owner === 'H' + (2 - i)) {
+        for (const foreignType of ['PUMP', 'SHIP', 'OFFER', 'CANCEL']) {
+          const forbidden = {type: foreignType, companyId: id,
+            claimId: rivalClaim,
+            requestId: 'FOREIGN-' + month + '-' + id + '-' + foreignType};
+          const untouched = clone(s);
+          assert.throws(() => E.transition(s, forbidden),
+            /Claim gehört nicht zum Unternehmen/,
+            'foreign claim action accepted ' + month + ' ' + id + ' ' + foreignType);
+          assert.deepEqual(s, untouched,
+            'foreign claim action changed input ' + month + ' ' + id + ' ' + foreignType);
+          assert.equal(E.validate(s), true, 'invalid state after rejected foreign action');
+          foreignActionRejections++;
+        }
+      }
       for (const type of types) s = action(s, type, id, month, claimId).state;
       const last = action(s, 'END_TURN', id, month);
       s = last.state;
@@ -181,7 +199,7 @@ function play() {
     }
   }
   return {reports, companyMonthChecks, duplicateChecks, jsonRoundtrips,
-    deliberateCorruptionsCaught,
+    foreignActionRejections, deliberateCorruptionsCaught,
     cumulativeSoldMilli: cumulativeSold.reduce((n, x) => n + x, 0),
     producedMilli: CLAIMS.reduce((n, id, i) =>
       n + initial[i].reserveMilli - s.claims[id].reserveMilli, 0),
@@ -194,11 +212,12 @@ console.log(JSON.stringify({
   schema: 'pppoppi.multimonth-competition/1', scenarios: 1,
   repeatedRuns: 2, simulatedMonths: 6, companyMonthChecks: 12,
   duplicateChecks: 12, jsonRoundtrips: 10,
-  deliberateCorruptionsCaught: 96,
+  foreignActionRejections: 40, deliberateCorruptionsCaught: 96,
   noInjectedCashOrInventory: true, result: first,
   limitations: ['Two human firms and two Berlin claims; three completed market months.',
     'No refinery or public freight in this targeted test.',
     '48 independent negative corruption probes per repeated run (both firms and market, three months).',
+    '20 foreign-field PUMP/SHIP/OFFER/CANCEL actions rejected per run after rival ownership; 40 in total.',
     'Cash reconciliation is not a profit or asset valuation.',
     'Browser file dialog, historic C64 and personal acceptance remain open.'],
   prereleaseGate: 'BLOCKED'
