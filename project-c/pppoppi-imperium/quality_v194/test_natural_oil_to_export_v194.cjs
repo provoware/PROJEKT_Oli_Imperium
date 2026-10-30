@@ -12,6 +12,68 @@ const CLAIM = 'BERLIN-1';
 const ROUTE = ['B-BB','BB-N'];
 assert.deepEqual(P.routeFor('BERLIN','NORD'), ROUTE);
 const firm = s => s.companies.find(f => f.id === 'H1');
+
+// A cash bridge is not a profit calculation. It preserves every ledger entry,
+// distinguishes investments/prepayments from revenue and exposes unknown codes.
+const SALES = new Set(['MARKTERLÖS','VERTRAGSERLÖS','AUSSENMARKT',
+  'RAFFINIERT_MONATSVERKAUF']);
+const INVESTMENTS = new Set(['FELDKAUF','FACHBOHRUNG','TANKAUSBAU',
+  'STRECKENBAU','RAFFINERIE_BAU','VERTRIEBSROUTE','PUBLIC_CONNECT']);
+const ACTION_COSTS = new Set(['GUTACHTEN','FOERDERUNG','TRANSPORT','FRACHT',
+  'RAFFINERIE_VERARBEITUNG','TRANSPORT_REPARATUR',
+  'BRANDBEKÄMPFUNG_PROFI','ZAHLUNG_PERSONAL','ZAHLUNG_WARTUNG']);
+const CASH_KEYS = ['salesCent','investmentCent','actionCostCent',
+  'freightHoldCent','freightRefundCent','loanCent','principalCent',
+  'otherIncomingCent','otherOutgoingCent'];
+function cashBridge(entries) {
+  const totals = Object.fromEntries(CASH_KEYS.map(k=>[k,0]));
+  const codes = {};
+  for (const entry of entries) {
+    assert.ok(entry && typeof entry.code==='string' && entry.code,
+      'invalid ledger code');
+    assert.ok(Number.isSafeInteger(entry.deltaCent),'unsafe ledger amount');
+    const n=entry.deltaCent;
+    codes[entry.code]=(codes[entry.code]||0)+1;
+    let key=n>=0?'otherIncomingCent':'otherOutgoingCent';
+    if (SALES.has(entry.code)) {
+      assert.ok(n>=0,'negative sales booking'); key='salesCent';
+    } else if (INVESTMENTS.has(entry.code)) {
+      assert.ok(n<=0,'positive investment booking'); key='investmentCent';
+    } else if (ACTION_COSTS.has(entry.code)) {
+      assert.ok(n<=0,'positive action cost'); key='actionCostCent';
+    } else if (entry.code==='PUBLIC_FREIGHT_HOLD') {
+      assert.ok(n<=0,'positive freight prepayment'); key='freightHoldCent';
+    } else if (entry.code==='FRACHT_RUECKGABE') {
+      assert.ok(n>=0,'negative freight refund'); key='freightRefundCent';
+    } else if (['RETTUNGSKREDIT','KI_RETTUNGSKREDIT'].includes(entry.code)) {
+      assert.ok(n>=0,'negative loan receipt'); key='loanCent';
+    } else if (entry.code==='ZAHLUNG_TILGUNG') {
+      assert.ok(n<=0,'positive principal repayment'); key='principalCent';
+    }
+    totals[key]+=n;
+    assert.ok(Number.isSafeInteger(totals[key]),'unsafe category total');
+  }
+  const netCent=CASH_KEYS.reduce((n,k)=>n+totals[k],0);
+  assert.ok(Number.isSafeInteger(netCent),'unsafe cash bridge');
+  assert.equal(netCent,entries.reduce((n,e)=>n+e.deltaCent,0),
+    'classification does not reconcile with ledger');
+  return {...totals,netCent,codes};
+}
+// Deliberate corruptions must fail instead of silently producing a "profit".
+for (const [code,amount,pattern] of [
+  ['AUSSENMARKT',-1,/negative sales/],
+  ['FELDKAUF',1,/positive investment/],
+  ['ZAHLUNG_PERSONAL',1,/positive action cost/],
+  ['PUBLIC_FREIGHT_HOLD',1,/positive freight prepayment/],
+  ['FRACHT_RUECKGABE',-1,/negative freight refund/],
+  ['RETTUNGSKREDIT',-1,/negative loan receipt/],
+  ['ZAHLUNG_TILGUNG',1,/positive principal repayment/]
+]) assert.throws(()=>cashBridge([{code,deltaCent:amount}]),pattern);
+assert.throws(()=>cashBridge([{code:'AUSSENMARKT',deltaCent:1.5}]),
+  /unsafe ledger amount/);
+assert.equal(cashBridge([{code:'UNBEKANNT',deltaCent:1},
+  {code:'UNBEKANNT',deltaCent:-2}]).netCent,-1);
+
 function command(type, label, suffix, extra = {}, id = 'H1') {
   return {type, companyId:id, requestId:'NATURAL-EXPORT-'+label+'-'+suffix, ...extra};
 }
@@ -160,8 +222,16 @@ function play(blocked) {
   assert.equal(s.publicNetwork.queued.length,0);
   assert.equal(s.publicNetwork.offers.length,0);
   // Every cash movement, including wages, must be traceable to the ledger.
+  const bridge=cashBridge(firm(s).ledger);
   const ledgerNet=firm(s).ledger.reduce((n,e)=>n+e.deltaCent,0);
   assert.equal(firm(s).cashCent-initialCash,ledgerNet);
+  assert.equal(bridge.netCent,ledgerNet,'cash bridge differs from ledger');
+  assert.ok(bridge.salesCent>=revenue,'external revenue not classified');
+  assert.ok(bridge.investmentCent<0,'investment cash flows absent');
+  assert.ok(bridge.actionCostCent<0,'action cash flows absent');
+  assert.ok(bridge.freightHoldCent<0,'freight prepayment absent');
+  assert.equal(bridge.freightRefundCent,blocked?P.freight(9000,ROUTE):0);
+  assert.equal(bridge.codes.AUSSENMARKT||0,blocked?0:1);
   assert.equal(firm(s).generation,1);
   s = save(next(s,label,6));
   assert.equal(firm(s).ledger.filter(e=>e.code==='AUSSENMARKT').length,
@@ -172,7 +242,8 @@ function play(blocked) {
     deliveredMilli:blocked?0:9000,soldMilli:blocked?0:9000,
     refundedMilli:blocked?9000:0,revenueCent:revenue,
     jsonRoundtrips:5,duplicateQueueRejected:true,
-    negativeCases:blocked?2:3,ledgerReconciled:true};
+    negativeCases:blocked?2:3,ledgerReconciled:true,
+    cashBridge:bridge};
 }
 const rows=[false,true].map(blocked=>{
   const first=play(blocked);
@@ -182,13 +253,15 @@ const rows=[false,true].map(blocked=>{
 console.log(JSON.stringify({
   schema:'pppoppi.natural-oil-export/1',
   scenarios:2,repeatedRuns:2,totalSimulatedMonths:20,
-  checkedCompanyMonths:40,rows,
+  checkedCompanyMonths:40,cashBridgeNegativeTests:8,
+  cashBridgeUnknownCodeChecks:1,rows,
   untouchedProductionFiles:true,
   limitations:[
     'Production and infrastructure use real game actions and normal initial budget.',
     'The blocked-link scenario injects a valid public disruption, not oil inventory.',
     'One claim, one refinery, one route and five months do not establish overall balance.',
     'Sales revenue is not net profit or asset valuation; no C64 authenticity is claimed.',
+    'Cash bridge separates sales, capital spending, running cash costs, freight prepayments/refunds and unknown bookings; it does not value assets or calculate profit.',
     'Browser, scaling, accessibility, asset rights and release gate remain open.'
   ],
   prereleaseGate:'BLOCKED'
