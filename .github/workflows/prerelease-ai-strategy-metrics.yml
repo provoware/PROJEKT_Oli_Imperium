@@ -22,6 +22,7 @@ on:
       - 'project-c/pppoppi-imperium/quality_v194/test_ai_natural_debt_observation_v194.cjs'
       - 'project-c/pppoppi-imperium/quality_v194/test_ai_cashflow_audit_v194.cjs'
       - 'project-c/pppoppi-imperium/quality_v194/test_public_freight_monthly_audit_v194.cjs'
+      - 'project-c/pppoppi-imperium/quality_v194/test_public_freight_chain_sale_v194.cjs'
       - 'project-c/pppoppi-imperium/quality_v194/AI_CASHFLOW_AUDIT_20261030.md'
       - 'project-c/pppoppi-imperium/quality_v194/AI_NATURAL_DEBT_OBSERVATION_20261030.md'
       - 'project-c/pppoppi-imperium/quality_v194/AI_OWNED_CLAIM_INSOLVENCY_20261030.md'
@@ -154,6 +155,12 @@ jobs:
           node --check project-c/pppoppi-imperium/quality_v194/test_public_freight_monthly_audit_v194.cjs
           node project-c/pppoppi-imperium/quality_v194/test_public_freight_monthly_audit_v194.cjs | tee public_freight_monthly_audit.json
           node -e "const r=require('./public_freight_monthly_audit.json'); if(r.scenarios!==2 || r.repeatedRuns!==2 || r.totalSimulatedMonths!==8 || r.checkedCompanyMonths!==16 || r.duplicateQueuesRejected!==8 || r.jsonRoundtrips!==8 || r.rows.length!==2 || r.prereleaseGate!=='BLOCKED') process.exit(1);"
+      - name: Zweistufige Frachtkette, Lieferverzug und Aussenmarktverkauf pruefen
+        run: |
+          set -o pipefail
+          node --check project-c/pppoppi-imperium/quality_v194/test_public_freight_chain_sale_v194.cjs
+          node project-c/pppoppi-imperium/quality_v194/test_public_freight_chain_sale_v194.cjs | tee public_freight_chain_sale.json
+          node -e "const r=require('./public_freight_chain_sale.json'); if(r.scenarios!==2 || r.repeatedRuns!==2 || r.totalSimulatedMonths!==12 || r.checkedCompanyMonths!==24 || r.duplicatesRejected!==8 || r.jsonRoundtrips!==12 || r.rejectedEarlyOffers!==4 || r.rows.length!==2 || r.rows[0].expectedRevenueCent<=0 || r.rows[1].expectedRevenueCent!==0 || r.prereleaseGate!=='BLOCKED') process.exit(1);"
       - name: Reproduzierbaren Zahlenbericht sichern
         if: always()
         uses: actions/upload-artifact@v4
@@ -176,5 +183,6 @@ jobs:
             ai_natural_debt_observation.json
             ai_cashflow_audit.json
             public_freight_monthly_audit.json
+            public_freight_chain_sale.json
           if-no-files-found: warn
           retention-days: 14
