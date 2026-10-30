@@ -6,6 +6,7 @@ on:
       - 'project-c/pppoppi-imperium/quality_v194/test_multiclaim_competition_v194.cjs'
       - 'project-c/pppoppi-imperium/quality_v194/test_multimonth_competition_v194.cjs'
       - 'project-c/pppoppi-imperium/quality_v194/MULTIMONTH_COMPETITION_20261030.md'
+      - 'project-c/pppoppi-imperium/quality_v194/MULTICYCLE_OIL_FREIGHT_20261030.md'
       - 'project-c/pppoppi-imperium/quality_v194/MULTICLAIM_COMPETITION_20261030.md'
       - 'project-c/pppoppi-imperium/quality_v194/NATURAL_OIL_EXPORT_20261030.md'
       - 'project-c/pppoppi-imperium/prerelease/matrix.json'
