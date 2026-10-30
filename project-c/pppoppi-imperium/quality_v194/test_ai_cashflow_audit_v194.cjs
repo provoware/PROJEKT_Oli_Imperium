@@ -11,6 +11,34 @@ const E = globalThis.OliV082;
 const copy = value => JSON.parse(JSON.stringify(value));
 const MONTHS = 24;
 const CONFIGS = [{name: 'two_ai', ais: 2}, {name: 'three_ai', ais: 3}];
+// These are explicitly known booking codes, not a claim of accounting profit.
+// Every other inflow/outflow stays visible in its own residual category.
+const SALES = new Set(['MARKTERLÖS', 'VERTRAGSERLÖS', 'AUSSENMARKT', 'RAFFINIERT_MONATSVERKAUF']);
+const INVESTMENTS = new Set(['FELDKAUF', 'FACHBOHRUNG', 'TANKAUSBAU',
+  'STRECKENBAU', 'RAFFINERIE_BAU', 'VERTRIEBSROUTE', 'PUBLIC_CONNECT']);
+const LOANS = new Set(['RETTUNGSKREDIT', 'KI_RETTUNGSKREDIT']);
+const CATEGORIES = ['salesCent', 'investmentCent', 'loanCent', 'principalCent',
+  'otherIncomingCent', 'otherOutgoingCent'];
+function classify(entry) {
+  const amount = entry.deltaCent;
+  if (SALES.has(entry.code)) {
+    assert.ok(amount >= 0, 'sales booking has negative sign');
+    return 'salesCent';
+  }
+  if (INVESTMENTS.has(entry.code)) {
+    assert.ok(amount <= 0, 'investment booking has positive sign');
+    return 'investmentCent';
+  }
+  if (LOANS.has(entry.code)) {
+    assert.ok(amount >= 0, 'loan booking has negative sign');
+    return 'loanCent';
+  }
+  if (entry.code === 'ZAHLUNG_TILGUNG') {
+    assert.ok(amount <= 0, 'principal repayment has positive sign');
+    return 'principalCent';
+  }
+  return amount >= 0 ? 'otherIncomingCent' : 'otherOutgoingCent';
+}
 function move(state, type, requestId) {
   const original = copy(state);
   const result = E.transition(state, {type, companyId: 'H1', requestId});
@@ -28,6 +56,8 @@ function reconcile(before, after) {
     'old ledger entries were modified');
   const entries = after.ledger.slice(before.ledger.length);
   let net = 0, incoming = 0, outgoing = 0;
+  const categories = Object.fromEntries(CATEGORIES.map(key => [key, 0]));
+  const codeCounts = {};
   const seen = new Set(before.ledger.map(entry => entry.id));
   for (const entry of entries) {
     assert.ok(entry && typeof entry.id === 'string' && !seen.has(entry.id),
@@ -40,6 +70,10 @@ function reconcile(before, after) {
     assert.ok(Number.isSafeInteger(net), 'ledger sum overflow');
     if (entry.deltaCent >= 0) incoming += entry.deltaCent;
     else outgoing -= entry.deltaCent;
+    const category = classify(entry);
+    categories[category] += Math.abs(entry.deltaCent);
+    codeCounts[entry.code] = (codeCounts[entry.code] || 0) + 1;
+    assert.ok(Number.isSafeInteger(categories[category]), 'classified total overflow');
     assert.ok(Number.isSafeInteger(incoming) && Number.isSafeInteger(outgoing),
       'cash-flow totals overflow');
   }
@@ -48,8 +82,12 @@ function reconcile(before, after) {
   assert.equal(after.cashCent - before.cashCent, net,
     'cash delta does not match ledger');
   assert.equal(incoming - outgoing, net, 'cash-flow totals do not reconcile');
+  assert.equal(categories.salesCent + categories.loanCent +
+    categories.otherIncomingCent - categories.investmentCent -
+    categories.principalCent - categories.otherOutgoingCent, net,
+    'classified cash-flow does not reconcile');
   return {bookings: entries.length, netCent: net, incomingCent: incoming,
-    outgoingCent: outgoing};
+    outgoingCent: outgoing, ...categories, codeCounts};
 }
 function run(config) {
   let state = E.fresh({humans: 1, ais: config.ais,
@@ -57,7 +95,8 @@ function run(config) {
   const stats = Object.fromEntries(state.companies.map(f => [f.id, {
     months: 0, reconciledMonths: 0, restartMonths: 0,
     bookings: 0, incomingCent: 0, outgoingCent: 0,
-    reportedRevenueCent: 0, monthsWithDebt: 0, finalFields: 0
+    reportedRevenueCent: 0, monthsWithDebt: 0, finalFields: 0,
+    ...Object.fromEntries(CATEGORIES.map(key => [key, 0])), codeCounts: {}
   }]));
   let checks = 0, humanRescues = 0;
   for (let month = 1; month <= MONTHS; month++) {
@@ -101,8 +140,14 @@ function run(config) {
       row.incomingCent += audit.incomingCent;
       row.outgoingCent += audit.outgoingCent;
       row.reportedRevenueCent += monthly.revenueCent;
-      assert.ok([row.incomingCent, row.outgoingCent, row.reportedRevenueCent]
-        .every(Number.isSafeInteger), 'aggregate overflow');
+      assert.equal(audit.salesCent, monthly.revenueCent,
+        'monthly reported revenue differs from independent sales bookings');
+      for (const key of CATEGORIES) row[key] += audit[key];
+      for (const [code, count] of Object.entries(audit.codeCounts))
+        row.codeCounts[code] = (row.codeCounts[code] || 0) + count;
+      assert.ok([row.incomingCent, row.outgoingCent, row.reportedRevenueCent,
+        ...CATEGORIES.map(key => row[key])].every(Number.isSafeInteger),
+        'aggregate overflow');
       assert.equal(monthly.cashCent, firm.cashCent, 'report cash differs from engine');
       assert.equal(monthly.debtCent, firm.debtCent, 'report debt differs from engine');
       assert.equal(monthly.revenueCent, firm.monthRevenueCent,
@@ -117,6 +162,12 @@ function run(config) {
   for (const row of Object.values(stats)) {
     assert.equal(row.months, MONTHS);
     assert.equal(row.reconciledMonths + row.restartMonths, MONTHS);
+    assert.equal(row.salesCent, row.reportedRevenueCent,
+      'cumulative sales and reported revenue differ');
+    assert.equal(row.salesCent + row.loanCent + row.otherIncomingCent,
+      row.incomingCent, 'classified incoming cash differs');
+    assert.equal(row.investmentCent + row.principalCent + row.otherOutgoingCent,
+      row.outgoingCent, 'classified outgoing cash differs');
   }
   return {name: config.name, months: MONTHS, companies: Object.keys(stats).length,
     accountingChecks: checks, humanRescues, stats};
@@ -137,6 +188,13 @@ const badLedger = copy(afterAi);
 badLedger.ledger[beforeAi.ledger.length].deltaCent++;
 assert.throws(() => reconcile(beforeAi, badLedger),
   /cash delta does not match ledger/);
+// Deliberately corrupted booking signs must not be accepted as valid categories.
+assert.throws(() => classify({code: 'MARKTERLÖS', deltaCent: -1}),
+  /sales booking has negative sign/);
+assert.throws(() => classify({code: 'FELDKAUF', deltaCent: 1}),
+  /investment booking has positive sign/);
+assert.throws(() => classify({code: 'RETTUNGSKREDIT', deltaCent: -1}),
+  /loan booking has negative sign/);
 const rows = CONFIGS.map(config => {
   const first = run(config);
   assert.deepEqual(run(config), first, 'non-reproducible ' + config.name);
@@ -148,8 +206,16 @@ console.log(JSON.stringify({
   configurations: CONFIGS.length, repeatedRuns: 2,
   monthsPerRun: MONTHS, totalSimulatedMonths: 96,
   accountingChecks: rows.reduce((n, r) => n + r.accountingChecks, 0),
-  negativeTests: 2, noInjectedCashOrDebt: true, rows,
+  negativeTests: 5, noInjectedCashOrDebt: true,
+  revenueChecks: rows.reduce((n, r) => n + r.accountingChecks, 0),
+  classifications: Object.fromEntries(CATEGORIES.map(key =>
+    [key, rows.reduce((n, r) => n + Object.values(r.stats)
+      .reduce((m, f) => m + f[key], 0), 0)])),
+  rows,
   limitations: [
+    'Sales are independently matched to booking codes and monthly revenue reports.',
+    'Investment means selected acquisition/build bookings, not an approved asset value.',
+    'Other inflows and outflows remain separately visible, with exact booking-code counts.',
     'Ledger/cash reconciliation measures cash flow, not accounting profit.',
     'Field value, inventory valuation and historical C64 rules are not established.',
     'Restart months are separately checked because the ledger resets.',
