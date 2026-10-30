@@ -23,7 +23,7 @@ jobs:
           set -o pipefail
           node --check project-c/pppoppi-imperium/quality_v194/test_public_freight_chain_sale_v194.cjs
           node project-c/pppoppi-imperium/quality_v194/test_public_freight_chain_sale_v194.cjs | tee public_freight_chain_sale.json
-          node -e "const r=require('./public_freight_chain_sale.json'); if(r.scenarios!==2 || r.repeatedRuns!==2 || r.totalSimulatedMonths!==12 || r.checkedCompanyMonths!==24 || r.duplicatesRejected!==8 || r.jsonRoundtrips!==12 || r.rejectedEarlyOffers!==4 || r.rows.length!==2 || r.rows[0].expectedRevenueCent<=0 || r.rows[1].expectedRevenueCent!==0 || r.prereleaseGate!=='BLOCKED') process.exit(1);"
+          node -e "const r=require('./public_freight_chain_sale.json'); if(r.scenarios!==2 || r.repeatedRuns!==2 || r.totalSimulatedMonths!==12 || r.checkedCompanyMonths!==24 || r.duplicatesRejected!==8 || r.jsonRoundtrips!==12 || r.rejectedEarlyOffers!==4 || r.cashBridgeNegativeTests!==48 || r.cashBridgeCheckpoints!==16 || !r.rows.every(x=>x.cashBridgeNegativeTests===12 && x.cashBridgeCheckpoints===4) || r.rows.length!==2 || r.rows[0].expectedRevenueCent<=0 || r.rows[1].expectedRevenueCent!==0 || r.prereleaseGate!=='BLOCKED') process.exit(1);"
       - name: JSON-Pruefbeleg sichern
         if: always()
         uses: actions/upload-artifact@v4
