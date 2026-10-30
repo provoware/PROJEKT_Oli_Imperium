@@ -128,6 +128,7 @@ def audit_session(page, worker, zoom, download_dir):
             return {
                 clicks: window.__sessionImportClicks,
                 fileInputClicks: window.__sessionFileInputClicks,
+                nativeShowPickerAvailable: typeof document.getElementById('loadSessionFile').showPicker === 'function',
                 userActivationAtInputClick: window.__sessionInputActivation,
                 inputClickTrusted: window.__sessionInputTrusted,
                 toast: document.querySelector('#toast')?.textContent?.slice(0, 200),
@@ -148,8 +149,8 @@ def audit_session(page, worker, zoom, download_dir):
     page.wait_for_function("window.__sessionImportClicks === 1")
     check(label + ": Import-Schalter reagiert auf echte Enter-Taste",
           page.evaluate("window.__sessionImportClicks") == 1)
-    check(label + ": versteckter Datei-Eingang erhielt genau einen Klick",
-          page.evaluate("window.__sessionFileInputClicks") == 1)
+    check(label + ": nativer Datei-Picker statt kuenstlichem Input-Klick",
+          page.evaluate("typeof document.getElementById('loadSessionFile').showPicker === 'function' && window.__sessionFileInputClicks === 0"))
     check(label + ": Datei-Auswahldialog durch Enter geoeffnet",
           chooser_event.value is not None)
     chooser_event.value.set_files(str(saved))
