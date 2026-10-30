@@ -35,14 +35,16 @@ function save(s) {
   assert.equal(E.validate(restored),true,'invalid JSON roundtrip');
   return restored;
 }
-function close(s,month) {
-  for(const id of IDS) {
-    const action=cmd('END_TURN',id,'END-'+month);
-    s=step(s,action);
-    const duplicate=E.transition(s,action);
-    assert.equal(duplicate.duplicate,true,'duplicate turn not rejected');
-    assert.deepEqual(duplicate.state,s,'duplicate turn changed state');
-  }
+function end(s,id,month) {
+  const action=cmd('END_TURN',id,'END-'+month);
+  s=step(s,action);
+  const duplicate=E.transition(s,action);
+  assert.equal(duplicate.duplicate,true,'duplicate turn not rejected');
+  assert.deepEqual(duplicate.state,s,'duplicate turn changed state');
+  return s;
+}
+function close(s,month,turnsEnded=false) {
+  if(!turnsEnded) for(const id of IDS) s=end(s,id,month);
   if(s.phase==='RESCUE') {
     for(const id of [...s.rescueIds]) {
       s=step(s,cmd('RESCUE_LOAN',id,'RESCUE-'+month));
@@ -124,8 +126,9 @@ function play() {
       assert.deepEqual(s,untouched);
       foreignRejections++;
     }
+    s=end(s,id,1);
   }
-  s=close(s,1);jsonRoundtrips++;
+  s=close(s,1,true);jsonRoundtrips++;
   s=next(s,2);jsonRoundtrips++;
   for(let i=0;i<2;i++) {
     const id=IDS[i],claimId=CLAIMS[i];
@@ -134,8 +137,9 @@ function play() {
     assert.equal(s.refinery.plants[id].BERLIN.productMilli,9000);
     s=step(s,cmd('NETWORK_PRODUCT',id,'M2-PRODUCT',
       {region:'BERLIN',qtyMilli:9000}));
+    s=end(s,id,2);
   }
-  s=close(s,2);jsonRoundtrips++;
+  s=close(s,2,true);jsonRoundtrips++;
   s=next(s,3);jsonRoundtrips++;
   for(const id of IDS) {
     assert.equal(s.transport.firms[id].BERLIN.marketMilli,9000);
@@ -148,8 +152,9 @@ function play() {
     assert.equal(duplicate.duplicate,true);
     assert.deepEqual(duplicate.state,s);
     duplicateQueues++;
+    s=end(s,id,3);
   }
-  s=close(s,3);jsonRoundtrips++;
+  s=close(s,3,true);jsonRoundtrips++;
   const freight={};
   for(const id of IDS) {
     const entry=s.lastReport.publicNetwork.freight.find(x=>x.companyId===id);
@@ -175,8 +180,9 @@ function play() {
     assert.equal(s.publicNetwork.received[id]?.NORD||0,accepted);
     if(accepted>0) s=step(s,cmd('PUBLIC_OFFER',id,'M5-OFFER',
       {from:'BERLIN',to:'NORD',qtyMilli:accepted}));
+    s=end(s,id,5);
   }
-  s=close(s,5);jsonRoundtrips++;
+  s=close(s,5,true);jsonRoundtrips++;
   for(const id of IDS) {
     const market=s.lastReport.publicNetwork.productMarket.NORD.allocations[id];
     allocation[id]={soldMilli:market?.soldMilli||0,
