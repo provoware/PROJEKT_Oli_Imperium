@@ -308,7 +308,12 @@ function play(blocked) {
   const rawDuplicate=E.transition(s,raw2);
   assert.equal(rawDuplicate.duplicate,true);
   assert.deepEqual(rawDuplicate.state,s);
+  // Legitimate local market sale funds later repairs; no synthetic cash.
+  s=step(s,command('SHIP',label,'M6-LOCAL-SHIP',{claimId:CLAIM}));
+  s=step(s,command('OFFER',label,'M6-LOCAL-OFFER',{claimId:CLAIM}));
   s=save(close(s,label,6));
+  const domesticSoldMilli=s.lastReport.allocations.BERLIN[CLAIM]||0;
+  assert.ok(domesticSoldMilli>0,'real domestic sale did not settle');
   s=next(s,label,7);
   assert.equal(s.transport.firms.H1.BERLIN.rawMilli,10000);
   s=step(s,command('NETWORK_REFINE',label,'M7-REFINE',
@@ -365,7 +370,7 @@ function play(blocked) {
   assert.equal(s.publicNetwork.offers.length,0);
   assert.equal(s.claims[CLAIM].reserveMilli,
     initialReserve-2*E.CFG.pumpMilli);
-  const totalSoldMilli=(blocked?0:9000)+secondSale.soldMilli;
+  const totalSoldMilli=(blocked?0:9000)+domesticSoldMilli+secondSale.soldMilli;
   const remainingMilli=s.claims[CLAIM].inventoryMilli+
     s.transport.firms.H1.BERLIN.marketMilli;
   assert.equal(2*E.CFG.pumpMilli,
@@ -386,7 +391,8 @@ function play(blocked) {
     physicalCheckpoints:physicalStages.length,physicalNegativeTests:2,
     physicalStages,cashBridge:bridge,
     secondCycle:{hadFire,rawDuplicateRejected:true,queueDuplicateRejected:true,
-      pipeRepaired:true,publicLinkRepaired:true,secondSoldMilli:secondSale.soldMilli,
+      pipeRepaired:true,publicLinkRepaired:true,domesticSoldMilli,
+      secondSoldMilli:secondSale.soldMilli,
       secondRevenueCent:secondSale.revenueCent,totalProducedMilli:2*E.CFG.pumpMilli,
       totalSoldMilli,remainingMilli,processingLossMilli:2000,
       ledgerReconciled:true,rescueLoanCount:firm(s).ledger.filter(x=>x.code==='RETTUNGSKREDIT').length,
