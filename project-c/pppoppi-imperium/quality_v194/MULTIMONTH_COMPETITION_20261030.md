@@ -32,3 +32,15 @@ Dieser neue Test enthält weder Raffinerie noch öffentlichen Frachtweg und bele
 3. Den nativen Dateidialog-Fehler mit isolierter Browserursachenprüfung beheben; danach mehrfache Regression.
 
 **Kein Merge, kein Release, keine vorgezogene persönliche Endabnahme.**
+
+## Nachprüfung der tatsächlichen GitHub-CI (30.10.2026)
+
+[GitHub-Lauf #41072949687](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41072949687) auf HEAD `bd779459a5f0f6ec78043ea128c34f981c5c7e58`: **PASS**, einschließlich `node --check`, dreier Fachtests, des neuen Dreimonatsprüfschritts und JSON-Artefakt [#12986361353](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41072949687/artifacts/12986361353). Zwei deterministische Durchläufe mit zusammen sechs Spielmonaten, zwölf Firmen-Monatskontrollen, zwölf abgewehrten Doppelvorgängen und zehn JSON-Rundläufen bestanden.
+
+| Monat | Tatsächliche Berliner Nachfrage | Verkauf beider Firmen | Restlager beider Firmen | Kumuliert verkauft |
+|---|---:|---:|---:|---:|
+| 1 | 120 Barrel | 120 Barrel | 80 Barrel | 120 Barrel |
+| 2 | 114 Barrel | 80 Barrel | 0 Barrel | 200 Barrel |
+| 3 | 102 Barrel | 102 Barrel | 98 Barrel | 302 Barrel |
+
+**Physische Bilanz nach Monat 3:** 400 Barrel regulär gefördert = 302 Barrel verkauft + 98 Barrel Restlager. Diese Zahlen beziehen sich auf einen der zwei identischen Durchläufe; sie dürfen nicht als reale Einnahmen, Gewinn oder Vermögensbewertung ausgegeben werden. Die übrigen Gesamtprüfungen und der native Dateiimport bleiben eigene Sperren. **Nach diesem Dokumentationscommit muss CI erneut auf dem endgültigen HEAD kontrolliert werden.**
