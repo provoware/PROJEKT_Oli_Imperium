@@ -107,7 +107,15 @@ check('V1.9.4-Berichte lesen den tatsächlichen V1.9.3-Kern; dessen Module bleib
   const modifiedFiles = [...new Set(changes.map(entry => entry[0]))];
   assert.deepEqual(modifiedFiles.sort(), ['README_START.txt', 'index.html',
     'src/neo_bridge.js', 'src/v082_engine.js', 'src/v082_strategy_engine.js', 'test_human_parity_v192.cjs']);
-  for (const name of runtimeModules) assert.ok(!modifiedFiles.includes(name));
+  // Schutz vor unbeabsichtigten Originaländerungen bleibt durch verifySource aktiv.
+  // Nur die beiden abgeleiteten Engine-Dateien erhalten die geprüfte Cent-Rundung.
+  for (const name of runtimeModules) {
+    if (name !== 'src/v082_strategy_engine.js') assert.ok(!modifiedFiles.includes(name));
+  }
+  for (const name of ['src/v082_engine.js', 'src/v082_strategy_engine.js']) {
+    assert.ok(renderPatched(name).includes('Number((BigInt(f.debtCent)'), name);
+    assert.ok(!read(name).includes('BigInt(f.debtCent)'), 'Original muss unangetastet bleiben: ' + name);
+  }
   for (const testScript of ['evaluate_balance_v194.cjs', 'analyze_stress_v194.cjs']) {
     const source = read(testScript);
     assert.match(source, /strategy_logistics_v193/);
