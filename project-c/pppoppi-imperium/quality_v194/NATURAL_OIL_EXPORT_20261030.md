@@ -1,6 +1,6 @@
 # WIR-02 / WIR-03 – Natuerliche Oelfoerderung bis zum Aussenmarkt (30.10.2026)
 
-**Status: CI noch zu verifizieren; Vorrelease BLOCKED.** Entwicklungszweig `automation/v194-ai-logistics-reserve-20261029-1530`, [Entwurfs-PR #137](https://github.com/provoware/PROJEKT_Oli_Imperium/pull/137). Ausgangs-HEAD vor dieser Arbeit: `3b236a5545ce4f7383fbb092b1628ee74c12528b`. Ein tatsaechlicher PASS wird erst nach ausgefuehrter GitHub-CI am endgueltigen HEAD gemeldet.
+**Gezielter Teiltest PASS auf HEAD `c1e80edb7d64c3cc7fb6450c865c848228230102`; Vorrelease BLOCKED.** Entwicklungszweig `automation/v194-ai-logistics-reserve-20261029-1530`, [Entwurfs-PR #137](https://github.com/provoware/PROJEKT_Oli_Imperium/pull/137). Ausgangs-HEAD vor dieser Arbeit: `3b236a5545ce4f7383fbb092b1628ee74c12528b`. [GitHub Actions #41041818406](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41041818406) hat Syntax, Spielaktionen, Mengenkontrolle, Wiederholbarkeit, Kassenjournal und JSON-Rundlaeufe erfolgreich ausgefuehrt. Der gezielte PASS bezieht sich auf den genannten HEAD; nachfolgende Dokumentations-Commits muessen separat kontrolliert werden.
 
 ## Ziel und pruefbare Abhaengigkeiten
 
@@ -30,7 +30,7 @@ node --check project-c/pppoppi-imperium/quality_v194/test_natural_oil_to_export_
 node project-c/pppoppi-imperium/quality_v194/test_natural_oil_to_export_v194.cjs
 ```
 
-Der gezielte Workflow ist `.github/workflows/prerelease-natural-oil-export.yml`; er sichert das JSON-Protokoll als GitHub-Artefakt. Das CI-Ergebnis ist unabhaengig vom Dokument zu kontrollieren; ein nicht gestarteter, fehlgeschlagener oder abgebrochener Lauf gilt **nicht** als PASS.
+Verifiziert: 20 simulierte Spielmonate, 40 Firmen-Monatsbeobachtungen, zwei Szenarien je zweimal reproduzierbar; je Szenario fuenf JSON-Rundlaeufe. Im offenen Fall 9 Barrel verkauft und **714.690 Cent** Aussenmarkterloes; bei Streckensperre 0 Barrel verkauft und 9 Barrel zurueckgegeben. Vorzeitige Verarbeitung und Angebote, Ueberverkauf sowie Doppelvormerkung wurden abgewehrt. Die Kassen-Journal-Abstimmung bestand. Der gezielte Workflow ist `.github/workflows/prerelease-natural-oil-export.yml`; er sichert das JSON-Protokoll als GitHub-Artefakt. Das CI-Ergebnis ist unabhaengig vom Dokument zu kontrollieren; ein nicht gestarteter, fehlgeschlagener oder abgebrochener Lauf gilt **nicht** als PASS.
 
 ## Grenzen und offene Release-Pflichten
 
