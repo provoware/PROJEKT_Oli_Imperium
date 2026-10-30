@@ -69,3 +69,13 @@ Der Test prüft nun für **jede Firma in jedem der drei Monatsberichte** zusätz
 **Automatischer Nachweis:** `test_multimonth_competition_v194.cjs` liefert `foreignActionRejections` sowie `result.foreignActionRejections`; der verpflichtende GitHub-Pruefschritt in `.github/workflows/prerelease-natural-oil-export.yml` verlangt exakt 40 beziehungsweise 20. **Status bis zum erfolgreichen GitHub-Lauf auf dem finalen Dokumentations-HEAD: PENDING.** Eine erfolgreich abgewiesene Aktion ersetzt weder eine Browser-Importpruefung noch den Nachweis von Raffinerie-/Frachtwegen zwischen mehreren Firmen.
 
 **Weiter offen:** Mehrfirmen-Raffinerie und öffentliche Fracht über mehrere Monate, eigenständige Gewinn- und Anlagenbewertung, intermittierender Dateiimport bei 175 %, Ressourcenrechte und C64-Referenz. WIR-03 bleibt BLOCKED; keine persoenliche Endabnahme, kein Merge und kein Release.
+
+## Unabhängige Prüfung der Markt-Erlösbuchungen – 30.10.2026
+
+**Risiko:** Ein korrektes Kassenbuchsaldo allein beweist nicht, dass Markterlöse richtig als Verkauf verbucht wurden. Eine umbenannte oder doppelte Buchungszeile mit Betrag null kann die Kassenbilanz unverändert lassen. Der bisherige Test konnte solche Fälle übersehen.
+
+**Neues Pflichtpaket (WIR-03/BAL-01):** In jedem der drei real durchgespielten Konkurrenzmonate wird pro Firma die Anzahl der `MARKTERLÖS`-Buchungen unabhängig gegen die Zahl der tatsächlich positiven Monatsverkäufe geprüft. Zusätzlich muss die Summe dieser Buchungen exakt den aus den echten Monatszuteilungen und Marktpreisen unabhängig errechneten kumulierten Erlösen entsprechen. Pro Firma und Monat werden zwei weitere manipulierte **Kopien** geprüft: Umbenennung einer Verkaufsbuchung und zusätzliche Null-Euro-Verkaufsbuchung. Beide müssen trotz unveränderter Kassenbuchsumme auffallen. Keine manipulierte Kopie wird in den Spielkern zurückgeschrieben.
+
+**Erwartete, noch nicht bestätigte Ergebnisse:** Zwei identische Durchläufe, sechs simulierte Monate, zwölf Firmen-Monatsprüfungen, zehn JSON-Rundläufe, 40 Fremdaktionssperren und nun **120 Manipulations-Negativproben** (60 je Durchlauf). Der GitHub-Prüfschritt kontrolliert die neuen Zähler. **Status PENDING bis zur tatsächlich abgeschlossenen GitHub-CI auf dem finalen HEAD.** Die fachliche Prüfung belegt weder eine vollständige Gewinnrechnung noch Anlagenbewertung oder einen Browserimport. Die Vorrelease-Pflichten bleiben BLOCKED.
+
+**Nächster sachlicher Schritt:** Nach grüner CI die mehrmonatige Mehrfirmen-Raffinerie- und Frachtkette mit unabhängiger Mengen-, Erlös- und Kassenbilanz abdecken.
