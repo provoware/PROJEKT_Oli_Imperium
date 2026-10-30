@@ -106,7 +106,7 @@ jobs:
           node --check project-c/pppoppi-imperium/quality_v194/test_ai_turn_rotation_risk_unit_v194.cjs
           node --test project-c/pppoppi-imperium/quality_v194/test_ai_turn_rotation_risk_unit_v194.cjs
           node project-c/pppoppi-imperium/quality_v194/test_ai_turn_rotation_risk_v194.cjs ai_turn_rotation_stress.json | tee ai_turn_rotation_risk.json
-          node -e "const r=require('./ai_turn_rotation_risk.json'); if(r.checkedPairs!==12 || r.checkedCompanyComparisons!==36 || r.accountingIdentitiesChecked!==72 || r.perScenario.length!==2 || r.prereleaseGate!=='BLOCKED') process.exit(1);"
+          node -e "const r=require('./ai_turn_rotation_risk.json'); if(r.checkedPairs!==12 || r.checkedCompanyComparisons!==36 || r.accountingIdentitiesChecked!==144 || r.perScenario.length!==2 || r.prereleaseGate!=='BLOCKED') process.exit(1);"
       - name: Reproduzierbaren Zahlenbericht sichern
         if: always()
         uses: actions/upload-artifact@v4
