@@ -6,15 +6,15 @@
 
 Der bisherige Test `test_natural_oil_to_export_v194.cjs` deckte eine natürliche Förderung und einen fünfmonatigen Weg bis zum Außenmarkt ab. Der neue zusammenhängende Pflichtschritt führt **dieselbe Firma mit demselben echten Feld und der bestehenden Raffinerie** durch eine zweite Förderung und einen zweiten vollständigen Rohöl-/Fertigwaren-/Außenmarkttransport bis zum zehnten Spielmonat. Kein künstlich eingebuchtes Öl, Geld, Eigentum oder Marktvolumen.
 
-Zwei Szenarien werden je zweimal ausgeführt: ursprünglich freie öffentliche Strecke sowie ursprünglich blockierte Strecke mit Rückerstattung. Der erste Zyklus bleibt unverändert prüfbar. Im zweiten Zyklus wird ein vorhandener Feldbrand bei Bedarf mit der echten Spielaktion `FIRE_EXPERT` beseitigt. Die reguläre **Rohrleitungsstörung in Monat 6** muss einen vorzeitigen Fertigwarentransport verhindern; erst `NETWORK_REPAIR` ermöglicht den Transport. Die reguläre **öffentliche Streckensperre in Monat 8** wird mit `PUBLIC_REPAIR` behoben; der Zweikanten-Transport muss danach die Ware erst in Monat 10 anliefern. Frühverkäufe sind abzuweisen.
+Zwei Szenarien werden je zweimal ausgeführt: ursprünglich freie öffentliche Strecke sowie ursprünglich blockierte Strecke mit Rückerstattung. Der erste Zyklus bleibt unverändert prüfbar. Im zweiten Zyklus wird ein vorhandener Feldbrand bei Bedarf mit der echten Spielaktion `FIRE_EXPERT` beseitigt. Die reguläre **Rohrleitungsstörung in Monat 6** muss einen vorzeitigen Fertigwarentransport verhindern; erst `NETWORK_REPAIR` ermöglicht den Transport. Ein echter regionaler Verkauf der Restförderung im sechsten Monat finanziert die folgenden Reparaturen aus regulären Einnahmen. Die reguläre **öffentliche Streckensperre in Monat 8** wird mit `PUBLIC_REPAIR` behoben; der Zweikanten-Transport muss danach die Ware erst in Monat 10 anliefern. Frühverkäufe sind abzuweisen.
 
 ## Unabhängige Sollprüfungen
 
 - Je Szenario zwei reproduzierbare Durchläufe über zehn vollständig abgeschlossene Monate; insgesamt **40 simulierte Monate und 80 Firmen-Monatsbeobachtungen**.
 - Beide Förderungen erfolgen durch `PUMP`; 200 Barrel Gesamtförderung, 2 Barrel Raffinerieverlust. Nach beiden Zyklen gilt `Förderung = Verkäufe + vorhandene Bestände + Verarbeitungsschwund`.
-- Freier Erstweg: 18 Barrel über beide Zyklen verkauft, 180 Barrel verbleiben im Feldlager. Ursprünglich gesperrter Erstweg: 9 Barrel verkauft, 180 Barrel im Feldlager und 9 Barrel aus der ersten Rückerstattung im regionalen Marktlager.
-- Zweiter Außenmarktverkauf von neun Barrel in beiden Szenarien, ohne Doppelbuchung. Doppelte Rohöl- und Frachtvormerkungen werden abgewiesen. Vorzeitige Verkäufe und die planmäßig gesperrte Rohrleitung müssen ohne Eingabeveränderung scheitern.
-- Beide Reparaturen müssen echte, vom Spielkern verarbeitete Aktionen sein. Nach Monat 10 dürfen keine offenen Sendungen, Vormerkungen oder Angebote verbleiben; JSON-Wiederherstellung und Kassenbuchabgleich müssen bestehen.
+- Freier Erstweg: 18 Barrel über beide Außenmarktzyklen und zusätzlich 102 Barrel im regionalen Markt verkauft; 78 Barrel verbleiben im Feldlager. Ursprünglich gesperrter Erstweg: 9 Barrel im Außenmarkt und 102 Barrel regional verkauft; 78 Barrel im Feldlager und 9 Barrel aus der ersten Rückerstattung im regionalen Marktlager.
+- Zweiter Außenmarktverkauf von neun Barrel und ein zusätzlicher echter regionaler Verkauf von 102 Barrel in beiden Szenarien, ohne Doppelbuchung. Doppelte Rohöl- und Frachtvormerkungen werden abgewiesen. Vorzeitige Verkäufe und die planmäßig gesperrte Rohrleitung müssen ohne Eingabeveränderung scheitern.
+- Beide Reparaturen müssen echte, vom Spielkern verarbeitete Aktionen sein. Ein regulärer Rettungskredit ist nur im tatsächlich eintretenden Sanierungszustand zulässig; der beobachtete lokale Prüflauf benötigte keinen. Nach Monat 10 dürfen keine offenen Sendungen, Vormerkungen oder Angebote verbleiben; JSON-Wiederherstellung und Kassenbuchabgleich müssen bestehen.
 
 **Abgrenzung:** Kein Gewinn-/Vermögensnachweis, keine Mehrfeld-/Mehrfirmen-Raffineriekette, keine Browser-Dateidialog-Reparatur, keine historische C64-Originaltreue oder Rechtefreigabe.
 
@@ -25,7 +25,7 @@ node --check project-c/pppoppi-imperium/quality_v194/test_natural_oil_to_export_
 node project-c/pppoppi-imperium/quality_v194/test_natural_oil_to_export_v194.cjs
 ```
 
-Der GitHub-Prüfablauf [prerelease-natural-oil-export.yml](../../../.github/workflows/prerelease-natural-oil-export.yml) prüft die Zähler, Mengenidentitäten und Reparaturnachweise auf dem PR-HEAD und sichert das JSON-Artefakt. **Bis zum tatsächlich erfolgreichen Lauf: PENDING, nicht PASS.** Bei FAIL die konkrete Fehlerstelle auswerten und korrigieren; nicht durch Testabschaltung oder verdeckte Wiederholung umgehen.
+Der GitHub-Prüfablauf [prerelease-natural-oil-export.yml](../../../.github/workflows/prerelease-natural-oil-export.yml) prüft die Zähler, Mengenidentitäten und Reparaturnachweise auf dem PR-HEAD und sichert das JSON-Artefakt. **Lokaler V8-Prüflauf mit den unveränderten Spielkern-Modulen: PASS** (beide Szenarien zweimal reproduziert; 40 Monate, je 200 Barrel Förderung, 102 Barrel Regionalverkauf, je 9 Barrel zweiter Außenmarktverkauf). **GitHub-CI bis zum tatsächlich erfolgreichen Lauf: PENDING, nicht PASS.** Bei FAIL die konkrete Fehlerstelle auswerten und korrigieren; nicht durch Testabschaltung oder verdeckte Wiederholung umgehen.
 
 ## Weitere Pflichten
 
