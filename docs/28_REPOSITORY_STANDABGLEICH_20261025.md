@@ -109,3 +109,11 @@ python3 -m unittest discover -s tests -v
 
 Die ersten drei Kommandos beschreiben den **jeweils aktuellen** Zustand; die
 Zahlen oben sind eine datierte Momentaufnahme, keine laufende Synchronisation.
+
+## Fortschreibung vom 30.10.2026 – Abgrenzung zum historischen Abgleich
+
+Dieser Bericht ist eine **Momentaufnahme vom 25.10.2026**, kein aktuelles Verzeichnis sämtlicher Entwicklungszweige und kein Freigabe- oder Importnachweis. Die damals gezählten 21 Zweige und 282 zusätzlichen Commits dürfen nicht als heutige Zahlen übernommen werden.
+
+Am 30.10.2026 wurden vor der Zusammenführung von [PR #139](https://github.com/provoware/PROJEKT_Oli_Imperium/pull/139) **98 offene Änderungsanträge (97 Entwürfe)** ermittelt. Nach dessen technisch geprüftem Merge auf `main` ist die Dokumentations- und Entwurfsbremse aktiv. Weitere Spiel- und Quellpakete sind damit **nicht** automatisch integriert oder freigegeben. Der spätere Quellimport wird separat in [PR #27](https://github.com/provoware/PROJEKT_Oli_Imperium/pull/27) dokumentiert; für eine belastbare aktuelle Aussage sind der konkrete Branch-HEAD, Rechte und Quellprüfungen erneut abzugleichen.
+
+Die aktuellen Entwicklungs- und Freigabepflichten bleiben in ihren jeweils maßgeblichen Projekt-C-Dateien und den offenen Änderungsanträgen. Diesen historischen Bericht nicht als Ersatz für einen Live-Bestandsabgleich oder die 52-Pflichten-Prüfmatrix verwenden.
