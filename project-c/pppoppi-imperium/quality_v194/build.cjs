@@ -156,6 +156,12 @@ const changes = [
     "div(f.debtCent*CFG.loanRepaymentBps,10000)",
     "Number((BigInt(f.debtCent)*BigInt(CFG.loanRepaymentBps)+5000n)/10000n)"],
 
+  // SPE-02: unabhaengige Alt-Gutachten duerfen beim Import nicht kollidieren.
+  ["src/v082_engine.js", "c.region===r.id&&c.owner!==null).length", "c.region===r.id&&(c.owner!==null||c.surveyedBy.length>0)).length"],
+  ["src/v082_engine.js", "ok(!c.owner,'Altspielstand besitzt zu viele Konzessionen')", "ok(!c.owner&&c.surveyedBy.length===0,'Altspielstand besitzt zu viele Konzessionen oder Gutachten')"],
+  ["src/v082_strategy_engine.js", "c.region===r.id&&c.owner!==null).length", "c.region===r.id&&(c.owner!==null||c.surveyedBy.length>0)).length"],
+  ["src/v082_strategy_engine.js", "ok(!c.owner,'Altspielstand besitzt zu viele Konzessionen')", "ok(!c.owner&&c.surveyedBy.length===0,'Altspielstand besitzt zu viele Konzessionen oder Gutachten')"],
+
 ];
 
 function replaceExactlyOnce(text, before, after, relative) {
