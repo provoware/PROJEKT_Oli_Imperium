@@ -34,3 +34,22 @@ node project-c/pppoppi-imperium/quality_v194/test_ai_cashflow_audit_v194.cjs
 3. Aktive Konkurrenz-/Marktkrisen ohne manipulierte Kassenstände testen; Dateidialog-Flake, Medienrechte und historische C64-Referenz unabhängig weiterbearbeiten.
 
 Kein Merge, kein Release, keine vorgezogene persönliche Endabnahme.
+
+## Nachtrag 30.10.2026 – Buchungsarten getrennt statt Kassenstand als Gewinn auszugeben
+
+Der vorangegangene [GitHub-KI-Lauf #41009162560](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41009162560) auf `fd250c989f5e7a3e65deba15e4432f961859b527` ist **PASS** (96 Simulationsmonate, 168 Kassenbuchabgleiche, zwei absichtlich verfälschte Buchungen). Die neue Änderung ist **noch nicht auf ihrem endgültigen HEAD als PASS bestätigt**.
+
+Der vorhandene Test wurde ohne Änderung des Spielkerns erweitert. Er rechnet die Buchungen jetzt je Firma zusätzlich in sechs getrennten Geldkategorien nach:
+
+1. Verkaufserlöse aus den bekannten Codes `MARKTERLÖS`, `VERTRAGSERLÖS`, `AUSSENMARKT` und `RAFFINIERT_MONATSVERKAUF`.
+2. Auszahlungen für ausdrücklich bekannte Feldkäufe und Bauinvestitionen.
+3. Kredit-Einzahlungen und Tilgungen, getrennt von Verkaufserlösen.
+4. Sonstige Einzahlungen und Auszahlungen als **offene Restkategorien**; sämtliche vorkommenden Buchungscodes und ihre Häufigkeiten bleiben im JSON-Protokoll sichtbar.
+
+Für jede Firma ohne Neustart müssen die **unabhängig aus Buchungscodes ermittelten Verkaufserlöse** exakt mit dem Monatsbericht übereinstimmen. Die sechs Kategorien müssen zusammen wieder exakt die Ein- und Auszahlungen sowie die Kassenänderung ergeben. Drei zusätzliche Negativproben verwerfen falsch vorzeichenbehaftete Verkaufs-, Investitions- und Kreditbuchungen: insgesamt **fünf Negativproben**. Die vorhandene Wiederholbarkeit und die getrennte Behandlung von Firmenneustarts bleiben erhalten.
+
+**Grenze:** Ein Feldkauf ist ein Geldabfluss, aber kein automatisch bewerteter Vermögensverlust; Lager, Anlagen, Abschreibung, offene Rechnungen und die zeitliche Zuordnung von Kosten fehlen weiterhin. Die Restkategorien sind keine geprüften betrieblichen Aufwendungen. Aus diesen Zahlen darf **weder buchhalterischer Gewinn noch Gesamtvermögen** abgeleitet werden. Historische C64-Regeln sind weiterhin nicht verifiziert.
+
+**Prüfweg:** `node --check project-c/pppoppi-imperium/quality_v194/test_ai_cashflow_audit_v194.cjs` und anschließend das Programm; die GitHub-CI fordert jetzt mindestens 120 Erlösabgleiche, fünf Negativproben und die vollständige Kategorie-Zusammenfassung. **Status auf neuem HEAD: PENDING**, bis der Lauf tatsächlich abgeschlossen ist. BAL-01, WIR-01 und WIR-04 bleiben BLOCKED; 6/52 PASS, 39 BLOCKED, 4 OPEN, 3 DEFERRED.
+
+**Nächste drei Schritte:** (1) GitHub-CI und die real vorkommenden Buchungscodes prüfen, Abweichungen korrigieren; (2) Restkategorien fachlich auflösen und Forderungen, Lager sowie Anlagewerte mit nachgewiesenen Bewertungsregeln verknüpfen; (3) danach eine echte Gewinn-/Vermögensrechnung mit Grenz- und Negativtests entwickeln. Persönliche Endabnahme erst am eingefrorenen Kandidaten, kein Merge/Release.
