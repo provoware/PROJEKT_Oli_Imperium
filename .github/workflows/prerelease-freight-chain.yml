@@ -3,6 +3,9 @@ on:
   pull_request:
     paths:
       - 'project-c/pppoppi-imperium/quality_v194/test_public_freight_chain_sale_v194.cjs'
+      - 'project-c/pppoppi-imperium/quality_v194/test_public_freight_monthly_audit_v194.cjs'
+      - 'project-c/pppoppi-imperium/quality_v194/FREIGHT_MONTHLY_CI_COVERAGE_20261030.md'
+      - 'project-c/pppoppi-imperium/SPIEL/src/**'
       - 'project-c/pppoppi-imperium/quality_v194/PUBLIC_FREIGHT_CHAIN_SALE_20261030.md'
       - 'project-c/pppoppi-imperium/prerelease/matrix.json'
       - '.github/workflows/prerelease-freight-chain.yml'
@@ -24,11 +27,19 @@ jobs:
           node --check project-c/pppoppi-imperium/quality_v194/test_public_freight_chain_sale_v194.cjs
           node project-c/pppoppi-imperium/quality_v194/test_public_freight_chain_sale_v194.cjs | tee public_freight_chain_sale.json
           node -e "const r=require('./public_freight_chain_sale.json'); if(r.scenarios!==2 || r.repeatedRuns!==2 || r.totalSimulatedMonths!==12 || r.checkedCompanyMonths!==24 || r.duplicatesRejected!==8 || r.jsonRoundtrips!==12 || r.rejectedEarlyOffers!==4 || r.cashBridgeNegativeTests!==48 || r.cashBridgeCheckpoints!==16 || !r.rows.every(x=>x.cashBridgeNegativeTests===12 && x.cashBridgeCheckpoints===4) || r.rows.length!==2 || r.rows[0].expectedRevenueCent<=0 || r.rows[1].expectedRevenueCent!==0 || r.prereleaseGate!=='BLOCKED') process.exit(1);"
+      - name: Monatsgrenzen, zwei Firmen, Frachtvorauszahlung und Rueckerstattung
+        run: |
+          set -o pipefail
+          node --check project-c/pppoppi-imperium/quality_v194/test_public_freight_monthly_audit_v194.cjs
+          node project-c/pppoppi-imperium/quality_v194/test_public_freight_monthly_audit_v194.cjs | tee public_freight_monthly_audit.json
+          node -e "const r=require('./public_freight_monthly_audit.json'); if(r.schema!=='pppoppi.freight-monthly-audit/1'||r.scenarios!==2||r.repeatedRuns!==2||r.totalSimulatedMonths!==8||r.checkedCompanyMonths!==16||r.duplicateQueuesRejected!==8||r.jsonRoundtrips!==8||r.noProductionSourceChanges!==true||r.prereleaseGate!=='BLOCKED'||r.rows.length!==2||r.rows[0].blockedLink!==false||r.rows[1].blockedLink!==true||r.rows[0].rows.length!==2||r.rows[1].rows.length!==2||!r.rows[0].rows.every(x=>x.acceptedMilli===12000&&x.netFreightCent===x.heldCent-x.refundedCent&&x.netFreightCent>0)||!r.rows[1].rows.every(x=>x.acceptedMilli===0&&x.netFreightCent===0&&x.refundedCent===x.heldCent)) process.exit(1);"
       - name: JSON-Pruefbeleg sichern
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: public-freight-chain-sale
-          path: public_freight_chain_sale.json
+          path: |
+            public_freight_chain_sale.json
+            public_freight_monthly_audit.json
           if-no-files-found: warn
           retention-days: 14
