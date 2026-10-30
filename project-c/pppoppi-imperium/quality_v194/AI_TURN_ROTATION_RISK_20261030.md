@@ -39,3 +39,25 @@ Die Kennzahl Kasse minus Schulden ist **kein buchhalterischer Gewinn**. Ölbest�
 3. Unabhängig die 77 ausgeschlossenen Archivdateien rechtlich prüfen und eine verifizierte C64-PAL-Referenz dokumentieren. Persönliche Sicht-/Kubuntu-Abnahme erst nach vollständig grüner Technik und eingefrorenem Vorrelease-Kandidaten.
 
 **Kein Merge, kein Release, keine persönliche Vorab-Abnahme.**
+
+## Nachtrag 30.10.2026 – Integritätslücke der aggregierten Prüfwerte
+
+Der bisherige Risikoabgleich prüfte nur **Differenzen** zwischen fester und rotierender
+Zugfolge. Waren die beiden Gruppen-Gesamtsummen um denselben Betrag falsch, blieb die
+Differenz trotzdem korrekt und der Fehler konnte unentdeckt bleiben. Zusätzlich zählte
+die JSON-Ausgabe nur 72 Geldidentitäten, obwohl **72 Firmenzustände mit je zwei
+Identitäten = 144 Prüfungen** durchlaufen wurden. Die 72 waren somit eine falsche
+Bezeichnung der tatsächlichen Prüfanzahl, keine neue Simulation.
+
+Der ergänzte unabhängige Abgleich berechnet für **alle 18 Varianten** die sieben
+Gruppenkennzahlen unmittelbar aus den drei Firmenzeilen neu: Feldsumme, kleinste und
+größte Feldzahl, Spannweite, Firmen ohne Feld, Summe der Liquiditätsveränderungen und
+kleinste Liquiditätsveränderung. Außerdem kontrolliert er die vollständige
+2 × 3 × 3-Fallabdeckung, die anfängliche Firmenreihenfolge sowie die absoluten
+Feld- und Nullfeldzahlen in allen zwölf Gegenvergleichen. Ein neuer Negativtest
+verändert bewusst die Summen und verlangt einen Abbruch.
+
+**Status bei Änderung: PENDING** bis zum tatsächlichen CI-Lauf auf dem endgültigen
+Entwicklungs-HEAD. Dies ist eine Absicherung der Testdaten, **kein Nachweis von
+Gewinn, Vermögenswert, Sanierungsqualität oder Originaltreue**. BAL-01 bleibt BLOCKED;
+der Nenner der Vorrelease-Pflichtmatrix ändert sich nicht. Kein Spielkern-Eingriff.
