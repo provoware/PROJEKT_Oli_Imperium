@@ -18,6 +18,23 @@ HERE = Path(__file__).resolve().parent
 PAYLOAD = '<img src=x onerror=window.__pppoppiXss=1><svg onload=window.__pppoppiXss=2></svg>'
 SCENES = ('computer', 'claim', 'finance', 'contracts', 'newsroom', 'report', 'map', 'region')
 
+# Beide Sicherungsgenerationen in genau einer read-only IndexedDB-Transaktion.
+BACKUP_SLOTS = '''async () => {
+                    await PPBackup.idle();
+                    const db = await new Promise((resolve, reject) => {
+                        const request = indexedDB.open('pppoppi-imperium-local-backups-v1', 1);
+                        request.onsuccess = () => resolve(request.result);
+                        request.onerror = () => reject(request.error);
+                    });
+                    return await new Promise((resolve, reject) => {
+                        const tx = db.transaction('snapshots', 'readonly');
+                        const request = tx.objectStore('snapshots').getAll();
+                        tx.oncomplete = () => { db.close(); resolve(request.result); };
+                        tx.onabort = () => { db.close(); reject(tx.error); };
+                    });
+                }'''
+
+
 
 def check(label, condition):
     print(('PASS: ' if condition else 'FAIL: ') + label, flush=True)
@@ -141,20 +158,7 @@ def main():
                 # SIC-01 aus PR #27: fehlgeschlagenes File.text() darf weder
                 # den aktiven Stand noch eine der beiden Sicherungen veraendern.
                 # Bewusst echte Datei-Auswahl im Chromium; kein zusaetzliches Testmodul.
-                backups_before = page.evaluate("""async () => {
-                    await PPBackup.idle();
-                    const db = await new Promise((resolve, reject) => {
-                        const request = indexedDB.open('pppoppi-imperium-local-backups-v1', 1);
-                        request.onsuccess = () => resolve(request.result);
-                        request.onerror = () => reject(request.error);
-                    });
-                    return await new Promise((resolve, reject) => {
-                        const tx = db.transaction('snapshots', 'readonly');
-                        const request = tx.objectStore('snapshots').getAll();
-                        tx.oncomplete = () => { db.close(); resolve(request.result); };
-                        tx.onabort = () => { db.close(); reject(tx.error); };
-                    });
-                }""")
+                backups_before = page.evaluate(BACKUP_SLOTS)
                 check('Vor Lesefehler sind zwei valide Sicherungsgenerationen vorhanden',
                       len(backups_before) == 2)
                 page.evaluate("""() => {
@@ -168,20 +172,7 @@ def main():
                 }""")
                 import_file(page, 'read-error.json', hostile, False)
                 page.evaluate('window.__restoreOriginalFileText()')
-                backups_after = page.evaluate("""async () => {
-                    await PPBackup.idle();
-                    const db = await new Promise((resolve, reject) => {
-                        const req = indexedDB.open('pppoppi-imperium-local-backups-v1', 1);
-                        req.onsuccess = () => resolve(req.result);
-                        req.onerror = () => reject(req.error);
-                    });
-                    return await new Promise((resolve, reject) => {
-                        const tx = db.transaction('snapshots', 'readonly');
-                        const req = tx.objectStore('snapshots').getAll();
-                        tx.oncomplete = () => { db.close(); resolve(req.result); };
-                        tx.onabort = () => { db.close(); reject(tx.error); };
-                    });
-                }""")
+                backups_after = page.evaluate(BACKUP_SLOTS)
                 check('Dateilesefehler schont Spielstand und beide IndexedDB-Generationen',
                       state(page) == hostile and backups_after == backups_before)
                 check('Export nach allen Ablehnungen exakt unveraendert', export_state(page) == hostile)
