@@ -32,7 +32,7 @@ function openDatabase(){
   request.onblocked=()=>reject(Error('Browser-Speicher ist durch ein anderes Fenster blockiert'));
  });
 }
-async function writeSnapshot(json){
+async function writeSnapshot(json,handoff){
  const db=await openDatabase();
  return new Promise((resolve,reject)=>{
   let tx;
@@ -43,7 +43,7 @@ async function writeSnapshot(json){
    request.onsuccess=()=>{
     const latest=Math.max(0,...request.result.map(x=>Number.isSafeInteger(x.seq)?x.seq:0));
     const seq=latest+1;
-    store.put({slot:seq%2,seq,created:new Date().toISOString(),json});
+    store.put({slot:seq%2,seq,created:new Date().toISOString(),json,handoff});
    };
    tx.oncomplete=()=>{db.close();resolve()};
    tx.onabort=()=>{db.close();reject(tx.error||Error('Schreibvorgang abgebrochen'))};
@@ -64,14 +64,15 @@ async function readSnapshots(){
   }catch(error){db.close();reject(error)}
  });
 }
-function capture(state){
+function capture(state,handoff=false){
  let json;
  try{
+  if(typeof handoff!=='boolean')throw Error('Ungueltiger Vertraulichkeitsstatus');
   json=JSON.stringify(state);
   if(!json||new Blob([json]).size>MAX_BYTES)throw Error('Spielstand überschreitet 5 MB');
  }catch(error){status('Automatische Sicherung fehlgeschlagen: '+error.message,true);return Promise.resolve(false)}
  status('Zwischensicherung wird geschrieben …');
- queue=queue.catch(()=>false).then(()=>writeSnapshot(json)).then(()=>{
+ queue=queue.catch(()=>false).then(()=>writeSnapshot(json,handoff)).then(()=>{
   status('Zwischensicherung vollständig gespeichert. JSON-Export empfohlen.');
   return true;
  }).catch(error=>{
@@ -79,6 +80,10 @@ function capture(state){
   return false;
  });
  return queue;
+}
+function confidentialHumanTurn(state){
+ return !!(state && state.phase==='TURN' && Number.isSafeInteger(state.turnIndex) &&
+  state.turnIndex>0 && state.companies?.[state.turnIndex]?.type==='human');
 }
 async function restore(validate){
  await queue; // niemals eine noch laufende eigene Sicherung überholen
@@ -96,8 +101,14 @@ async function restore(validate){
   try{
    const state=JSON.parse(saves[i].json);
    if(validate(state)!==true)throw Error('Ungültiger Spielstand');
+   // Alt-Snapshots ohne Kennung nur gesperrt wiederherstellen, falls
+   // bereits ein anderer menschlicher Spieler am Zug ist (fail closed).
+   const handoff=saves[i].handoff===undefined
+    ? confidentialHumanTurn(state) : saves[i].handoff;
+   if(typeof handoff!=='boolean'||(handoff&&!confidentialHumanTurn(state)))
+    throw Error('Ungültiger Vertraulichkeitsstatus');
    status(i?'Ältere gültige Sicherung gefunden – neuere beschädigt.':'Gültige Zwischensicherung geprüft.');
-   return {state,older:i>0,sequence:saves[i].seq};
+   return {state,older:i>0,sequence:saves[i].seq,handoff};
   }catch(_error){/* nächste, ältere Generation prüfen */}
  }
  status('Beide Zwischensicherungen sind beschädigt. JSON-Datei laden!',true);
