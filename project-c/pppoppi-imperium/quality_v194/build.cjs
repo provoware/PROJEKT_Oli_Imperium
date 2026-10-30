@@ -139,6 +139,23 @@ const changes = [
   ["src/neo_bridge.js","case 'export':exportGame();break;","case 'session-export':exportEndstateSession();break;case 'session-import':{const picker=$('loadSessionFile');try{if(typeof picker.showPicker==='function')picker.showPicker();else picker.click();}catch(error){toast('Dateiauswahl nicht moeglich: '+error.message);}break;}case 'export':exportGame();break;"],
   ["src/neo_bridge.js","go('computer','Firmencomputer ansehen')}</div>","go('computer','Firmencomputer ansehen')}<button type=\"button\" data-ui=\"session-export\">Sitzung exportieren</button><button type=\"button\" data-ui=\"session-import\">Sitzung laden</button></div>"],
   ["src/neo_bridge.js","$('loadEconFile').addEventListener('change',e=>{const file=e.target.files[0];importGame(file);e.target.value=''});","$('loadEconFile').addEventListener('change',e=>{const file=e.target.files[0];importGame(file);e.target.value=''});$('loadSessionFile').addEventListener('change',e=>{const file=e.target.files[0];importEndstateSession(file);e.target.value=''});"],
+  // PR #27: ehemalige P0-Schutzregeln nur im abgeleiteten Technikaufbau.
+  ["src/neo_bridge.js",
+    "async function importGame(file){if(handoff)return toast('Import während der vertraulichen Übergabe gesperrt.');if(!file)return;const revision=++importRevision;try{if(file.size>5_000_000)",
+    "function assertSafeImportFile(file){\n const filename=file.name===undefined?'spielstand.json':file.name;\n if(typeof filename!=='string'||filename.length<1||filename.length>180||\n    !filename.toLowerCase().endsWith('.json')||\n    /[\\/\\\\:\\x00-\\x1f\\x7f\\u2215\\u2044\\uff0f]/.test(filename)||\n    /(^\\.|\\.\\.|%(?:2e|2f|5c)|[?#\\u202e\\u202d\\u2066-\\u2069])/i.test(filename)||\n    (typeof file.webkitRelativePath==='string'&&file.webkitRelativePath.length>0))\n    throw Error('Unzulässiger Dateiname: nur lokale JSON-Dateien ohne Pfadangaben');\n}\nasync function importGame(file){if(handoff)return toast('Import während der vertraulichen Übergabe gesperrt.');if(!file)return;const revision=++importRevision;try{assertSafeImportFile(file);if(file.size>5_000_000)"],
+  ["src/v082_engine.js",
+    "div(f.debtCent*CFG.loanInterestBps,10000)",
+    "Number((BigInt(f.debtCent)*BigInt(CFG.loanInterestBps)+5000n)/10000n)"],
+  ["src/v082_engine.js",
+    "div(f.debtCent*CFG.loanRepaymentBps,10000)",
+    "Number((BigInt(f.debtCent)*BigInt(CFG.loanRepaymentBps)+5000n)/10000n)"],
+  ["src/v082_strategy_engine.js",
+    "div(f.debtCent*CFG.loanInterestBps,10000)",
+    "Number((BigInt(f.debtCent)*BigInt(CFG.loanInterestBps)+5000n)/10000n)"],
+  ["src/v082_strategy_engine.js",
+    "div(f.debtCent*CFG.loanRepaymentBps,10000)",
+    "Number((BigInt(f.debtCent)*BigInt(CFG.loanRepaymentBps)+5000n)/10000n)"],
+
 ];
 
 function replaceExactlyOnce(text, before, after, relative) {
