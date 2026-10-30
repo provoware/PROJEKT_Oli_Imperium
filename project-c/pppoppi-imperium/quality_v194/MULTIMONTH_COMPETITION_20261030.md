@@ -56,3 +56,16 @@ Der Test prüft nun für **jede Firma in jedem der drei Monatsberichte** zusätz
 **Grenze:** Ein erkannter manipulierten Zustand beweist die Güte des unabhängigen Test-Orakels, **nicht** automatisch die Ablehnung durch den Spielstandimport. Die Browser-Dateidialog-Störung bei 175 %, mehrstufige Mehrfirmen-Raffinerie-/Frachtwege, vollständige Gewinn-/Anlagenbewertung, Rechte und C64-Vergleich bleiben offen. WIR-03/BAL-01 sowie die Vorrelease-Gesamtsperre bleiben BLOCKED.
 
 **Nächste drei Schritte:** (1) GitHub-Fach- und Gesamt-CI auf endgültigem HEAD auswerten; (2) reale mehrmonatige Mehrfirmen-Raffinerie-/Frachtwege prüfen; (3) den nativen Dateidialogfehler ursächlich untersuchen, ohne Sicherheitsprüfungen zu umgehen.
+
+
+## Fremdaktionsschutz bei zwei echten Konkurrenten – 30.10.2026
+
+**Ausgangsluecke:** Der Dreimonatstest pruefte die Eigentumszuordnung nach jedem Marktabschluss, versuchte aber nicht, fremde Felder waehrend des tatsaechlichen gegnerischen Spielzugs mit Produktions- oder Marktaktionen zu veraendern. Eine reine Bestandspruefung erkennt eine fehlerhafte Zugriffsfreigabe nicht unmittelbar.
+
+**Gezieltes Pflichtpaket:** Bei regulär erworbenem gegnerischem Feld werden im jeweils aktiven Zug die vier Aktionen `PUMP`, `SHIP`, `OFFER` und `CANCEL` mit der fremden Feldkennung an die **unveraenderte** Engine uebergeben. Jede Aktion muss mit `Claim gehört nicht zum Unternehmen` abgewiesen werden. Der Eingabezustand muss bytegleich bleiben und weiterhin gueltig sein. Die Negativpruefungen verwenden keine injizierten Eigentuemer oder Rohstoffe. Vor dem Erwerb des zweiten Felds wird keine fremde Eigentumspruefung behauptet.
+
+**Sollumfang:** Im ersten Monat vier Ablehnungen beim zweiten Unternehmen, in den Monaten 2 und 3 jeweils acht Ablehnungen. Das sind **20 pro Dreimonatslauf und 40 in zwei identischen Durchlaeufen**. Die bisherigen 96 manipulierten Kopien, 12 Firmen-Monatspruefungen, 12 Duplikatkontrollen und 10 JSON-Rundlaeufe bleiben getrennt erhalten.
+
+**Automatischer Nachweis:** `test_multimonth_competition_v194.cjs` liefert `foreignActionRejections` sowie `result.foreignActionRejections`; der verpflichtende GitHub-Pruefschritt in `.github/workflows/prerelease-natural-oil-export.yml` verlangt exakt 40 beziehungsweise 20. **Status bis zum erfolgreichen GitHub-Lauf auf dem finalen Dokumentations-HEAD: PENDING.** Eine erfolgreich abgewiesene Aktion ersetzt weder eine Browser-Importpruefung noch den Nachweis von Raffinerie-/Frachtwegen zwischen mehreren Firmen.
+
+**Weiter offen:** Mehrfirmen-Raffinerie und öffentliche Fracht über mehrere Monate, eigenständige Gewinn- und Anlagenbewertung, intermittierender Dateiimport bei 175 %, Ressourcenrechte und C64-Referenz. WIR-03 bleibt BLOCKED; keine persoenliche Endabnahme, kein Merge und kein Release.
