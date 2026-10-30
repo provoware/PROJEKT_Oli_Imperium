@@ -208,7 +208,7 @@
         "project-c/pppoppi-imperium/quality_v194/PUBLIC_FREIGHT_CHAIN_SALE_20261030.md"
       ],
       "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
-      "next": "PR #137 (30.10.): Zweikanten-Frachtkette BERLIN–BRANDENBURG–NORD mit Engpass und gesperrter zweiter Kante, zweimonatigem Lieferweg, JSON-Rundläufen, abgewiesenen Duplikaten und anschliessendem Aussenmarktverkauf als Teiltest. 12 Simulationsmonate in vier Läufen geplant; GitHub-CI auf finalem HEAD auswerten. Keine natürliche Produktion, keine Vermögens-/Gewinnbilanz, keine C64-Originalreferenz. WIR-02 BLOCKED."
+      "next": "PR #137 (30.10.): Zweikanten-Frachtkette BERLIN–BRANDENBURG–NORD mit gemeinsamem Engpass, gesperrter zweiter Kante, zwei Monaten Lieferweg, JSON-Rundläufen, Duplikat-Abwehr und anschliessendem Aussenmarktverkauf: gezielte CI #41035085332 PASS auf Test-HEAD f69ea985bbb88be6dd1fa299432e95924e42546f (12 Simulationsmonate, 24 Firmen-Monatsbeobachtungen, 8 Duplikate, 12 JSON-Rundläufe). Weitere natürliche Produktion, Gewinn-/Vermögensbilanz, Browserkette und C64-Referenz fehlen; WIR-02 bleibt BLOCKED. Gesamt-CI auf finalem Dokumentations-HEAD gesondert kontrollieren."
     },
     {
       "id": "WIR-03",
