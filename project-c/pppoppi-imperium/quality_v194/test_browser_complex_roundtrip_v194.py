@@ -45,6 +45,40 @@ def end_turn(page, handoff):
         page.locator('[data-ui="handoff-ok"]').wait_for(state="visible")
         check("Zuguebergabe an zweiten Menschen",
               state(page)["turnIndex"] == 1 and state(page)["phase"] == "TURN")
+        # SPE-01 aus PR #27: Die geheime Uebergabe darf weder einen Download
+        # noch einen Spielstand-Import ausloesen. Echte Browser-Ereignisse.
+        before = state(page)
+        exported = page.evaluate("""() => {
+            const oldUrl = URL.createObjectURL;
+            const oldClick = HTMLAnchorElement.prototype.click;
+            let requested = false;
+            try {
+                URL.createObjectURL = () => { requested = true; return 'blob:blocked-test'; };
+                HTMLAnchorElement.prototype.click = () => {};
+                document.getElementById('saveGame').click();
+            } finally {
+                URL.createObjectURL = oldUrl;
+                HTMLAnchorElement.prototype.click = oldClick;
+            }
+            return requested;
+        }""")
+        check("Vertrauliche Uebergabe sperrt Spielstand-Export",
+              not exported and state(page) == before
+              and page.evaluate("NeoEconomy.needsHandoff()") is True)
+        foreign = page.evaluate("""() => NeoEconomy.engine.fresh({
+            humans: 2, ais: 0, seed: 'PR27-HANDOFF-IMPORT'
+        })""")
+        check("Gegenprobe erzeugt gueltigen fremden Spielstand",
+              page.evaluate("(s) => NeoEconomy.engine.validate(s)", foreign) is True
+              and foreign != before)
+        page.locator("#loadEconFile").set_input_files({
+            "name": "handoff-foreign.json",
+            "mimeType": "application/json",
+            "buffer": json.dumps(foreign, ensure_ascii=False).encode("utf-8"),
+        })
+        check("Vertrauliche Uebergabe sperrt fremden Spielstand-Import",
+              state(page) == before
+              and page.evaluate("NeoEconomy.needsHandoff()") is True)
         page.locator('[data-ui="handoff-ok"]').click()
     else:
         page.wait_for_function("NeoEconomy.getState()?.phase === 'REPORT'")
