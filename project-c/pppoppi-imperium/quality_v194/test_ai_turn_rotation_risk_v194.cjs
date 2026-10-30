@@ -9,6 +9,30 @@ const CENT_FIELDS = ['startNetCent', 'finalNetCent', 'finalCashCent',
   'finalDebtCent', 'liquidNetChangeCent', 'maximumNetDrawdownCent'];
 const COUNT_FIELDS = ['finalFields', 'rescueCount', 'monthsBelowProfileBuffer'];
 
+
+function verifyMetrics(row) {
+  assert.ok(row && Array.isArray(row.firms) && row.firms.length === 3,
+    'exactly three company rows required');
+  assert.deepEqual(row.firms.map(x => x.id).sort(), IDS, 'invalid company IDs');
+  const fields = row.firms.map(x => x.finalFields);
+  const changes = row.firms.map(x => x.liquidNetChangeCent);
+  for (const value of [...fields, ...changes])
+    assert.ok(Number.isSafeInteger(value), 'unsafe aggregate input');
+  assert.ok(fields.every(value => value >= 0), 'negative aggregate field count');
+  const expected = {
+    totalFields: fields.reduce((a, b) => a + b, 0),
+    minimumFields: Math.min(...fields),
+    maximumFields: Math.max(...fields),
+    fieldRange: Math.max(...fields) - Math.min(...fields),
+    zeroFieldFirms: fields.filter(value => value === 0).length,
+    totalLiquidNetChangeCent: changes.reduce((a, b) => a + b, 0),
+    minimumLiquidNetChangeCent: Math.min(...changes)
+  };
+  for (const [field, value] of Object.entries(expected))
+    assert.equal(row.metrics?.[field], value, 'aggregate metric mismatch: ' + field);
+  return expected;
+}
+
 function compareFirm(fixed, rotated) {
   assert.equal(fixed.id, rotated.id, 'company ID changed');
   assert.ok(IDS.includes(fixed.id), 'unknown company');
@@ -67,6 +91,13 @@ function analyze(report) {
   const rows = new Map();
   const key = (scenario, offset, direction) => [scenario, offset, direction].join('|');
   for (const row of report.rows) {
+    assert.ok(['active_low_demand', 'passive_normal'].includes(row.scenario), 'unknown scenario');
+    assert.ok(Number.isInteger(row.offset) && row.offset >= 0 && row.offset <= 2,
+      'invalid starting offset');
+    assert.ok([-1, 0, 1].includes(row.direction), 'invalid direction');
+    assert.deepEqual(row.order, IDS.map((_, i) => IDS[(i + row.offset) % 3]),
+      'incorrect first-month company order');
+    verifyMetrics(row);
     const k = key(row.scenario, row.offset, row.direction);
     assert.ok(!rows.has(k), 'duplicate rotation case');
     assert.deepEqual([...row.firms.map(x => x.id)].sort(), IDS, 'missing company');
@@ -83,6 +114,12 @@ function analyze(report) {
     const rotated = rows.get(k);
     assert.ok(fixed && rotated, 'missing fixed or rotated case');
     assert.equal(item.firms.length, 3);
+    assert.deepEqual(item.firms.map(x => x.id).sort(), IDS,
+      'duplicate or missing recorded company');
+    assert.equal(item.fixedTotalFields, fixed.metrics.totalFields, 'wrong fixed fields');
+    assert.equal(item.rotatedTotalFields, rotated.metrics.totalFields, 'wrong rotated fields');
+    assert.equal(item.fixedZeroFieldFirms, fixed.metrics.zeroFieldFirms, 'wrong fixed zero count');
+    assert.equal(item.rotatedZeroFieldFirms, rotated.metrics.zeroFieldFirms, 'wrong rotated zero count');
     const firms = IDS.map(id => {
       const f = fixed.firms.find(x => x.id === id);
       const r = rotated.firms.find(x => x.id === id);
@@ -108,6 +145,12 @@ function analyze(report) {
       deltaTotalLiquidNetCent: item.deltaTotalLiquidNetCent, firms });
   }
   assert.equal(used.size, 12);
+  for (const scenario of ['active_low_demand', 'passive_normal']) {
+    for (const offset of [0, 1, 2]) {
+      for (const direction of [-1, 0, 1])
+        assert.ok(rows.has(key(scenario, offset, direction)), 'missing scenario/offset/direction');
+    }
+  }
   const allFirms = results.flatMap(x => x.firms);
   assert.equal(allFirms.length, 36);
   const scenarios = [...new Set(results.map(x => x.scenario))].sort();
@@ -124,7 +167,7 @@ function analyze(report) {
     sourceSchema: report.schema,
     checkedPairs: results.length,
     checkedCompanyComparisons: allFirms.length,
-    accountingIdentitiesChecked: 2 * allFirms.length,
+    accountingIdentitiesChecked: 4 * allFirms.length,
     aggregate: countOutcomes(allFirms), perScenario, results,
     caveats: [
       'The paired cash-minus-debt metric is NOT accounting profit or asset value.',
@@ -141,4 +184,4 @@ if (require.main === module) {
   const report = JSON.parse(fs.readFileSync(process.argv[2], 'utf8'));
   console.log(JSON.stringify(analyze(report), null, 2));
 }
-module.exports = { compareFirm, countOutcomes, analyze };
+module.exports = { compareFirm, countOutcomes, verifyMetrics, analyze };
