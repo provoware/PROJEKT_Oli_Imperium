@@ -23,7 +23,7 @@ jobs:
           set -o pipefail
           node --check project-c/pppoppi-imperium/quality_v194/test_natural_oil_to_export_v194.cjs
           node project-c/pppoppi-imperium/quality_v194/test_natural_oil_to_export_v194.cjs | tee natural_oil_export.json
-          node -e "const r=require('./natural_oil_export.json'); const a=r.rows; if(r.scenarios!==2 || r.repeatedRuns!==2 || r.totalSimulatedMonths!==20 || r.checkedCompanyMonths!==40 || a.length!==2 || a[0].soldMilli!==9000 || a[0].revenueCent<=0 || a[1].soldMilli!==0 || a[1].refundedMilli!==9000 || !a.every(x=>x.ledgerReconciled && x.duplicateQueueRejected && x.jsonRoundtrips===5) || r.prereleaseGate!=='BLOCKED') process.exit(1);"
+          node -e "const r=require('./natural_oil_export.json'); const a=r.rows; if(r.scenarios!==2 || r.repeatedRuns!==2 || r.totalSimulatedMonths!==20 || r.checkedCompanyMonths!==40 || a.length!==2 || a[0].soldMilli!==9000 || a[0].revenueCent<=0 || a[1].soldMilli!==0 || a[1].refundedMilli!==9000 || !a.every(x=>x.ledgerReconciled && x.duplicateQueueRejected && x.jsonRoundtrips===5 && x.cashBridge && x.cashBridge.netCent===Object.entries(x.cashBridge).filter(([k])=>k.endsWith('Cent') && k!=='netCent').reduce((n,[,v])=>n+v,0) && x.cashBridge.investmentCent<0 && x.cashBridge.actionCostCent<0 && x.cashBridge.freightHoldCent<0 && x.cashBridge.salesCent>=x.revenueCent) || r.cashBridgeNegativeTests!==8 || r.cashBridgeUnknownCodeChecks!==1 || r.prereleaseGate!=='BLOCKED') process.exit(1);"
       - name: Pruefbeleg sichern
         if: always()
         uses: actions/upload-artifact@v4
