@@ -40,7 +40,7 @@ jobs:
               content = doc.read_text(encoding="utf-8")
               if not content.strip():
                   problems.append(f"{doc.relative_to(root)}: leer")
-              for link in re.findall(r"!?(?:\\[[^\\]]*\\])\\(([^)\\n]+)\\)", content):
+              for link in re.findall(r"!?\[[^\]]*\]\(([^)\n]+)\)", content):
                   target = link.strip().split(" ", 1)[0].strip("<>")
                   if not target or target.startswith(("#", "//")) or re.match(r"^[a-zA-Z][a-zA-Z0-9+.-]*:", target):
                       continue
@@ -51,6 +51,6 @@ jobs:
                   if not destination.is_relative_to(root) or not destination.exists():
                       problems.append(f"{doc.relative_to(root)}: ungueltiger lokaler Link {target}")
           if problems:
-              raise SystemExit("\\n".join(problems))
+              raise SystemExit("\n".join(problems))
           print(f"PASS: {len(docs)} Markdown-Dateien und ihre lokalen Verweise")
           PY
