@@ -16,12 +16,19 @@ const company = (s, id) => {
 function auditIndependent(s, initial, cumulativeSold, month) {
   const report = s.lastReport;
   assert.equal(report.month, month, 'audit: wrong report month');
-  let soldTotal = 0;
+  const demand = report.regions.BERLIN.demandMilli;
+  assert.ok(Number.isSafeInteger(demand) && demand >= 0,
+    'audit: invalid market demand');
+  let soldTotal = 0, offeredTotal = 0;
   for (let i = 0; i < 2; i++) {
     const id = 'H' + (i + 1), claimId = CLAIMS[i];
     const claim = s.claims[claimId], firm = company(s, id);
     const sold = report.allocations.BERLIN[claimId] || 0;
     const produced = initial[i].reserveMilli - claim.reserveMilli;
+    for (const [name, value] of Object.entries({sold, reserve: claim.reserveMilli,
+      inventory: claim.inventoryMilli, prepared: claim.preparedMilli}))
+      assert.ok(Number.isSafeInteger(value) && value >= 0,
+        'audit: invalid quantity ' + id + ' ' + name);
     assert.equal(claim.owner, id, 'audit: wrong field owner');
     assert.equal(produced, cumulativeSold[i] + claim.inventoryMilli + claim.preparedMilli,
       'audit: production inventory mismatch');
@@ -33,9 +40,10 @@ function auditIndependent(s, initial, cumulativeSold, month) {
       firm.ledger.reduce((n, row) => n + row.deltaCent, 0),
       'audit: cash ledger mismatch');
     soldTotal += sold;
+    offeredTotal += sold + claim.inventoryMilli + claim.preparedMilli;
   }
-  assert.ok(soldTotal <= report.regions.BERLIN.demandMilli,
-    'audit: market demand exceeded');
+  assert.equal(soldTotal, Math.min(offeredTotal, demand),
+    'audit: market allocation does not match available supply and demand');
 }
 function negativeAuditProbes(s, initial, cumulativeSold, month) {
   auditIndependent(s, initial, cumulativeSold, month);
@@ -58,6 +66,20 @@ function negativeAuditProbes(s, initial, cumulativeSold, month) {
         /audit:/, 'undetected cross-company corruption ' + id + ' month ' + month);
       caught++;
     }
+  }
+  // Global market faults are independent of a single firm's ledger.
+  const marketCorruptions = [
+    state => { state.lastReport.regions.BERLIN.demandMilli = 0; },
+    state => { state.lastReport.regions.BERLIN.demandMilli = 0.5; },
+    state => { state.lastReport.allocations.BERLIN[CLAIMS[0]] = -1; },
+    state => { state.lastReport.allocations.BERLIN[CLAIMS[0]] = 0.5; }
+  ];
+  for (const mutate of marketCorruptions) {
+    const altered = clone(s);
+    mutate(altered);
+    assert.throws(() => auditIndependent(altered, initial, cumulativeSold, month),
+      /audit:/, 'undetected global market corruption month ' + month);
+    caught++;
   }
   return caught;
 }
@@ -172,11 +194,11 @@ console.log(JSON.stringify({
   schema: 'pppoppi.multimonth-competition/1', scenarios: 1,
   repeatedRuns: 2, simulatedMonths: 6, companyMonthChecks: 12,
   duplicateChecks: 12, jsonRoundtrips: 10,
-  deliberateCorruptionsCaught: 72,
+  deliberateCorruptionsCaught: 96,
   noInjectedCashOrInventory: true, result: first,
   limitations: ['Two human firms and two Berlin claims; three completed market months.',
     'No refinery or public freight in this targeted test.',
-    '36 independent negative corruption probes per repeated run (both firms, three months).',
+    '48 independent negative corruption probes per repeated run (both firms and market, three months).',
     'Cash reconciliation is not a profit or asset valuation.',
     'Browser file dialog, historic C64 and personal acceptance remain open.'],
   prereleaseGate: 'BLOCKED'
