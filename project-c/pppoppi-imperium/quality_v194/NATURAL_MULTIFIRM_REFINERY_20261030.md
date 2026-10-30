@@ -1,6 +1,6 @@
 # WIR-02 / WIR-03 – zwei natuerliche Raffinerie- und Frachtketten (30.10.2026)
 
-**Status: PENDING bis zur GitHub-Pruefung auf dem endgueltigen Commit. Vorrelease BLOCKED.**
+**Technischer Teiltest: PASS** auf `729f09dd153cd29d16c9ee5468f8e2d1106cf489` in [GitHub-CI #41139800011](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41139800011). **Vorrelease BLOCKED**; die erneute CI auf dem spaeteren Dokumentations-HEAD ist gesondert auszuwerten.
 
 ## Ziel und Abgrenzung
 
@@ -51,3 +51,13 @@ Dateidialogfehler bei 175/200 Prozent bleiben unabhaengig offen.
 
 **Kein Merge, kein Release, keine persoenliche Endabnahme vor
 vollstaendig geprueftem und eingefrorenem Kandidaten.**
+
+## GitHub-Pruefverlauf und konkrete Messwerte
+
+- [Erster CI-Lauf #41139741193](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41139741193): **FAIL**. Der Test versuchte Aktionen fuer H2, bevor H1 seinen Zug abgeschlossen hatte. Kein Spielfehler; die Teststeuerung war falsch.
+- Korrektur auf `729f09dd`: Jeder menschliche Zug wird vor dem Wechsel zur anderen Firma mit echtem `END_TURN` abgeschlossen. Die doppelte Monatsbeendigung wird abgewiesen.
+- [Zweiter CI-Lauf #41139800011](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41139800011): **PASS**. Zwei deterministische Durchlaeufe mit je fuenf echten Monatsabschluessen, 20 JSON-Rundlaeufen, vier abgewiesenen Frachtduplikaten und zwoelf erkannten absichtlichen Verfaelschungen.
+- Je Durchlauf: beide Firmen foerdern je 100.000 Milli-Barrel, verarbeiten je 10.000 zu 9.000 Milli-Barrel Fertigware und verkaufen je 9.000 Milli-Barrel am Aussenmarkt. **Gesamtbilanz:** 200.000 gefoerdert = 180.000 Restlager + 18.000 verkauft + 2.000 Verarbeitungsschwund. Je Firma 50.400 Cent Frachtkosten und 714.690 Cent Aussenmarkterloes.
+- Der aktualisierte CI-Vertrag prueft diese gemessenen Werte nun explizit. Bis zu seiner erfolgreichen Ausfuehrung auf dem finalen Dokumentations-HEAD gilt dafuer **PENDING**.
+
+**Abgrenzung:** 714.690 Cent Verkaufserloes ist kein Gewinn. Die negative Kassenentwicklung und Investitionen sind keine bewertete Bilanz. Die technische Teilpruefung darf deshalb keines der 52 uebergreifenden Vorrelease-Gates vorzeitig freigeben.
