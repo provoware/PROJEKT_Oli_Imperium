@@ -89,6 +89,15 @@ def main():
 
                 # Reject unsupported and broken formats without changing journals.
                 invalid = [
+                    # SPE-02 aus PR #27: V0.7 ist keine stillschweigend
+                    # unterstützte Migration; auch fehlende und zukünftige
+                    # Schemata dürfen den laufenden Spielstand nicht ersetzen.
+                    ("unsupported-v07.json", {**copy.deepcopy(old_v08),
+                                              "schema": "pppoppi.berlin.save/0.7"}),
+                    ("missing-version.json", {k: copy.deepcopy(v)
+                                              for k, v in old_v08.items() if k != "schema"}),
+                    ("future-version.json", {**copy.deepcopy(old_v08),
+                                             "schema": "pppoppi.berlin.save/0.9"}),
                     ("unsupported-v06.json", old_v06),
                     ("corrupt-v08.json", {**copy.deepcopy(old_v08), "companies": []}),
                     ("truncated-v08.json", b'{"schema":"pppoppi.berlin.save/0.8",'),
