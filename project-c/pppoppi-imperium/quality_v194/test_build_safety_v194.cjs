@@ -66,7 +66,7 @@ try {
       require('./endstate_browser_bundle_v194.cjs').bundleSource());
     assert.equal(fs.readFileSync(path.join(destination, 'src/endstate_live_v194.js'), 'utf8'),
       fs.readFileSync(path.join(__dirname, 'endstate_live_v194.js'), 'utf8'));
-    assert.deepEqual(info.sourceOverrides, ['README_START.txt', 'index.html', 'src/neo_bridge.js', 'test_human_parity_v192.cjs']);
+    assert.deepEqual(info.sourceOverrides, ['README_START.txt', 'index.html', 'src/neo_bridge.js', 'src/v082_engine.js', 'src/v082_strategy_engine.js', 'test_human_parity_v192.cjs']);
     assert.equal(fs.readFileSync(path.join(destination, 'index.html'), 'utf8'), renderPatched('index.html'));
     assert.equal(fs.readFileSync(path.join(destination, 'src/neo_bridge.js'), 'utf8'), renderPatched('src/neo_bridge.js'));
     assert.equal(fs.readFileSync(path.join(destination, 'src/profi_economy.js'), 'utf8'),
