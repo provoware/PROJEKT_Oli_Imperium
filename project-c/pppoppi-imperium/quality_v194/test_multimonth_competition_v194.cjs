@@ -12,6 +12,55 @@ const company = (s, id) => {
   assert.ok(f, 'missing company ' + id);
   return f;
 };
+// Independent cross-company accounting oracle. Corrupted copies are never fed to the engine.
+function auditIndependent(s, initial, cumulativeSold, month) {
+  const report = s.lastReport;
+  assert.equal(report.month, month, 'audit: wrong report month');
+  let soldTotal = 0;
+  for (let i = 0; i < 2; i++) {
+    const id = 'H' + (i + 1), claimId = CLAIMS[i];
+    const claim = s.claims[claimId], firm = company(s, id);
+    const sold = report.allocations.BERLIN[claimId] || 0;
+    const produced = initial[i].reserveMilli - claim.reserveMilli;
+    assert.equal(claim.owner, id, 'audit: wrong field owner');
+    assert.equal(produced, cumulativeSold[i] + claim.inventoryMilli + claim.preparedMilli,
+      'audit: production inventory mismatch');
+    assert.equal(firm.monthSoldMilli, sold, 'audit: sale counter mismatch');
+    assert.equal(firm.monthRevenueCent,
+      Math.floor((sold * s.prices.BERLIN + 500) / 1000),
+      'audit: market revenue mismatch');
+    assert.equal(firm.cashCent - initial[i].cashCent,
+      firm.ledger.reduce((n, row) => n + row.deltaCent, 0),
+      'audit: cash ledger mismatch');
+    soldTotal += sold;
+  }
+  assert.ok(soldTotal <= report.regions.BERLIN.demandMilli,
+    'audit: market demand exceeded');
+}
+function negativeAuditProbes(s, initial, cumulativeSold, month) {
+  auditIndependent(s, initial, cumulativeSold, month);
+  let caught = 0;
+  for (let i = 0; i < 2; i++) {
+    const id = 'H' + (i + 1), claimId = CLAIMS[i];
+    const corruptions = [
+      state => { state.claims[claimId].inventoryMilli += 1000; },
+      state => { company(state, id).ledger[0].deltaCent += 1; },
+      state => { company(state, id).cashCent += 1; },
+      state => { company(state, id).monthSoldMilli += 1000; },
+      state => { company(state, id).monthRevenueCent += 1; },
+      state => { state.lastReport.allocations.BERLIN[claimId] =
+        (state.lastReport.allocations.BERLIN[claimId] || 0) + 1000; }
+    ];
+    for (const mutate of corruptions) {
+      const altered = clone(s);
+      mutate(altered);
+      assert.throws(() => auditIndependent(altered, initial, cumulativeSold, month),
+        /audit:/, 'undetected cross-company corruption ' + id + ' month ' + month);
+      caught++;
+    }
+  }
+  return caught;
+}
 function action(s, type, id, month, claimId) {
   const cmd = {type, companyId: id,
     requestId: 'MULTIMONTH-' + month + '-' + id + '-' + type,
@@ -32,6 +81,7 @@ function play() {
   const cumulativeSold = [0, 0];
   const reports = [];
   let jsonRoundtrips = 0, duplicateChecks = 0, companyMonthChecks = 0;
+  let deliberateCorruptionsCaught = 0;
   for (let month = 1; month <= 3; month++) {
     assert.equal(s.month, month);
     assert.equal(s.phase, 'TURN');
@@ -87,6 +137,7 @@ function play() {
         'known first-month competition baseline changed');
       assert.deepEqual(CLAIMS.map(id => s.claims[id].inventoryMilli), [40000, 40000]);
     }
+    deliberateCorruptionsCaught += negativeAuditProbes(s, initial, cumulativeSold, month);
     const snapshot = clone(s);
     assert.equal(E.validate(snapshot), true, 'report JSON roundtrip invalid');
     assert.deepEqual(snapshot, s);
@@ -108,6 +159,7 @@ function play() {
     }
   }
   return {reports, companyMonthChecks, duplicateChecks, jsonRoundtrips,
+    deliberateCorruptionsCaught,
     cumulativeSoldMilli: cumulativeSold.reduce((n, x) => n + x, 0),
     producedMilli: CLAIMS.reduce((n, id, i) =>
       n + initial[i].reserveMilli - s.claims[id].reserveMilli, 0),
@@ -120,9 +172,11 @@ console.log(JSON.stringify({
   schema: 'pppoppi.multimonth-competition/1', scenarios: 1,
   repeatedRuns: 2, simulatedMonths: 6, companyMonthChecks: 12,
   duplicateChecks: 12, jsonRoundtrips: 10,
+  deliberateCorruptionsCaught: 72,
   noInjectedCashOrInventory: true, result: first,
   limitations: ['Two human firms and two Berlin claims; three completed market months.',
     'No refinery or public freight in this targeted test.',
+    '36 independent negative corruption probes per repeated run (both firms, three months).',
     'Cash reconciliation is not a profit or asset valuation.',
     'Browser file dialog, historic C64 and personal acceptance remain open.'],
   prereleaseGate: 'BLOCKED'
