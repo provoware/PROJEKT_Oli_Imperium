@@ -1,6 +1,6 @@
 # WIR-03 – Marktallokation und Negativproben (30.10.2026)
 
-**Status: PENDING auf dem endgültigen Dokumentations-HEAD. Vorrelease: BLOCKED.**
+**Status: Fachprüfung PASS auf `29c7d6daadc5a3b535020055a3d755898c06bc3e`; neuere Entwicklungs-HEADs gesondert prüfen. Vorrelease: BLOCKED.**
 Entwicklungszweig: `automation/v194-ai-logistics-reserve-20261029-1530`, [Entwurfs-PR #137](https://github.com/provoware/PROJEKT_Oli_Imperium/pull/137).
 `main`, Spielkern und geschützte Originaldateien werden nicht verändert.
 
@@ -31,3 +31,9 @@ Die Prüfung deckt ausschließlich zwei menschliche Firmen und zwei Berliner Fel
 3. Gewinn-/Vermögensbewertung getrennt und mit eindeutigen Bilanzannahmen spezifizieren.
 
 **Keine Änderung des Freigabestatus, kein Merge, kein Release und keine vorgezogene persönliche Abnahme.**
+
+## GitHub-Nachprüfung des 96er-Testpakets
+
+Auf dem tatsächlichen Commit `29c7d6daadc5a3b535020055a3d755898c06bc3e` wurde die [gezielte Fachprüfung #41100643940](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41100643940) erfolgreich abgeschlossen (**PASS**). Ebenfalls PASS: [Offline-Browser #41100642984](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41100642984), [KI-Kennzahlen #41100642988](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41100642988) und [Quellschutz #41100643072](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41100643072). Die [integrierte Freigabesperre #41100643012](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41100643012) bleibt wegen offener Pflichten korrekt **FAIL/BLOCKED**.
+
+Die anschließend ergänzten 40 Fremdaktionsprüfungen besitzen einen **neuen** Test-HEAD und erben diese erfolgreichen Ergebnisse nicht. Deren CI muss eigenständig auf dem endgültigen Commit abgeschlossen werden.
