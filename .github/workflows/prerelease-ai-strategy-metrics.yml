@@ -2,6 +2,9 @@ name: Projekt C – KI-Strategie-Kennzahlen und Reproduzierbarkeit
 on:
   pull_request:
     paths:
+      # Die Messungen laden den echten Spielkern. Aenderungen daran muessen
+      # dieselbe KI-Gesamtregression ausloesen, nicht nur Testdatei-Aenderungen.
+      - 'project-c/pppoppi-imperium/SPIEL/src/**'
       - 'project-c/pppoppi-imperium/quality_v194/test_ai_strategy_metrics_v194.cjs'
       - 'project-c/pppoppi-imperium/quality_v194/test_ai_strategy_metrics_unit_v194.cjs'
       - 'project-c/pppoppi-imperium/quality_v194/AI_STRATEGY_BASELINE_20261029.md'
