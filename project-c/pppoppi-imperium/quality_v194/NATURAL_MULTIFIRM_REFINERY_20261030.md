@@ -61,3 +61,39 @@ vollstaendig geprueftem und eingefrorenem Kandidaten.**
 - Der aktualisierte CI-Vertrag prueft diese gemessenen Werte nun explizit. Bis zu seiner erfolgreichen Ausfuehrung auf dem finalen Dokumentations-HEAD gilt dafuer **PENDING**.
 
 **Abgrenzung:** 714.690 Cent Verkaufserloes ist kein Gewinn. Die negative Kassenentwicklung und Investitionen sind keine bewertete Bilanz. Die technische Teilpruefung darf deshalb keines der 52 uebergreifenden Vorrelease-Gates vorzeitig freigeben.
+
+## Nachtrag 31.10.2026 – echter Kapazitaetsengpass (WIR-02/WIR-03)
+
+Der bisherige natuerliche Zweifirmenlauf (je 10 Barrel Rohware -> 9 Barrel
+Fertigware) bleibt als **Baseline** erhalten. Ein zweiter unabhaengiger
+Durchlauf nutzt pro Firma zwei echte 10-Barrel-Raffineriechargen, zwei
+unveraenderte Transportketten und 18 Barrel tatsaechlich erzeugte
+Fertigware. Beide Firmen buchen je 18 Barrel Berlin -> Nord; der gemeinsame
+Engpass BB-N hat aber nur 18 Barrel Gesamtkapazitaet.
+
+**Verbindliche Sollwerte des neuen Tests (noch kein PASS):**
+
+- Beide Firmen erhalten bei identischen Auftraegen je 9 Barrel;
+  9 Barrel je Firma werden zurueck ins regionale Marktlager gebucht.
+- Gemeinsame Streckenauslastung B-BB und BB-N: jeweils exakt 18 Barrel.
+- Frachtvorauszahlung und Rueckerstattung werden je Firma anhand
+  `PPPublicNetwork.freight` getrennt mit dem echten Buchungsjournal verglichen;
+  effektive Frachtkosten je Firma: 50.400 Cent.
+- Mengenbruecke fuer den Engpasslauf: 200 Barrel echte Foerderung =
+  160 Barrel Feldlager + 18 Barrel Rueckgabe/Regionalmarkt +
+  18 Barrel Aussenmarktverkauf + 4 Barrel Verarbeitungsschwund.
+- Beide Szenarien je zweimal deterministisch wiederholt: zusammen 20
+  simulierte Spielmonate, 40 Firmen-Monatsbeobachtungen, 40 JSON-Rundlaeufe,
+  acht abgewiesene doppelte Buchungen und 24 Negativproben.
+
+**Pruefstatus: PENDING**, bis der GitHub-Prueflauf auf dem abschliessenden
+Dokumentations-HEAD erfolgreich beendet ist. Der bestehende technische
+PASS auf dem vorherigen HEAD bleibt ein separater Nachweis, nicht die
+Freigabe dieser Erweiterung. Das 52-Punkte-Gate bleibt **BLOCKED**.
+
+**Naechste technische Pflicht:** Nach erfolgreicher Engpasspruefung einen
+zweiten Frachtmonat mit erneuter gemeinsamer Kapazitaetskonkurrenz,
+Reparatur-/Sperrfall und unabhängiger kumulativer Kassen- und Mengenbilanz
+pruefen; danach Gewinn-/Vermoegensbewertung und vollstaendige Endpartien.
+Keine Aussage ueber historische C64-Regeln, Ressourcenrechte, Browser-Zoom
+oder Nutzer-Endabnahme.
