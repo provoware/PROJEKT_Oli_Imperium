@@ -104,7 +104,36 @@ def audit_session(page, worker, zoom, download_dir):
         window.__sessionFileInputClicks = 0;
         window.__sessionInputActivation = null;
         window.__sessionInputTrusted = null;
-        document.getElementById('loadSessionFile').addEventListener('click', event => {
+        // Diagnose ausschliesslich im Test: erfasst den echten nativen
+        // Picker-Aufruf und aktive Benutzergeste, ohne Fehler zu umgehen.
+        const picker = document.getElementById('loadSessionFile');
+        const nativePicker = picker.showPicker;
+        window.__nativePickerProbe = {
+            calls: 0, activation: null, returned: false,
+            error: null, buttonTrusted: null, buttonActivation: null
+        };
+        if (typeof nativePicker === 'function') {
+            picker.showPicker = function(...args) {
+                const probe = window.__nativePickerProbe;
+                probe.calls++;
+                probe.activation = navigator.userActivation?.isActive ?? null;
+                try {
+                    const result = nativePicker.apply(this, args);
+                    probe.returned = true;
+                    return result;
+                } catch(error) {
+                    probe.error = error.name + ': ' + error.message;
+                    throw error;
+                }
+            };
+        }
+        document.querySelector('[data-ui="session-import"]').addEventListener(
+            'click', event => {
+                window.__nativePickerProbe.buttonTrusted = event.isTrusted;
+                window.__nativePickerProbe.buttonActivation =
+                    navigator.userActivation?.isActive ?? null;
+            }, {capture: true, once: true});
+        picker.addEventListener('click', event => {
             window.__sessionFileInputClicks++;
             window.__sessionInputActivation = navigator.userActivation?.isActive ?? null;
             window.__sessionInputTrusted = event.isTrusted;
@@ -131,6 +160,7 @@ def audit_session(page, worker, zoom, download_dir):
                 nativeShowPickerAvailable: typeof document.getElementById('loadSessionFile').showPicker === 'function',
                 userActivationAtInputClick: window.__sessionInputActivation,
                 inputClickTrusted: window.__sessionInputTrusted,
+                nativePickerProbe: window.__nativePickerProbe,
                 toast: document.querySelector('#toast')?.textContent?.slice(0, 200),
                 focusOnImport: focused === button,
                 focusedTag: focused?.tagName || null,
