@@ -60,9 +60,9 @@ def main():
               (preview / "src" / "backup_v194.js").is_file())
         errors, external = [], []
         with sync_playwright() as playwright:
-            def session():
+            def session(profile_dir=profile):
                 context = playwright.chromium.launch_persistent_context(
-                    str(profile), headless=True,
+                    str(profile_dir), headless=True,
                     viewport={"width": 800, "height": 600},
                     accept_downloads=True, reduced_motion="reduce",
                 )
@@ -132,6 +132,61 @@ def main():
                 "filesystem_crash_tested": False,
                 "release_gate": "BLOCKED",
             }, ensure_ascii=False), flush=True)
+            context.close()
+
+            # P0: reproduzierbare Geheimhaltungsprobe nach echtem Browserneustart.
+            # Ein fertig gespielter Zug von H1 darf den H2-Firmencomputer erst
+            # nach dessen ausdruecklicher Uebergabebestaetigung oeffnen.
+            private_profile = Path(tmp) / "confidential-handoff-profile"
+            context, page = session(private_profile)
+            page.locator("#startGame").click()
+            page.locator("#econMode").select_option("2-0")
+            page.locator('[data-ui="newgame"]').click()
+            check("Mehrspielerpartie vor vertraulicher Uebergabe gesichert",
+                  page.evaluate("PPBackup.idle()") is True)
+            page.evaluate("NeoEconomy.send('END_TURN')")
+            page.wait_for_function("NeoEconomy.needsHandoff()")
+            check("Ende des H1-Zuges sichert kompletten Stand",
+                  page.evaluate("PPBackup.idle()") is True)
+            private_state = state(page)
+            check("Unterbrochener Zug ist vertrauliche H2-Uebergabe",
+                  private_state["phase"] == "TURN"
+                  and private_state["turnIndex"] == 1
+                  and page.evaluate("NeoEconomy.needsHandoff()") is True)
+            context.close()
+
+            context, page = session(private_profile)
+            check("Neustart gibt vertraulichen Firmenstand nicht automatisch frei",
+                  state(page) is None)
+            page.locator("#startGame").click()
+            page.locator('[data-ui="restore-backup"]').click()
+            page.wait_for_function("NeoEconomy.getState() !== null")
+            check("Wiederherstellung bewahrt verdeckten Spielerwechsel",
+                  state(page) == private_state
+                  and page.evaluate("NeoEconomy.needsHandoff()") is True
+                  and page.locator('[data-ui="handoff-ok"]').count() == 1)
+            check("Finanzanzeige bleibt vor Uebergabebestaetigung verdeckt",
+                  page.evaluate("""() => {
+                    const nodes=document.querySelectorAll('.bottom .stats .item strong');
+                    return nodes.length >= 2 && nodes[1].textContent === '••••';
+                  }"""))
+            page.locator('[data-ui="handoff-ok"]').click()
+            check("H2 erhaelt erst nach Zustimmung Zugriff",
+                  state(page) == private_state
+                  and page.evaluate("NeoEconomy.needsHandoff()") is False)
+            check("Freigabezustand in derselben IndexedDB sicher gesichert",
+                  page.evaluate("PPBackup.idle()") is True)
+            context.close()
+
+            context, page = session(private_profile)
+            page.locator("#startGame").click()
+            page.locator('[data-ui="restore-backup"]').click()
+            page.wait_for_function("NeoEconomy.getState() !== null")
+            check("Bestaetigte Uebergabe bleibt nach erneutem Neustart bestaetigt",
+                  state(page) == private_state
+                  and page.evaluate("NeoEconomy.needsHandoff()") is False)
+            check("Neustart-Probe bleibt offline ohne Laufzeitfehler",
+                  not external and not errors)
             context.close()
 
 
