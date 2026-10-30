@@ -162,6 +162,11 @@ const changes = [
   ["src/v082_strategy_engine.js", "c.region===r.id&&c.owner!==null).length", "c.region===r.id&&(c.owner!==null||c.surveyedBy.length>0)).length"],
   ["src/v082_strategy_engine.js", "ok(!c.owner,'Altspielstand besitzt zu viele Konzessionen')", "ok(!c.owner&&c.surveyedBy.length===0,'Altspielstand besitzt zu viele Konzessionen oder Gutachten')"],
 
+  // P0: der vertrauliche Spielerwechsel muss auch nach Neustart gesperrt bleiben.
+  ["src/neo_bridge.js","E.validate(next.state);++importRevision;econ=next.state;window.PPBackup.capture(econ);","E.validate(next.state);++importRevision;econ=next.state;window.PPBackup.capture(econ,type==='END_TURN'&&econ.phase==='TURN'&&human()?.type==='human');"],
+  ["src/neo_bridge.js","case 'handoff-ok':handoff=false;show('computer');refreshStatus();break;","case 'handoff-ok':handoff=false;window.PPBackup.capture(econ,false);show('computer');refreshStatus();break;"],
+  ["src/neo_bridge.js","window.PPBackup.restore(E.validate).then(({state,older})=>{if(revision!==importRevision)return;window.PPPEndstateLive.detach();econ=state;selected=Object.keys(econ.claims)[0];handoff=false;show(econ.phase==='RESCUE'?'rescue':econ.phase==='REPORT'?'report':'computer');","window.PPBackup.restore(E.validate).then(({state,older,handoff:restoredHandoff})=>{if(revision!==importRevision)return;window.PPPEndstateLive.detach();econ=state;selected=Object.keys(econ.claims)[0];handoff=restoredHandoff;show(handoff?'handoff':econ.phase==='RESCUE'?'rescue':econ.phase==='REPORT'?'report':'computer');"],
+
 ];
 
 function replaceExactlyOnce(text, before, after, relative) {
