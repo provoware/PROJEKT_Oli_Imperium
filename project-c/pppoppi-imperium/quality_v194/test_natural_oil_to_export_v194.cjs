@@ -119,6 +119,13 @@ function reject(s, cmd, pattern) {
 function close(s, label, month) {
   for (const id of ['H1','H2'])
     s = step(s, command('END_TURN',label,id+'-END-'+month,{},id));
+  if(s.phase==='RESCUE') {
+    // Real engine credit only; preserve the acquired field and shipment state.
+    assert.deepEqual(s.rescueIds,['H1'],'unexpected rescue beneficiary');
+    s=step(s,command('RESCUE_LOAN',label,'M'+month+'-RESCUE-LOAN',{},'H1'));
+    assert.equal(s.claims[CLAIM].owner,'H1','rescue lost the oil field');
+    assert.equal(firm(s).generation,1,'rescue unexpectedly restarted firm');
+  }
   assert.equal(s.phase, 'REPORT');
   assert.equal(s.lastReport.month, month);
   assert.equal(s.reports.length, month);
@@ -382,7 +389,8 @@ function play(blocked) {
       pipeRepaired:true,publicLinkRepaired:true,secondSoldMilli:secondSale.soldMilli,
       secondRevenueCent:secondSale.revenueCent,totalProducedMilli:2*E.CFG.pumpMilli,
       totalSoldMilli,remainingMilli,processingLossMilli:2000,
-      ledgerReconciled:true,finalMonth:s.month}};
+      ledgerReconciled:true,rescueLoanCount:firm(s).ledger.filter(x=>x.code==='RETTUNGSKREDIT').length,
+      finalMonth:s.month}};
 }
 const rows=[false,true].map(blocked=>{
   const first=play(blocked);
