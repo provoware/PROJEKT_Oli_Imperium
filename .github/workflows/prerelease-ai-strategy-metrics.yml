@@ -16,6 +16,8 @@ on:
       - 'project-c/pppoppi-imperium/quality_v194/test_ai_turn_rotation_stress_v194.cjs'
       - 'project-c/pppoppi-imperium/quality_v194/test_ai_turn_rotation_risk_v194.cjs'
       - 'project-c/pppoppi-imperium/quality_v194/test_ai_turn_rotation_risk_unit_v194.cjs'
+      - 'project-c/pppoppi-imperium/quality_v194/test_ai_debt_rescue_stress_v194.cjs'
+      - 'project-c/pppoppi-imperium/quality_v194/AI_DEBT_RESCUE_STRESS_20261030.md'
       - 'project-c/pppoppi-imperium/quality_v194/AI_TURN_ROTATION_RISK_20261030.md'
       - 'project-c/pppoppi-imperium/quality_v194/AI_TURN_ROTATION_STRESS_20261029.md'
       - 'project-c/pppoppi-imperium/quality_v194/AI_TURN_ROTATION_20261029.md'
@@ -107,6 +109,12 @@ jobs:
           node --test project-c/pppoppi-imperium/quality_v194/test_ai_turn_rotation_risk_unit_v194.cjs
           node project-c/pppoppi-imperium/quality_v194/test_ai_turn_rotation_risk_v194.cjs ai_turn_rotation_stress.json | tee ai_turn_rotation_risk.json
           node -e "const r=require('./ai_turn_rotation_risk.json'); if(r.checkedPairs!==12 || r.checkedCompanyComparisons!==36 || r.accountingIdentitiesChecked!==144 || r.perScenario.length!==2 || r.prereleaseGate!=='BLOCKED') process.exit(1);"
+      - name: KI-Schulden, automatischen Rettungskredit und Neustart pruefen
+        run: |
+          set -o pipefail
+          node --check project-c/pppoppi-imperium/quality_v194/test_ai_debt_rescue_stress_v194.cjs
+          node project-c/pppoppi-imperium/quality_v194/test_ai_debt_rescue_stress_v194.cjs | tee ai_debt_rescue_stress.json
+          node -e "const r=require('./ai_debt_rescue_stress.json'); if(r.repeatedRuns!==2 || r.scenario.aiRestarts!==1 || r.scenario.aiLoansWithoutRestart!==1 || !r.scenario.duplicateTurnRejected || !r.scenario.jsonRoundtrip || !r.scenario.nextMonthPreserved || r.prereleaseGate!=='BLOCKED') process.exit(1);"
       - name: Reproduzierbaren Zahlenbericht sichern
         if: always()
         uses: actions/upload-artifact@v4
@@ -123,5 +131,6 @@ jobs:
             ai_turn_rotation.json
             ai_turn_rotation_stress.json
             ai_turn_rotation_risk.json
+            ai_debt_rescue_stress.json
           if-no-files-found: warn
           retention-days: 14
