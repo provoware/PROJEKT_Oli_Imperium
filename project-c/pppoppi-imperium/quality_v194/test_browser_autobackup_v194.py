@@ -140,7 +140,7 @@ def main():
             private_profile = Path(tmp) / "confidential-handoff-profile"
             context, page = session(private_profile)
             page.locator("#startGame").click()
-            page.locator("#econMode").select_option("2-0")
+            page.locator("#econMode").select_option("2-2")
             page.locator('[data-ui="newgame"]').click()
             check("Mehrspielerpartie vor vertraulicher Uebergabe gesichert",
                   page.evaluate("PPBackup.idle()") is True)
