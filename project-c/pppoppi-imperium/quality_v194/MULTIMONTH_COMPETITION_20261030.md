@@ -44,3 +44,15 @@ Dieser neue Test enthält weder Raffinerie noch öffentlichen Frachtweg und bele
 | 3 | 102 Barrel | 102 Barrel | 98 Barrel | 302 Barrel |
 
 **Physische Bilanz nach Monat 3:** 400 Barrel regulär gefördert = 302 Barrel verkauft + 98 Barrel Restlager. Diese Zahlen beziehen sich auf einen der zwei identischen Durchläufe; sie dürfen nicht als reale Einnahmen, Gewinn oder Vermögensbewertung ausgegeben werden. Die übrigen Gesamtprüfungen und der native Dateiimport bleiben eigene Sperren. **Nach diesem Dokumentationscommit muss CI erneut auf dem endgültigen HEAD kontrolliert werden.**
+
+## Zusaetzliche unabhängige Negativkontrollen – 30.10.2026
+
+**Änderungsumfang:** Nur der vorhandene Dreimonats-Prüfer und sein GitHub-Prüfschritt, kein Eingriff in Spielregeln, Spielstände oder Originaldateien. Ausgangs-HEAD: `d201729814aff03e77020c47cfc1bd6d6c0fa2eb`. Die vorherigen [GitHub-Gesamtprüfungen auf diesem HEAD](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41083189004) waren PASS; die integrierte Freigabesperre blieb erwartungsgemäß FAIL/BLOCKED.
+
+Der Test prüft nun für **jede Firma in jedem der drei Monatsberichte** zusätzlich sechs gezielt verfälschte *Kopien* des gültigen Spielstands: (1) erfundenes Restöl, (2) manipulierte Kassenbuchung, (3) verändertes Barguthaben, (4) falscher Verkaufszähler, (5) falscher Erlöszähler, (6) verfälschte Marktzuweisung. Ein unabhängiger Mengen-/Geld-/Markt-Abgleich muss jede Verfälschung erkennen. Die veränderten Kopien werden **niemals** dem Spielkern übergeben oder gespeichert. Zwei reproduzierbare Durchläufe ergeben **72 erwartete Negativkontrollen** (36 je Durchlauf); die bisherigen 6 simulierten Monate, 12 Firmen-Monatskontrollen, 12 Duplikatsperren und 10 JSON-Rundläufe bleiben unverändert.
+
+**Prüfstatus bei Einreichung:** PENDING – erst nach tatsächlich abgeschlossener GitHub-CI auf dem letzten Dokumentations-HEAD PASS melden. Der CI-Schritt prüft beide Zähler `deliberateCorruptionsCaught=72` und `result.deliberateCorruptionsCaught=36`. Bei Fehler den Test oder die Ursache korrigieren, nicht die Kontrolle deaktivieren.
+
+**Grenze:** Ein erkannter manipulierten Zustand beweist die Güte des unabhängigen Test-Orakels, **nicht** automatisch die Ablehnung durch den Spielstandimport. Die Browser-Dateidialog-Störung bei 175 %, mehrstufige Mehrfirmen-Raffinerie-/Frachtwege, vollständige Gewinn-/Anlagenbewertung, Rechte und C64-Vergleich bleiben offen. WIR-03/BAL-01 sowie die Vorrelease-Gesamtsperre bleiben BLOCKED.
+
+**Nächste drei Schritte:** (1) GitHub-Fach- und Gesamt-CI auf endgültigem HEAD auswerten; (2) reale mehrmonatige Mehrfirmen-Raffinerie-/Frachtwege prüfen; (3) den nativen Dateidialogfehler ursächlich untersuchen, ohne Sicherheitsprüfungen zu umgehen.
