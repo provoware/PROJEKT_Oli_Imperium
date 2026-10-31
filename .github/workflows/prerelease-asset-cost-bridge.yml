@@ -31,7 +31,7 @@ jobs:
           assert.equal(r.schema,'pppoppi.asset-cost-bridge/1');
           assert.equal(r.scenarios,2);
           assert.equal(r.companiesChecked,4);
-          assert.equal(r.negativeCases,36);
+          assert.equal(r.negativeCases,52);
           assert.equal(r.summary.valuationStatus,'UNPRICED');
           assert.equal(r.summary.profitStatus,'NOT_COMPUTABLE');
           assert.equal(r.summary.companies.length,2);
