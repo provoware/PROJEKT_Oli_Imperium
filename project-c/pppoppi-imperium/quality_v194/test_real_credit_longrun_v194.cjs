@@ -89,10 +89,34 @@ function auditMonthlyLiabilities(a,b) {
   assert.equal(a.debtCent,expectedDebt,'reconstructed loan balance');
 }
 
-function verifyFinal(state,opening) {
+function auditHistoricalReports(state,expected) {
+  // Reports are frozen at monthly close, BEFORE a human rescue credit.
+  // The independent cash/debt oracle therefore uses pre-rescue balances.
+  assert.equal(state.reports.length,expected.length,'historical report count');
+  assert.deepEqual(state.lastReport,state.reports.at(-1),
+    'last report differs from archived report');
+  for(const [index,check] of expected.entries()) {
+    const r=state.reports[index];
+    assert.equal(r.month,check.month,'archived month sequence');
+    assert.equal(r.companies.length,2,'archived company count M'+check.month);
+    const h1=r.companies.find(f=>f.id==='H1');
+    const h2=r.companies.find(f=>f.id==='H2');
+    assert.ok(h1&&h2,'archived company missing M'+check.month);
+    assert.equal(h1.cashCent,check.h1CashCent,'archived H1 cash M'+check.month);
+    assert.equal(h1.debtCent,check.h1DebtCent,'archived H1 debt M'+check.month);
+    assert.equal(h1.arrearsCent,check.h1ArrearsCent,
+      'archived H1 arrears M'+check.month);
+    assert.equal(h2.cashCent,check.h2CashCent,'archived H2 cash M'+check.month);
+    assert.equal(h2.debtCent,0,'archived H2 debt M'+check.month);
+    assert.equal(h2.arrearsCent,0,'archived H2 arrears M'+check.month);
+  }
+}
+
+function verifyFinal(state,opening,expectedReports) {
   const a=firm(state,'H1'),b=firm(state,'H2');
   ledgerAudit(a,opening);ledgerAudit(b,opening);
   auditMonthlyLiabilities(a,b);
+  auditHistoricalReports(state,expectedReports);
   assert.equal(a.cashCent,2815799,'final H1 cash');
   assert.equal(a.debtCent,5463166,'final H1 debt');
   assert.equal(b.cashCent,opening-16*E.CFG.wage,'independent H2 cash');
@@ -137,6 +161,8 @@ function scenario() {
   s=step(s,'RESCUE_LOAN','H1');
   assert.equal(s.phase,'REPORT');
   let expectedCash=3960000,expectedDebt=4000000,roundtrips=0,secondArrears=0;
+  const expectedReports=[{month:1,h1CashCent:0,h1DebtCent:0,
+    h1ArrearsCent:40000,h2CashCent:opening-E.CFG.wage}];
   assert.equal(firm(s,'H1').cashCent,expectedCash);
   assert.equal(firm(s,'H1').debtCent,expectedDebt);
   for(let month=2;month<=16;month++) {
@@ -166,6 +192,9 @@ function scenario() {
     assert.equal(s.phase,shortfall?'RESCUE':'REPORT','wrong month-end phase');
     assert.equal(b.cashCent,opening-month*E.CFG.wage,'H2 was affected by H1');
     assert.equal(b.debtCent,0,'H2 acquired unexpected debt');
+    expectedReports.push({month,h1CashCent:Math.max(0,expectedCash-due),
+      h1DebtCent:expectedDebt-(shortfall?0:principal),
+      h1ArrearsCent:shortfall,h2CashCent:opening-month*E.CFG.wage});
     expectedCash=Math.max(0,expectedCash-due);
     if(!shortfall)expectedDebt-=principal;
     if(shortfall) {
@@ -190,7 +219,7 @@ function scenario() {
   }
   assert.equal(secondArrears,195957);
   assert.equal(roundtrips,5);
-  verifyFinal(s,opening);
+  verifyFinal(s,opening,expectedReports);
   const corruptions=[
     x=>{firm(x,'H1').cashCent++;},
     x=>{const f=firm(x,'H1');f.ledger.push(copy(f.ledger.at(-1)));},
@@ -219,16 +248,21 @@ function scenario() {
     x=>{firm(x,'H2').obligations.push({id:'FORGED-H2',kind:'FAKE',
       dueCent:0,paidCent:0,priority:1});},
     x=>{const e=firm(x,'H1').ledger.find(e=>e.code==='RETTUNGSKREDIT');
-      e.month=2;}
+      e.month=2;},
+    x=>{x.reports[0].companies.find(f=>f.id==='H1').cashCent++;},
+    x=>{x.reports[13].companies.find(f=>f.id==='H1').debtCent++;},
+    x=>{x.reports[13].companies.find(f=>f.id==='H1').arrearsCent++;},
+    x=>{x.reports[15].companies.find(f=>f.id==='H2').cashCent++;}
   ];
   for(const corrupt of corruptions) {
     const damaged=copy(s);corrupt(damaged);
-    assert.throws(()=>verifyFinal(damaged,opening),'undetected corruption');
+    assert.throws(()=>verifyFinal(damaged,opening,expectedReports),'undetected corruption');
   }
   return {months:16,realActions:actions.length,secondRescueMonth:14,
     firstArrearsCent:40000,secondArrearsCent:secondArrears,
     creditPerRescueCent:E.CFG.credit,finalCashCent:expectedCash,
     finalDebtCent:expectedDebt,jsonRoundtrips:roundtrips,
+    historicalReportsChecked:expectedReports.length,
     negativeCases:corruptions.length,noInjectedCashOrDebt:true};
 }
 const a=scenario(),b=scenario();
