@@ -24,7 +24,7 @@ jobs:
           set -o pipefail
           node --check project-c/pppoppi-imperium/quality_v194/test_market_demand_v194.cjs
           node project-c/pppoppi-imperium/quality_v194/test_market_demand_v194.cjs | tee market_demand.json
-          node -e "const r=require('./market_demand.json'),a=r.result; if(r.schema!=='pppoppi.multifirm-market-audit/1'||r.runs!==2||r.simulatedMonths!==22||r.companyMonthChecks!==44||r.jsonRoundtrips!==42||r.duplicatesRejected!==16||r.corruptionsCaught!==30||r.foreignActionsRejected!==2||r.publicRepairs!==2||r.allocatorCapChecked!==true||r.noInjectedInventoryOrCash!==true||r.prereleaseGate!=='BLOCKED'||!a||a.months!==11||a.sold?.H1!==27000||a.sold?.H2!==27000||a.distinctPriceCount<3||a.distinctDemandCount<3||JSON.stringify(a.bottleneckMonths)!=='[3,6]')process.exit(1);"
+          node -e "const r=require('./market_demand.json'),a=r.result; if(r.schema!=='pppoppi.multifirm-market-audit/2'||r.runs!==4||r.simulatedMonths!==44||r.companyMonthChecks!==88||r.jsonRoundtrips!==84||r.duplicatesRejected!==36||r.corruptionsCaught!==60||r.foreignActionsRejected!==4||r.publicRepairs!==4||r.allocatorCapChecked!==true||r.naturalDemandOverbookingChecked!==true||r.noInjectedInventoryOrCash!==true||r.prereleaseGate!=='BLOCKED'||!a||a.months!==11||a.sold?.H1!==27000||a.sold?.H2!==27000||a.distinctPriceCount<3||a.distinctDemandCount<3||JSON.stringify(a.bottleneckMonths)!=='[3,6]'||!r.saturatedResult||r.saturatedResult.naturalOverbooking!==true||r.saturatedResult.marketOfferMilli!==36000||r.saturatedResult.sold?.H1!==27000||r.saturatedResult.sold?.H2!==27000)process.exit(1);"
       - name: Reproduzierbaren JSON-Nachweis sichern
         if: always()
         uses: actions/upload-artifact@v4
