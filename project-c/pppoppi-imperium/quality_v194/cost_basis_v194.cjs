@@ -8,7 +8,7 @@ function engineSpecs(){const e=globalThis.OliV082?.CFG,p=globalThis.PPProfi?.COS
  return {pumpMilli:e.pumpMilli,rawBatchMilli:p.rawBatchMilli,yieldMilli:p.yieldMilli};
 }
 const POLICY=Object.freeze({
- id:'PPPOPPI-ADAPT/FIN-COST/3-DRAFT',status:'DRAFT_NOT_APPROVED',
+ id:'PPPOPPI-ADAPT/FIN-COST/4-DRAFT',status:'DRAFT_NOT_APPROVED',
  fieldLifeMonths:120,drillLifeMonths:120,tankLifeMonths:60,
  refineryLifeMonths:120,routeLifeMonths:60,networkLifeMonths:60,
  depreciation:'linear, cent-genau, ab Folgemonat, Restcent im Schlussmonat',
@@ -22,6 +22,7 @@ const POLICY=Object.freeze({
  capital:'Eigentümer-Einlagen/Entnahmen nur gegen gesonderten Beleg',
  impairment:'einzeln dokumentierter erzielbarer Wert bei konkretem Schaden, nie automatisch 0 oder pauschale Prozentabschreibung; keine stillschweigende Zuschreibung',
  residual:'kein positiver Restwert ohne nachvollziehbaren Einzelbeleg',
+ rawDamage:'Brand mit Rohöl am Feld löst persistente Bestandsprüfung aus; kein stummes Weglöschen durch FIRE_EXPERT; kein Verlust ohne Einzelbeleg oder belegte Charge',
  releaseGate:'BLOCKED'
 });
 const cap=new Set(['FELDKAUF','FACHBOHRUNG','TANKAUSBAU','RAFFINERIE_BAU','VERTRIEBSROUTE','STRECKENBAU','PUBLIC_CONNECT']);
@@ -93,6 +94,7 @@ function seed(s,id){
   heldFreightCent:0,assetSaleProceedsCent:0,assetDisposalsBookCent:0,capitalizedInboundFreightCent:0,
   revenueCent:0,expenseCent:0,costOfSalesCent:0,depreciationCent:0,
   impairmentCent:0,impairments:[],damageReviews:{},
+  rawStockImpairmentCent:0,rawDamagePending:{},rawDamageReviews:[],
   observedSteps:0,monthsClosed:0,releaseGate:'BLOCKED'};
 }
 function classifyAsset(code,entry,month){
@@ -237,6 +239,23 @@ function reconcile(previous,current,original){
    b.product[x.to].cent=plus(b.product[x.to].cent,booked);
   }
  }
+ // Ein entstandener Brandschaden an real lagerndem Rohöl bleibt offen, selbst
+ // wenn eine spätere Löschaktion das burning-Flag wieder entfernt.
+ for(const [cid,pending] of Object.entries(b.rawDamagePending||{}))if(!pending.resolved){
+  const c=current.claims?.[cid];
+  if(!c||c.owner!==id||plus(volume(c.inventoryMilli),volume(c.preparedMilli))!==pending.affectedQtyMilli)
+   throw Error('LAGERWERTMINDERUNG_OFFEN: Rohöl wurde vor Bewertung verschoben oder entfernt');
+ }
+ for(const c of Object.values(current.claims||{}))if(c.owner===id&&(c.burning||c.damaged)){
+  const old=previous.claims?.[c.id];
+  if((!old||(!old.burning&&!old.damaged))&&plus(volume(c.inventoryMilli),volume(c.preparedMilli))>0){
+   if(b.rawDamagePending[c.id]&&!b.rawDamagePending[c.id].resolved)
+    throw Error('Weitere Beschädigung trotz offenem Rohöllagergutachten');
+   b.rawDamagePending[c.id]={claimId:c.id,region:c.region,month:current.month,
+    affectedQtyMilli:plus(volume(c.inventoryMilli),volume(c.preparedMilli)),
+    sourceSequence:current.sequence,resolved:false};
+  }
+ }
  const nextTotals=bookTotals(current,id);
  for(const r of Object.keys(prior)){
   let soldRaw=0,soldProduct=0;
@@ -292,7 +311,8 @@ function recordDamageValuation(original,state,claimId,evidence){
  const f=state?.companies?.find(x=>x.id===b.companyId),claim=state?.claims?.[claimId];
  if(!f||!claim||claim.owner!==b.companyId||!claim.drilled||(!claim.burning&&!claim.damaged))
   throw Error('Keine dokumentierte beschädigte eigene Anlage');
- if(volume(claim.inventoryMilli)+volume(claim.preparedMilli)>0)
+ if((plus(volume(claim.inventoryMilli),volume(claim.preparedMilli))>0||
+     b.rawDamagePending?.[claimId])&&b.rawDamagePending?.[claimId]?.resolved!==true)
   throw Error('LAGERWERTMINDERUNG_OFFEN: Beschaedigtes Lager erfordert eigene Menge-/Kostenpruefung');
  if(b.month!==state.month||b.phase!==state.phase||b.generation!==f.generation||
     b.cashCent!==f.cashCent||b.ledgerCount!==f.ledger.length||
@@ -329,6 +349,49 @@ function recordDamageValuation(original,state,claimId,evidence){
  b.impairments.push(review);b.damageReviews[claimId]=review;
  return b;
 }
+function recordRawInventoryValuation(original,state,claimId,evidence){
+ const b=JSON.parse(JSON.stringify(original));
+ if(!b||b.modelId!==POLICY.id)throw Error('Unbekannte Modellrichtlinie');
+ const pending=b.rawDamagePending?.[claimId],claim=state?.claims?.[claimId];
+ if(!pending||pending.resolved)throw Error('Kein offener Rohöllager-Schadensfall oder bereits bewertet');
+ if(!claim||claim.owner!==b.companyId||claim.region!==pending.region)
+  throw Error('Fremdes oder unbekanntes beschädigtes Rohöllager');
+ const firm=state.companies?.find(x=>x.id===b.companyId);
+ if(!firm||b.month!==state.month||b.phase!==state.phase||b.generation!==firm.generation||
+    b.cashCent!==firm.cashCent||b.debtCent!==firm.debtCent||
+    b.ledgerCount!==firm.ledger.length||
+    b.ledgerLastId!==(firm.ledger.at(-1)?.id||null))
+  throw Error('Rohöllagerbewertung nicht an aktuellen Buchungsstand gebunden');
+ const affected=plus(volume(claim.inventoryMilli),volume(claim.preparedMilli));
+ if(affected!==pending.affectedQtyMilli||affected===0)
+  throw Error('Rohöllagermenge seit Beschädigung verändert');
+ assertPools(b,bookTotals(state,b.companyId));
+ if(!evidence||evidence.claimId!==claimId||evidence.month!==state.month||
+    evidence.affectedQtyMilli!==affected||
+    typeof evidence.sourceRef!=='string'||evidence.sourceRef.trim().length<12||
+    typeof evidence.method!=='string'||evidence.method.trim().length<12)
+  throw Error('Rohöllager-Einzelbeleg, Menge, Methode oder Bewertungsdatum fehlt');
+ // Das aktuelle Kostenmodell fuehrt einen gewichteten ROHOEL-Pool JE REGION.
+ // Ohne isolierbare Claim-Charge ist ein claimbezogener Wert nicht beweisbar.
+ const pool=b.raw[pending.region];
+ if(!pool||pool.qty!==affected)
+  throw Error('UNSICHERE_CHARGENZUORDNUNG: regionale Rohölkosten nicht claimgenau isolierbar');
+ const carrying=cents(pool.cent),recoverable=cents(evidence.recoverableCent);
+ if(recoverable>carrying)throw Error('Unbelegte Rohöl-Zuschreibung über Buchwert');
+ const impairment=sub(carrying,recoverable);
+ pool.cent=recoverable;
+ b.rawStockImpairmentCent=plus(b.rawStockImpairmentCent,impairment);
+ pending.resolved=true;
+ pending.reviewMonth=state.month;
+ pending.reviewSequence=state.sequence;
+ const review={claimId,region:pending.region,month:state.month,
+  damageMonth:pending.month,damagedQtyMilli:affected,carryingBeforeCent:carrying,
+  recoverableCent:recoverable,impairmentCent:impairment,
+  sourceRef:evidence.sourceRef,method:evidence.method,
+  assessment:'UNVERIFIED_DRAFT_ESTIMATE'};
+ b.rawDamageReviews.push(review);
+ return b;
+}
 function valuation(b,s){
  const qty=bookTotals(s,b.companyId);
  assertPools(b,qty);
@@ -356,6 +419,8 @@ function report(b,state){
  if(b.month!==state.month||b.phase!==state.phase||b.cashCent!==state.companies.find(f=>f.id===b.companyId)?.cashCent)
   throw Error('Buchstand und Spielstand differieren');
  const v=valuation(b,state);
+ if(Object.values(b.rawDamagePending||{}).some(p=>!p.resolved))
+  throw Error('LAGERWERTMINDERUNG_OFFEN: Rohöllager auch nach Brandlöschung nicht freigegeben');
  for(const claim of Object.values(state.claims||{}))if(claim.owner===b.companyId&&(claim.burning||claim.damaged)){
   const review=b.damageReviews?.[claim.id];
   if(!review||review.month!==state.month||review.sequence!==state.sequence||
@@ -364,7 +429,7 @@ function report(b,state){
  }
  const computed=A.snapshot(state,b.companyId,v);
  const netResult=sub(computed.equityCent,b.openingEquityCent);
- const recognizedResult=sub(sub(sub(sub(b.revenueCent,b.expenseCent),b.costOfSalesCent),b.depreciationCent),b.impairmentCent);
+ const recognizedResult=sub(sub(sub(sub(sub(b.revenueCent,b.expenseCent),b.costOfSalesCent),b.depreciationCent),b.impairmentCent),b.rawStockImpairmentCent);
  if(netResult!==recognizedResult)throw Error('Bilanzgleichung/Erfolgsrechnung nicht abstimmbar');
  return {...computed,policy:POLICY.id,observedModelResultCent:netResult,accountingProfitCent:null,
   observedRevenueCent:b.revenueCent,observedOperatingOutflowsCent:b.expenseCent,
@@ -372,7 +437,8 @@ function report(b,state){
   observedPublicFreightHeldCent:b.heldFreightCent,observedAssetSaleProceedsCent:b.assetSaleProceedsCent,
   observedProductionCostCent:Object.values(b.raw).reduce((n,x)=>plus(n,x.cent),0),
   observedCOGSCent:b.costOfSalesCent,observedDepreciationCent:b.depreciationCent,
-  observedImpairmentCent:b.impairmentCent,damageAssessment:'UNVERIFIED_DRAFT_ESTIMATE',
+  observedImpairmentCent:b.impairmentCent,observedRawInventoryImpairmentCent:b.rawStockImpairmentCent,
+  rawDamageReviews:b.rawDamageReviews.length,damageAssessment:'UNVERIFIED_DRAFT_ESTIMATE',
   periodsClosed:b.monthsClosed,releaseGate:'BLOCKED',status:'MODEL_ONLY_UNAPPROVED'};
 }
-module.exports={POLICY,bookTotals,seed,reconcile,valuation,report,recordDamageValuation};
+module.exports={POLICY,bookTotals,seed,reconcile,valuation,report,recordDamageValuation,recordRawInventoryValuation};
