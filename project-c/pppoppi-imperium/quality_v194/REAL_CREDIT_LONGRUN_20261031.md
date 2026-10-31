@@ -53,3 +53,14 @@ Acht weitere gezielte Negativproben pro Wiederholung pruefen falsche historische
 **Pruefziel:** Node-Syntax, beide 16-Monats-Szenarien, 64 Firmen-Monatskontrollen, 40 Negativproben, 5 JSON-Rundlaeufe je Szenario und die neue unabhaengige Verbindlichkeitenpruefung. Der GitHub-CI-Lauf auf dem finalen Commit muss gesondert nachgewiesen werden; bis dahin PENDING, uebergeordnetes Vorrelease weiterhin BLOCKED. Die 18 erfolgreichen Fach-Workflows und der bewusst sperrende integrierte Gate-Lauf wurden auf dem vorherigen HEAD `d7616ccadd4fbe7c17b4cc0451c0acf423e8f69d` ueber die GitHub-API festgestellt (31.10.2026); sie sind kein Nachweis fuer den neuen HEAD.
 
 **Weiterhin offen:** Forderungen aus Vertraegen, rechtlich/fachlich begruendete Anlagen- und Lagerwerte, Abschreibungen, Gesamtgewinn, vollstaendige Endpartien, Browser-Dateidialog bei 200 %, Medienrechte und C64-Originalvergleich. Persoenliche Endabnahmen erst nach eingefrorenem technisch gruenem Kandidaten.
+
+
+## Nachtrag 31.10.2026 – historische Monatsberichte unabhängig gegenprüfen
+
+**Befund vor Änderung:** Die 16-Monats-Probe kontrollierte die Endkasse, alle 78 Rechnungen und deren Zahlungen, aber die im Spielstand gespeicherten **früheren Monatsberichte** nur auf ihre Anzahl. Ein nachträglich veränderter Kassen-, Schulden- oder Rückstandswert in einem alten Bericht konnte dadurch unbemerkt bleiben.
+
+**Neue Regression:** Für alle 16 archivierten Monatsberichte werden die beiden Firmen anhand des bereits unabhängig aus Tarifen, Startkasse, Zinsen und Tilgung hergeleiteten Monats-Sollverlaufs geprüft: H1-Kasse, H1-Restschuld, H1-Rückstände, H2-Kasse sowie H2-Schulden und -Rückstände. Wichtig: Der Monatsbericht wird **vor** einer menschlichen Kreditrettung gespeichert; Monat 1 und Monat 14 werden deshalb gegen die tatsächlichen Werte *vor* dem Kredit verglichen. Auch der letzte Bericht muss mit dem Archiv übereinstimmen.
+
+Vier zusätzliche absichtliche Manipulationen je Wiederholung betreffen historische Kasse (Monat 1), Schuld und Rückstand (Monat 14) sowie die zweite Firma (Monat 16). **Neuer Sollwert: 48 Negativproben insgesamt**, zwei 16-Monats-Szenarien und 16 historische Berichte je Szenario. Die Engine und Spielstände bleiben unverändert; kein buchhalterischer Gewinn- oder Vermögensnachweis.
+
+**Prüfung:** `node --check project-c/pppoppi-imperium/quality_v194/test_real_credit_longrun_v194.cjs`, anschließend `node project-c/pppoppi-imperium/quality_v194/test_real_credit_longrun_v194.cjs`; GitHub-Workflow `prerelease-real-credit-longrun.yml` fordert zusätzlich `historicalReportsChecked=16` und `negativeCases=48`. **PASS erst nach echtem CI-Lauf auf dem neuen HEAD**. Die 52er-Pflichtmatrix bleibt 6 PASS / 39 BLOCKED / 4 OPEN / 3 DEFERRED. Browser-Dateidialog, Endpartien, Bilanzierungsregeln, Rechte und Originalvergleich bleiben offen; kein Merge, kein Release.
