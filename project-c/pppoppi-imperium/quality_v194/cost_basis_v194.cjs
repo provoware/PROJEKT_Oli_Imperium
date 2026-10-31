@@ -221,11 +221,13 @@ function reconcile(previous,current,original){
  const closing=previous.phase!=='REPORT'&&current.phase==='REPORT'&&current.month===previous.month;
  if(closing){
   const auction=current.lastReport?.publicNetwork;
-  if(!auction||!Array.isArray(auction.freight))throw Error('Keine öffentliche Frachtabrechnung am Monatsende');
-  const total=auction.freight.filter(x=>x.companyId===id).reduce((n,x)=>plus(n,cents(x.freightCent)),0);
+  if((!auction||!Array.isArray(auction.freight))&&b.heldFreightCent!==0)
+   throw Error('Keine öffentliche Frachtabrechnung am Monatsende');
+  const freight=auction?.freight||[];
+  const total=freight.filter(x=>x.companyId===id).reduce((n,x)=>plus(n,cents(x.freightCent)),0);
   if(total!==b.heldFreightCent)throw Error('Frachtvorauszahlung/Monatsabrechnung stimmt nicht');
   b.expenseCent=plus(b.expenseCent,total);b.heldFreightCent=0;
-  for(const x of auction.freight.filter(x=>x.companyId===id&&x.acceptedMilli)){
+  for(const x of freight.filter(x=>x.companyId===id&&x.acceptedMilli)){
    if(!b.product[x.from]||!b.product[x.to])throw Error('Öffentlicher Transport in ungekannte Region');
    const booked=take(b.product[x.from],x.acceptedMilli);
    b.product[x.to].qty=plus(b.product[x.to].qty,x.acceptedMilli);
