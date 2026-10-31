@@ -80,13 +80,13 @@ test('Echte Warenwirtschaft über vier Monate: Rohöl, Raffinerie, Netztransport
  assert.equal(x.book.assets.length,assetsM1+3);
  a('PUMP',{claimId:id});
  a('NETWORK_RAW',{region:'BERLIN',claimId:id,qtyMilli:10000});
- assert.equal(B.valuation(x.book,x.state).inTransitBookCent,10000);
+ assert.equal(B.valuation(x.book,x.state).inTransitBookCent,11400,'Nachgewiesene Rohölzulieferung: Förderkosten plus 14.000-Cent-Anlieferfracht');
  x.close();x.next();
  assert.equal(B.valuation(x.book,x.state).inTransitBookCent,0,'Rohöl am Werk eingetroffen');
  a('NETWORK_REFINE',{region:'BERLIN',claimId:id});
- assert.equal(x.book.product.BERLIN.cent,75000);
+ assert.equal(x.book.product.BERLIN.cent,76400);
  a('NETWORK_PRODUCT',{region:'BERLIN',claimId:id,qtyMilli:9000});
- assert.equal(B.valuation(x.book,x.state).inTransitBookCent,75000);
+ assert.equal(B.valuation(x.book,x.state).inTransitBookCent,76400);
  x.close();x.next();
  assert.equal(B.valuation(x.book,x.state).inTransitBookCent,0,'Fertigware im Marktdepot eingetroffen');
  a('NETWORK_OFFER',{region:'BERLIN',claimId:id});x.close();
@@ -95,12 +95,12 @@ test('Echte Warenwirtschaft über vier Monate: Rohöl, Raffinerie, Netztransport
  assert.equal(report.status,'MODEL_ONLY_UNAPPROVED');
  assert.equal(report.releaseGate,'BLOCKED');
  assert.equal(report.accountingProfitCent,null);
- assert.equal(report.observedCOGSCent,240000);
+ assert.equal(report.observedCOGSCent,241400);
  assert.equal(report.observedRevenueCent,7897311);
  assert.equal(report.observedDepreciationCent,444999);
- assert.equal(x.book.raw.BERLIN.cent,90000,'Unverkauftes Rohöl bleibt Vermögen');
- assert.equal(report.equityCent,26362212);
- assert.equal(report.observedModelResultCent,6362212);
+ assert.equal(x.book.raw.BERLIN.cent,102600,'Rohöl-Restbestand einschließlich Anlieferungskosten bleibt Vermögen');
+ assert.equal(report.equityCent,26374812);
+ assert.equal(report.observedModelResultCent,6374812);
  assert.equal(report.equityCent-E.CFG.startCash,
   x.book.revenueCent-x.book.expenseCent-x.book.costOfSalesCent-x.book.depreciationCent,
   'Vermögensänderung stimmt mit Umsatz, Aufwand, Herstellkosten und Abschreibung überein');
