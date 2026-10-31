@@ -291,9 +291,9 @@ function scenario() {
   }
   // Re-run the same two month-end commands with identical request IDs.
   serial=secondSerial;
-  const resumed=endMonth(JSON.parse(JSON.stringify(secondBaseline)));
+  const renewedReplay=endMonth(JSON.parse(JSON.stringify(secondBaseline)));
   jsonRoundtrips++;
-  assert.deepEqual(resumed,settled,'second settlement changed after restore');
+  assert.deepEqual(renewedReplay,settled,'second settlement changed after restore');
   const exportedRenewal=JSON.parse(JSON.stringify(settled));
   jsonRoundtrips++;
   auditRenewal(settled);
