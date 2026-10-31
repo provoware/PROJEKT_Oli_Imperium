@@ -116,8 +116,10 @@ function auditFreightIntegrity(s, productQty, expected) {
     assert.equal(holds.length,1,'audit: freight hold count '+id);
     assert.equal(holds[0].deltaCent,-P.freight(productQty,PATH),
       'audit: freight hold amount '+id);
-    const refund=journal.filter(row=>row.code==='FRACHT_RUECKGABE')
-      .reduce((sum,row)=>sum+row.deltaCent,0);
+    const refunds=journal.filter(row=>row.code==='FRACHT_RUECKGABE');
+    assert.equal(refunds.length,entry.returnedMilli>0?1:0,
+      'audit: freight refund entry count '+id);
+    const refund=refunds.reduce((sum,row)=>sum+row.deltaCent,0);
     assert.equal(refund,P.freight(entry.returnedMilli,PATH),
       'audit: freight refund amount '+id);
     assert.equal(-holds[0].deltaCent-refund,expected[id].netFreightCent,
@@ -217,8 +219,18 @@ function play(batches) {
       state=>{state.lastReport.publicNetwork.freight.find(row=>row.companyId===id).returnedMilli+=1;},
       state=>{company(state,id).ledger.find(row=>row.code==='PUBLIC_FREIGHT_HOLD').deltaCent+=1;}
     );
+    freightCorruptions.push(
+      state=>{state.lastReport.publicNetwork.freight.push(copy(
+        state.lastReport.publicNetwork.freight.find(row=>row.companyId===id)));},
+      state=>{company(state,id).ledger.push(copy(
+        company(state,id).ledger.find(row=>row.code==='PUBLIC_FREIGHT_HOLD')));}
+    );
     if(batches===2) freightCorruptions.push(
-      state=>{company(state,id).ledger.find(row=>row.code==='FRACHT_RUECKGABE').deltaCent+=1;}
+      state=>{company(state,id).ledger.find(row=>row.code==='FRACHT_RUECKGABE').deltaCent+=1;},
+      state=>{company(state,id).ledger.push({
+        ...copy(company(state,id).ledger.find(row=>row.code==='FRACHT_RUECKGABE')),
+        deltaCent:0
+      });}
     );
   }
   let freightCorruptionsCaught=0;
@@ -276,7 +288,7 @@ console.log(JSON.stringify({
   schema:'pppoppi.natural-multifirm-refinery/2',
   scenarios:2,repeatedRuns:2,simulatedMonths:20,companyMonthChecks:40,
   jsonRoundtrips:40,duplicateQueuesRejected:8,
-  negativeCorruptionsCaught:24,freightCorruptionsCaught:44,noInjectedOilOrCash:true,
+  negativeCorruptionsCaught:24,freightCorruptionsCaught:64,noInjectedOilOrCash:true,
   result:{baseline,congested},prereleaseGate:'BLOCKED',limitations:[
     'Two genuinely owned Berlin fields, two firms and two refineries; five completed months per scenario.',
     'Baseline and oversubscribed public network: two 18-barrel orders compete for 18-barrel shared capacity.',
