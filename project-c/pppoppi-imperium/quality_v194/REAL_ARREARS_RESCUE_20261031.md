@@ -34,3 +34,12 @@ GitHub: [Pflichtworkflow](https://github.com/provoware/PROJEKT_Oli_Imperium/acti
 3. Bewertungsregeln für Rohöl, Abschreibungen, Restwerte und Forderungen fachlich klären; anschließend Gewinn-/Vermögensrechnung, vollständige Endpartien und Browser-Dateiimport prüfen.
 
 **Weiterführende Empfehlung:** Die neue reale Kreditkette als kleine Referenz für spätere Langzeitprüfungen nutzen, ohne aus zwei Monaten allgemeine Spielbalance abzuleiten.
+
+## Tatsächlicher GitHub-Fachnachweis und Fehlerkorrektur (31.10.2026)
+
+- **FAIL:** [Erster Fachworkflow #41202202200](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41202202200) auf `e16aa6ee7f61d90a8bf3050a18c18f137826e878`. Die Negativprobe mit duplizierter Zahlung wurde korrekt als fehlerhaft erkannt, aber zuerst durch die allgemeine Kassenabweichung statt durch die spezifische Duplikatmeldung. Die zu enge Test-Erwartung führte zum Fehlschlag; kein belegter Fehler des Spielkerns.
+- **Korrektur:** [Commit d0b8039](https://github.com/provoware/PROJEKT_Oli_Imperium/commit/d0b80398b02d32da8e24b8a439ceac118e6d0250) priorisiert die eindeutige Buchungskennung vor der allgemeinen Kassenrechnung.
+- **PASS:** [Fachworkflow #41202330381](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41202330381) auf exakt `d0b80398b02d32da8e24b8a439ceac118e6d0250`. Syntax, zwei echte Szenariodurchläufe, 8 Firmen-Monatsbeobachtungen, 10 absichtliche Manipulationen, Kredit-/Rechnungs-/Tilgungs- und JSON-Prüfung bestanden.
+- **BLOCKED:** [Integrierte Vorrelease-Sperre #41202330331](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41202330331) auf demselben HEAD absichtlich rot wegen offener 52er-Pflichten. Die übrigen 16 technischen Workflows sind gesondert auf dem abschließenden Dokumentations-HEAD zu kontrollieren.
+
+**Kein Gesamt-PASS:** Diese Fachprüfung beweist weder KI-Insolvenzen noch die langfristige Wirtschaftsbalance, Buchgewinn, Restwerte, C64-Originaltreue oder vollständige Spielbarkeit. Der dokumentierende Folge-Commit erfordert eine neue CI-Zuordnung auf dessen endgültigem HEAD.
