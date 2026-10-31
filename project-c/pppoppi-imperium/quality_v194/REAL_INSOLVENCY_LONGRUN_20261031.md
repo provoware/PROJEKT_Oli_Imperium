@@ -15,6 +15,19 @@ Der bestehende 16-Monats-Test weist zwei **natürliche** Zahlungskrisen und dere
 - JSON-Speicher-/Wiederherstellung an drei Stellen pro Szenario, insbesondere mitten im Rettungszustand; Prüfung der Duplikatsperre nach jeder Aktion; anschließend Fortsetzung in Monat 15 ohne wiederkehrende alte Schulden oder Felder.
 - Zwei deterministische Wiederholungen, **56 Firmen-Monatsbeobachtungen** und **22 gezielte Manipulationsproben** (Kasse, Schuld, Generation, Zähler, alte Rechnungen/Buchungen, Feldfreigabe, andere Firma, Archiv und Neustartereignis).
 
+## Zusätzliche unabhängige Krisenbuchprüfung
+
+Vor dem regulären Neustart wird der tatsächlich entstandene Rettungszustand
+unabhängig vom Monatsbericht geprüft: 54 Rechnungen von H1 und 14 von H2,
+Zins- und Tilgungssoll aus dem Kreditverlauf, sämtliche Einzelzahlungen,
+eindeutige Belegkennungen, Kassenbuchsumme, Rettungskredit und offene
+195.957 Cent. **14 zusätzliche gezielte Verfälschungen je Wiederholung**
+prüfen unter anderem ausgeglichene falsche Buchungen, erfundene Zahlungen,
+vertauschte Rechnungsarten, doppelte Rechnungen und veränderte Kreditbeträge.
+Mit den bisherigen 11 Neustart-Verfälschungen sind das **50 Negativproben
+in zwei vollständigen Wiederholungen**. Diese Prüfung beweist keine
+Bilanzbewertung und keine Vertragsforderung.
+
 ## Ausführung und Abnahme
 
 ```bash
@@ -24,7 +37,7 @@ node project-c/pppoppi-imperium/quality_v194/test_real_insolvency_longrun_v194.c
 
 Der bestehende [GitHub-Fachworkflow](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/workflows/prerelease-real-credit-longrun.yml) führt die neue Prüfung zusätzlich zum bisherigen 16-Monats-Kredittest aus und sichert beide JSON-Ausgaben. [Entwurfs-PR #147](https://github.com/provoware/PROJEKT_Oli_Imperium/pull/147).
 
-**Status bei Umsetzung: PENDING.** PASS erst nach tatsächlich erfolgreicher GitHub-Ausführung auf dem endgültigen Commit. Das Gesamt-Vorrelease-Gate bleibt BLOCKED; keine neue vollständige Pflicht als PASS zählen. Der unveränderte Spielkern wird nur gelesen.
+**Fach-CI PASS:** [GitHub-Lauf #41229983897](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41229983897) auf Test-HEAD `bab800224ff234bceb9a1d77480935f814b13c33`: 2 × 14 Monate, 56 Firmen-Monatskontrollen, 50/50 erkannte Manipulationsproben, darunter 28 Krisenbuch-Verfälschungen, 3 JSON-Rundläufe je Szenario. Der erste Lauf [#41229919990](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41229919990) schlug fehl, weil zwei Zahlungen **derselben** Rechnung gegeneinander verschoben wurden: eine fachlich zulässige Umverteilung. Der Test wurde auf Zahlungen unterschiedlicher Rechnungen korrigiert. Dokumentations-HEAD und Gesamt-CI müssen erneut geprüft werden. PASS erst nach tatsächlich erfolgreicher GitHub-Ausführung auf dem endgültigen Commit. Das Gesamt-Vorrelease-Gate bleibt BLOCKED; keine neue vollständige Pflicht als PASS zählen. Der unveränderte Spielkern wird nur gelesen.
 
 ## Unverändert offen
 
