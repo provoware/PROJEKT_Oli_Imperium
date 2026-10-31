@@ -40,7 +40,8 @@ jobs:
           assert.equal(r.finalCashCent,2815799);
           assert.equal(r.finalDebtCent,5463166);
           assert.equal(r.jsonRoundtrips,5);
-          assert.equal(r.negativeCases,40);
+          assert.equal(r.negativeCases,48);
+          assert.equal(r.historicalReportsChecked,16);
           assert.equal(r.noInjectedCashOrDebt,true);
           assert.equal(r.prereleaseGate,'BLOCKED');
           NODE
