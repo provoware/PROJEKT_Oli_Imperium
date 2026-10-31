@@ -45,7 +45,16 @@ function campaign(){
  const burning=Object.values(state.claims).filter(x=>x.owner&&x.burning).map(x=>x.id);
  for(let i=1;i<=2;i++){
   const id='H'+i,claimId='BERLIN-'+i;
-  if(state.claims[claimId].burning)act('FIRE_EXPERT',id,{claimId});
+  if(state.claims[claimId].burning){
+   const claim=state.claims[claimId];
+   assert.ok(books[id].rawDamagePending[claimId]);
+   books[id]=B.recordRawInventoryValuation(books[id],state,claimId,{
+    claimId,month:state.month,affectedQtyMilli:claim.inventoryMilli+claim.preparedMilli,
+    recoverableCent:books[id].raw.BERLIN.cent,
+    sourceRef:'SYNTHETIC-MULTIFIRM-INVENTORY-CHECK-NOT-EXTERNAL',
+    method:'Synthetische Erhaltung der Rohölbuchwerte nach Einzelinventur'});
+   act('FIRE_EXPERT',id,{claimId});
+  }
   act('PUBLIC_CONNECT',id,{from:'BERLIN',to:'BRANDENBURG'});
   act('PUBLIC_QUEUE',id,{from:'BERLIN',to:'BRANDENBURG',qtyMilli:18000});
   if(i===1)assert.equal(books[id].heldFreightCent,50400);
