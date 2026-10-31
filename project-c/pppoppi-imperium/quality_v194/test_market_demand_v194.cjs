@@ -264,7 +264,7 @@ function play(limitedDemand=false) {
       s=act(s,command('NETWORK_PRODUCT',id,'M5-PRODUCT',
         {region:'BERLIN',qtyMilli:18000}));
       assert.equal(s.publicNetwork.received[id].NORD,9000);
-      if(!limitedDemand) s=act(s,command('PUBLIC_OFFER',id,'M5-OFFER',
+      s=act(s,command('PUBLIC_OFFER',id,'M5-OFFER',
         {from:'BERLIN',to:'NORD',qtyMilli:9000}));
       s=end(s,id,5);
     }
@@ -294,7 +294,7 @@ function play(limitedDemand=false) {
     'public closure not triggered at M8');
   for(const id of IDS) {
     queue(id,8,9000);
-    assert.equal(s.publicNetwork.received[id].NORD,limitedDemand?18000:9000);
+    assert.equal(s.publicNetwork.received[id].NORD,9000);
     if(!limitedDemand) s=act(s,command('PUBLIC_OFFER',id,'M8-OFFER',
       {from:'BERLIN',to:'NORD',qtyMilli:9000}));
     s=end(s,id,8);
@@ -341,7 +341,7 @@ function play(limitedDemand=false) {
   advance(10);settle(10);
   advance(11);
   for(const id of IDS) {
-    assert.equal(s.publicNetwork.received[id].NORD,limitedDemand?27000:9000);
+    assert.equal(s.publicNetwork.received[id].NORD,limitedDemand?18000:9000);
     s=act(s,command('PUBLIC_OFFER',id,'M11-OFFER',
       {from:'BERLIN',to:'NORD',qtyMilli:limitedDemand?18000:9000}));
     s=end(s,id,11);
@@ -352,11 +352,11 @@ function play(limitedDemand=false) {
     sold[id]+=s.lastReport.publicNetwork.productMarket.NORD.allocations[id].soldMilli;
   audit(s,initial,sold,batches,'M11');
   s=roundtrip(s);roundtrips++;
-  assert.deepEqual(sold,limitedDemand?{H1:9000,H2:9000}:{H1:27000,H2:27000});
+  assert.deepEqual(sold,limitedDemand?{H1:18000,H2:18000}:{H1:27000,H2:27000});
   for(const id of IDS) {
     assert.equal(s.claims[CLAIMS[IDS.indexOf(id)]].inventoryMilli,60000);
     assert.equal(s.transport.firms[id].BERLIN.marketMilli,9000);
-    assert.equal(s.publicNetwork.received[id].NORD,limitedDemand?18000:0);
+    assert.equal(s.publicNetwork.received[id].NORD,limitedDemand?9000:0);
     for(const change of [
       state=>{state.claims[CLAIMS[IDS.indexOf(id)]].inventoryMilli++;},
       state=>{firm(state,id).cashCent++;},
