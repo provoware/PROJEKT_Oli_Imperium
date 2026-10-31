@@ -34,6 +34,22 @@ function ledgerAudit(f,opening) {
     return sum+e.deltaCent;
   },0);
   assert.equal(f.cashCent,opening+delta,'ledger/cash mismatch');
+  // Independently reconcile every invoice against the actual payment entries.
+  // A forged offsetting ledger entry can preserve cash while hiding a bad invoice.
+  const byId=new Map(f.obligations.map(o=>[o.id,o]));
+  assert.equal(byId.size,f.obligations.length,'duplicate invoice ID');
+  for(const o of f.obligations){
+    const entries=f.ledger.filter(e=>e.code==='ZAHLUNG_'+o.kind&&e.info===o.id);
+    const paid=entries.reduce((sum,e)=>{
+      assert.ok(Number.isSafeInteger(e.deltaCent)&&e.deltaCent<0,'invalid payment amount');
+      return sum-e.deltaCent;
+    },0);
+    assert.equal(paid,o.paidCent,'invoice/payment mismatch: '+o.id);
+  }
+  for(const e of f.ledger.filter(e=>e.code.startsWith('ZAHLUNG_'))){
+    const o=byId.get(e.info);
+    assert.ok(o&&e.code==='ZAHLUNG_'+o.kind,'orphan or mistyped payment: '+e.id);
+  }
 }
 function verifyFinal(state,opening) {
   const a=firm(state,'H1'),b=firm(state,'H2');
@@ -48,6 +64,9 @@ function verifyFinal(state,opening) {
   assert.equal(invoice(a,14,'ZINS').dueCent,21614,'month 14 interest');
   assert.equal(invoice(a,16,'TILGUNG').dueCent,287535,'month 16 principal');
   assert.equal(E.pending(a),0,'unpaid final invoices');
+  assert.equal(a.generation,1,'rescues must not silently restart H1');
+  assert.equal(b.generation,1,'unaffected H2 restarted');
+  assert.equal(a.loanUsed,true,'loan-used flag lost');
   for(const o of a.obligations)assert.equal(o.paidCent,o.dueCent,'unpaid H1 invoice');
 }
 function scenario() {
@@ -141,7 +160,16 @@ function scenario() {
     x=>{invoice(firm(x,'H1'),14,'ZINS').dueCent++;},
     x=>{invoice(firm(x,'H1'),16,'TILGUNG').dueCent++;},
     x=>{firm(x,'H2').cashCent++;},
-    x=>{invoice(firm(x,'H1'),12,'PERSONAL').paidCent--;}
+    x=>{invoice(firm(x,'H1'),12,'PERSONAL').paidCent--;},
+    x=>{const f=firm(x,'H1');const e=f.ledger.find(e=>e.code==='ZAHLUNG_PERSONAL');
+      const other=f.ledger.find(e=>e.code==='ZAHLUNG_WARTUNG');
+      e.deltaCent--;other.deltaCent++;},
+    x=>{invoice(firm(x,'H1'),12,'PERSONAL').kind='WARTUNG';},
+    x=>{const f=firm(x,'H1');const e=f.ledger.find(e=>e.code==='ZAHLUNG_PERSONAL');
+      e.info='MISSING-INVOICE';},
+    x=>{const f=firm(x,'H1');const e=f.ledger.find(e=>e.code==='ZAHLUNG_PERSONAL');
+      f.ledger.push({...e,id:'FORGED-SECOND-PAYMENT',deltaCent:-1});
+      f.ledger.push({id:'FORGED-OFFSET',month:16,deltaCent:1,code:'ADJUST',info:'offset'});}
   ];
   for(const corrupt of corruptions) {
     const damaged=copy(s);corrupt(damaged);
