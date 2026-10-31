@@ -172,9 +172,12 @@ function scenario() {
     return {...row,revenue,fee,penalty,
       profit:revenue-cents(row.delivered,E.CFG.contractUnitCost)-fee};
   });
+  const finalSerial=serial;
   const direct=endMonth(s);
   const restored=JSON.parse(JSON.stringify(baseline));jsonRoundtrips++;
   assert.equal(E.validate(restored),true);
+  // Replay exactly the same request IDs: otherwise processedIds/sequence differ.
+  serial=finalSerial;
   const resumed=endMonth(restored);
   assert.deepEqual(resumed,direct,'save/reload changed contract settlement');
   audit(direct,baseline,expected);
