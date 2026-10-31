@@ -6,6 +6,8 @@ on:
       - 'project-c/pppoppi-imperium/quality_v194/test_real_insolvency_longrun_v194.cjs'
       - 'project-c/pppoppi-imperium/quality_v194/test_real_contract_settlement_v194.cjs'
       - 'project-c/pppoppi-imperium/quality_v194/test_real_parallel_contracts_v194.cjs'
+      - 'project-c/pppoppi-imperium/quality_v194/test_real_three_contracts_v194.cjs'
+      - 'project-c/pppoppi-imperium/quality_v194/REAL_THREE_CONTRACTS_20261031.md'
       - 'project-c/pppoppi-imperium/quality_v194/REAL_PARALLEL_CONTRACTS_20261031.md'
       - 'project-c/pppoppi-imperium/quality_v194/REAL_CREDIT_LONGRUN_20261031.md'
       - 'project-c/pppoppi-imperium/prerelease/matrix.json'
@@ -119,6 +121,29 @@ jobs:
           assert.equal(r.noInjectedCashOrInventory,true);
           assert.equal(r.prereleaseGate,'BLOCKED');
           NODE
+      - name: Drei parallele Regionalvertraege einer Firma mit Voll-, Teil- und Nulllieferung
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check project-c/pppoppi-imperium/quality_v194/test_real_three_contracts_v194.cjs
+          node project-c/pppoppi-imperium/quality_v194/test_real_three_contracts_v194.cjs | tee real_three_contracts.json
+          node - <<'NODE'
+          const assert=require('node:assert/strict');
+          const fs=require('node:fs');
+          const r=JSON.parse(fs.readFileSync('real_three_contracts.json','utf8'));
+          assert.equal(r.schema,'pppoppi.real-three-contracts/1');
+          assert.equal(r.scenarios,2);
+          assert.equal(r.companyMonthsChecked,16);
+          assert.equal(r.negativeCases,24);
+          assert.equal(r.jsonRoundtrips,6);
+          assert.deepEqual(r.contractRegions,['BERLIN','NORD','BRANDENBURG']);
+          assert.equal(r.deliveredMilli[0],40000);
+          assert.ok(r.deliveredMilli[1]>0&&r.deliveredMilli[1]<40000);
+          assert.equal(r.deliveredMilli[2],0);
+          assert.equal(r.partialDeliveredMilli,r.deliveredMilli[1]);
+          assert.equal(r.noInjectedCashOrInventory,true);
+          assert.equal(r.prereleaseGate,'BLOCKED');
+          NODE
       - name: Reproduzierbare JSON-Ausgabe sichern
         if: always()
         uses: actions/upload-artifact@v4
@@ -129,5 +154,6 @@ jobs:
             real_insolvency_longrun.json
             real_contract_settlement.json
             real_parallel_contracts.json
+            real_three_contracts.json
           if-no-files-found: warn
           retention-days: 14
