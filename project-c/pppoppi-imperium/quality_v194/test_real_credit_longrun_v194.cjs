@@ -51,9 +51,48 @@ function ledgerAudit(f,opening) {
     assert.ok(o&&e.code==='ZAHLUNG_'+o.kind,'orphan or mistyped payment: '+e.id);
   }
 }
+
+function auditMonthlyLiabilities(a,b) {
+  // Rebuild every month's due amounts from the independent tariff/rate oracle.
+  // A matching final balance alone cannot prove historical invoices are true.
+  const credits=a.ledger.filter(e=>e.code==='RETTUNGSKREDIT')
+    .map(e=>({month:e.month,amount:e.deltaCent}));
+  assert.deepEqual(credits,[
+    {month:1,amount:E.CFG.credit},{month:14,amount:E.CFG.credit}
+  ],'unexpected rescue-credit schedule');
+  assert.equal(a.obligations.length,62,'unexpected H1 invoice inventory');
+  assert.equal(b.obligations.length,16,'unexpected H2 invoice inventory');
+  let expectedDebt=0;
+  for(let month=1;month<=16;month++) {
+    for(const [f,kinds] of [[a,['PERSONAL','WARTUNG']],[b,['PERSONAL']]]) {
+      for(const kind of kinds) {
+        const o=invoice(f,month,kind);
+        assert.equal(o.dueCent,kind==='PERSONAL'?E.CFG.wage:E.CFG.upkeep,
+          'monthly expense tariff: '+f.id+' M'+month+' '+kind);
+        assert.equal(o.paidCent,o.dueCent,
+          'unsettled monthly expense: '+f.id+' M'+month+' '+kind);
+      }
+    }
+    if(month>1) {
+      const interest=invoice(a,month,'ZINS');
+      const principal=invoice(a,month,'TILGUNG');
+      assert.equal(interest.dueCent,rounded(expectedDebt*E.CFG.loanInterestBps,10000),
+        'independent interest schedule M'+month);
+      assert.equal(principal.dueCent,rounded(expectedDebt*E.CFG.loanRepaymentBps,10000),
+        'independent principal schedule M'+month);
+      assert.equal(interest.paidCent,interest.dueCent,'unpaid interest M'+month);
+      assert.equal(principal.paidCent,principal.dueCent,'unpaid principal M'+month);
+      expectedDebt-=principal.dueCent;
+    }
+    if(month===1||month===14)expectedDebt+=E.CFG.credit;
+  }
+  assert.equal(a.debtCent,expectedDebt,'reconstructed loan balance');
+}
+
 function verifyFinal(state,opening) {
   const a=firm(state,'H1'),b=firm(state,'H2');
   ledgerAudit(a,opening);ledgerAudit(b,opening);
+  auditMonthlyLiabilities(a,b);
   assert.equal(a.cashCent,2815799,'final H1 cash');
   assert.equal(a.debtCent,5463166,'final H1 debt');
   assert.equal(b.cashCent,opening-16*E.CFG.wage,'independent H2 cash');
@@ -169,7 +208,18 @@ function scenario() {
       e.info='MISSING-INVOICE';},
     x=>{const f=firm(x,'H1');const e=f.ledger.find(e=>e.code==='ZAHLUNG_PERSONAL');
       f.ledger.push({...e,id:'FORGED-SECOND-PAYMENT',deltaCent:-1});
-      f.ledger.push({id:'FORGED-OFFSET',month:16,deltaCent:1,code:'ADJUST',info:'offset'});}
+      f.ledger.push({id:'FORGED-OFFSET',month:16,deltaCent:1,code:'ADJUST',info:'offset'});},
+    x=>{invoice(firm(x,'H1'),3,'ZINS').dueCent++;},
+    x=>{invoice(firm(x,'H1'),5,'TILGUNG').dueCent++;},
+    x=>{invoice(firm(x,'H1'),7,'PERSONAL').dueCent++;},
+    x=>{invoice(firm(x,'H1'),9,'WARTUNG').dueCent++;},
+    x=>{invoice(firm(x,'H2'),6,'PERSONAL').dueCent++;},
+    x=>{firm(x,'H1').obligations.push({id:'FORGED-EMPTY',kind:'FAKE',
+      dueCent:0,paidCent:0,priority:1});},
+    x=>{firm(x,'H2').obligations.push({id:'FORGED-H2',kind:'FAKE',
+      dueCent:0,paidCent:0,priority:1});},
+    x=>{const e=firm(x,'H1').ledger.find(e=>e.code==='RETTUNGSKREDIT');
+      e.month=2;}
   ];
   for(const corrupt of corruptions) {
     const damaged=copy(s);corrupt(damaged);

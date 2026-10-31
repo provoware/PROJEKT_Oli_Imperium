@@ -43,3 +43,13 @@ Der bisherige reine Kassenbuch-Summenvergleich konnte zwei gegeneinander verscho
 Vier neue Manipulationen je Wiederholung prüfen (1) gegeneinander ausgeglichene falsche Zahlungen, (2) nachträglich umbenannte Rechnungsarten, (3) verwaiste Zahlungskennungen und (4) zusätzliche fingierte Zahlung mit ausgleichender Gutschrift. Zusammen **24 Negativproben** in zwei 16-Monats-Wiederholungen. Die Prüfung nutzt den unveränderten Spielkern und behauptet weder eine echte Forderungsbewertung noch eine vollständige Gewinn-/Vermögensbilanz.
 
 **Status:** Test und CI-Sollwert im Entwurfszweig geändert; tatsächlichen GitHub-Fachlauf auf dem finalen Commit prüfen. Bis dahin kein neuer PASS-Beleg. Release-Matrix weiterhin 6 PASS / 39 BLOCKED / 4 OPEN / 3 DEFERRED.
+
+## Erweiterung: unabhaengige Monatsverbindlichkeiten (31.10.2026)
+
+Die bisherige Endkontrolle konnte trotz korrekter Endschuld einzelne fruehere Monatsrechnungen nur begrenzt auf ihre fachlich richtige Hoehe pruefen. Neu wird die komplette 16-Monats-Folge fuer beide Firmen unabhaengig rekonstruiert: 32 Personal-, 16 Wartungs-, 15 Zins- und 15 Tilgungsrechnungen, zwei Rettungskredite mit festem Buchungsmonat sowie die jeweils bezahlten Betragswerte. Fuer H1 werden genau 62, fuer H2 genau 16 Rechnungen erwartet. Zinsen und Tilgungen werden aus dem zuvor rekonstruierten Schuldenstand berechnet, nicht aus dem aktuellen Bericht uebernommen.
+
+Acht weitere gezielte Negativproben pro Wiederholung pruefen falsche historische Zinsen, Tilgungen, Personal- und Wartungstarife, eine manipulierte Rechnung der zweiten Firma, zwei fingierte Nullrechnungen sowie einen umdatierten Rettungskredit. Damit 20 Manipulationsproben pro Szenario bzw. 40 bei zwei Wiederholungen. Kein Spielkern veraendert, keine Vermoegensbewertung behauptet.
+
+**Pruefziel:** Node-Syntax, beide 16-Monats-Szenarien, 64 Firmen-Monatskontrollen, 40 Negativproben, 5 JSON-Rundlaeufe je Szenario und die neue unabhaengige Verbindlichkeitenpruefung. Der GitHub-CI-Lauf auf dem finalen Commit muss gesondert nachgewiesen werden; bis dahin PENDING, uebergeordnetes Vorrelease weiterhin BLOCKED. Die 18 erfolgreichen Fach-Workflows und der bewusst sperrende integrierte Gate-Lauf wurden auf dem vorherigen HEAD `d7616ccadd4fbe7c17b4cc0451c0acf423e8f69d` ueber die GitHub-API festgestellt (31.10.2026); sie sind kein Nachweis fuer den neuen HEAD.
+
+**Weiterhin offen:** Forderungen aus Vertraegen, rechtlich/fachlich begruendete Anlagen- und Lagerwerte, Abschreibungen, Gesamtgewinn, vollstaendige Endpartien, Browser-Dateidialog bei 200 %, Medienrechte und C64-Originalvergleich. Persoenliche Endabnahmen erst nach eingefrorenem technisch gruenem Kandidaten.
