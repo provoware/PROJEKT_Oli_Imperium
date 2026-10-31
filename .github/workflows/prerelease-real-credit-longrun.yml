@@ -4,6 +4,7 @@ on:
     paths:
       - 'project-c/pppoppi-imperium/quality_v194/test_real_credit_longrun_v194.cjs'
       - 'project-c/pppoppi-imperium/quality_v194/test_real_insolvency_longrun_v194.cjs'
+      - 'project-c/pppoppi-imperium/quality_v194/test_real_contract_settlement_v194.cjs'
       - 'project-c/pppoppi-imperium/quality_v194/REAL_CREDIT_LONGRUN_20261031.md'
       - 'project-c/pppoppi-imperium/prerelease/matrix.json'
       - '.github/workflows/prerelease-real-credit-longrun.yml'
@@ -72,6 +73,29 @@ jobs:
           assert.equal(r.unrelatedCompanyPreserved,true);
           assert.equal(r.prereleaseGate,'BLOCKED');
           NODE
+      - name: Reale Vertragserfuellung und Vertragsstrafe unabhaengig pruefen
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check project-c/pppoppi-imperium/quality_v194/test_real_contract_settlement_v194.cjs
+          node project-c/pppoppi-imperium/quality_v194/test_real_contract_settlement_v194.cjs | tee real_contract_settlement.json
+          node - <<'NODE'
+          const assert=require('node:assert/strict');
+          const fs=require('node:fs');
+          const r=JSON.parse(fs.readFileSync('real_contract_settlement.json','utf8'));
+          assert.equal(r.schema,'pppoppi.real-contract-settlement/1');
+          assert.equal(r.scenarios,4);
+          assert.equal(r.companyMonthsChecked,16);
+          assert.equal(r.duplicateChecks,38);
+          assert.equal(r.jsonRoundtrips,8);
+          assert.equal(r.negativeCases,40);
+          assert.equal(r.delivery.deliveredMilli,40000);
+          assert.equal(r.delivery.revenueCent,2987600);
+          assert.equal(r.delivery.contractInvoiceCent,20000);
+          assert.equal(r.breach.deliveredMilli,0);
+          assert.equal(r.breach.contractInvoiceCent,746900);
+          assert.equal(r.prereleaseGate,'BLOCKED');
+          NODE
       - name: Reproduzierbare JSON-Ausgabe sichern
         if: always()
         uses: actions/upload-artifact@v4
@@ -80,5 +104,6 @@ jobs:
           path: |
             real_credit_longrun.json
             real_insolvency_longrun.json
+            real_contract_settlement.json
           if-no-files-found: warn
           retention-days: 14
