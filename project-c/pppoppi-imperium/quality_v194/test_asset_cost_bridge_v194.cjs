@@ -51,6 +51,28 @@ function audit(state,opening) {
         o.paidCent>=0&&o.dueCent>=o.paidCent,'invalid invoice');
       return o;
     });
+    // Independently check the only two invoices created by this real one-month
+    // scenario. Balanced ledgers and matching reports cannot prove invoice truth.
+    const expectedBills = [
+      {id:`M${state.month}-G${firm.generation}-LOHN`, kind:'PERSONAL',
+        amount:E.CFG.wage},
+      {id:`M${state.month}-G${firm.generation}-WARTUNG`, kind:'WARTUNG',
+        amount:E.CFG.upkeep}
+    ];
+    assert.equal(invoices.length,expectedBills.length,'invoice count mismatch');
+    for (const expected of expectedBills) {
+      const bill = invoices.find(o=>o.id===expected.id);
+      assert.ok(bill,'invoice missing');
+      assert.equal(bill.kind,expected.kind,'invoice kind mismatch');
+      assert.equal(bill.priority,1,'invoice priority mismatch');
+      assert.equal(bill.dueCent,expected.amount,'invoice amount mismatch');
+      assert.equal(bill.paidCent,expected.amount,'invoice settlement mismatch');
+      const payments=entries.filter(e=>e.code==='ZAHLUNG_'+expected.kind
+        &&e.info===expected.id);
+      assert.equal(payments.length,1,'invoice payment booking count mismatch');
+      assert.equal(payments[0].deltaCent,-expected.amount,
+        'invoice payment booking mismatch');
+    }
     const unpaid = invoices.filter(o=>o.priority<=3)
       .reduce((sum,o)=>sum+o.dueCent-o.paidCent,0);
     assert.equal(unpaid,E.pending(firm),'invoice/pending mismatch');
@@ -174,6 +196,39 @@ function scenario() {
       firm.ledger.find(e=>e.code==='GUTACHTEN').deltaCent-=500;
       // The cashbook still balances, but the refinery price is now false.
       assert.equal(firm.cashCent,report.cashCent);
+    }],
+    ['invoice amount mismatch',s=>{
+      const o=s.companies[0].obligations.find(o=>o.kind==='PERSONAL');
+      o.dueCent++;o.paidCent++;
+    }],
+    ['invoice amount mismatch',s=>{
+      const o=s.companies[0].obligations.find(o=>o.kind==='WARTUNG');
+      o.dueCent++;o.paidCent++;
+    }],
+    ['invoice priority mismatch',s=>{
+      s.companies[0].obligations.find(o=>o.kind==='PERSONAL').priority=2;
+    }],
+    ['invoice kind mismatch',s=>{
+      s.companies[0].obligations.find(o=>o.kind==='WARTUNG').kind='PERSONAL';
+    }],
+    ['invoice count mismatch',s=>{
+      const o=s.companies[0].obligations.find(o=>o.kind==='PERSONAL');
+      s.companies[0].obligations.push(copy(o));
+    }],
+    ['invoice count mismatch',s=>{
+      s.companies[0].obligations.push({
+        id:'M1-G1-FAKE',priority:1,kind:'FAKE',dueCent:1,paidCent:1
+      });
+    }],
+    ['invoice settlement mismatch',s=>{
+      const o=s.companies[0].obligations.find(o=>o.kind==='PERSONAL');
+      o.paidCent--;
+      s.lastReport.companies[0].arrearsCent++;
+    }],
+    ['invoice payment booking mismatch',s=>{
+      const f=s.companies[0],report=s.lastReport.companies[0];
+      f.ledger.find(e=>e.code==='ZAHLUNG_PERSONAL').deltaCent++;
+      f.cashCent++;report.cashCent++;
     }]
   ];
   for(const [message,corrupt] of cases) {
