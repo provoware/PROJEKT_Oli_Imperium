@@ -5,6 +5,8 @@ on:
       - 'project-c/pppoppi-imperium/quality_v194/test_real_credit_longrun_v194.cjs'
       - 'project-c/pppoppi-imperium/quality_v194/test_real_insolvency_longrun_v194.cjs'
       - 'project-c/pppoppi-imperium/quality_v194/test_real_contract_settlement_v194.cjs'
+      - 'project-c/pppoppi-imperium/quality_v194/test_real_parallel_contracts_v194.cjs'
+      - 'project-c/pppoppi-imperium/quality_v194/REAL_PARALLEL_CONTRACTS_20261031.md'
       - 'project-c/pppoppi-imperium/quality_v194/REAL_CREDIT_LONGRUN_20261031.md'
       - 'project-c/pppoppi-imperium/prerelease/matrix.json'
       - '.github/workflows/prerelease-real-credit-longrun.yml'
@@ -96,6 +98,27 @@ jobs:
           assert.equal(r.breach.contractInvoiceCent,746900);
           assert.equal(r.prereleaseGate,'BLOCKED');
           NODE
+      - name: Zwei parallele Regionalvertraege mit natuerlicher Teillieferung
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check project-c/pppoppi-imperium/quality_v194/test_real_parallel_contracts_v194.cjs
+          node project-c/pppoppi-imperium/quality_v194/test_real_parallel_contracts_v194.cjs | tee real_parallel_contracts.json
+          node - <<'NODE'
+          const assert=require('node:assert/strict');
+          const fs=require('node:fs');
+          const r=JSON.parse(fs.readFileSync('real_parallel_contracts.json','utf8'));
+          assert.equal(r.schema,'pppoppi.real-parallel-contracts/1');
+          assert.equal(r.scenarios,2);
+          assert.equal(r.companyMonthsChecked,8);
+          assert.equal(r.partialDeliveredMilli,20000);
+          assert.equal(r.completeDeliveredMilli,40000);
+          assert.deepEqual(r.contractRegions,['NORD','BERLIN']);
+          assert.equal(r.negativeCases,24);
+          assert.equal(r.jsonRoundtrips,6);
+          assert.equal(r.noInjectedCashOrInventory,true);
+          assert.equal(r.prereleaseGate,'BLOCKED');
+          NODE
       - name: Reproduzierbare JSON-Ausgabe sichern
         if: always()
         uses: actions/upload-artifact@v4
@@ -105,5 +128,6 @@ jobs:
             real_credit_longrun.json
             real_insolvency_longrun.json
             real_contract_settlement.json
+            real_parallel_contracts.json
           if-no-files-found: warn
           retention-days: 14
