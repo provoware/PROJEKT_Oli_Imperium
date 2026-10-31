@@ -20,7 +20,13 @@ function scenario(){
  }
  const close=()=>{move('END_TURN');move('END_TURN','H2');};
  const next=()=>move('NEXT_MONTH');
- return {get state(){return s},get book(){return b},start,steps,move,close,next};
+ return {get state(){return s},get book(){return b},start,steps,move,close,next,
+  valueRaw:(claimId,recoverableCent)=>{const before=cp(b);const c=s.claims[claimId];
+   b=B.recordRawInventoryValuation(b,s,claimId,{claimId,month:s.month,
+    affectedQtyMilli:c.inventoryMilli+c.preparedMilli,recoverableCent,
+    sourceRef:'SYNTHETIC-SURVIVING-STOCK-REVIEW-NOT-EXTERNAL',
+    method:'Synthetisch dokumentierter Wertansatz ohne automatischen Warenschwund'});
+   assert.deepEqual(before.raw,cp(before.raw));}};
 }
 test('Startbild: Keine unbekannten historischen Anschaffungskosten erfinden',()=>{
  const x=scenario();
@@ -90,6 +96,8 @@ test('Echte Warenwirtschaft über vier Monate: Rohöl, Raffinerie, Netztransport
  x.close();x.next();
  assert.equal(B.valuation(x.book,x.state).inTransitBookCent,0,'Fertigware im Marktdepot eingetroffen');
  assert.equal(x.state.claims[id].burning,true,'Vierter Monat: reales Brandereignis');
+ assert.throws(()=>B.report(x.book,x.state),/LAGERWERTMINDERUNG_OFFEN/);
+ x.valueRaw(id,x.book.raw.BERLIN.cent);
  a('FIRE_EXPERT',{claimId:id});
  assert.equal(x.state.claims[id].burning,false,'Reale Brandbekämpfung vor Bewertung');
  a('NETWORK_OFFER',{region:'BERLIN',claimId:id});x.close();
