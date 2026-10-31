@@ -25,6 +25,8 @@ const POLICY=Object.freeze({
 const cap=new Set(['FELDKAUF','FACHBOHRUNG','TANKAUSBAU','RAFFINERIE_BAU','VERTRIEBSROUTE','STRECKENBAU']);
 const cost=new Set(['GUTACHTEN','TRANSPORT','FRACHT','REPARATUR','BRANDBEKÄMPFUNG_PROFI','TRANSPORT_REPARATUR','ZAHLUNG_PERSONAL','ZAHLUNG_WARTUNG','ZAHLUNG_ZINS']);
 const sale=new Set(['MARKTERLÖS','RAFFINIERT_MONATSVERKAUF','AUSSENMARKT']);
+const financingIn=new Set(['RETTUNGSKREDIT','KI_RETTUNGSKREDIT']);
+const financingOut=new Set(['ZAHLUNG_TILGUNG']);
 const zero=new Set(['PIPELINE_GUTSCHRIFT']); // Gutschrift ist kein Verkauf
 const volume=x=>{if(!Number.isSafeInteger(x)||x<0)throw Error('Ungueltige nichtnegative Menge');return x};
 const cents=x=>{if(!Number.isSafeInteger(x)||x<0)throw Error('Ungueltiger nichtnegativer Cent-Wert');return x};
@@ -85,7 +87,7 @@ function seed(s,id){
  for(const r of Object.keys(quantities)){raw[r]={qty:0,cent:0};product[r]={qty:0,cent:0};}
  return {modelId:POLICY.id,companyId:id,generation:f.generation,
   month:s.month,phase:s.phase,cashCent:cents(f.cashCent),debtCent:0,
-  ledgerCount:0,ledgerLastId:null,raw,product,assets:[],
+  ledgerCount:0,ledgerLastId:null,raw,product,assets:[],openingEquityCent:cents(f.cashCent),
   revenueCent:0,expenseCent:0,costOfSalesCent:0,depreciationCent:0,
   observedSteps:0,monthsClosed:0,releaseGate:'BLOCKED'};
 }
@@ -126,6 +128,7 @@ function reconcile(previous,current,original){
    throw Error('Buchungsregister nachtraeglich veraendert');
  const newly=after.ledger.slice(before.ledger.length);
  let cashDelta=0;const pump={},refine={},rawSales={},productSales={};
+ let loanReceipts=0,loanPayments=0;
  for(const r of Object.keys(prior)){pump[r]=0;refine[r]=0;rawSales[r]=0;productSales[r]=0;}
  for(const x of newly){
   if(!Number.isSafeInteger(x.deltaCent)||typeof x.code!=='string')
@@ -150,6 +153,12 @@ function reconcile(previous,current,original){
    b.product[region].qty=plus(b.product[region].qty,output);
    b.product[region].cent=plus(b.product[region].cent,plus(transfer,-x.deltaCent));
    refine[region]=plus(refine[region],q);
+  }else if(financingIn.has(x.code)){
+   if(x.deltaCent<=0)throw Error('Kredit ohne Zufluss');
+   loanReceipts=plus(loanReceipts,x.deltaCent);
+  }else if(financingOut.has(x.code)){
+   if(x.deltaCent>=0)throw Error('Tilgung ohne Abfluss');
+   loanPayments=plus(loanPayments,-x.deltaCent);
   }else if(cost.has(x.code)){
    if(x.deltaCent>0)throw Error('Aufwand mit positivem Vorzeichen');
    b.expenseCent=plus(b.expenseCent,-x.deltaCent);
@@ -165,6 +174,12 @@ function reconcile(previous,current,original){
  }
  if(sub(after.cashCent,before.cashCent)!==cashDelta)
   throw Error('Bargeld nicht mit Einzelbuchungen abstimmbar');
+ if(sub(after.debtCent,before.debtCent)!==sub(loanReceipts,loanPayments))
+  throw Error('Darlehenshauptschuld nicht mit Kredit- und Tilgungsbuchungen abstimmbar');
+ const priorBills=A.financialFacts(previous,id).unpaidOtherBillsCent;
+ const closingBills=A.financialFacts(current,id).unpaidOtherBillsCent;
+ // Periodenabgrenzung: offene Lohn-/Zinsrechnungen sind Aufwand auch ohne Zahlung.
+ b.expenseCent=plus(b.expenseCent,sub(closingBills,priorBills));
  // Verkaufsberichte werden nur bei echtem Monatsabschluss einmal ausgewertet.
  const closing=previous.phase!=='REPORT'&&current.phase==='REPORT'&&current.month===previous.month;
  const nextTotals=bookTotals(current,id);
@@ -232,7 +247,10 @@ function report(b,state){
   throw Error('Buchstand und Spielstand differieren');
  const v=valuation(b,state);
  const computed=A.snapshot(state,b.companyId,v);
- return {...computed,policy:POLICY.id,accountingProfitCent:null,
+ const netResult=sub(computed.equityCent,b.openingEquityCent);
+ const recognizedResult=sub(sub(sub(b.revenueCent,b.expenseCent),b.costOfSalesCent),b.depreciationCent);
+ if(netResult!==recognizedResult)throw Error('Bilanzgleichung/Erfolgsrechnung nicht abstimmbar');
+ return {...computed,policy:POLICY.id,observedModelResultCent:netResult,accountingProfitCent:null,
   observedRevenueCent:b.revenueCent,observedOperatingOutflowsCent:b.expenseCent,
   observedProductionCostCent:Object.values(b.raw).reduce((n,x)=>plus(n,x.cent),0),
   observedCOGSCent:b.costOfSalesCent,observedDepreciationCent:b.depreciationCent,
