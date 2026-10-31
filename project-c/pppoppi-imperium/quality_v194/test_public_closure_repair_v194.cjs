@@ -64,6 +64,14 @@ function audit(s,initial,sold,batches,stage) {
     const ledger=f.ledger.reduce((n,x)=>n+x.deltaCent,0);
     assert.equal(f.cashCent-initial[id].cashCent,ledger,
       'audit: cash/ledger '+stage+' '+id);
+    const sales=f.ledger.filter(x=>x.code==='AUSSENMARKT');
+    const reportSales=s.reports.map(r=>
+      r.publicNetwork?.productMarket?.NORD?.allocations?.[id]).filter(Boolean);
+    assert.equal(sales.reduce((n,x)=>n+x.deltaCent,0),
+      reportSales.reduce((n,x)=>n+x.revenueCent,0),
+      'audit: cumulative external revenue '+stage+' '+id);
+    assert.equal(sales.length,reportSales.filter(x=>x.soldMilli>0).length,
+      'audit: external sales entry count '+stage+' '+id);
   }
 }
 function freightAudit(s,month,requested,accepted,returned,used) {
