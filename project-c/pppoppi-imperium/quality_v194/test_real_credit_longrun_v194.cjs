@@ -66,7 +66,7 @@ function verifyFinal(state,opening) {
   assert.equal(E.pending(a),0,'unpaid final invoices');
   assert.equal(a.generation,1,'rescues must not silently restart H1');
   assert.equal(b.generation,1,'unaffected H2 restarted');
-  assert.equal(a.loanUsed,true,'loan-used flag lost');
+  assert.equal(a.loanUsed,false,'monthly loan-use flag not reset');
   for(const o of a.obligations)assert.equal(o.paidCent,o.dueCent,'unpaid H1 invoice');
 }
 function scenario() {
