@@ -174,7 +174,7 @@ function scenario() {
     ['asset plant state mismatch',s=>{s.refinery.plants.H1.BERLIN.built=false;}],
     ['asset route state mismatch',s=>{s.refinery.plants.H1.BERLIN.route=false;}],
     ['report debt mismatch',s=>{s.companies[0].debtCent++;}],
-    ['report arrears mismatch',s=>{s.companies[0].obligations[0].dueCent++;}],
+    ['report arrears mismatch',s=>{s.lastReport.companies[0].arrearsCent++;}],
     ['report revenue mismatch',s=>{s.lastReport.companies[0].revenueCent++;}],
     ['physical stock conservation mismatch',s=>{s.claims['BERLIN-1'].inventoryMilli++;}],
     // Both the cash and the published report are manipulated to conceal a wrong tariff.
