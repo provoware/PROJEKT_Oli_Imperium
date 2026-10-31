@@ -215,6 +215,7 @@ function play() {
           s=act(s,command('REPAIR',id,'M4-REPAIR',{claimId}));
         for(let n=0;n<2;n++) s=act(s,command('NETWORK_REFINE',id,'M4-REFINE-'+n,
           {region:'BERLIN',claimId}));
+        s=end(s,id,4);
       }
       batches=4;
     }
@@ -235,6 +236,10 @@ function play() {
       for(const id of IDS) sold[id]+=s.lastReport.publicNetwork
         .productMarket.NORD.allocations[id].soldMilli;
       audit(s,initial,sold,batches,'M5');
+      s=roundtrip(s);roundtrips++;
+    } else if(month===4) {
+      assert.equal(s.phase,'REPORT');
+      audit(s,initial,sold,batches,'M4');
       s=roundtrip(s);roundtrips++;
     } else if(month===6) {
       assert.equal(s.phase,'REPORT');
