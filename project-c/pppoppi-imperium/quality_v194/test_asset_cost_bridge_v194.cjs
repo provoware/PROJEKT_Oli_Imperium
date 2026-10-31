@@ -149,9 +149,10 @@ function scenario() {
 const first=scenario(),second=scenario();
 assert.deepEqual(first,second,'asset bridge is not reproducible');
 console.log(JSON.stringify({schema:'pppoppi.asset-cost-bridge/1',
-  scenarios:2,companiesChecked:4,negativeCases:24,
+  scenarios:2,companiesChecked:4,
   assetCostVsValueSeparated:true,profitNotClaimed:true,
-  ...first,prereleaseGate:'BLOCKED',
+  ...first,negativeCases:first.negativeCases+second.negativeCases,
+  prereleaseGate:'BLOCKED',
   limitations:[
     'Acquisition payments are cash flows, not approved residual or market values.',
     'Depreciation, fire losses, stock unit costs and receivable recognition are not defined.',
