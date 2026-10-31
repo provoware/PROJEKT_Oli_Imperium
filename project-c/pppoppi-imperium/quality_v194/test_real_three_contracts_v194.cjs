@@ -203,11 +203,121 @@ function scenario() {
       'undetected manipulation '+(i+1));
     negativeCases++;
   }
-  const next=act(exported,'NEXT_MONTH','H1');
+  // A second real contract cycle must not rebook any of the three old contracts.
+  let next=act(exported,'NEXT_MONTH','H1');
   assert.equal(next.month,5);
   assert.equal(firm(next,'H1').contracts.filter(x=>x.status==='OPEN').length,0);
   assert.equal(firm(next,'H1').ledger.filter(x=>x.code==='VERTRAGSERLÖS').length,2);
-  return {partialDeliveredMilli:partial,regions:expected.map(x=>x.region),
+  const oldContracts=clone(firm(next,'H1').contracts);
+  const oldIds=new Set(oldContracts.map(x=>x.id));
+  const oldReceipts=clone(firm(next,'H1').ledger.filter(x=>
+    x.code==='VERTRAGSERLÖS'&&oldIds.has(x.info)));
+  const oldBills=clone(firm(next,'H1').obligations.filter(x=>
+    x.kind.startsWith('VERTRAG')));
+  const archive=clone(next.reports);
+  assert.equal(next.claims['BERLIN-1'].inventoryMilli,60000);
+  next=act(next,'SIGN','H1',{region:'BERLIN'});
+  const renewedId=firm(next,'H1').contracts.at(-1).id;
+  assert.equal(firm(next,'H1').contracts.length,4);
+  assert.equal(firm(next,'H1').contracts.at(-1).dueMonth,6);
+  next=endMonth(next);
+  assert.equal(next.phase,'REPORT');
+  assert.equal(next.month,5);
+  assert.equal(firm(next,'H1').contracts.at(-1).status,'OPEN');
+  assert.deepEqual(next.reports.slice(0,4),archive);
+  next=act(next,'NEXT_MONTH','H1');
+  const secondBaseline=clone(next);
+  const secondSerial=serial;
+  const price=round(secondBaseline.prices.BERLIN*E.CFG.contractBonusBps,10000);
+  const secondRevenue=cents(E.CFG.contractQty,price);
+  const fee=E.CFG.contractDeliveryFee;
+  const expectedCash=firm(secondBaseline,'H1').cashCent+secondRevenue-fee-
+    E.CFG.wage-2*E.CFG.upkeep;
+  const expectedProfit=secondRevenue-cents(E.CFG.contractQty,
+    E.CFG.contractUnitCost)-fee;
+  const settled=endMonth(next);
+  function auditRenewal(x) {
+    assert.equal(E.validate(x),true);
+    assert.equal(x.month,6);
+    assert.equal(x.phase,'REPORT');
+    assert.equal(x.reports.length,6);
+    assert.deepEqual(x.lastReport,x.reports[5]);
+    assert.deepEqual(x.reports.slice(0,4),archive,'old reports rewritten');
+    const f=firm(x,'H1'),other=firm(x,'H2');
+    assert.equal(f.contracts.length,4);
+    assert.deepEqual(f.contracts.slice(0,3),oldContracts,
+      'old contracts changed or settled twice');
+    const renewal=f.contracts[3];
+    assert.equal(renewal.id,renewedId);
+    assert.equal(renewal.region,'BERLIN');
+    assert.equal(renewal.dueMonth,6);
+    assert.equal(renewal.status,'DONE');
+    assert.equal(renewal.soldMilli,E.CFG.contractQty);
+    assert.equal(renewal.profitCent,expectedProfit);
+    assert.equal(f.stats.contractsDone,2);
+    assert.equal(f.stats.contractsOnTime,2);
+    assert.equal(x.claims['BERLIN-1'].inventoryMilli,20000);
+    assert.equal(f.monthContractMilli,E.CFG.contractQty);
+    assert.equal(f.monthRevenueCent,secondRevenue);
+    assert.equal(f.cashCent,expectedCash,'second-cycle independent cash');
+    assert.equal(f.debtCent,0);
+    assert.equal(E.pending(f),0);
+    assert.equal(other.cashCent,firm(secondBaseline,'H2').cashCent-E.CFG.wage);
+    assert.deepEqual(f.ledger.filter(y=>y.code==='VERTRAGSERLÖS'&&
+      oldIds.has(y.info)),oldReceipts,'old contract revenue duplicated');
+    assert.deepEqual(f.obligations.filter(y=>y.kind.startsWith('VERTRAG')&&
+      oldIds.has(y.id.slice(y.id.indexOf('-V-')+1).replace(/-(FEE|STRAFE)$/,''))),
+      oldBills,'old contract invoices changed');
+    const receipts=f.ledger.filter(y=>y.code==='VERTRAGSERLÖS'&&
+      y.info===renewedId);
+    assert.equal(receipts.length,1);
+    assert.equal(receipts[0].month,6);
+    assert.equal(receipts[0].deltaCent,secondRevenue);
+    const billId='M6-'+renewedId+'-FEE';
+    const bills=f.obligations.filter(y=>y.id===billId);
+    assert.equal(bills.length,1);
+    assert.equal(bills[0].kind,'VERTRAGSTRANSPORT');
+    assert.equal(bills[0].dueCent,fee);
+    assert.equal(bills[0].paidCent,fee);
+    const payments=f.ledger.filter(y=>y.code==='ZAHLUNG_VERTRAGSTRANSPORT'
+      &&y.info===billId);
+    assert.equal(payments.length,1);
+    assert.equal(payments[0].deltaCent,-fee);
+    const report=x.lastReport.companies.find(y=>y.id==='H1');
+    assert.equal(report.cashCent,expectedCash);
+    assert.equal(report.revenueCent,secondRevenue);
+    assert.equal(report.arrearsCent,0);
+    assert.equal(report.debtCent,0);
+  }
+  // Re-run the same two month-end commands with identical request IDs.
+  serial=secondSerial;
+  const resumed=endMonth(JSON.parse(JSON.stringify(secondBaseline)));
+  jsonRoundtrips++;
+  assert.deepEqual(resumed,settled,'second settlement changed after restore');
+  const exportedRenewal=JSON.parse(JSON.stringify(settled));
+  jsonRoundtrips++;
+  auditRenewal(settled);
+  auditRenewal(exportedRenewal);
+  const renewalAttacks=[
+    x=>{firm(x,'H1').cashCent++;},
+    x=>{firm(x,'H1').contracts[3].soldMilli--;},
+    x=>{firm(x,'H1').ledger.find(y=>y.info===renewedId&&
+      y.code==='VERTRAGSERLÖS').deltaCent++;},
+    x=>{firm(x,'H1').obligations.find(y=>y.id==='M6-'+renewedId+'-FEE').paidCent--;},
+    x=>{firm(x,'H1').contracts[1].status='DONE';},
+    x=>{x.reports[3].companies.find(y=>y.id==='H1').cashCent++;},
+    x=>{firm(x,'H2').cashCent++;},
+    x=>{x.claims['BERLIN-1'].inventoryMilli++;}
+  ];
+  for(const [i,attack] of renewalAttacks.entries()) {
+    const damaged=clone(exportedRenewal);attack(damaged);
+    assert.throws(()=>auditRenewal(damaged),
+      'undetected renewal manipulation '+(i+1));
+    negativeCases++;
+  }
+  return {secondCycleDeliveredMilli:E.CFG.contractQty,
+    secondCycleRevenueCent:secondRevenue,
+    partialDeliveredMilli:partial,regions:expected.map(x=>x.region),
     delivered:expected.map(x=>x.delivered),
     revenueCent:expected.reduce((n,x)=>n+x.revenue,0),
     penaltyCent:expected.reduce((n,x)=>n+x.penalty,0)};
@@ -215,7 +325,9 @@ function scenario() {
 const first=scenario(),second=scenario();
 assert.deepEqual(first,second,'non-deterministic three-contract settlement');
 console.log(JSON.stringify({schema:'pppoppi.real-three-contracts/1',
-  scenarios:2,companyMonthsChecked:16,duplicateChecks,jsonRoundtrips,
+  scenarios:2,companyMonthsChecked:24,duplicateChecks,jsonRoundtrips,
+  secondCycleDeliveredMilli:first.secondCycleDeliveredMilli,
+  secondCycleRevenueCent:first.secondCycleRevenueCent,
   negativeCases,partialDeliveredMilli:first.partialDeliveredMilli,
   contractRegions:first.regions,deliveredMilli:first.delivered,
   noInjectedCashOrInventory:true,prereleaseGate:'BLOCKED',
