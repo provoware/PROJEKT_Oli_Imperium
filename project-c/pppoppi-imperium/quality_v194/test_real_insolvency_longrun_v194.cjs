@@ -49,6 +49,96 @@ function checkRestart(s,reference) {
     &&e.company==='H1').length,reference.restartEvents+1,
     'restart event count wrong');
 }
+
+function auditPreRestart(state,opening) {
+  assert.equal(state.phase,'RESCUE','crisis audit requires pending rescue');
+  assert.equal(state.month,14,'crisis audit month');
+  const h1=firm(state,'H1'),h2=firm(state,'H2');
+  function ledgerAudit(f) {
+    assert.equal(new Set(f.ledger.map(e=>e.id)).size,f.ledger.length,
+      'duplicate ledger identifier');
+    assert.equal(f.cashCent,opening+f.ledger.reduce((sum,e)=>{
+      assert.ok(Number.isSafeInteger(e.deltaCent),'unsafe ledger delta');
+      return sum+e.deltaCent;
+    },0),'cash/ledger mismatch');
+    const ids=new Set();
+    for(const o of f.obligations) {
+      assert.ok(!ids.has(o.id),'duplicate obligation');
+      ids.add(o.id);
+      assert.ok(Number.isSafeInteger(o.dueCent)&&o.dueCent>=0,
+        'invalid obligation due');
+      assert.ok(Number.isSafeInteger(o.paidCent)&&o.paidCent>=0
+        &&o.paidCent<=o.dueCent,'invalid obligation paid');
+      const payments=f.ledger.filter(e=>e.code==='ZAHLUNG_'+o.kind
+        &&e.info===o.id);
+      const paid=payments.reduce((sum,e)=>{
+        assert.ok(Number.isSafeInteger(e.deltaCent)&&e.deltaCent<0,
+          'invalid payment delta');
+        return sum-e.deltaCent;
+      },0);
+      assert.equal(paid,o.paidCent,'payment/obligation mismatch: '+o.id);
+    }
+    for(const e of f.ledger.filter(e=>e.code.startsWith('ZAHLUNG_'))) {
+      const obligation=f.obligations.find(o=>o.id===e.info);
+      assert.ok(obligation&&e.code==='ZAHLUNG_'+obligation.kind,
+        'orphan or mistyped payment');
+    }
+  }
+  ledgerAudit(h1);ledgerAudit(h2);
+  assert.equal(h1.obligations.length,54,'H1 monthly invoice count');
+  assert.equal(h2.obligations.length,14,'H2 monthly invoice count');
+  const invoice=(f,month,kind)=>{
+    const id='M'+month+'-G'+f.generation+'-'+
+      (kind==='PERSONAL'?'LOHN':kind);
+    const matches=f.obligations.filter(o=>o.id===id);
+    assert.equal(matches.length,1,'missing/duplicate monthly invoice '+id);
+    return matches[0];
+  };
+  let debt=0;
+  for(let month=1;month<=14;month++) {
+    const wage=invoice(h1,month,'PERSONAL');
+    const upkeep=invoice(h1,month,'WARTUNG');
+    const other=invoice(h2,month,'PERSONAL');
+    assert.equal(wage.dueCent,E.CFG.wage,'H1 wage tariff');
+    assert.equal(upkeep.dueCent,E.CFG.upkeep,'H1 upkeep tariff');
+    assert.equal(other.dueCent,E.CFG.wage,'H2 wage tariff');
+    assert.equal(other.paidCent,other.dueCent,'unpaid H2 wage');
+    if(month<14) {
+      assert.equal(wage.paidCent,wage.dueCent,'old H1 wage arrears');
+      assert.equal(upkeep.paidCent,upkeep.dueCent,'old H1 upkeep arrears');
+    }
+    if(month===1) {
+      debt=E.CFG.credit;
+    } else {
+      const interest=invoice(h1,month,'ZINS');
+      const principal=invoice(h1,month,'TILGUNG');
+      assert.equal(interest.dueCent,round(debt*E.CFG.loanInterestBps,10000),
+        'independent interest M'+month);
+      assert.equal(principal.dueCent,round(debt*E.CFG.loanRepaymentBps,10000),
+        'independent principal M'+month);
+      if(month<14) {
+        assert.equal(interest.paidCent,interest.dueCent,'old unpaid interest');
+        assert.equal(principal.paidCent,principal.dueCent,'old unpaid principal');
+        debt-=principal.dueCent;
+      } else {
+        assert.equal(principal.paidCent,0,'insolvent principal unexpectedly paid');
+      }
+    }
+  }
+  const credits=h1.ledger.filter(e=>e.code==='RETTUNGSKREDIT');
+  assert.equal(credits.length,1,'unexpected credit count');
+  assert.equal(credits[0].month,1,'credit booked in wrong month');
+  assert.equal(credits[0].deltaCent,E.CFG.credit,'wrong credit amount');
+  assert.equal(h1.debtCent,debt,'independent debt mismatch');
+  assert.equal(h2.debtCent,0,'unrelated company acquired debt');
+  assert.equal(h1.cashCent,0,'insolvent company retained cash');
+  assert.equal(h2.cashCent,opening-14*E.CFG.wage,'H2 cash oracle');
+  assert.equal(E.pending(h1),195957,'natural unpaid invoices');
+  assert.equal(E.pending(h2),0,'H2 unpaid invoices');
+  assert.equal(h1.obligations.reduce((n,o)=>n+o.dueCent-o.paidCent,0),
+    195957,'unreconciled crisis obligations');
+}
+
 function scenario() {
   sequence=0;
   const seed='WIR04-NATURAL-INSOLVENCY-20261031';
@@ -134,6 +224,33 @@ function scenario() {
       assert.equal(firm(s,'H1').debtCent,debt);
     }
   }
+  auditPreRestart(s,E.CFG.startCash);
+  const crisisCorruptions=[
+    x=>{firm(x,'H1').cashCent++;},
+    x=>{const f=firm(x,'H1');f.ledger.push(copy(f.ledger.at(-1)));},
+    x=>{const f=firm(x,'H1');const p=f.ledger.filter(e=>e.code==='ZAHLUNG_PERSONAL');
+      p[0].deltaCent--;p[1].deltaCent++;},
+    x=>{firm(x,'H1').obligations[0].paidCent++;},
+    x=>{firm(x,'H1').obligations[0].dueCent++;},
+    x=>{const f=firm(x,'H1');f.obligations.push(copy(f.obligations[0]));},
+    x=>{firm(x,'H1').ledger.find(e=>e.code==='ZAHLUNG_PERSONAL').info='ORPHAN';},
+    x=>{firm(x,'H1').ledger.find(e=>e.code==='ZAHLUNG_PERSONAL').code='ZAHLUNG_ZINS';},
+    x=>{const f=firm(x,'H1');const p=f.ledger.find(e=>e.code==='ZAHLUNG_PERSONAL');
+      f.ledger.push({...p,id:'FORGED-PAY',deltaCent:-1});
+      f.ledger.push({id:'FORGED-OFFSET',month:14,code:'ADJUST',
+        info:'offset',deltaCent:1});},
+    x=>{const f=firm(x,'H1');f.ledger.find(e=>e.code==='RETTUNGSKREDIT').deltaCent++;
+      f.ledger.find(e=>e.code==='GUTACHTEN').deltaCent--;},
+    x=>{firm(x,'H1').obligations.find(o=>o.id==='M7-G1-ZINS').dueCent++;},
+    x=>{firm(x,'H1').obligations.find(o=>o.id==='M10-G1-TILGUNG').dueCent++;},
+    x=>{firm(x,'H2').obligations[0].dueCent++;},
+    x=>{firm(x,'H2').ledger.find(e=>e.code==='ZAHLUNG_PERSONAL').info='ORPHAN';}
+  ];
+  for(const corrupt of crisisCorruptions) {
+    const damaged=copy(s);corrupt(damaged);
+    assert.throws(()=>auditPreRestart(damaged,E.CFG.startCash),
+      'undetected pre-insolvency accounting corruption');
+  }
   const released=owned(s,'H1');
   assert.deepEqual(released,['BERLIN-1','BRANDENBURG-1']);
   const before=firm(s,'H1');
@@ -178,7 +295,8 @@ function scenario() {
     assert.deepEqual(s.claims[id],pristine.claims[id],'field reappeared');
   return {months:14,companyMonthsChecked:28,realActions:actions.length,
     firstRescueMonth:1,naturalInsolvencyMonth:14,arrearsCent:195957,
-    releasedClaims:released,roundtrips,negativeCases:corruptions.length,
+    releasedClaims:released,roundtrips,negativeCases:corruptions.length+crisisCorruptions.length,
+    crisisNegativeCases:crisisCorruptions.length,
     noInjectedCashOrDebt:true,unrelatedCompanyPreserved:true};
 }
 const a=scenario(),b=scenario();
