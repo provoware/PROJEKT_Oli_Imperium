@@ -103,6 +103,7 @@ function scenario() {
   for(const type of ['SURVEY','BUY','DRILL','PUMP','SHIP','OFFER'])
     s=move(s,type,'H1',{claimId:'NORD-1'});
   s=move(s,'SIGN','H1',{region:'NORD'});
+  s=move(s,'END_TURN','H1');
   for(const type of ['SURVEY','BUY','DRILL','PUMP'])
     s=move(s,type,'H2',{claimId:'BERLIN-1'});
   s=move(s,'SIGN','H2',{region:'BERLIN'});
@@ -110,7 +111,6 @@ function scenario() {
   assert.throws(()=>E.transition(s,{type:'SIGN',companyId:'H2',
     region:'BERLIN',requestId:'TWO-REGIONS-DUPLICATE'}),
     /Vertragsobergrenze|Regionalvertrag/);
-  s=move(s,'END_TURN','H1');
   s=move(s,'END_TURN','H2');
   assert.equal(s.phase,'REPORT');
   assert.equal(s.reports.length,1);
