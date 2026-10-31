@@ -22,7 +22,6 @@ function move(state,type,id,extra={}) {
 }
 function audit(state,opening) {
   assert.equal(state.phase,'REPORT','month must be settled');
-  assert.equal(E.validate(state),true);
   const result = [];
   let totalInvestment = 0, totalSales = 0, totalUnpaid = 0;
   for (const id of IDS) {
@@ -104,6 +103,7 @@ function audit(state,opening) {
     'regional sales total mismatch');
   assert.ok(Number.isSafeInteger(totalInvestment+totalSales+totalUnpaid),
     'aggregate overflow');
+  assert.equal(E.validate(state),true);
   return {companies:result,totalAcquisitionPaymentsCent:totalInvestment,
     totalSalesCent:totalSales,totalUnpaidInvoicesCent:totalUnpaid,
     valuationStatus:'UNPRICED',profitStatus:'NOT_COMPUTABLE'};
@@ -130,7 +130,7 @@ function scenario() {
     ['cash/ledger mismatch',s=>{s.companies[0].ledger[0].deltaCent++;}],
     ['duplicate booking ID',s=>{s.companies[0].ledger.push(copy(s.companies[0].ledger[0]));}],
     ['asset purchase trail mismatch',s=>{s.companies[0].ledger.find(e=>e.code==='FELDKAUF').info='BERLIN-2';}],
-    ['asset purchase trail owner mismatch',s=>{s.claims['BERLIN-1'].owner=null;}],
+    ['asset ownership mismatch',s=>{s.claims['BERLIN-1'].owner=null;}],
     ['asset drilling trail missing',s=>{s.claims['BERLIN-1'].drilled=false;}],
     ['asset plant state mismatch',s=>{s.refinery.plants.H1.BERLIN.built=false;}],
     ['asset route state mismatch',s=>{s.refinery.plants.H1.BERLIN.route=false;}],
