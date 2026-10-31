@@ -11,7 +11,7 @@ Der vorhandene 2-Monats-Test zeigt eine erste natürliche Zahlungsnot und einen 
 - Monate 2–13: Monatliche Personalkosten und Wartung sowie Zins und Tilgung werden aus der **jeweils vor dem Monatsabschluss vorhandenen Restschuld** unabhängig berechnet und mit den echten Rechnungen, Buchungen, Firmenwerten und Monatsberichten verglichen.
 - Monat 14: Vor dem Abschluss 73.729 Cent Kasse, 2.161.441 Cent Restschuld, 269.686 Cent fällige Rechnungen. Daraus entsteht ein natürlicher Rückstand von **195.957 Cent**. Die zweite reguläre Kreditrettung muss diesen ausgleichen; keine künstliche Kredit- oder Bargeldinjektion in den Spielstand.
 - Monate 15–16: Der nun höhere Kreditbestand wird weiter verzinst und getilgt. Erwartete Endkasse H1 **2.815.799 Cent**, Restschuld H1 **5.463.166 Cent**; H2 bleibt unabhängig schuldenfrei.
-- Zwei identische 16-Monats-Szenarien mit 64 Firmen-Monatsbeobachtungen, fünf JSON-Speicher-/Wiederherstellungsprüfungen pro Szenario (einschließlich einer Rettungsphase), Duplikatsperre bei allen Befehlen, 16 gezielten Manipulationsproben insgesamt. Kein vollständiger Sieg-/Verlust-Spielverlauf.
+- Zwei identische 16-Monats-Szenarien mit 64 Firmen-Monatsbeobachtungen, fünf JSON-Speicher-/Wiederherstellungsprüfungen pro Szenario (einschließlich einer Rettungsphase), Duplikatsperre bei allen Befehlen, 24 gezielten Manipulationsproben insgesamt (einschließlich vier neuer Buchungs-/Rechnungsangriffe pro Wiederholung). Kein vollständiger Sieg-/Verlust-Spielverlauf.
 
 ## Ausführung und überprüfbare Freigabebedingungen
 
@@ -35,3 +35,11 @@ Die neue Probe zeigt nicht die vollständige Gewinn-/Vermögensrechnung, Forderu
 ## Tatsächlicher erster CI-Fehlversuch (31.10.2026)
 
 [GitHub-Fachlauf #41206123867](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41206123867) **FAIL**: Der unabhängige Test hatte beim zweiten Rettungskredit die anschließend vollständig bezahlte, zuvor offene Tilgungsrechnung über 108.072 Cent nicht von der Restschuld abgezogen. Der Spielkern verbucht diese Zahlung korrekt. Test-Orakel, Endwerte und GitHub-Sollprüfung wurden korrigiert; neuer Fachlauf auf endgültigem HEAD gesondert auszuwerten. Keine behauptete Spielkernänderung.
+
+## Zusatzprüfung – unabhängiger Rechnungs- und Zahlungsabgleich (31.10.2026)
+
+Der bisherige reine Kassenbuch-Summenvergleich konnte zwei gegeneinander verschobene Zahlungen nicht sicher unterscheiden, wenn die Gesamtkasse unverändert blieb. Die Fachprobe gleicht deshalb **jede einzelne Rechnung** mit den tatsächlichen negativen Zahlungseinträgen nach Rechnungskennung und Zahlungsart ab; verwaiste, falsch zugeordnete und doppelt gezählte Zahlungen müssen auffallen. Diese Kontrolle erfolgt bei jedem geprüften Monatsabschluss, nicht nur beim Endstand.
+
+Vier neue Manipulationen je Wiederholung prüfen (1) gegeneinander ausgeglichene falsche Zahlungen, (2) nachträglich umbenannte Rechnungsarten, (3) verwaiste Zahlungskennungen und (4) zusätzliche fingierte Zahlung mit ausgleichender Gutschrift. Zusammen **24 Negativproben** in zwei 16-Monats-Wiederholungen. Die Prüfung nutzt den unveränderten Spielkern und behauptet weder eine echte Forderungsbewertung noch eine vollständige Gewinn-/Vermögensbilanz.
+
+**Status:** Test und CI-Sollwert im Entwurfszweig geändert; tatsächlichen GitHub-Fachlauf auf dem finalen Commit prüfen. Bis dahin kein neuer PASS-Beleg. Release-Matrix weiterhin 6 PASS / 39 BLOCKED / 4 OPEN / 3 DEFERRED.
