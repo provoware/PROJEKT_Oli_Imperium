@@ -138,13 +138,28 @@ function scenario() {
     return {...row,revenue,penalty,fee,
       profit:revenue-moneyFor(row.delivered,E.CFG.contractUnitCost)-fee};
   });
-  const direct=move(move(s,'END_TURN','H1'),'END_TURN','H2');
-  // Different request IDs are harmless: compare economic state from saved
-  // pre-settlement input with identical commands, not with a fresh run.
-  const saved=copy(baseline);roundtrips++;
+  function finishMonth(input) {
+    const first=E.transition(input,{type:'END_TURN',companyId:'H1',
+      requestId:'PARALLEL-M2-H1'});
+    assert.equal(first.duplicate,false);
+    const second=E.transition(first.state,{type:'END_TURN',companyId:'H2',
+      requestId:'PARALLEL-M2-H2'});
+    assert.equal(second.duplicate,false);
+    assert.equal(E.validate(second.state),true);
+    return second.state;
+  }
+  const direct=finishMonth(s);
+  const saved=JSON.parse(JSON.stringify(baseline));roundtrips++;
   assert.equal(E.validate(saved),true);
+  const resumed=finishMonth(saved);
+  assert.deepEqual(resumed,direct,'restored settlement diverged');
+  const replay=E.transition(direct,{type:'END_TURN',companyId:'H2',
+    requestId:'PARALLEL-M2-H2'});
+  assert.equal(replay.duplicate,true);
+  assert.deepEqual(replay.state,direct,'duplicate settlement mutated report');
+  duplicateChecks++;
   audit(direct,baseline,expected);
-  const restored=copy(direct);roundtrips++;
+  const restored=JSON.parse(JSON.stringify(resumed));roundtrips++;
   audit(restored,baseline,expected);
   const attacks=[
     x=>{firm(x,'H1').cashCent++;},
