@@ -67,3 +67,10 @@ WIR-02 und WIR-03 bleiben unabhängig davon **BLOCKED**.
 
 **Kein Merge, kein Release, keine persönliche Endabnahme vor
 eingefrorenem und vollständig technisch geprüftem Kandidaten.**
+
+
+## Erste GitHub-Ausführung und anschließende Härtung
+
+- [GitHub-CI #41160715066](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41160715066) auf Commit 60811928426b1f7071b3fb55a5397d22c588da3f: **PASS**. Der echte Node-Test, der maschinengeprüfte JSON-Vertrag und das Hochladen des Nachweises waren erfolgreich. [JSON-Artefakt](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41160715066/artifacts/13026952588).
+- Danach zusätzlich unabhängig kontrolliert: Summe **und Anzahl** aller tatsächlichen Außenmarkt-Verkaufsbelege gegen sämtliche Monatsberichte. Diese Härtung benötigt eine **neue GitHub-Prüfung auf dem finalen Dokumentations-HEAD**; bis dahin PENDING.
+- Der bestätigte Fachteil-PASS auf dem früheren Commit ist **keine** Freigabe von WIR-02/WIR-03, des produktiven Importwegs oder der integrierten Vorrelease-Sperre.
