@@ -34,3 +34,13 @@ GitHub-Prüfung: [prerelease-asset-cost-bridge.yml](https://github.com/provoware
 3. Vollständige Endpartien mit diesen Wirtschaftsfolgen und Browser-Speicherwiederherstellung prüfen; den sporadischen Dateiimportfehler, Medienrechte und C64-Originalvergleich separat weiterführen.
 
 **Kein Merge, kein Release. Persönliche Sichtprüfung und Kubuntu-Praxistest erst nach allen technischen Pflichtgates und eingefrorenem Kandidaten.**
+
+
+## Tatsächlicher GitHub-Nachweis und Fehlerkorrektur (31.10.2026)
+
+- [Erster CI-Lauf #41185012729](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41185012729): **FAIL**, obwohl das Fachskript selbst alle Prüfungen bestand. Ursache war ein Fehler im JSON-Ausgabeobjekt: Der nachträglich eingefügte Einzeldurchlauf überschrieb die Gesamtzahl 24 durch 12. Die GitHub-Sollprüfung erkannte dies korrekt (12 statt 24).
+- Korrektur-Commit [2addce766b0db1f0c952f609c2b436d9dd60a954](https://github.com/provoware/PROJEKT_Oli_Imperium/commit/2addce766b0db1f0c952f609c2b436d9dd60a954): Die Gesamtzahl wird nun nach beiden echten Durchläufen berechnet.
+- [Wiederholter GitHub-CI-Lauf #41185042086](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41185042086): **PASS** auf genau diesem Korrektur-HEAD. Node-Syntax, Engine-Szenarien, 4 Firmenkontrollen, 24 Negativproben, JSON-Sollwerte und Artefakt-Sicherung erfolgreich.
+- Beobachtete Summe pro Durchlauf: 31.600.000 Cent bezahlte Anschaffungen, 8.400.000 Cent reale regionale Erlöse, zwei Firmen mit je einem Feld, einer Bohrung, Raffinerie und Vertriebsroute; je 40.000 Milli-Barrel Restrohöl. Beide Firmen ohne Schulden oder unbezahlte Rechnungen in diesem Szenario. Das ist **kein** Test einer natürlichen Kreditkrise oder einer bewerteten Bilanz.
+
+Die integrierte Vorrelease-Sperre bleibt absichtlich **FAIL/BLOCKED**. Nach diesem Dokumentations-Commit ist die Fach-CI auf dem endgültigen HEAD erneut zu prüfen; ein PASS auf einem vorherigen Commit ersetzt diese Prüfung nicht. **WIR-04/BAL-01 bleiben BLOCKED; 6/52 PASS.** Kein Merge, kein Release.
