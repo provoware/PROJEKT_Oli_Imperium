@@ -17,10 +17,12 @@ function run(seed='IMPAIRMENT-2026'){
  }
  const close=()=>{move('END_TURN');move('END_TURN','H2')};
  const next=()=>move('NEXT_MONTH');
- function damaged(){
+ function damaged(withInventory=false){
   const claimId='BERLIN-1';
   move('SURVEY','H1',{claimId});move('BUY','H1',{claimId});
-  move('DRILL','H1',{claimId});close();
+  move('DRILL','H1',{claimId});
+  if(withInventory)move('PUMP','H1',{claimId});
+  close();
   for(let n=2;n<=4;n++){next();if(n<4)close();}
   assert.equal(state.month,4);
   assert.equal(state.claims[claimId].burning,true,'echt erzeugtes periodisches Brandereignis');
@@ -109,4 +111,11 @@ test('Bereits vollständig geminderter Buchwert bleibt auch über Folgemonate Nu
  const group=x.book.assets.filter(a=>a.ref===id);
  assert.ok(group.every(a=>a.bookCent===0));
  assert.equal(B.report(x.book,x.state).observedImpairmentCent,x.book.impairmentCent);
+});
+
+test('Beschädigtes Öllager: Anlagen-Schätzwert darf keinen unbekannten Warenschaden verdecken',()=>{
+ const x=run(),id=x.damaged(true);
+ assert.equal(x.state.claims[id].inventoryMilli,E.CFG.pumpMilli);
+ assert.throws(()=>B.recordDamageValuation(x.book,x.state,id,evidence(id,4,3000000)),/LAGERWERTMINDERUNG_OFFEN/);
+ assert.throws(()=>B.report(x.book,x.state),/WERTMINDERUNG_OFFEN/);
 });
