@@ -97,6 +97,33 @@ function audit(s,initial,allocations,stage,batches) {
     'audit: cross-company oil conservation '+stage);
   return {soldTotal,inventoryTotal,netLedgerTotal};
 }
+function auditFreightIntegrity(s, productQty, expected) {
+  const report=s.lastReport.publicNetwork;
+  for(const edge of PATH)
+    assert.equal(report.capacity[edge].usedMilli,18000,
+      'audit: shared freight capacity '+edge);
+  for(const id of IDS) {
+    const entries=report.freight.filter(row=>row.companyId===id);
+    assert.equal(entries.length,1,'audit: freight report count '+id);
+    const entry=entries[0];
+    assert.equal(entry.requestedMilli,productQty,'audit: freight request '+id);
+    assert.equal(entry.acceptedMilli,expected[id].acceptedMilli,'audit: accepted freight '+id);
+    assert.equal(entry.returnedMilli,expected[id].returnedMilli,'audit: returned freight '+id);
+    assert.equal(entry.acceptedMilli+entry.returnedMilli,entry.requestedMilli,
+      'audit: freight quantity conservation '+id);
+    const journal=company(s,id).ledger;
+    const holds=journal.filter(row=>row.code==='PUBLIC_FREIGHT_HOLD');
+    assert.equal(holds.length,1,'audit: freight hold count '+id);
+    assert.equal(holds[0].deltaCent,-P.freight(productQty,PATH),
+      'audit: freight hold amount '+id);
+    const refund=journal.filter(row=>row.code==='FRACHT_RUECKGABE')
+      .reduce((sum,row)=>sum+row.deltaCent,0);
+    assert.equal(refund,P.freight(entry.returnedMilli,PATH),
+      'audit: freight refund amount '+id);
+    assert.equal(-holds[0].deltaCent-refund,expected[id].netFreightCent,
+      'audit: net freight cost '+id);
+  }
+}
 function play(batches) {
   assert.ok(batches===1||batches===2);
   const rawQty=10000*batches, productQty=9000*batches;
@@ -178,6 +205,29 @@ function play(batches) {
     freight[id]={acceptedMilli:entry.acceptedMilli,returnedMilli:entry.returnedMilli,
       netFreightCent:held-refunded};
   }
+  auditFreightIntegrity(s,productQty,freight);
+  const freightCorruptions=[
+    state=>{state.lastReport.publicNetwork.capacity['B-BB'].usedMilli+=1;},
+    state=>{state.lastReport.publicNetwork.capacity['BB-N'].usedMilli+=1;}
+  ];
+  for(const id of IDS) {
+    freightCorruptions.push(
+      state=>{state.lastReport.publicNetwork.freight.find(row=>row.companyId===id).requestedMilli+=1;},
+      state=>{state.lastReport.publicNetwork.freight.find(row=>row.companyId===id).acceptedMilli+=1;},
+      state=>{state.lastReport.publicNetwork.freight.find(row=>row.companyId===id).returnedMilli+=1;},
+      state=>{company(state,id).ledger.find(row=>row.code==='PUBLIC_FREIGHT_HOLD').deltaCent+=1;}
+    );
+    if(batches===2) freightCorruptions.push(
+      state=>{company(state,id).ledger.find(row=>row.code==='FRACHT_RUECKGABE').deltaCent+=1;}
+    );
+  }
+  let freightCorruptionsCaught=0;
+  for(const mutate of freightCorruptions) {
+    const altered=copy(s);
+    mutate(altered);
+    assert.throws(()=>auditFreightIntegrity(altered,productQty,freight),/audit:/);
+    freightCorruptionsCaught++;
+  }
   assert.ok(IDS.some(id=>freight[id].acceptedMilli>0),'no actual public shipment');
   s=next(s,4);jsonRoundtrips++;
   s=close(s,4);jsonRoundtrips++;
@@ -215,6 +265,7 @@ function play(batches) {
   assert.equal(s.transport.shipments.length,0);
   s=next(s,6);jsonRoundtrips++;
   return {batches,months:5,companyMonthChecks:10,jsonRoundtrips,
+    freightCorruptionsCaught,
     duplicateQueues,foreignRejections,negativeChecks:caught,
     freight,allocation,totals,finalMonth:s.month};
 }
@@ -225,7 +276,7 @@ console.log(JSON.stringify({
   schema:'pppoppi.natural-multifirm-refinery/2',
   scenarios:2,repeatedRuns:2,simulatedMonths:20,companyMonthChecks:40,
   jsonRoundtrips:40,duplicateQueuesRejected:8,
-  negativeCorruptionsCaught:24,noInjectedOilOrCash:true,
+  negativeCorruptionsCaught:24,freightCorruptionsCaught:44,noInjectedOilOrCash:true,
   result:{baseline,congested},prereleaseGate:'BLOCKED',limitations:[
     'Two genuinely owned Berlin fields, two firms and two refineries; five completed months per scenario.',
     'Baseline and oversubscribed public network: two 18-barrel orders compete for 18-barrel shared capacity.',
