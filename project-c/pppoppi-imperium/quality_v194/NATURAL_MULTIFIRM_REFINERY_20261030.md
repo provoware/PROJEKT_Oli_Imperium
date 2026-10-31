@@ -111,3 +111,16 @@ oder Nutzer-Endabnahme.
 - **Grenzen:** Noch keine wiederholten Engpaesse ueber mehrere Frachtmonate mit Streckensperre und Reparatur, keine Gewinn-/Vermoegensbilanz, keine durchgaengige Endpartie, keine C64-Originalfreigabe und keine Rechteklaerung der 77 Archivdateien.
 
 **Naechste Implementierung:** Mehrmonatigen erneuten Kapazitaetskonflikt mit Streckensperre/Reparatur und kumulierter unabhaengiger Mengen-/Kassenpruefung modellieren; danach Endpartie- und Vermoegensgates separat bearbeiten. Kein Merge und kein Release.
+
+
+## Nachtrag 31.10.2026 – Frachtbelege gegen doppelte Buchungen absichern
+
+**Ausgangspunkt:** Der 44-Proben-Test von PR #142 wurde in [GitHub-CI #41151173632](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41151173632) erfolgreich ausgefuehrt. Dieser Nachtrag ist ein **neues, noch separat zu pruefendes** Pflichtpaket auf eigenem Entwicklungszweig.
+
+**Fehlerbild und Wirksamkeit:** Der bisherige Journalabgleich verglich bei Rueckerstattungen nur die Summe. Eine zusaetzliche Null-Cent-Rueckerstattung haette die Summe nicht veraendert. Der Pruefer verlangt jetzt bei tatsaechlicher Rueckgabe genau **einen** Rueckerstattungsbeleg, andernfalls **keinen**. Er testet zudem absichtlich doppelte Frachtberichte und doppelte Vorauszahlungsbelege in unveraenderten Spielstandkopien.
+
+**Verbindlicher Testumfang:** Basisfall 14 und Engpassfall 18 erkannte Fracht-Manipulationen je Durchlauf, jeweils zweimal deterministisch wiederholt: **64 Fracht-Negativproben** statt bisher 44. Zusaetzlich unveraendert: 24 Bestands-/Kassen-Negativproben, 20 simulierte Spielmonate, 40 Firmenkontrollen, 40 JSON-Rundlaeufe und acht abgewiesene doppelte Frachtauftraege. Der GitHub-Workflow erzwingt diese Zahlen; der Spielkern bleibt unangetastet.
+
+**Abnahme:** `node --check project-c/pppoppi-imperium/quality_v194/test_natural_multifirm_refinery_v194.cjs` und der komplette Node-Test im Workflow `.github/workflows/prerelease-natural-multifirm.yml`. **Status PENDING**, bis ein erfolgreicher GitHub-Lauf auf dem finalen Commit vorliegt. Dies ist eine Verschaerfung der Testpruefung, kein Beweis fuer eine Reparatur der produktiven Importvalidierung. WIR-02/WIR-03 bleiben BLOCKED. Keine Gewinn-/Vermoegensbewertung, keine vollstaendige Endpartie, keine historische C64-Verifikation oder Rechtefreigabe.
+
+**Naechste Implementierung:** Mehrere aufeinanderfolgende Frachtmonate mit wiederholtem Engpass, Streckensperre und Reparatur sowie kumulierter Mengen- und Kassenbilanz. Kein Merge, kein Release und keine vorgezogene persoenliche Endabnahme.
