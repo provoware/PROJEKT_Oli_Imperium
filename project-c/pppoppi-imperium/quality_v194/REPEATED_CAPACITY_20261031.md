@@ -11,7 +11,7 @@ Die neue Pruefung verwendet ausschliesslich echte Aktionen des unveraenderten Sp
 | M1 | Feldkauf, Bohrung, Foerderung, Infrastruktur und je 20 Barrel Rohtransport |
 | M2 | Je zwei Raffineriechargen und 18 Barrel Fertigware |
 | M3 | Zweiter echter Rohtransport von je 20 Barrel (regional maximal 30 Barrel/Monat); **erster Engpass:** je 18 Barrel angefordert; je 9 angenommen und 9 erstattet; gemeinsames Limit 18 |
-| M4 | Je zwei weitere echte Raffineriechargen |
+| M4 | Gegebenenfalls reale Feldschaeden mit bezahlter Reparatur/Feuerwehr beheben; je zwei weitere echte Raffineriechargen |
 | M5 | Je 18 weitere Barrel Fertigware zum Lager; erste je 9 Barrel am Aussenmarkt verkauft |
 | M6 | **Zweiter unabhaengiger Engpass:** erneut je 18 angefordert, je 9 angenommen und 9 erstattet; gemeinsames Limit 18 |
 | M8 | Automatische Streckensperre, je 9 Barrel voll erstattet; je 9 zuvor angelieferte Barrel verkauft |
@@ -40,3 +40,5 @@ WIR-02/WIR-03 bleiben **BLOCKED**: Der Test prueft nur zwei wiederholte Engpassm
 
 ## Fehlerkorrektur der Erstpruefung
 Der erste GitHub-Lauf [#41165242177](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41165242177) endete mit **FAIL**: Die Testaktion versuchte 40 Barrel Rohtransport in einem Monat, obwohl der unveraenderte Spielkern je Rohstrecke maximal 30 Barrel/Monat zulaesst. Die Testabfolge wurde korrigiert: je 20 Barrel in M1 und M3, ohne Kapazitaetsgrenzen zu umgehen. Die neue CI muss erneut erfolgreich sein; kein PASS aus diesem Fehlversuch.
+
+Der zweite GitHub-Lauf [#41165297209](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41165297209) endete **FAIL** mit `Anlage gestört`: Ein reguläres Spielereignis hatte vor M4 ein Feld beschädigt. Der Test verwendet deshalb vor der zweiten Verarbeitung bei Bedarf die echten kostenpflichtigen Aktionen `FIRE_EXPERT` und `REPAIR`; weder Schaden noch Kontostand werden direkt überschrieben. Neuer GitHub-Lauf erforderlich.
