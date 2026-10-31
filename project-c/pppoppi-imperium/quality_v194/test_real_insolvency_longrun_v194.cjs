@@ -229,7 +229,8 @@ function scenario() {
     x=>{firm(x,'H1').cashCent++;},
     x=>{const f=firm(x,'H1');f.ledger.push(copy(f.ledger.at(-1)));},
     x=>{const f=firm(x,'H1');const p=f.ledger.filter(e=>e.code==='ZAHLUNG_PERSONAL');
-      p[0].deltaCent--;p[1].deltaCent++;},
+      const q=f.ledger.find(e=>e.code==='ZAHLUNG_WARTUNG');
+      p[0].deltaCent--;q.deltaCent++;},
     x=>{firm(x,'H1').obligations[0].paidCent++;},
     x=>{firm(x,'H1').obligations[0].dueCent++;},
     x=>{const f=firm(x,'H1');f.obligations.push(copy(f.obligations[0]));},
@@ -246,10 +247,10 @@ function scenario() {
     x=>{firm(x,'H2').obligations[0].dueCent++;},
     x=>{firm(x,'H2').ledger.find(e=>e.code==='ZAHLUNG_PERSONAL').info='ORPHAN';}
   ];
-  for(const corrupt of crisisCorruptions) {
+  for(const [index,corrupt] of crisisCorruptions.entries()) {
     const damaged=copy(s);corrupt(damaged);
     assert.throws(()=>auditPreRestart(damaged,E.CFG.startCash),
-      'undetected pre-insolvency accounting corruption');
+      'undetected pre-insolvency accounting corruption #'+(index+1));
   }
   const released=owned(s,'H1');
   assert.deepEqual(released,['BERLIN-1','BRANDENBURG-1']);
