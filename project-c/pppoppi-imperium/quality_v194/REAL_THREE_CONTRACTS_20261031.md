@@ -35,3 +35,31 @@ WIR-03 und WIR-04 bleiben **BLOCKED**; unverändert **6 PASS / 39 BLOCKED / 4 OP
 **Nächste konkrete technische Implementierung:** Zusammenhängenden mehrmonatigen Dreivertragsverlauf mit wiederholter Fälligkeit, neuen Abschlüssen und natürlichen Zahlungsschwierigkeiten bis zur Sanierung prüfen. Forderungs- und Vermögensbewertung nur nach fachlich dokumentierter Modellentscheidung ergänzen.
 
 **Sperre:** PR bleibt DRAFT, kein Merge nach `main`, keine Veröffentlichung und keine Releasefreigabe.
+
+## Nachtrag 01.11.2026 – zweiter Vertragszyklus ohne Altbuchungen
+
+Der Test setzt die echte Viermonatsfolge fort: In Monat 5 wird nach den drei
+abgeschlossenen Regionalverträgen erneut ein BERLIN-Vertrag über 40.000
+Milli-Barrel geschlossen. Die verbliebenen 60.000 Milli-Barrel stammen aus
+regulärer Förderung; in Monat 6 wird der neue Vertrag fällig. Es werden weder
+Geld noch Lagerbestände künstlich erzeugt.
+
+**Zusätzliche Sollprüfungen:** vier weitere Firmen-Monatsbeobachtungen je
+Durchlauf (insgesamt 24), zweite Fälligkeit mit unabhängiger Cent-Rechnung,
+alte Verträge und alte Rechnungen unverändert, keine zweite Auszahlung alter
+Vertragserlöse, unveränderte historische Berichte, 20.000 Milli-Barrel
+Restlager, JSON-Fortsetzung mit identischen Vorgangskennungen und acht
+zusätzliche Manipulationsproben je Durchlauf. **Gesamtsoll:** zwei
+deterministische Sechsmonatsläufe, 40 Negativproben, 10 JSON-Rundläufe.
+
+**Prüfstand bei Einreichung:** Änderungen auf getrenntem Entwicklungszweig,
+GitHub-Fach-CI auf endgültigem Dokumentations-HEAD noch **PENDING**.
+Lokaler Node-Lauf in dieser Ausführung nicht möglich; daher vor erfolgreichem
+GitHub-Lauf ausdrücklich **kein PASS** für das neue Paket.
+
+**Grenzen:** Eine zweite Vertragsfälligkeit ist keine vollständige Endpartie.
+Eine echte Debitorenforderung wird im Spielkern weiterhin nicht angelegt.
+Natürliche Zahlungsnot durch wiederholte Verträge, mehrmonatige
+Insolvenz-Endwertung, Gewinn-/Vermögensbilanz und historische Originaltreue
+bleiben offen. Die 52er-Pflichtmatrix bleibt bei 6 PASS / 39 BLOCKED /
+4 OPEN / 3 DEFERRED. Kein Merge, kein Release und keine persönliche Endabnahme.
