@@ -12,7 +12,7 @@ Die bestehenden 11-Monats-Tests belegen reale Förderung, Raffinerie, Frachtengp
 - Außenmarktabsatz darf das gemeldete Marktlimit nie überschreiten. Für zwei Angebote zu je 18.000 Milli-Barrel bei 18.000 Gesamtbedarf wird die unveränderte Zuteilungsfunktion separat in beiden Eingabereihenfolgen geprüft: je 9.000 Zuteilung.
 - Negative Tests müssen verfälschten Marktpreis, Marktlimit und Verkaufserlös erkennen; alle bisherigen Mengen-/Kassenprüfungen bleiben aktiv.
 
-**Sollzahlen:** zwei Durchläufe, 22 Spielmonate, 44 Firmen-Monatskontrollen, 42 JSON-Rundläufe, 16 Duplikatsperren, 26 Manipulationsproben, zwei Fremdaktionssperren und zwei öffentliche Reparaturen. Die GitHub-CI prüft die JSON-Ausgabe und speichert sie als Artefakt.
+**Sollzahlen:** zwei Durchläufe, 22 Spielmonate, 44 Firmen-Monatskontrollen, 42 JSON-Rundläufe, 16 Duplikatsperren, 30 Manipulationsproben, zwei Fremdaktionssperren und zwei öffentliche Reparaturen. Die GitHub-CI prüft die JSON-Ausgabe und speichert sie als Artefakt.
 
 ## Fehlerhistorie und fachliche Abgrenzung
 - [CI #41169089334](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41169089334) **FAIL**: Falsche Testannahme über bereits eingetroffene, nicht verkaufte Ware.
@@ -30,3 +30,13 @@ Diese Fehlversuche zeigen, dass ein natürlich gesättigter Außenmarkt **nicht*
 3. Gewinn-/Anlagenbewertung und Endpartien weiterentwickeln; historische Referenz und Medienrechte getrennt blockiert lassen.
 
 **DRAFT – kein Merge, kein Release, keine persönliche Endabnahme.**
+
+## Ergänzende Pflichtprüfung – 31.10.2026, 06:35 MEZ
+
+Der bisherige Fachtest auf HEAD `63b500fb6978413178fd25fa9b54d2666a01d555` ist in [GitHub-CI #41169684084](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41169684084) **PASS**. Unabhängig davon scheitert die integrierte Vorrelease-Sperre weiterhin erwartungsgemäß; die Browser-Gesamtprüfung auf demselben HEAD ist **FAIL** und kein Freigabenachweis.
+
+**Neu:** Der Marktprüfer fordert nun nicht nur `verkauft <= Nachfrage`, sondern `verkauft = min(angeboten, Nachfrage)` und eine proportional faire Zuteilung mit höchstens einem Milli-Barrel Rundungsabweichung. Der Sollwert wird ohne Aufruf der produktiven Zuteilungsfunktion berechnet. Zwei neue gezielte Negativfälle pro Wiederholung manipulieren zugleich Verkaufsbericht, Rückgabemenge, Kassenstand und Journal: (a) 1.000 Milli-Barrel unterschlagene Zuteilung und (b) ungerechte 10.000/8.000-Zuteilung bei zwei Angeboten zu je 18.000. Dadurch bleiben die Einzelbuchungen formal stimmig; nur der unabhängige Zuteilungsprüfer muss den Fehler erkennen.
+
+**Prüfziel:** 30 statt 26 erkannte Manipulationen in zwei Durchläufen. Der synthetisch verfälschte 18+18-Fall ist ausdrücklich **kein** Beleg einer natürlich überbuchten Spielpartie. WIR-01/02/03 bleiben BLOCKED, die 52er-Matrix bleibt bei 6 PASS / 39 BLOCKED / 4 OPEN / 3 DEFERRED. Neue CI auf endgültigem Commit ist vor einer PASS-Aussage abzuwarten.
+
+**Nächste Implementierung:** wirtschaftlich tragfähige, natürlich überbuchte Außenmarktpartie mit aus echten Lieferungen aufgebauten Lagerbeständen, danach Gewinn-/Vermögensrechnung und vollständige Endpartien. Kein Merge, kein Release.
