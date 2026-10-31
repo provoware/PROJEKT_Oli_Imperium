@@ -89,6 +89,9 @@ test('Echte Warenwirtschaft über vier Monate: Rohöl, Raffinerie, Netztransport
  assert.equal(B.valuation(x.book,x.state).inTransitBookCent,76400);
  x.close();x.next();
  assert.equal(B.valuation(x.book,x.state).inTransitBookCent,0,'Fertigware im Marktdepot eingetroffen');
+ assert.equal(x.state.claims[id].burning,true,'Vierter Monat: reales Brandereignis');
+ a('FIRE_EXPERT',{claimId:id});
+ assert.equal(x.state.claims[id].burning,false,'Reale Brandbekämpfung vor Bewertung');
  a('NETWORK_OFFER',{region:'BERLIN',claimId:id});x.close();
  assert.equal(x.book.monthsClosed,4);
  const report=B.report(x.book,x.state);
@@ -99,13 +102,13 @@ test('Echte Warenwirtschaft über vier Monate: Rohöl, Raffinerie, Netztransport
  assert.equal(report.observedRevenueCent,7897311);
  assert.equal(report.observedDepreciationCent,444999);
  assert.equal(x.book.raw.BERLIN.cent,102600,'Rohöl-Restbestand einschließlich Anlieferungskosten bleibt Vermögen');
- assert.equal(report.equityCent,26374812);
- assert.equal(report.observedModelResultCent,6374812);
+ assert.equal(report.equityCent,26374812-E.COST.fireExpertCost);
+ assert.equal(report.observedModelResultCent,6374812-E.COST.fireExpertCost);
  assert.equal(report.equityCent-E.CFG.startCash,
   x.book.revenueCent-x.book.expenseCent-x.book.costOfSalesCent-x.book.depreciationCent,
   'Vermögensänderung stimmt mit Umsatz, Aufwand, Herstellkosten und Abschreibung überein');
  assert.equal(report.assetsCent,report.equityCent);
- assert.equal(x.steps.length,30,'Jeder echte Übergang und Monatsabschluss beobachtet');
+ assert.equal(x.steps.length,31,'Brandlöschung ist zusätzlicher echter Wirtschaftsübergang');
 });
 test('Abschreibung beginnt erst im Folgemonat und besitzt keine fiktive Verkaufsgutschrift',()=>{
  const x=scenario(),id='BERLIN-1';
