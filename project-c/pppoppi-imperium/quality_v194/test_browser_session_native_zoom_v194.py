@@ -39,6 +39,41 @@ def keyboard_button(page, selector, label):
     return button
 
 
+def isolated_filechooser_control(page):
+    """Nur NACH einem FAIL: prueft einen unabhaengigen nativen Picker.
+
+    Keine Wiederholung des Spiel-Imports und kein direktes Setzen einer Datei.
+    Ein erfolgreicher Kontroll-Picker macht den urspruenglichen Fehler nicht gruen.
+    """
+    try:
+        page.evaluate("""() => {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.id = '__pickerControlInput';
+            input.hidden = true;
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.id = '__pickerControlButton';
+            button.textContent = 'Native picker diagnostic';
+            button.addEventListener('click', () => input.showPicker());
+            document.body.append(input, button);
+        }""")
+        page.locator('#__pickerControlButton').focus()
+        try:
+            with page.expect_file_chooser(timeout=2500):
+                page.keyboard.press('Enter')
+            return 'OPENED_AFTER_ORIGINAL_FAILURE'
+        except PlaywrightTimeoutError:
+            return 'NO_FILECHOOSER_ON_INDEPENDENT_CONTROL'
+    except Exception as error:
+        return 'CONTROL_ERROR: ' + type(error).__name__ + ': ' + str(error)[:160]
+    finally:
+        page.evaluate("""() => {
+            document.getElementById('__pickerControlButton')?.remove();
+            document.getElementById('__pickerControlInput')?.remove();
+        }""")
+
+
 def audit_session(page, worker, zoom, download_dir):
     label = str(round(zoom * 100)) + "%"
     errors, external = [], []
@@ -165,13 +200,22 @@ def audit_session(page, worker, zoom, download_dir):
                 focusOnImport: focused === button,
                 focusedTag: focused?.tagName || null,
                 dialogOpen: document.querySelector('#dialog')?.open,
+                documentHasFocus: document.hasFocus(),
+                visibilityState: document.visibilityState,
+                activationAfterTimeout: navigator.userActivation?.isActive ?? null,
                 fileInputs: inputs.map(input => ({
+                    id: input.id,
                     connected: input.isConnected,
                     disabled: input.disabled,
+                    hidden: input.hidden,
+                    display: getComputedStyle(input).display,
                     files: input.files?.length ?? null
                 }))
             };
         }""")
+        # Diagnose erst NACH dem echten Fehler. Selbst ein erfolgreicher
+        # Kontroll-Picker darf den fehlgeschlagenen Import niemals ersetzen.
+        diagnostics["independentPickerControl"] = isolated_filechooser_control(page)
         print("SESSION-FILECHOOSER-FAIL:", json.dumps(
             {"zoom_percent": round(zoom * 100), **diagnostics},
             ensure_ascii=False), flush=True)
