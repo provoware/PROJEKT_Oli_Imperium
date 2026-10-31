@@ -207,6 +207,12 @@ function play() {
     if(month===4) {
       for(let i=0;i<2;i++) {
         const id=IDS[i],claimId=CLAIMS[i];
+        // Real month-end events may damage or ignite a claim. Use the
+        // existing paid game actions; never clear a damage flag directly.
+        if(s.claims[claimId].burning)
+          s=act(s,command('FIRE_EXPERT',id,'M4-EXTINGUISH',{claimId}));
+        if(s.claims[claimId].damaged)
+          s=act(s,command('REPAIR',id,'M4-REPAIR',{claimId}));
         for(let n=0;n<2;n++) s=act(s,command('NETWORK_REFINE',id,'M4-REFINE-'+n,
           {region:'BERLIN',claimId}));
       }
