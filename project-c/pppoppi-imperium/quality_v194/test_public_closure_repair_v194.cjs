@@ -253,8 +253,14 @@ function play() {
     assert.equal(s.publicNetwork.received[id].NORD,9000);
     s=act(s,command('PUBLIC_OFFER',id,'M11-OFFER',
       {from:'BERLIN',to:'NORD',qtyMilli:9000}));
+    s=end(s,id,11);
   }
-  settle(11);
+  assert.equal(s.phase,'REPORT');
+  assert.equal(s.reports.length,11);
+  for(const id of IDS)
+    sold[id]+=s.lastReport.publicNetwork.productMarket.NORD.allocations[id].soldMilli;
+  audit(s,initial,sold,batches,'M11');
+  s=roundtrip(s);roundtrips++;
   assert.deepEqual(sold,{H1:18000,H2:18000});
   for(const id of IDS) {
     assert.equal(s.claims[CLAIMS[IDS.indexOf(id)]].inventoryMilli,80000);
