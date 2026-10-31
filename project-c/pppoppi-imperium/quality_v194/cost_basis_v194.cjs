@@ -8,23 +8,23 @@ function engineSpecs(){const e=globalThis.OliV082?.CFG,p=globalThis.PPProfi?.COS
  return {pumpMilli:e.pumpMilli,rawBatchMilli:p.rawBatchMilli,yieldMilli:p.yieldMilli};
 }
 const POLICY=Object.freeze({
- id:'PPPOPPI-ADAPT/FIN-COST/1-DRAFT',status:'DRAFT_NOT_APPROVED',
+ id:'PPPOPPI-ADAPT/FIN-COST/2-DRAFT',status:'DRAFT_NOT_APPROVED',
  fieldLifeMonths:120,drillLifeMonths:120,tankLifeMonths:60,
  refineryLifeMonths:120,routeLifeMonths:60,networkLifeMonths:60,
  depreciation:'linear, cent-genau, ab Folgemonat, Restcent im Schlussmonat',
  production:'tatsaechliche FOERDERUNG-Auszahlung als Rohölkosten',
  manufacturing:'10 Barrel Rohöl plus reale Verarbeitungszahlung werden 9 Barrel Fertigware',
  stock:'regionaler gewichteter Durchschnitt; nur Herstellkosten, nie Marktpreis',
- transport:'eigene Frachten als Periodenaufwand; Warenbestand bleibt Eigentum',
+ transport:'nachgewiesene Rohöl-Zulieferfracht wird Rohölkostenbestand; Fertigwarentransport = Aufwand; öffentliche Fracht-HOLD = Vorauszahlung bis Monatsauktion',
  trade:'Erlös erst beim tatsächlichen gutgeschriebenen Marktabschluss',
  receivables:'ohne nachgewiesene offene Lieferung keine Forderung ansetzen',
  purchase:'Kauf/Bohrung/Bau zum ausgewiesenen Anschaffungswert, Gutachten als Aufwand',
  capital:'Eigentümer-Einlagen/Entnahmen nur gegen gesonderten Beleg',
  releaseGate:'BLOCKED'
 });
-const cap=new Set(['FELDKAUF','FACHBOHRUNG','TANKAUSBAU','RAFFINERIE_BAU','VERTRIEBSROUTE','STRECKENBAU']);
-const cost=new Set(['GUTACHTEN','TRANSPORT','FRACHT','REPARATUR','BRANDBEKÄMPFUNG_PROFI','TRANSPORT_REPARATUR','ZAHLUNG_PERSONAL','ZAHLUNG_WARTUNG','ZAHLUNG_ZINS']);
-const sale=new Set(['MARKTERLÖS','RAFFINIERT_MONATSVERKAUF','AUSSENMARKT']);
+const cap=new Set(['FELDKAUF','FACHBOHRUNG','TANKAUSBAU','RAFFINERIE_BAU','VERTRIEBSROUTE','STRECKENBAU','PUBLIC_CONNECT']);
+const cost=new Set(['GUTACHTEN','TRANSPORT','REPARATUR','BRANDBEKÄMPFUNG_PROFI','TRANSPORT_REPARATUR','PUBLIC_REPAIR','ZAHLUNG_PERSONAL','ZAHLUNG_WARTUNG','ZAHLUNG_ZINS','ZAHLUNG_VERTRAGSTRANSPORT','ZAHLUNG_VERTRAGSSTRAFE','OBJEKTSCHUTZ','REPARATUR','SABOTAGEVERSUCH','MINISPIEL_FIRE','MINISPIEL_DRILL','MINISPIEL_PIPE','BRANDBEKÄMPFUNG_PROFI']);
+const sale=new Set(['MARKTERLÖS','RAFFINIERT_MONATSVERKAUF','AUSSENMARKT','VERTRAGSERLÖS']);
 const financingIn=new Set(['RETTUNGSKREDIT','KI_RETTUNGSKREDIT']);
 const financingOut=new Set(['ZAHLUNG_TILGUNG']);
 const zero=new Set(['PIPELINE_GUTSCHRIFT']); // Gutschrift ist kein Verkauf
@@ -88,13 +88,14 @@ function seed(s,id){
  return {modelId:POLICY.id,companyId:id,generation:f.generation,
   month:s.month,phase:s.phase,cashCent:cents(f.cashCent),debtCent:0,
   ledgerCount:0,ledgerLastId:null,raw,product,assets:[],openingEquityCent:cents(f.cashCent),
+  heldFreightCent:0,assetSaleProceedsCent:0,assetDisposalsBookCent:0,capitalizedInboundFreightCent:0,
   revenueCent:0,expenseCent:0,costOfSalesCent:0,depreciationCent:0,
   observedSteps:0,monthsClosed:0,releaseGate:'BLOCKED'};
 }
 function classifyAsset(code,entry,month){
  const kind=code==='FELDKAUF'?'field':code==='FACHBOHRUNG'?'drill':
   code==='TANKAUSBAU'?'tank':code==='RAFFINERIE_BAU'?'refinery':
-  code==='VERTRIEBSROUTE'?'route':'network';
+  code==='VERTRIEBSROUTE'?'route':code==='PUBLIC_CONNECT'?'publicAccess':'network';
  const months=POLICY[kind==='field'?'fieldLifeMonths':
   kind==='drill'?'drillLifeMonths':kind==='tank'?'tankLifeMonths':
   kind==='refinery'?'refineryLifeMonths':kind==='route'?'routeLifeMonths':'networkLifeMonths'];
@@ -128,6 +129,9 @@ function reconcile(previous,current,original){
    throw Error('Buchungsregister nachtraeglich veraendert');
  const newly=after.ledger.slice(before.ledger.length);
  let cashDelta=0;const pump={},refine={},rawSales={},productSales={};
+ const newRawShipments=(current.transport?.shipments||[]).filter(x=>x.companyId===id&&x.type==='RAW'&&!((previous.transport?.shipments||[]).some(y=>y.id===x.id)));
+ const usedInbound=new Set();
+ let pendingSaleClaim=null;
  let loanReceipts=0,loanPayments=0;
  for(const r of Object.keys(prior)){pump[r]=0;refine[r]=0;rawSales[r]=0;productSales[r]=0;}
  for(const x of newly){
@@ -159,6 +163,39 @@ function reconcile(previous,current,original){
   }else if(financingOut.has(x.code)){
    if(x.deltaCent>=0)throw Error('Tilgung ohne Abfluss');
    loanPayments=plus(loanPayments,-x.deltaCent);
+  }else if(x.code==='FRACHT'){
+   if(x.deltaCent>=0)throw Error('Fracht ohne Abfluss');
+   const matching=newRawShipments.filter(sh=>sh.path.join(' > ')===x.info&&sh.freightCent===-x.deltaCent&&!usedInbound.has(sh.id));
+   if(matching.length===1){
+    const sh=matching[0];usedInbound.add(sh.id);
+    if(!b.raw[sh.region]||b.raw[sh.region].qty<sh.qtyMilli)throw Error('Rohöl-Fracht ohne belegte Menge');
+    b.raw[sh.region].cent=plus(b.raw[sh.region].cent,-x.deltaCent);
+    b.capitalizedInboundFreightCent=plus(b.capitalizedInboundFreightCent,-x.deltaCent);
+   }else if(matching.length===0){
+    if(String(x.info).includes(':RAW:'))throw Error('Rohöl-Fracht ohne passenden Transportschein');
+    b.expenseCent=plus(b.expenseCent,-x.deltaCent);
+   }else throw Error('Mehrdeutiger Rohöl-Frachtbeleg');
+  }else if(x.code==='PUBLIC_FREIGHT_HOLD'){
+   if(x.deltaCent>=0)throw Error('Frachtvorauszahlung ohne Kassenabfluss');
+   b.heldFreightCent=plus(b.heldFreightCent,-x.deltaCent);
+  }else if(x.code==='FRACHT_RUECKGABE'){
+   if(x.deltaCent<0||x.deltaCent>b.heldFreightCent)throw Error('Unbelegte Frachtrueckgabe');
+   b.heldFreightCent=sub(b.heldFreightCent,x.deltaCent);
+  }else if(x.code==='NOTVERKAUF'){
+   if(x.deltaCent<=0)throw Error('Notverkauf ohne Verkaufspreis');
+   if(pendingSaleClaim!==null)throw Error('Mehrfacher Notverkauf nicht belegt');
+   const owned=previous.claims?.[x.info],released=current.claims?.[x.info];
+   if(!owned||owned.owner!==id||released?.owner!==null||owned.inventoryMilli||owned.preparedMilli)
+    throw Error('Notverkauf nicht eindeutig oder mit unbewerteten Lagerabgaengen');
+   if((previous.transport?.shipments||[]).some(sh=>sh.companyId===id&&sh.claimId===x.info))
+    throw Error('Notverkauf mit offener Rohöllieferung');
+   pendingSaleClaim=x.info;
+   b.assetSaleProceedsCent=plus(b.assetSaleProceedsCent,x.deltaCent);
+   b.revenueCent=plus(b.revenueCent,x.deltaCent);
+   const removed=b.assets.filter(a=>a.ref===x.info||(a.kind==='network'&&a.ref.endsWith(':RAW:'+x.info)));
+   if(!removed.length)throw Error('Kein Buchwert zum Notverkauf gefunden');
+   for(const a of removed){b.expenseCent=plus(b.expenseCent,a.bookCent);b.assetDisposalsBookCent=plus(b.assetDisposalsBookCent,a.bookCent);}
+   b.assets=b.assets.filter(a=>!removed.includes(a));
   }else if(cost.has(x.code)){
    if(x.deltaCent>0)throw Error('Aufwand mit positivem Vorzeichen');
    b.expenseCent=plus(b.expenseCent,-x.deltaCent);
@@ -182,10 +219,30 @@ function reconcile(previous,current,original){
  b.expenseCent=plus(b.expenseCent,sub(closingBills,priorBills));
  // Verkaufsberichte werden nur bei echtem Monatsabschluss einmal ausgewertet.
  const closing=previous.phase!=='REPORT'&&current.phase==='REPORT'&&current.month===previous.month;
+ if(closing){
+  const auction=current.lastReport?.publicNetwork;
+  if(!auction||!Array.isArray(auction.freight))throw Error('Keine öffentliche Frachtabrechnung am Monatsende');
+  const total=auction.freight.filter(x=>x.companyId===id).reduce((n,x)=>plus(n,cents(x.freightCent)),0);
+  if(total!==b.heldFreightCent)throw Error('Frachtvorauszahlung/Monatsabrechnung stimmt nicht');
+  b.expenseCent=plus(b.expenseCent,total);b.heldFreightCent=0;
+  for(const x of auction.freight.filter(x=>x.companyId===id&&x.acceptedMilli)){
+   if(!b.product[x.from]||!b.product[x.to])throw Error('Öffentlicher Transport in ungekannte Region');
+   const booked=take(b.product[x.from],x.acceptedMilli);
+   b.product[x.to].qty=plus(b.product[x.to].qty,x.acceptedMilli);
+   b.product[x.to].cent=plus(b.product[x.to].cent,booked);
+  }
+ }
  const nextTotals=bookTotals(current,id);
  for(const r of Object.keys(prior)){
   let soldRaw=0,soldProduct=0;
   if(closing){
+   for(const v of after.contracts||[]){
+    const old=(before.contracts||[]).find(x=>x.id===v.id);
+    if(v.region===r&&old?.status==='OPEN'&&v.status!=='OPEN'){
+     if(!Number.isSafeInteger(v.soldMilli)||v.soldMilli<0)throw Error('Unbelegte Vertragsmenge');
+     soldRaw=plus(soldRaw,v.soldMilli);
+    }
+   }
    for(const claim of Object.values(previous.claims||{}))if(claim.owner===id&&claim.region===r){
     soldRaw=plus(soldRaw,current.lastReport?.allocations?.[r]?.[claim.id]||0);
    }
@@ -239,19 +296,23 @@ function valuation(b,s){
   modelId:POLICY.id,evidenceRef:'ENGINE-OBSERVED-LEDGER-AND-QUANTITIES; POLICY-NOT-APPROVED',
   receivablesCent:0,inventoryBookCent:stock,inTransitBookCent:transit,
   claimBookCent:field,refineryBookCent:refinery,networkBookCent:network,
-  prepaymentBookCent:0,otherAssetsCent:0,additionalLiabilitiesCent:0
+  prepaymentBookCent:cents(b.heldFreightCent),otherAssetsCent:0,additionalLiabilitiesCent:0
  };
 }
 function report(b,state){
  if(b.month!==state.month||b.phase!==state.phase||b.cashCent!==state.companies.find(f=>f.id===b.companyId)?.cashCent)
   throw Error('Buchstand und Spielstand differieren');
  const v=valuation(b,state);
+ if(Object.values(state.claims||{}).some(x=>x.owner===b.companyId&&(x.burning||x.damaged)))
+  throw Error('WERTMINDERUNG_OFFEN: Beschädigte Anlage nicht ohne Nachweis bewerten');
  const computed=A.snapshot(state,b.companyId,v);
  const netResult=sub(computed.equityCent,b.openingEquityCent);
  const recognizedResult=sub(sub(sub(b.revenueCent,b.expenseCent),b.costOfSalesCent),b.depreciationCent);
  if(netResult!==recognizedResult)throw Error('Bilanzgleichung/Erfolgsrechnung nicht abstimmbar');
  return {...computed,policy:POLICY.id,observedModelResultCent:netResult,accountingProfitCent:null,
   observedRevenueCent:b.revenueCent,observedOperatingOutflowsCent:b.expenseCent,
+  observedInboundFreightCapitalizedCent:b.capitalizedInboundFreightCent,
+  observedPublicFreightHeldCent:b.heldFreightCent,observedAssetSaleProceedsCent:b.assetSaleProceedsCent,
   observedProductionCostCent:Object.values(b.raw).reduce((n,x)=>plus(n,x.cent),0),
   observedCOGSCent:b.costOfSalesCent,observedDepreciationCent:b.depreciationCent,
   periodsClosed:b.monthsClosed,releaseGate:'BLOCKED',status:'MODEL_ONLY_UNAPPROVED'};
