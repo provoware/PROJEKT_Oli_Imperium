@@ -28,12 +28,12 @@ function invoice(f,month,kind) {
   return found[0];
 }
 function cashAudit(f,opening) {
+  assert.equal(new Set(f.ledger.map(e=>e.id)).size,f.ledger.length,
+    'duplicate booking ID');
   assert.equal(f.cashCent,opening+f.ledger.reduce((n,e)=>{
     assert.ok(Number.isSafeInteger(e.deltaCent),'unsafe booking');
     return n+e.deltaCent;
   },0),'cashbook does not reconcile');
-  assert.equal(new Set(f.ledger.map(e=>e.id)).size,f.ledger.length,
-    'duplicate booking ID');
 }
 function run() {
   sequence=0;
