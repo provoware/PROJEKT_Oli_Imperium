@@ -50,7 +50,7 @@ function marketAudit(s,stage) {
   assert.equal(market.priceCent,Math.floor((region.priceCent*115+50)/100),
     'market audit: export price calculation '+stage);
   const lines=market.allocations;
-  let totalSold=0,totalRevenue=0;
+  let totalSold=0,totalOffered=0,totalRevenue=0;
   for(const id of IDS) {
     const row=lines[id],journal=firm(s,id).ledger.filter(x=>
       x.month===report.month&&x.code==='AUSSENMARKT');
@@ -71,10 +71,24 @@ function marketAudit(s,stage) {
     assert.equal(journal.reduce((n,x)=>n+x.deltaCent,0),row.revenueCent,
       'market audit: journal value '+stage+' '+id);
     totalSold+=row.soldMilli;
+    totalOffered+=row.offeredMilli;
     totalRevenue+=row.revenueCent;
   }
-  assert.ok(totalSold<=market.demandMilli,
-    'market audit: demand exceeded '+stage);
+  // Independent oracle: all available demand must be allocated, not merely
+  // kept below the cap. Proportional shares may differ by at most one milli.
+  // Deliberately do not reuse the production allocator as the test oracle.
+  assert.ok(Number.isSafeInteger(totalOffered),'market audit: offer overflow '+stage);
+  const target=Math.min(totalOffered,market.demandMilli);
+  assert.equal(totalSold,target,
+    'market audit: incomplete or excessive allocation '+stage);
+  for(const id of IDS) {
+    const row=lines[id];
+    if(!row)continue;
+    const difference=BigInt(row.soldMilli)*BigInt(totalOffered)-
+      BigInt(row.offeredMilli)*BigInt(target);
+    assert.ok(difference>=-BigInt(totalOffered)&&difference<=BigInt(totalOffered),
+      'market audit: disproportionate allocation '+stage+' '+id);
+  }
   assert.ok(totalRevenue>=0,'market audit: negative revenue '+stage);
 }
 function audit(s,initial,sold,batches,stage) {
@@ -374,6 +388,40 @@ function play() {
   ]) {
     const bad=clone(s);mutation(bad);
     assert.throws(()=>marketAudit(bad,'tampered-M11'),/market audit:/);
+    corruptions++;
+  }
+  // Two adversarial report+cash+journal mutations: ordinary row arithmetic,
+  // revenue rounding and cash accounting still agree, but allocation is wrong.
+  {
+    const bad=clone(s),m=bad.lastReport.publicNetwork.productMarket.NORD;
+    const row=m.allocations.H1,previous=row.revenueCent;
+    row.soldMilli-=1000;
+    row.returnedMilli+=1000;
+    row.revenueCent=Math.floor((row.soldMilli*m.priceCent+500)/1000);
+    const entry=firm(bad,'H1').ledger.find(x=>x.month===11&&x.code==='AUSSENMARKT');
+    assert.ok(entry,'expected real M11 export journal');
+    entry.deltaCent=row.revenueCent;
+    firm(bad,'H1').cashCent+=row.revenueCent-previous;
+    assert.throws(()=>marketAudit(bad,'tampered-underallocation'),
+      /market audit: incomplete or excessive allocation/);
+    corruptions++;
+  }
+  {
+    const bad=clone(s),m=bad.lastReport.publicNetwork.productMarket.NORD;
+    for(const id of IDS) {
+      const row=m.allocations[id],company=firm(bad,id);
+      const entry=company.ledger.find(x=>x.month===11&&x.code==='AUSSENMARKT');
+      assert.ok(entry,'expected real M11 export journal '+id);
+      row.offeredMilli=18000;
+      row.soldMilli=id==='H1'?10000:8000;
+      row.returnedMilli=row.offeredMilli-row.soldMilli;
+      const previous=row.revenueCent;
+      row.revenueCent=Math.floor((row.soldMilli*m.priceCent+500)/1000);
+      entry.deltaCent=row.revenueCent;
+      company.cashCent+=row.revenueCent-previous;
+    }
+    assert.throws(()=>marketAudit(bad,'tampered-unfair-allocation'),
+      /market audit: disproportionate allocation/);
     corruptions++;
   }
   const distinctPrices=[...new Set(s.reports.map(x=>x.publicNetwork.productMarket.NORD.priceCent))];
