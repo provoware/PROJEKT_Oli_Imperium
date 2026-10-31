@@ -170,7 +170,8 @@ function scenario() {
 const a=scenario(),b=scenario();
 assert.deepEqual(a,b,'natural insolvency scenario not deterministic');
 console.log(JSON.stringify({schema:'pppoppi.real-insolvency-longrun/1',
-  scenarios:2,companyMonthsChecked:56,...a,
+  scenarios:2,...a,
+  companyMonthsChecked:a.companyMonthsChecked+b.companyMonthsChecked,
   negativeCases:a.negativeCases+b.negativeCases,
   prereleaseGate:'BLOCKED',
   limitations:[
