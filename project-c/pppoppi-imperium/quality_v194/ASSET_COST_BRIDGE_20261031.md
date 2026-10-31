@@ -44,3 +44,13 @@ GitHub-Prüfung: [prerelease-asset-cost-bridge.yml](https://github.com/provoware
 - Beobachtete Summe pro Durchlauf: 31.600.000 Cent bezahlte Anschaffungen, 8.400.000 Cent reale regionale Erlöse, zwei Firmen mit je einem Feld, einer Bohrung, Raffinerie und Vertriebsroute; je 40.000 Milli-Barrel Restrohöl. Beide Firmen ohne Schulden oder unbezahlte Rechnungen in diesem Szenario. Das ist **kein** Test einer natürlichen Kreditkrise oder einer bewerteten Bilanz.
 
 Die integrierte Vorrelease-Sperre bleibt absichtlich **FAIL/BLOCKED**. Nach diesem Dokumentations-Commit ist die Fach-CI auf dem endgültigen HEAD erneut zu prüfen; ein PASS auf einem vorherigen Commit ersetzt diese Prüfung nicht. **WIR-04/BAL-01 bleiben BLOCKED; 6/52 PASS.** Kein Merge, kein Release.
+
+## Nachtrag: unabhängige Anschaffungstarife und verdeckte Kassenmanipulation (31.10.2026)
+
+**Konkrete Lücke:** Die bisherige Brücke prüfte Anschaffungsbuchungen nur auf Anzahl, Kennung und negatives Vorzeichen. Ein manipuliertes Kaufentgelt konnte bei gleichzeitig gefälschtem Kassenstand und Monatsbericht die Summenprüfung bestehen; ebenso ein wertneutraler Tausch zwischen zwei Investitionsbuchungen.
+
+**Technische Ergänzung auf PR #147:** Die vier tatsächlich benutzten Berliner Anschaffungsbuchungen werden zusätzlich gegen feste Cent-Sollwerte der eigenständigen PPPOPPI-Adaption geprüft: Feldkauf **5.000.000**, Fachbohrung **7.000.000**, Raffineriebau **3.000.000** und Vertriebsroute **800.000** Cent. Je Firma muss jeder Tarif genau einmal mit passender Feld-/Regionskennung gebucht sein. Diese Werte sind **keine** behaupteten C64-Originalpreise und **keine** bilanziellen Anlagenwerte.
+
+Sechs zusätzliche Negativproben je reproduzierbarem Durchlauf verfälschen nacheinander die vier Investitionsbeträge samt passend manipuliertem Kassenstand und Monatsbericht, verschieben Geld zwischen zwei Investitionsbuchungen oder zwischen Raffinerie und Gutachten. Erwartet sind **18 Negativproben pro Durchlauf, 36 insgesamt**, bei weiterhin zwei echten Spielabläufen und vier Firmenkontrollen. Der GitHub-Prüfablauf fordert die neue Gesamtzahl explizit. Die Fachprüfung auf dem endgültigen Commit ist bis zum tatsächlichen CI-Ergebnis **PENDING**, nicht PASS.
+
+**Weiter offen:** Die Bewertung von Vermögensgegenständen, Abschreibung, Lagerkosten, Forderungen und Brandverlusten ist fachlich nicht definiert. Die vorhandenen Szenarien erzeugen weder natürliche Kreditverschuldung noch offene Rechnungen. WIR-04/BAL-01 und die Gesamtfreigabe bleiben BLOCKED; kein Merge oder Release.
