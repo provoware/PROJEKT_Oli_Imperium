@@ -40,7 +40,7 @@ test('Öltransportkosten: Rohölzulieferung aktiviert, ausgehende Fertigware ble
  assert.equal(product,0,'Fertigware wurde im Folgemonat schon am Marktlager abgeladen');
  assert.equal(t.book.raw.BERLIN.cent,102600);
  assert.equal(t.book.product.BERLIN.cent,76400);
- assert.equal(B.report(t.book,t.state).accountingProfitCent,null);
+ assert.throws(()=>B.report(t.book,t.state),/WERTMINDERUNG_OFFEN/);
 });
 test('Öffentlicher Frachtvorschuss: zunächst Forderungs-/Vorauszahlungsbestand statt Aufwand',()=>{
  const t=preparePublic(),start=t.book.expenseCent;
@@ -51,7 +51,7 @@ test('Öffentlicher Frachtvorschuss: zunächst Forderungs-/Vorauszahlungsbestand
  const held=t.book.heldFreightCent;
  assert.ok(held>0);assert.equal(t.book.expenseCent,afterConnection);
  assert.equal(B.valuation(t.book,t.state).prepaymentBookCent,held);
- assert.equal(B.report(t.book,t.state).accountingProfitCent,null);
+ assert.throws(()=>B.report(t.book,t.state),/WERTMINDERUNG_OFFEN/);
  t.end();
  assert.equal(t.book.heldFreightCent,0);
  assert.equal(t.book.expenseCent,afterConnection+held+E.CFG.wage+E.CFG.upkeep);
