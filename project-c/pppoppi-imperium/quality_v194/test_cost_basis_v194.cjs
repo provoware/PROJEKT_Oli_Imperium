@@ -13,8 +13,8 @@ function scenario(){
   assert.equal(out.duplicate,false);
   assert.deepEqual(s,before,'Rechenweg darf die Spielengine nicht veraendern');
   E.validate(out.state);
-  const oldBook=cp(b);b=B.reconcile(s,out.state,b);
-  assert.deepEqual(oldBook,oldBook,'keine In-Place-Buchwertmutation');
+  const oldBook=cp(b);const newer=B.reconcile(s,out.state,b);
+  assert.deepEqual(b,oldBook,'keine In-Place-Buchwertmutation');b=newer;
   s=out.state;steps.push({type,month:s.month,phase:s.phase});
   return {state:s,book:b};
  }
@@ -40,7 +40,7 @@ test('Echter Feldkauf: Anschaffungswert statt Sofortverlust, Gutachten laufender
  const x=scenario(),id='BERLIN-1';
  x.move('SURVEY','H1',{claimId:id});x.move('BUY','H1',{claimId:id});
  const a=B.report(x.book,x.state);
- assert.equal(a.claimBookCent,undefined); // Buchwert steht in Modell-Aktiva, nicht als erfundener Engine-Wert.
+ assert.equal(B.valuation(x.book,x.state).claimBookCent,E.REGIONS.find(r=>r.id==='BERLIN').buy);
  assert.equal(x.book.assets[0].bookCent,E.REGIONS.find(r=>r.id==='BERLIN').buy);
  assert.equal(x.book.expenseCent,E.REGIONS.find(r=>r.id==='BERLIN').survey);
  assert.equal(a.equityCent,E.CFG.startCash-E.REGIONS.find(r=>r.id==='BERLIN').survey);
@@ -100,6 +100,7 @@ test('Echte Warenwirtschaft über vier Monate: Rohöl, Raffinerie, Netztransport
  assert.equal(report.observedDepreciationCent,444999);
  assert.equal(x.book.raw.BERLIN.cent,90000,'Unverkauftes Rohöl bleibt Vermögen');
  assert.equal(report.equityCent,26362212);
+ assert.equal(report.observedModelResultCent,6362212);
  assert.equal(report.equityCent-E.CFG.startCash,
   x.book.revenueCent-x.book.expenseCent-x.book.costOfSalesCent-x.book.depreciationCent,
   'Vermögensänderung stimmt mit Umsatz, Aufwand, Herstellkosten und Abschreibung überein');
