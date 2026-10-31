@@ -10,7 +10,7 @@ Der vorhandene 2-Monats-Test zeigt eine erste natürliche Zahlungsnot und einen 
 - Monat 1: 140.000 Cent Personal-/Wartungsrechnungen, 40.000 Cent natürlicher Rückstand. Regulärer Rettungskredit: +4.000.000 Cent Kasse und +4.000.000 Cent Verbindlichkeiten; der Rückstand wird ausgeglichen.
 - Monate 2–13: Monatliche Personalkosten und Wartung sowie Zins und Tilgung werden aus der **jeweils vor dem Monatsabschluss vorhandenen Restschuld** unabhängig berechnet und mit den echten Rechnungen, Buchungen, Firmenwerten und Monatsberichten verglichen.
 - Monat 14: Vor dem Abschluss 73.729 Cent Kasse, 2.161.441 Cent Restschuld, 269.686 Cent fällige Rechnungen. Daraus entsteht ein natürlicher Rückstand von **195.957 Cent**. Die zweite reguläre Kreditrettung muss diesen ausgleichen; keine künstliche Kredit- oder Bargeldinjektion in den Spielstand.
-- Monate 15–16: Der nun höhere Kreditbestand wird weiter verzinst und getilgt. Erwartete Endkasse H1 **2.803.155 Cent**, Restschuld H1 **5.560.701 Cent**; H2 bleibt unabhängig schuldenfrei.
+- Monate 15–16: Der nun höhere Kreditbestand wird weiter verzinst und getilgt. Erwartete Endkasse H1 **2.815.799 Cent**, Restschuld H1 **5.463.166 Cent**; H2 bleibt unabhängig schuldenfrei.
 - Zwei identische 16-Monats-Szenarien mit 64 Firmen-Monatsbeobachtungen, fünf JSON-Speicher-/Wiederherstellungsprüfungen pro Szenario (einschließlich einer Rettungsphase), Duplikatsperre bei allen Befehlen, 16 gezielten Manipulationsproben insgesamt. Kein vollständiger Sieg-/Verlust-Spielverlauf.
 
 ## Ausführung und überprüfbare Freigabebedingungen
@@ -31,3 +31,7 @@ Die neue Probe zeigt nicht die vollständige Gewinn-/Vermögensrechnung, Forderu
 **Nächste drei Schritte:** (1) Fach-CI und Gesamtregression auf finalem HEAD prüfen und Fehler beheben; (2) echte Forderungen und langfristige Schulden-/Insolvenzgrenzen in weiteren natürlichen Wirtschaftsabläufen prüfen; (3) Bilanzierungsregeln fachlich klären, bevor Gewinn oder Vermögen als vollständig berechnet gelten.
 
 **Empfehlung:** Bei weiteren Krisentests den unveränderten Spielkern und unabhängig hergeleitete Cent-Sollwerte beibehalten; nicht allein auf vom Spiel selbst gemeldete Bilanzzahlen vertrauen.
+
+## Tatsächlicher erster CI-Fehlversuch (31.10.2026)
+
+[GitHub-Fachlauf #41206123867](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41206123867) **FAIL**: Der unabhängige Test hatte beim zweiten Rettungskredit die anschließend vollständig bezahlte, zuvor offene Tilgungsrechnung über 108.072 Cent nicht von der Restschuld abgezogen. Der Spielkern verbucht diese Zahlung korrekt. Test-Orakel, Endwerte und GitHub-Sollprüfung wurden korrigiert; neuer Fachlauf auf endgültigem HEAD gesondert auszuwerten. Keine behauptete Spielkernänderung.
