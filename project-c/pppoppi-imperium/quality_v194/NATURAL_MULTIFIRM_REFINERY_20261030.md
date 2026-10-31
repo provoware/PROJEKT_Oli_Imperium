@@ -97,3 +97,17 @@ Reparatur-/Sperrfall und unabhängiger kumulativer Kassen- und Mengenbilanz
 pruefen; danach Gewinn-/Vermoegensbewertung und vollstaendige Endpartien.
 Keine Aussage ueber historische C64-Regeln, Ressourcenrechte, Browser-Zoom
 oder Nutzer-Endabnahme.
+
+## Nachtrag 31.10.2026 – unabhaengiger Fracht-Journal-Manipulationstest
+
+**Vorbefund:** Der vorherige PR-140-HEAD `322a3ca1f18433e2fda594a41651fc4266f2c1d7` hat die [Mehrfirmen-Fachpruefung #41145361270](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41145361270) bestanden. Die integrierte Vorrelease-Sperre blieb erwartungsgemaess rot.
+
+**Neue technische Pflicht, getrennt vom Finanzmodell in PR #141:** Die bereits natuerlich durchgespielten zwei Fracht-Szenarien werden gegen gezielte Datenverfaelschungen gesichert. Ein zweiter Pruefer kontrolliert die Auslastung beider Streckenkanten, pro Firma genau einen Frachtbericht, angeforderte/angenommene/zurueckgebuchte Mengen, die Frachtvorauszahlung und den tatsaechlich verbuchten Rueckerstattungsbetrag. Er vergleicht den Nettobetrag mit einem vor der Verfaelschung festgehaltenen Erwartungswert.
+
+- **Sollumfang:** 10 erkannte Frachtmanipulationen im Basisfall und 12 im Engpassfall, je zweimal wiederholt: **44 negative Frachtproben** zusaetzlich zu den 24 bisherigen Bestands-/Kassenproben.
+- **Fehlerarten:** Beide Streckenauslastungen; je Firma falsche angeforderte, angenommene und zurueckgegebene Menge; falsche Frachtvorauszahlung; im Engpassfall falsche Rueckerstattung.
+- **Verfahren:** Nur Kopien des gueltigen Spielstands werden verfaelscht. Der unveraenderte Spielkern wird weiterhin mit echten Aktionen durchlaufen. Der GitHub-Pflichtworkflow erzwingt das exakte Ergebnis im JSON-Nachweis.
+- **Pruefstatus:** **PENDING**, bis die GitHub-CI auf dem endgueltigen Commit dieses Zweigs erfolgreich abgeschlossen ist. Syntaxpruefung allein ist kein PASS. WIR-02/WIR-03 bleiben **BLOCKED**.
+- **Grenzen:** Noch keine wiederholten Engpaesse ueber mehrere Frachtmonate mit Streckensperre und Reparatur, keine Gewinn-/Vermoegensbilanz, keine durchgaengige Endpartie, keine C64-Originalfreigabe und keine Rechteklaerung der 77 Archivdateien.
+
+**Naechste Implementierung:** Mehrmonatigen erneuten Kapazitaetskonflikt mit Streckensperre/Reparatur und kumulierter unabhaengiger Mengen-/Kassenpruefung modellieren; danach Endpartie- und Vermoegensgates separat bearbeiten. Kein Merge und kein Release.
