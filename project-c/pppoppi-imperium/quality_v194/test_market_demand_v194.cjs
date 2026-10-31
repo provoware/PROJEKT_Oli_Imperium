@@ -294,7 +294,7 @@ function play(limitedDemand=false) {
     'public closure not triggered at M8');
   for(const id of IDS) {
     queue(id,8,9000);
-    assert.equal(s.publicNetwork.received[id].NORD,9000);
+    assert.equal(s.publicNetwork.received[id].NORD,limitedDemand?18000:9000);
     if(!limitedDemand) s=act(s,command('PUBLIC_OFFER',id,'M8-OFFER',
       {from:'BERLIN',to:'NORD',qtyMilli:9000}));
     s=end(s,id,8);
