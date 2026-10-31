@@ -8,7 +8,7 @@ function engineSpecs(){const e=globalThis.OliV082?.CFG,p=globalThis.PPProfi?.COS
  return {pumpMilli:e.pumpMilli,rawBatchMilli:p.rawBatchMilli,yieldMilli:p.yieldMilli};
 }
 const POLICY=Object.freeze({
- id:'PPPOPPI-ADAPT/FIN-COST/2-DRAFT',status:'DRAFT_NOT_APPROVED',
+ id:'PPPOPPI-ADAPT/FIN-COST/3-DRAFT',status:'DRAFT_NOT_APPROVED',
  fieldLifeMonths:120,drillLifeMonths:120,tankLifeMonths:60,
  refineryLifeMonths:120,routeLifeMonths:60,networkLifeMonths:60,
  depreciation:'linear, cent-genau, ab Folgemonat, Restcent im Schlussmonat',
@@ -20,6 +20,8 @@ const POLICY=Object.freeze({
  receivables:'ohne nachgewiesene offene Lieferung keine Forderung ansetzen',
  purchase:'Kauf/Bohrung/Bau zum ausgewiesenen Anschaffungswert, Gutachten als Aufwand',
  capital:'Eigentümer-Einlagen/Entnahmen nur gegen gesonderten Beleg',
+ impairment:'einzeln dokumentierter erzielbarer Wert bei konkretem Schaden, nie automatisch 0 oder pauschale Prozentabschreibung; keine stillschweigende Zuschreibung',
+ residual:'kein positiver Restwert ohne nachvollziehbaren Einzelbeleg',
  releaseGate:'BLOCKED'
 });
 const cap=new Set(['FELDKAUF','FACHBOHRUNG','TANKAUSBAU','RAFFINERIE_BAU','VERTRIEBSROUTE','STRECKENBAU','PUBLIC_CONNECT']);
@@ -90,6 +92,7 @@ function seed(s,id){
   ledgerCount:0,ledgerLastId:null,raw,product,assets:[],openingEquityCent:cents(f.cashCent),
   heldFreightCent:0,assetSaleProceedsCent:0,assetDisposalsBookCent:0,capitalizedInboundFreightCent:0,
   revenueCent:0,expenseCent:0,costOfSalesCent:0,depreciationCent:0,
+  impairmentCent:0,impairments:[],damageReviews:{},
   observedSteps:0,monthsClosed:0,releaseGate:'BLOCKED'};
 }
 function classifyAsset(code,entry,month){
@@ -265,8 +268,12 @@ function reconcile(previous,current,original){
  }
  if(closing){
   for(const asset of b.assets)if(current.month>=asset.firstDepreciationMonth&&asset.depreciatedMonths<asset.lifeMonths){
-   const prev=proportion(asset.costCent,asset.depreciatedMonths,asset.lifeMonths);
-   const next=proportion(asset.costCent,asset.depreciatedMonths+1,asset.lifeMonths);
+   const elapsed=asset.depreciatedMonths-(asset.depreciationBaseAtMonths||0);
+   const remainingLife=asset.lifeMonths-(asset.depreciationBaseAtMonths||0);
+   const baseCost=asset.depreciationBaseCent===undefined?asset.costCent:asset.depreciationBaseCent;
+   if(elapsed<0||remainingLife<=0||elapsed>=remainingLife)throw Error('Abschreibungsplan beschädigt');
+   const prev=proportion(baseCost,elapsed,remainingLife);
+   const next=proportion(baseCost,elapsed+1,remainingLife);
    const charge=sub(next,prev);
    asset.bookCent=sub(asset.bookCent,charge);
    asset.depreciatedMonths++;
@@ -276,6 +283,48 @@ function reconcile(previous,current,original){
  }
  b.month=current.month;b.phase=current.phase;b.cashCent=after.cashCent;b.debtCent=after.debtCent;
  b.ledgerCount=after.ledger.length;b.ledgerLastId=after.ledger.at(-1)?.id||null;b.observedSteps++;
+ return b;
+}
+function recordDamageValuation(original,state,claimId,evidence){
+ const b=JSON.parse(JSON.stringify(original));
+ if(!b||b.modelId!==POLICY.id)throw Error('Unbekannte Modellrichtlinie');
+ if(typeof claimId!=='string'||!claimId)throw Error('Claimkennung fehlt');
+ const f=state?.companies?.find(x=>x.id===b.companyId),claim=state?.claims?.[claimId];
+ if(!f||!claim||claim.owner!==b.companyId||!claim.drilled||(!claim.burning&&!claim.damaged))
+  throw Error('Keine dokumentierte beschädigte eigene Anlage');
+ if(b.month!==state.month||b.phase!==state.phase||b.generation!==f.generation||
+    b.cashCent!==f.cashCent||b.ledgerCount!==f.ledger.length||
+    b.ledgerLastId!==(f.ledger.at(-1)?.id||null))
+  throw Error('Bewertung passt nicht zum Buchungsstand');
+ assertPools(b,bookTotals(state,b.companyId));
+ if(!evidence||typeof evidence.sourceRef!=='string'||evidence.sourceRef.trim().length<10||
+    typeof evidence.method!=='string'||evidence.method.trim().length<8||
+    evidence.month!==state.month||evidence.claimId!==claimId)
+  throw Error('Nachvollziehbarer Einzelbeleg und Bewertungsdatum fehlen');
+ const recoverable=cents(evidence.recoverableCent);
+ const assets=b.assets.filter(a=>a.ref===claimId||(a.kind==='network'&&a.ref.endsWith(':RAW:'+claimId)));
+ if(!assets.length)throw Error('Kein aktivierter Claim-Buchwert vorhanden');
+ const carrying=assets.reduce((n,a)=>plus(n,cents(a.bookCent)),0);
+ if(recoverable>carrying)throw Error('Unbelegte Zuschreibung über Buchwert verboten');
+ let loss=sub(carrying,recoverable),unallocatedBook=carrying;
+ const totalLoss=loss;
+ for(const a of assets){
+  const oldBook=cents(a.bookCent);
+  const cut=unallocatedBook?proportion(loss,oldBook,unallocatedBook):0;
+  if(cut>oldBook)throw Error('Wertminderung über Restbuchwert');
+  a.bookCent=sub(oldBook,cut);
+  // Neue Abschreibungsbasis: niemals Abschreibung auf bereits abgeschriebenen Verlust.
+  a.depreciationBaseCent=a.bookCent;
+  a.depreciationBaseAtMonths=a.depreciatedMonths;
+  loss=sub(loss,cut);unallocatedBook=sub(unallocatedBook,oldBook);
+ }
+ if(loss!==0||unallocatedBook!==0)throw Error('Nicht verteilte Wertminderung');
+ b.impairmentCent=plus(b.impairmentCent,totalLoss);
+ const review={claimId,month:state.month,sequence:state.sequence,
+  burning:claim.burning,damaged:claim.damaged,recoverableCent:recoverable,
+  carryingBeforeCent:carrying,impairmentCent:totalLoss,
+  sourceRef:evidence.sourceRef,method:evidence.method,assessment:'UNVERIFIED_DRAFT_ESTIMATE'};
+ b.impairments.push(review);b.damageReviews[claimId]=review;
  return b;
 }
 function valuation(b,s){
@@ -305,11 +354,15 @@ function report(b,state){
  if(b.month!==state.month||b.phase!==state.phase||b.cashCent!==state.companies.find(f=>f.id===b.companyId)?.cashCent)
   throw Error('Buchstand und Spielstand differieren');
  const v=valuation(b,state);
- if(Object.values(state.claims||{}).some(x=>x.owner===b.companyId&&(x.burning||x.damaged)))
-  throw Error('WERTMINDERUNG_OFFEN: Beschädigte Anlage nicht ohne Nachweis bewerten');
+ for(const claim of Object.values(state.claims||{}))if(claim.owner===b.companyId&&(claim.burning||claim.damaged)){
+  const review=b.damageReviews?.[claim.id];
+  if(!review||review.month!==state.month||review.sequence!==state.sequence||
+     review.burning!==claim.burning||review.damaged!==claim.damaged)
+   throw Error('WERTMINDERUNG_OFFEN: Beschädigte Anlage nicht ohne aktuellen Einzelbeleg bewerten');
+ }
  const computed=A.snapshot(state,b.companyId,v);
  const netResult=sub(computed.equityCent,b.openingEquityCent);
- const recognizedResult=sub(sub(sub(b.revenueCent,b.expenseCent),b.costOfSalesCent),b.depreciationCent);
+ const recognizedResult=sub(sub(sub(sub(b.revenueCent,b.expenseCent),b.costOfSalesCent),b.depreciationCent),b.impairmentCent);
  if(netResult!==recognizedResult)throw Error('Bilanzgleichung/Erfolgsrechnung nicht abstimmbar');
  return {...computed,policy:POLICY.id,observedModelResultCent:netResult,accountingProfitCent:null,
   observedRevenueCent:b.revenueCent,observedOperatingOutflowsCent:b.expenseCent,
@@ -317,6 +370,7 @@ function report(b,state){
   observedPublicFreightHeldCent:b.heldFreightCent,observedAssetSaleProceedsCent:b.assetSaleProceedsCent,
   observedProductionCostCent:Object.values(b.raw).reduce((n,x)=>plus(n,x.cent),0),
   observedCOGSCent:b.costOfSalesCent,observedDepreciationCent:b.depreciationCent,
+  observedImpairmentCent:b.impairmentCent,damageAssessment:'UNVERIFIED_DRAFT_ESTIMATE',
   periodsClosed:b.monthsClosed,releaseGate:'BLOCKED',status:'MODEL_ONLY_UNAPPROVED'};
 }
-module.exports={POLICY,bookTotals,seed,reconcile,valuation,report};
+module.exports={POLICY,bookTotals,seed,reconcile,valuation,report,recordDamageValuation};
