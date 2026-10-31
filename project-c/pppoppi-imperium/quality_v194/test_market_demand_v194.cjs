@@ -162,7 +162,7 @@ function freightAudit(s,month,requested,accepted,returned,used) {
       P.freight(accepted,PATH),'audit: net freight '+month+' '+id);
   }
 }
-function play() {
+function play(saturated=false) {
   let s=E.fresh({humans:2,ais:0,seed:'REPEATED-CAPACITY-TWO-FIRMS'});
   const initial={};
   for(let i=0;i<2;i++) initial[IDS[i]]={
@@ -172,7 +172,11 @@ function play() {
   let roundtrips=0,duplicates=0,corruptions=0,foreign=0,repairs=0;
   let batches=0;
   function settle(month) {
-    for(const id of IDS) s=end(s,id,month);
+    for(const id of IDS) {
+      // A real M7 shipment arrives in M9 and remains unsold until M11.
+      if(saturated && month===7) queue(id,7,9000);
+      s=end(s,id,month);
+    }
     if(s.phase==='RESCUE') for(const id of [...s.rescueIds])
       s=act(s,command('RESCUE_LOAN',id,'M'+month+'-RESCUE'));
     assert.equal(s.phase,'REPORT','month '+month+' did not settle');
@@ -283,7 +287,7 @@ function play() {
       s=end(s,id,5);
     }
     if(month===6) for(const id of IDS) {
-      queue(id,6,18000);
+      queue(id,6,saturated?9000:18000);
       s=end(s,id,6);
     }
     if(month===5) {
@@ -298,7 +302,7 @@ function play() {
       s=roundtrip(s);roundtrips++;
     } else if(month===6) {
       assert.equal(s.phase,'REPORT');
-      freightAudit(s,6,18000,9000,9000,18000);
+      freightAudit(s,6,saturated?9000:18000,9000,saturated?0:9000,18000);
       audit(s,initial,sold,batches,'M6');
       s=roundtrip(s);roundtrips++;
     } else settle(month);
@@ -317,7 +321,8 @@ function play() {
     s.lastReport.publicNetwork.productMarket.NORD.allocations[id].soldMilli;
   assert.equal(s.phase,'REPORT');
   freightAudit(s,8,9000,0,9000,0);
-  for(const id of IDS) assert.equal(s.transport.firms[id].BERLIN.marketMilli,18000);
+  for(const id of IDS) assert.equal(s.transport.firms[id].BERLIN.marketMilli,
+    saturated?9000:18000);
   audit(s,initial,sold,batches,'M8');
   for(const id of IDS) {
     const bad=clone(s);
@@ -355,9 +360,9 @@ function play() {
   advance(10);settle(10);
   advance(11);
   for(const id of IDS) {
-    assert.equal(s.publicNetwork.received[id].NORD,9000);
+    assert.equal(s.publicNetwork.received[id].NORD,saturated?18000:9000);
     s=act(s,command('PUBLIC_OFFER',id,'M11-OFFER',
-      {from:'BERLIN',to:'NORD',qtyMilli:9000}));
+      {from:'BERLIN',to:'NORD',qtyMilli:saturated?18000:9000}));
     s=end(s,id,11);
   }
   assert.equal(s.phase,'REPORT');
@@ -369,8 +374,8 @@ function play() {
   assert.deepEqual(sold,{H1:27000,H2:27000});
   for(const id of IDS) {
     assert.equal(s.claims[CLAIMS[IDS.indexOf(id)]].inventoryMilli,60000);
-    assert.equal(s.transport.firms[id].BERLIN.marketMilli,9000);
-    assert.equal(s.publicNetwork.received[id].NORD,0);
+    assert.equal(s.transport.firms[id].BERLIN.marketMilli,saturated?0:9000);
+    assert.equal(s.publicNetwork.received[id].NORD,saturated?9000:0);
     for(const change of [
       state=>{state.claims[CLAIMS[IDS.indexOf(id)]].inventoryMilli++;},
       state=>{firm(state,id).cashCent++;},
@@ -431,7 +436,15 @@ function play() {
   assert.equal(s.publicNetwork.inTransit.length,0);
   assert.equal(s.transport.shipments.length,0);
   assert.equal(s.publicNetwork.queued.length,0);
+  if(saturated) {
+    const rows=s.lastReport.publicNetwork.productMarket.NORD.allocations;
+    assert.equal(rows.H1.offeredMilli+rows.H2.offeredMilli,36000,
+      'natural overbooking: real offers must exceed 18-barrel market cap');
+    assert.equal(rows.H1.soldMilli+rows.H2.soldMilli,18000);
+    assert.equal(rows.H1.returnedMilli+rows.H2.returnedMilli,18000);
+  }
   return {months:11,companyMonthChecks:22,roundtrips,duplicates,
+    naturalOverbooking:saturated,marketOfferMilli:saturated?36000:18000,
     distinctPriceCount:distinctPrices.length,distinctDemandCount:distinctDemand.length,
     corruptions,foreign,repairs,sold,finalMonth:s.month,
     closedMonth:8,repairedMonth:9,freightMonths:[3,6,8,9],bottleneckMonths:[3,6]};
@@ -449,21 +462,26 @@ for(const orders of [
   assert.equal(allocation.H2,9000);
   assert.equal(allocation.H1+allocation.H2,cap);
 }
-const first=play(),second=play();
-assert.deepEqual(second,first,'non-deterministic repeat');
+const first=play(),second=play(),saturatedFirst=play(true),saturatedSecond=play(true);
+assert.deepEqual(second,first,'non-deterministic baseline repeat');
+assert.deepEqual(saturatedSecond,saturatedFirst,'non-deterministic saturated repeat');
+assert.equal(saturatedFirst.naturalOverbooking,true);
+assert.equal(saturatedFirst.marketOfferMilli,36000);
+const all=[first,second,saturatedFirst,saturatedSecond];
+const total=key=>all.reduce((n,x)=>n+x[key],0);
 console.log(JSON.stringify({
-  schema:'pppoppi.multifirm-market-audit/1',
-  runs:2,simulatedMonths:22,companyMonthChecks:44,
-  jsonRoundtrips:first.roundtrips+second.roundtrips,
-  duplicatesRejected:first.duplicates+second.duplicates,
-  corruptionsCaught:first.corruptions+second.corruptions,
-  foreignActionsRejected:first.foreign+second.foreign,
-  publicRepairs:first.repairs+second.repairs,
-  allocatorCapChecked:true,
+  schema:'pppoppi.multifirm-market-audit/2',
+  runs:4,simulatedMonths:44,companyMonthChecks:88,
+  jsonRoundtrips:total('roundtrips'),
+  duplicatesRejected:total('duplicates'),
+  corruptionsCaught:total('corruptions'),
+  foreignActionsRejected:total('foreign'),
+  publicRepairs:total('repairs'),
+  allocatorCapChecked:true,naturalDemandOverbookingChecked:true,
   noInjectedInventoryOrCash:true,prereleaseGate:'BLOCKED',
-  result:first,
+  result:first,saturatedResult:saturatedFirst,
   limitations:['Natural regional prices and demand change; external price, rounding, reports and ledger checked.',
-    'Two 11-month full real-action scenarios and two isolated 18+18 to 18 bbl allocator cap tests.',
-    'A naturally saturated end-to-end export month is NOT yet demonstrated.',
+    'Four real-action 11-month runs; M11 naturally offers 36 bbl against an 18-bbl export cap in two runs.',
+    'A separate isolated allocator boundary check remains as an independent reference.',
     'No profit/asset valuation, full endgame, historical C64 or asset-rights clearance.']
 },null,2));
