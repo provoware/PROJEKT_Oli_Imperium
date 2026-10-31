@@ -1,0 +1,79 @@
+name: Projekt C – Forschungsbilanz und viermonatige Kostenrechnung
+on:
+  push:
+    branches:
+      - research/oli-finance-rules-20261031
+    paths:
+      - 'project-c/pppoppi-imperium/quality_v194/accounting_model_v194.cjs'
+      - 'project-c/pppoppi-imperium/quality_v194/test_accounting_model_v194.cjs'
+      - 'project-c/pppoppi-imperium/quality_v194/cost_basis_v194.cjs'
+      - 'project-c/pppoppi-imperium/quality_v194/test_cost_basis_v194.cjs'
+      - 'project-c/pppoppi-imperium/quality_v194/ACCOUNTING_MODEL_RULES_20261031.md'
+      - 'project-c/pppoppi-imperium/quality_v194/COST_POLICY_AND_FOUR_MONTH_RECONCILIATION_20261031.md'
+      - '.github/workflows/research-finance-cost-reconciliation.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  costs:
+    name: Echte Wirtschaftsaktionen und Negativtests – Node ${{ matrix.node }}
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ['22', '24']
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+      - name: Syntax und originale Spielquellen unveraendert pruefen
+        run: |
+          set -eu
+          node --check project-c/pppoppi-imperium/quality_v194/accounting_model_v194.cjs
+          node --check project-c/pppoppi-imperium/quality_v194/cost_basis_v194.cjs
+          node --check project-c/pppoppi-imperium/quality_v194/test_accounting_model_v194.cjs
+          node --check project-c/pppoppi-imperium/quality_v194/test_cost_basis_v194.cjs
+      - name: Vorliegende echte Geldpositionstests – keine verdeckte Gewinnfreigabe
+        run: node --test project-c/pppoppi-imperium/quality_v194/test_financial_boundaries_v194.cjs
+      - name: Unabhaengige Bilanzgrenzen und viermonatige Warenkostenregression
+        run: |
+          node --test project-c/pppoppi-imperium/quality_v194/test_accounting_model_v194.cjs
+          node --test project-c/pppoppi-imperium/quality_v194/test_cost_basis_v194.cjs
+      - name: Sperrkennzeichen im Forschungsmodul nachweisen
+        run: |
+          node - <<'NODE'
+          const assert=require('node:assert/strict');
+          const c=require('./project-c/pppoppi-imperium/quality_v194/cost_basis_v194.cjs');
+          assert.equal(c.POLICY.status,'DRAFT_NOT_APPROVED');
+          assert.equal(c.POLICY.releaseGate,'BLOCKED');
+          assert.match(c.POLICY.id,/DRAFT/);
+          console.log('PASS: Kein Original-, Gewinn-, Matrix- oder Merge-Freigabestatus');
+          NODE
+  governance:
+    name: Keine Integration und unveraenderte SPIEL-Quellen
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Nur neue Forschungsartefakte und eigene CI erlaubt
+        run: |
+          set -euo pipefail
+          base=7ce841ba43d2d2fd94fec90ef206b19d48bae8b2
+          git cat-file -e "${base}^{commit}"
+          test -n "$(git diff --name-only "$base" HEAD)"
+          while IFS= read -r path; do
+            case "$path" in
+              project-c/pppoppi-imperium/quality_v194/*|.github/workflows/research-finance-cost-reconciliation.yml)
+                echo "ZULAESSIG: $path";;
+              *) echo "VERBOTENE AENDERUNG: $path" >&2; exit 1;;
+            esac
+          done < <(git diff --name-only "$base" HEAD)
+          test "$(git diff --name-only "$base" HEAD -- 'project-c/pppoppi-imperium/SPIEL/**' | wc -l)" -eq 0
+      - name: Repository-Datenvalidierung
+        run: |
+          python3 tools/validate_project.py
+          python3 -m unittest discover -s tests -q
