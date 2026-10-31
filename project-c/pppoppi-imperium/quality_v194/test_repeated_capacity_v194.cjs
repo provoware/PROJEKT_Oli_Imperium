@@ -161,7 +161,7 @@ function play() {
       ['NETWORK_BUILD',{region:'BERLIN',kind:'RAW',claimId}],
       ['NETWORK_BUILD',{region:'BERLIN',kind:'PIPE'}],
       ['NETWORK_BUILD',{region:'BERLIN',kind:'FINAL'}],
-      ['NETWORK_RAW',{region:'BERLIN',claimId,qtyMilli:40000}]
+      ['NETWORK_RAW',{region:'BERLIN',claimId,qtyMilli:20000}]
     ]) s=act(s,command(type,id,'M1-'+type+'-'+(extra.kind||''),extra));
     if(i===1) {
       rejected(s,command('PUMP',id,'FOREIGN',{claimId:CLAIMS[0]}),
@@ -191,6 +191,10 @@ function play() {
   for(const id of IDS) {
     s=act(s,command('PUBLIC_CONNECT',id,'M3-CONNECT',
       {from:'BERLIN',to:'NORD'}));
+    // Regional RAW link is limited to 30 bbl per month: transport the
+    // second 20 bbl naturally in M3, arriving for M4 refining.
+    s=act(s,command('NETWORK_RAW',id,'M3-RAW',
+      {region:'BERLIN',claimId:CLAIMS[IDS.indexOf(id)],qtyMilli:20000}));
     queue(id,3,18000);
     s=end(s,id,3);
   }
