@@ -1,6 +1,6 @@
 'use strict';
-// WIR-01/02/03: two natural bottlenecks plus price and limited-demand settlement.
-// Based on the existing 11-month real-action test; no direct game-state injection.
+// WIR-01/02/03: real market-price and revenue audit, with separate demand-cap allocator check.
+// No direct changes to inventory, cash, demand or prices.
 // Only original engine actions. No inventory/cash/route-state injection.
 const assert = require('node:assert/strict');
 for (const name of ['v07_engine','v08_engine','v082_engine','profi_economy',
@@ -148,7 +148,7 @@ function freightAudit(s,month,requested,accepted,returned,used) {
       P.freight(accepted,PATH),'audit: net freight '+month+' '+id);
   }
 }
-function play(limitedDemand=false) {
+function play() {
   let s=E.fresh({humans:2,ais:0,seed:'REPEATED-CAPACITY-TWO-FIRMS'});
   const initial={};
   for(let i=0;i<2;i++) initial[IDS[i]]={
@@ -274,8 +274,8 @@ function play(limitedDemand=false) {
     }
     if(month===5) {
       assert.equal(s.phase,'REPORT');
-      for(const id of IDS) sold[id]+=(s.lastReport.publicNetwork
-        .productMarket.NORD.allocations[id]?.soldMilli||0);
+      for(const id of IDS) sold[id]+=s.lastReport.publicNetwork
+        .productMarket.NORD.allocations[id].soldMilli;
       audit(s,initial,sold,batches,'M5');
       s=roundtrip(s);roundtrips++;
     } else if(month===4) {
@@ -295,12 +295,12 @@ function play(limitedDemand=false) {
   for(const id of IDS) {
     queue(id,8,9000);
     assert.equal(s.publicNetwork.received[id].NORD,9000);
-    if(!limitedDemand) s=act(s,command('PUBLIC_OFFER',id,'M8-OFFER',
+    s=act(s,command('PUBLIC_OFFER',id,'M8-OFFER',
       {from:'BERLIN',to:'NORD',qtyMilli:9000}));
     s=end(s,id,8);
   }
   for(const id of IDS) sold[id]+=
-    (s.lastReport.publicNetwork.productMarket.NORD.allocations[id]?.soldMilli||0);
+    s.lastReport.publicNetwork.productMarket.NORD.allocations[id].soldMilli;
   assert.equal(s.phase,'REPORT');
   freightAudit(s,8,9000,0,9000,0);
   for(const id of IDS) assert.equal(s.transport.firms[id].BERLIN.marketMilli,18000);
@@ -341,9 +341,9 @@ function play(limitedDemand=false) {
   advance(10);settle(10);
   advance(11);
   for(const id of IDS) {
-    assert.equal(s.publicNetwork.received[id].NORD,limitedDemand?18000:9000);
+    assert.equal(s.publicNetwork.received[id].NORD,9000);
     s=act(s,command('PUBLIC_OFFER',id,'M11-OFFER',
-      {from:'BERLIN',to:'NORD',qtyMilli:limitedDemand?18000:9000}));
+      {from:'BERLIN',to:'NORD',qtyMilli:9000}));
     s=end(s,id,11);
   }
   assert.equal(s.phase,'REPORT');
@@ -352,11 +352,11 @@ function play(limitedDemand=false) {
     sold[id]+=s.lastReport.publicNetwork.productMarket.NORD.allocations[id].soldMilli;
   audit(s,initial,sold,batches,'M11');
   s=roundtrip(s);roundtrips++;
-  assert.deepEqual(sold,limitedDemand?{H1:18000,H2:18000}:{H1:27000,H2:27000});
+  assert.deepEqual(sold,{H1:27000,H2:27000});
   for(const id of IDS) {
     assert.equal(s.claims[CLAIMS[IDS.indexOf(id)]].inventoryMilli,60000);
     assert.equal(s.transport.firms[id].BERLIN.marketMilli,9000);
-    assert.equal(s.publicNetwork.received[id].NORD,limitedDemand?9000:0);
+    assert.equal(s.publicNetwork.received[id].NORD,0);
     for(const change of [
       state=>{state.claims[CLAIMS[IDS.indexOf(id)]].inventoryMilli++;},
       state=>{firm(state,id).cashCent++;},
@@ -378,45 +378,44 @@ function play(limitedDemand=false) {
   }
   const distinctPrices=[...new Set(s.reports.map(x=>x.publicNetwork.productMarket.NORD.priceCent))];
   const distinctDemand=[...new Set(s.reports.map(x=>x.regions.NORD.demandMilli))];
-  assert.ok(distinctPrices.length>=3,'market audit: price did not vary naturally');
-  assert.ok(distinctDemand.length>=3,'market audit: demand did not vary naturally');
-  if(limitedDemand) {
-    const m=s.lastReport.publicNetwork.productMarket.NORD;
-    assert.equal(m.demandMilli,18000);
-    assert.equal(m.allocations.H1.offeredMilli,18000);
-    assert.equal(m.allocations.H2.offeredMilli,18000);
-    for(const id of IDS) {
-      assert.equal(m.allocations[id].soldMilli,9000);
-      assert.equal(m.allocations[id].returnedMilli,9000);
-    }
-  }
+  assert.ok(distinctPrices.length>=3,'market audit: prices did not change naturally');
+  assert.ok(distinctDemand.length>=3,'market audit: demand did not change naturally');
   assert.equal(s.publicNetwork.inTransit.length,0);
   assert.equal(s.transport.shipments.length,0);
   assert.equal(s.publicNetwork.queued.length,0);
-  return {months:11,companyMonthChecks:22,roundtrips,duplicates,limitedDemand,
+  return {months:11,companyMonthChecks:22,roundtrips,duplicates,
     distinctPriceCount:distinctPrices.length,distinctDemandCount:distinctDemand.length,
     corruptions,foreign,repairs,sold,finalMonth:s.month,
     closedMonth:8,repairedMonth:9,freightMonths:[3,6,8,9],bottleneckMonths:[3,6]};
 }
-const first=play(false),second=play(false);
-const limitedFirst=play(true),limitedSecond=play(true);
-assert.deepEqual(second,first,'baseline not deterministic');
-assert.deepEqual(limitedSecond,limitedFirst,'limited-demand run not deterministic');
-const all=[first,second,limitedFirst,limitedSecond];
-const sum=k=>all.reduce((n,x)=>n+x[k],0);
+// Isolated allocator boundary test. This does NOT claim a naturally saturated 11-month market.
+const allocate=globalThis.OliV07.allocLargestRemainder;
+const cap=P.TRADE_DEMAND;
+assert.equal(cap,18000);
+for(const orders of [
+  [{id:'H1',qty:18000},{id:'H2',qty:18000}],
+  [{id:'H2',qty:18000},{id:'H1',qty:18000}]
+]) {
+  const allocation=allocate(orders,cap);
+  assert.equal(allocation.H1,9000);
+  assert.equal(allocation.H2,9000);
+  assert.equal(allocation.H1+allocation.H2,cap);
+}
+const first=play(),second=play();
+assert.deepEqual(second,first,'non-deterministic repeat');
 console.log(JSON.stringify({
-  schema:'pppoppi.multifirm-market-demand/1',
-  runs:4,simulatedMonths:44,companyMonthChecks:88,
-  jsonRoundtrips:sum('roundtrips'),
-  duplicatesRejected:sum('duplicates'),
-  corruptionsCaught:sum('corruptions'),
-  foreignActionsRejected:sum('foreign'),
-  publicRepairs:sum('repairs'),
+  schema:'pppoppi.multifirm-market-audit/1',
+  runs:2,simulatedMonths:22,companyMonthChecks:44,
+  jsonRoundtrips:first.roundtrips+second.roundtrips,
+  duplicatesRejected:first.duplicates+second.duplicates,
+  corruptionsCaught:first.corruptions+second.corruptions,
+  foreignActionsRejected:first.foreign+second.foreign,
+  publicRepairs:first.repairs+second.repairs,
+  allocatorCapChecked:true,
   noInjectedInventoryOrCash:true,prereleaseGate:'BLOCKED',
-  result:first,limitedResult:limitedFirst,
-  limitations:['Real 11-month oil and refinery chain, with repeated public freight bottlenecks.',
-    'Four independent runs: two baseline and two naturally limited-demand export scenarios.',
-    'Export demand is 18,000 milli-barrels; two 18,000 offers split fairly, 9,000 sold and 9,000 returned per firm.',
-    'Market price and regional demand change naturally; export price, rounding and monthly journals independently checked.',
-    'No complete profit/asset valuation, endgame, historical C64 comparison or asset-rights clearance.']
+  result:first,
+  limitations:['Natural regional prices and demand change; external price, rounding, reports and ledger checked.',
+    'Two 11-month full real-action scenarios and two isolated 18+18 to 18 bbl allocator cap tests.',
+    'A naturally saturated end-to-end export month is NOT yet demonstrated.',
+    'No profit/asset valuation, full endgame, historical C64 or asset-rights clearance.']
 },null,2));
