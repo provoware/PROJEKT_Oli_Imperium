@@ -1,0 +1,20 @@
+name: Projekt C – 12 Monate reale Wirtschaftsaktionen
+on:
+  pull_request:
+    paths:
+      - 'project-c/pppoppi-imperium/quality_v194/test_economy_actions_12months_v194.cjs'
+      - '.github/workflows/prerelease-economy-actions.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  economy-actions:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Zwölf Monate echte Förder-, Markt- und Vertragsaktionen prüfen
+        run: node project-c/pppoppi-imperium/quality_v194/test_economy_actions_12months_v194.cjs

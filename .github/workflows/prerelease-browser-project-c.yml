@@ -1,0 +1,273 @@
+name: Projekt C – echter Offline-Browser-Rundlauf
+on:
+  pull_request:
+    paths:
+      - 'project-c/pppoppi-imperium/**'
+      - '.github/workflows/prerelease-browser-project-c.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  chromium-roundtrip:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Natuerliche 240-Monats-Partie mit zwei Menschen und Spielende-Diagnose (kein Release-PASS)
+        run: node project-c/pppoppi-imperium/quality_v194/test_endstate_audit_v194.cjs
+      - name: Monatsobergrenze, Duplikatschutz und sichere Ablehnung (kein Release-PASS)
+        run: node project-c/pppoppi-imperium/quality_v194/test_endstate_boundaries_v194.cjs
+      - name: Endregel-Prototyp - Modi, Wertung, Gleichstand, Archiv und echter Monatsbericht (keine Freigabe)
+        run: node --test project-c/pppoppi-imperium/quality_v194/test_endstate_candidate_v194.cjs
+      - name: Endarchiv-Import - Wertungskonsistenz, Manipulationsschutz und Groessengrenzen (Teiltest)
+        run: node --test project-c/pppoppi-imperium/quality_v194/test_endstate_archive_io_v194.cjs
+      - name: Endspiel-Sitzungsadapter - versionierter Zustand, Abschluss und echte Engine (Teiltest)
+        run: node --test project-c/pppoppi-imperium/quality_v194/test_endstate_session_v194.cjs
+      - name: Browser-Endspielpaket - CJS-Quellen, VM-Isolation, Archiv und Sperre (Teiltest)
+        run: node --test project-c/pppoppi-imperium/quality_v194/test_endstate_browser_bundle_v194.cjs
+      - name: Live-Endspieladapter - echter Spielkern, 12-Monats-Kampagne und Sperre (Teiltest)
+        run: node --test project-c/pppoppi-imperium/quality_v194/test_endstate_live_v194.cjs
+      - name: Drei Generationen - zwei natuerliche Insolvenzen und JSON-Rundlauf (Teiltest)
+        run: node project-c/pppoppi-imperium/quality_v194/test_multigeneration_rescue_v194.cjs
+      - name: Zwei Menschen - Notverkauf, JSON-Rundlauf und Buchungsschutz (Teiltest)
+        run: node project-c/pppoppi-imperium/quality_v194/test_rescue_sale_roundtrip_v194.cjs
+      - name: Zwei Menschen - Vertragsbruch, Erfuellung, Rechnungen und JSON-Rundlauf (Teiltest)
+        run: node project-c/pppoppi-imperium/quality_v194/test_contract_breach_roundtrip_v194.cjs
+      - name: Natuerliche Teillieferung, Vertragsstrafe und JSON-Rundlauf (Teiltest)
+        run: node project-c/pppoppi-imperium/quality_v194/test_contract_partial_delivery_v194.cjs
+      - name: Chromium-Testumgebung installieren
+        run: |
+          python -m pip install playwright==1.56.0
+          python -m playwright install --with-deps chromium
+      - name: Offline-Dateistart, Tastatur, 800x600, Speichern, Neustart, defekter Import
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_roundtrip_v194.py
+      - name: Alle Spielszenen, Tastatur und zoom-aequivalente CSS-Viewports
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_scenes_v194.py
+      - name: Alle Spielszenen per Tab und Enter schliessen, Alt-Links und Fokus pruefen
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_keyboard_scenes_v194.py
+      - name: Dreistufiges Bohr-Minispiel mit echten Tab-, Pfeil- und Enter-Tasten samt Export
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_keyboard_drill_v194.py
+      - name: Rohrnetz und Feuerwehr per Tab und Enter samt echtem Brandereignis und Export
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_keyboard_pipe_fire_v194.py
+      - name: Alle sichtbaren Dialogelemente per echter Tab-Taste und Fokuszustand auditieren
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_dialog_focus_v194.py
+      - name: Native Escape-Schliessung und Fokus-Rueckkehr in allen Spielszenen
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_keyboard_escape_v194.py
+      - name: Echter Browser-Tab-Zoom 175/200 Prozent mit Offline-Tastaturpfad
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_native_zoom_v194.py
+      - name: Quantitativer Fokuskontrast in allen Szenen bei echtem 175/200-Prozent-Zoom
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_focus_contrast_v194.py
+      - name: Rohrnetz und Feuerwehr bei echtem Browserzoom 175 und 200 Prozent
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_native_zoom_minigames_v194.py
+      - name: Wirtschaftskette und Vertragsabschluss per echter Tab- und Enter-Taste
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_keyboard_economy_v194.py
+      - name: Wirtschaftskette mit echten Tab- und Enter-Aktionen bei nativem 175/200-Prozent-Zoom
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_native_zoom_economy_v194.py
+      - name: Texttreffbarkeit und Tabellenabschneidung bei echtem 175/200-Prozent-Zoom
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_native_zoom_text_v194.py
+      - name: Fliesstext und dynamische Minispielphasen bei echtem 175/200-Prozent-Zoom
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_native_zoom_flow_v194.py
+      - name: Deterministische Animationsphasen bei echtem 175/200-Prozent-Zoom
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_animation_phases_v194.py
+      - name: Wirtschaftsaktion pro Dialogszene mit echter Tastatur bei nativem 175/200-Prozent-Zoom
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_dialog_actions_v194.py
+      - name: Jede unterschiedliche Wirtschaftsaktion je Dialogszene bei nativem 175/200-Prozent-Zoom
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_dialog_action_matrix_v194.py
+      - name: Wirtschaft, Vertrag, Abrechnung und Spielstand-Neustart mit echten Browserklicks
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_economy_v194.py
+      - name: Vier Firmen mit zwei Regionen, zwei Vertraegen und wiederholter Spielstand-Fortsetzung
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_complex_roundtrip_v194.py
+      - name: Natuerliche Browser-Teillieferung mit zwei echten Chromium-Prozessneustarts
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_partial_delivery_v194.py
+      - name: Sanierung mit Kredit, Notverkauf und Neustart im echten Browser
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_rescue_v194.py
+      - name: Natuerliche Insolvenz durch acht Wirtschaftsklicks mit Kredit, Notverkauf und Neustart
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_natural_rescue_v194.py
+      - name: Natuerlicher Browser-Notverkauf mit echtem Chromium-Prozessneustart und Folgemonat
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_natural_sale_restart_v194.py
+      - name: Zwei Menschen, Spielerwechsel, parallele Insolvenz und getrennte Sanierung
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_two_humans_v194.py
+      - name: Wiederholte Spielstand-Imports, kaputte Dateien und Schutz vor Doppelbuchungen
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_reimport_v194.py
+      - name: Fremde Spielstaende mit 30 Struktur- und Tiefenfehlern, 5-MB-Grenze und HTML-Escaping
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_import_input_security_v194.py
+      - name: Import-Wettlauf, Spielaktion waehrend Import und Sitzungsabbruch
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_import_race_v194.py
+      - name: V0.8-Altspielstand migrieren, V0.8.2 erhalten, V0.6 sicher ablehnen
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_legacy_v194.py
+      - name: Altvertrag, laufendes Minispiel und abgeschlossenes Minispiel sicher migrieren
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_legacy_special_v194.py
+      - name: Erfuellte und gebrochene V0.8-Vertraege samt Buchungen migrieren
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_legacy_contracts_v194.py
+      - name: Unvollstaendige Exportkopien, Abbruch und Rueckfall auf gueltige Sicherung
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_save_interruption_v194.py
+      - name: Zwei lokale Zwischensicherungen, Browser-Neustart und sicherer Rueckfall
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_autobackup_v194.py
+      - name: Schreibtransaktionsabbruch, Speicherverweigerung und Wiederherstellung
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_storage_faults_v194.py
+      - name: Drei unabhaengige Offline-Leistungsprofile mit je zwoelf Monatswechseln
+        run: |
+          for run in 1 2 3; do
+            echo "::group::Leistungsprofil $run von 3"
+            python3 project-c/pppoppi-imperium/quality_v194/test_browser_performance_v194.py
+            echo "::endgroup::"
+          done
+      - name: Laengere 48-Monats-Partie mit fuenf bereinigten Speichermessungen
+        env:
+          PPPOPPI_PERF_MONTHS: '48'
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_performance_v194.py
+
+  # Die beiden aufwendigen nativen Zoomtests laufen mit frischem Chromium-Profil.
+  # Ein Fehler in anderen Browser-Tests darf ihre Diagnose nicht verhindern.
+  native-zoom-regression:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Chromium-Testumgebung installieren
+        run: |
+          python -m pip install playwright==1.56.0
+          python -m playwright install --with-deps chromium
+      - name: Sitzungsimport und -export per Tastatur bei echtem 175/200-Prozent-Zoom
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_session_native_zoom_v194.py
+      - name: Alle neun Claim-Parameter bei echtem 175/200-Prozent-Zoom
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_claim_parameters_v194.py
+      - name: Bohr-Minispiel bei echtem 175/200-Prozent-Zoom
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_native_zoom_drill_v194.py
+
+  # Echte Prozessneustarts bleiben unabhaengig von anderen Browserregressionen
+  # sichtbar. Die Gesamt-CI verlangt weiterhin den Erfolg aller drei Jobs.
+  browser-process-restart:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Chromium-Testumgebung installieren
+        run: |
+          python -m pip install playwright==1.56.0
+          python -m playwright install --with-deps chromium
+      - name: Zwoelf Browser-Spielmonate mit drei echten Chromium-Prozessneustarts
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_longrun_v194.py
+      - name: Endspieladapter im echten Offline-Chromium und abgeleiteten Technikaufbau (Teiltest)
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_endstate_bundle_v194.py
+      - name: Live-Endspieladapter im echten Offline-Chromium mit Spielaktion und Abschluss (Teiltest)
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_endstate_live_v194.py
+
+  # Eigenstaendige echte Endpartie, damit ein Fehler nicht im Langlauf untergeht.
+  browser-campaign-endgame:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Chromium-Testumgebung installieren
+        run: |
+          python -m pip install playwright==1.56.0
+          python -m playwright install --with-deps chromium
+      - name: Echte 12-Monats-Kampagne, Wertung, zwei Chromium-Neustarts und Archivschutz
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_campaign_endgame_v194.py
+
+  # Unabhaengige Regression fuer sporadisch fehlende Dialoginhalte.
+  # Kein Retry: fehlende Feldauswahl bleibt CI-Fehler.
+  claim-dialog-stability:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Chromium-Testumgebung installieren
+        run: |
+          python -m pip install playwright==1.56.0
+          python -m playwright install --with-deps chromium
+      - name: MV3-Serviceworker-Race, Timeout und Zoom-API isoliert pruefen
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_zoom_worker_wait_v194.py
+      - name: 216 Feldauswahlen in vier Dialogen bei echtem 175/200-Prozent-Zoom
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_dialog_select_stability_v194.py
+
+  # Getrennte Browser-Kette: zweite natuerliche Insolvenz und Generation 3.
+  # Nicht in den langen Hauptjob mischen; Fehler bleiben eigenstaendig sichtbar.
+  browser-multigeneration:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Chromium-Testumgebung installieren
+        run: |
+          python -m pip install playwright==1.56.0
+          python -m playwright install --with-deps chromium
+      - name: Zwei natuerliche Insolvenzen, drei Generationen und vier Chromium-Prozesse
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_multigeneration_rescue_v194.py
+
+  # Eigene Verlust-Endpartie: eine echte Insolvenz darf weder die
+  # Kampagne vorzeitig beenden noch nach Archivierung Buchungen zulassen.
+  browser-campaign-insolvency:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Chromium-Testumgebung installieren
+        run: |
+          python -m pip install playwright==1.56.0
+          python -m playwright install --with-deps chromium
+      - name: Natuerliche Insolvenz, Verlustwertung, drei Chromium-Prozesse und Archivschutz
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_campaign_insolvency_v194.py
+
+  # Schlussmonats-Sanierung: die 12-Monats-Kampagne darf erst NACH
+  # Behebung der natuerlichen Insolvenz archiviert werden.
+  browser-campaign-lastmonth-rescue:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Chromium-Testumgebung installieren
+        run: |
+          python -m pip install playwright==1.56.0
+          python -m playwright install --with-deps chromium
+      - name: Natuerliche Schlussmonatsinsolvenz, Sanierung, Archiv und drei Chromium-Prozesse
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_campaign_lastmonth_rescue_v194.py

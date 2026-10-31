@@ -1,0 +1,113 @@
+{
+  "version": "1.9.2",
+  "passed": 20,
+  "checks": [
+    {
+      "title": "Strategie-KI geladen",
+      "passed": true
+    },
+    {
+      "title": "KI-Inspektor sichtbar",
+      "passed": true
+    },
+    {
+      "title": "KI-Inspektor verdeckt keine Spielansicht",
+      "passed": true
+    },
+    {
+      "title": "Drei KI-Konkurrenten erzeugt",
+      "passed": true
+    },
+    {
+      "title": "Computerzüge und Monatsabschluss vollständig",
+      "passed": true
+    },
+    {
+      "title": "KI-Entscheidungsprotokoll gespeichert",
+      "passed": true
+    },
+    {
+      "title": "KI-Protokoll bedienbar",
+      "passed": true
+    },
+    {
+      "title": "Strategiebegründungen werden angezeigt",
+      "passed": true
+    },
+    {
+      "title": "Entscheidungen sind Unternehmen zugeordnet",
+      "passed": true
+    },
+    {
+      "title": "KI-Protokoll schließt ohne Spielaktion",
+      "passed": true
+    },
+    {
+      "title": "KI-Protokoll ist vollständig schreibgeschützt",
+      "passed": true
+    },
+    {
+      "title": "Nächster Monat erreichbar",
+      "passed": true
+    },
+    {
+      "title": "Spielstand mit KI-Historie exportiert",
+      "passed": true
+    },
+    {
+      "title": "KI-Entscheidungen überleben Export",
+      "passed": true
+    },
+    {
+      "title": "KI-Spielstand wieder eingelesen",
+      "passed": true
+    },
+    {
+      "title": "Alte Navigation unverändert aktiv",
+      "passed": true
+    },
+    {
+      "title": "KI-Protokoll auf Mobilgerät öffnet",
+      "passed": true
+    },
+    {
+      "title": "Keine horizontale Mobil-Überbreite",
+      "passed": true
+    },
+    {
+      "title": "Keine JavaScript-Ausnahme im Browser",
+      "passed": true
+    },
+    {
+      "title": "Offline, keine HTTP-Anfragen",
+      "passed": true
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "01_Buero_mit_Strategiebutton.png",
+      "sha256": "a1cc8a5d3304847d6410c7648fda9eb349564847f5cd67550691c8777bfbfac9",
+      "bytes": 1181715
+    },
+    {
+      "file": "02_KI_Entscheidungsprotokoll.png",
+      "sha256": "5085e133f55dd7485cf05b27032ddd5ac17d46d1b70467f565fad3c36e670c6d",
+      "bytes": 204281
+    },
+    {
+      "file": "03_Monatsabschluss_mit_KI.png",
+      "sha256": "c15119b1d47fa005304773757ef052855295a8eaff3b60936f62a080445a14aa",
+      "bytes": 167477
+    },
+    {
+      "file": "04_KI_Protokoll_mobil.png",
+      "sha256": "53e1c6427851206d1d64be214b275ca3b6c2a5f885724cb2a04e9c8536acbebe",
+      "bytes": 213576
+    }
+  ],
+  "js_errors": [],
+  "http_requests": [],
+  "browser": "Chromium, eingebettete lokale Dateien",
+  "kubuntu_endtest": "zurueckgestellt",
+  "c64_test": "nicht ausgefuehrt"
+}

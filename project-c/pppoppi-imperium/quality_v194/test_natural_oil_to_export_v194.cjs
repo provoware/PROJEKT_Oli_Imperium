@@ -1,0 +1,423 @@
+'use strict';
+// WIR-02/WIR-03: real SURVEY/BUY/DRILL/PUMP -> refinery -> local logistics
+// -> public two-hop shipment -> external sale. No synthetic oil inventory.
+const assert = require('node:assert/strict');
+for (const name of ['v07_engine','v08_engine','v082_engine','profi_economy',
+  'logistics_v17','public_network_v171'])
+  require('../SPIEL/src/' + name + '.js');
+const E = globalThis.OliV082;
+const P = globalThis.PPPublicNetwork;
+const copy = value => JSON.parse(JSON.stringify(value));
+const CLAIM = 'BERLIN-1';
+const ROUTE = ['B-BB','BB-N'];
+assert.deepEqual(P.routeFor('BERLIN','NORD'), ROUTE);
+const firm = s => s.companies.find(f => f.id === 'H1');
+
+// A cash bridge is not a profit calculation. It preserves every ledger entry,
+// distinguishes investments/prepayments from revenue and exposes unknown codes.
+const SALES = new Set(['MARKTERLÖS','VERTRAGSERLÖS','AUSSENMARKT',
+  'RAFFINIERT_MONATSVERKAUF']);
+const INVESTMENTS = new Set(['FELDKAUF','FACHBOHRUNG','TANKAUSBAU',
+  'STRECKENBAU','RAFFINERIE_BAU','VERTRIEBSROUTE','PUBLIC_CONNECT']);
+const ACTION_COSTS = new Set(['GUTACHTEN','FOERDERUNG','TRANSPORT','FRACHT',
+  'RAFFINERIE_VERARBEITUNG','TRANSPORT_REPARATUR',
+  'BRANDBEKÄMPFUNG_PROFI','ZAHLUNG_PERSONAL','ZAHLUNG_WARTUNG']);
+const CASH_KEYS = ['salesCent','investmentCent','actionCostCent',
+  'freightHoldCent','freightRefundCent','loanCent','principalCent',
+  'otherIncomingCent','otherOutgoingCent'];
+function cashBridge(entries) {
+  const totals = Object.fromEntries(CASH_KEYS.map(k=>[k,0]));
+  const codes = {};
+  for (const entry of entries) {
+    assert.ok(entry && typeof entry.code==='string' && entry.code,
+      'invalid ledger code');
+    assert.ok(Number.isSafeInteger(entry.deltaCent),'unsafe ledger amount');
+    const n=entry.deltaCent;
+    codes[entry.code]=(codes[entry.code]||0)+1;
+    let key=n>=0?'otherIncomingCent':'otherOutgoingCent';
+    if (SALES.has(entry.code)) {
+      assert.ok(n>=0,'negative sales booking'); key='salesCent';
+    } else if (INVESTMENTS.has(entry.code)) {
+      assert.ok(n<=0,'positive investment booking'); key='investmentCent';
+    } else if (ACTION_COSTS.has(entry.code)) {
+      assert.ok(n<=0,'positive action cost'); key='actionCostCent';
+    } else if (entry.code==='PUBLIC_FREIGHT_HOLD') {
+      assert.ok(n<=0,'positive freight prepayment'); key='freightHoldCent';
+    } else if (entry.code==='FRACHT_RUECKGABE') {
+      assert.ok(n>=0,'negative freight refund'); key='freightRefundCent';
+    } else if (['RETTUNGSKREDIT','KI_RETTUNGSKREDIT'].includes(entry.code)) {
+      assert.ok(n>=0,'negative loan receipt'); key='loanCent';
+    } else if (entry.code==='ZAHLUNG_TILGUNG') {
+      assert.ok(n<=0,'positive principal repayment'); key='principalCent';
+    }
+    totals[key]+=n;
+    assert.ok(Number.isSafeInteger(totals[key]),'unsafe category total');
+  }
+  const netCent=CASH_KEYS.reduce((n,k)=>n+totals[k],0);
+  assert.ok(Number.isSafeInteger(netCent),'unsafe cash bridge');
+  assert.equal(netCent,entries.reduce((n,e)=>n+e.deltaCent,0),
+    'classification does not reconcile with ledger');
+  return {...totals,netCent,codes};
+}
+// Deliberate corruptions must fail instead of silently producing a "profit".
+for (const [code,amount,pattern] of [
+  ['AUSSENMARKT',-1,/negative sales/],
+  ['FELDKAUF',1,/positive investment/],
+  ['ZAHLUNG_PERSONAL',1,/positive action cost/],
+  ['PUBLIC_FREIGHT_HOLD',1,/positive freight prepayment/],
+  ['FRACHT_RUECKGABE',-1,/negative freight refund/],
+  ['RETTUNGSKREDIT',-1,/negative loan receipt/],
+  ['ZAHLUNG_TILGUNG',1,/positive principal repayment/]
+]) assert.throws(()=>cashBridge([{code,deltaCent:amount}]),pattern);
+assert.throws(()=>cashBridge([{code:'AUSSENMARKT',deltaCent:1.5}]),
+  /unsafe ledger amount/);
+assert.equal(cashBridge([{code:'UNBEKANNT',deltaCent:1},
+  {code:'UNBEKANNT',deltaCent:-2}]).netCent,-1);
+
+// Physical inventory is checked independently of money. It is NOT an
+// accounting valuation and is scoped to H1's single Berlin-to-Nord chain.
+function stockAudit(s, stage, processingLossMilli=0, soldMilli=0) {
+  const local=s.transport.firms.H1.BERLIN;
+  const plant=s.refinery.plants.H1.BERLIN;
+  const qty=(rows)=>rows.filter(x=>x.companyId==='H1')
+    .reduce((n,x)=>n+x.qtyMilli,0);
+  const components={
+    fieldMilli:s.claims[CLAIM].inventoryMilli,
+    rawTransitMilli:qty(s.transport.shipments.filter(x=>x.type==='RAW')),
+    rawAtRefineryMilli:local.rawMilli,
+    productAtPlantMilli:plant.productMilli,
+    productTransitMilli:qty(s.transport.shipments.filter(x=>x.type==='PRODUCT')),
+    regionalMarketMilli:local.marketMilli,
+    publicQueuedMilli:qty(s.publicNetwork.queued),
+    publicTransitMilli:qty(s.publicNetwork.inTransit),
+    publicReceivedMilli:s.publicNetwork.received?.H1?.NORD||0,
+    soldMilli,processingLossMilli
+  };
+  for (const [key,value] of Object.entries(components))
+    assert.ok(Number.isSafeInteger(value)&&value>=0,
+      stage+': invalid physical component '+key);
+  const totalMilli=Object.values(components).reduce((n,x)=>n+x,0);
+  assert.equal(totalMilli,E.CFG.pumpMilli,stage+': physical stock mismatch');
+  return {stage,totalMilli,components};
+}
+function command(type, label, suffix, extra = {}, id = 'H1') {
+  return {type, companyId:id, requestId:'NATURAL-EXPORT-'+label+'-'+suffix, ...extra};
+}
+function step(s, cmd) {
+  const original = copy(s);
+  const result = E.transition(s, cmd);
+  assert.equal(result.duplicate, false, 'unexpected duplicate '+cmd.requestId);
+  assert.deepEqual(s, original, 'input mutated '+cmd.requestId);
+  assert.equal(E.validate(result.state), true, 'invalid state '+cmd.requestId);
+  return result.state;
+}
+function reject(s, cmd, pattern) {
+  const original = copy(s);
+  assert.throws(() => E.transition(s, cmd), pattern);
+  assert.deepEqual(s, original, 'rejected action mutated input');
+}
+function close(s, label, month) {
+  for (const id of ['H1','H2'])
+    s = step(s, command('END_TURN',label,id+'-END-'+month,{},id));
+  if(s.phase==='RESCUE') {
+    // Real engine credit only; preserve the acquired field and shipment state.
+    assert.deepEqual(s.rescueIds,['H1'],'unexpected rescue beneficiary');
+    s=step(s,command('RESCUE_LOAN',label,'M'+month+'-RESCUE-LOAN',{},'H1'));
+    assert.equal(s.claims[CLAIM].owner,'H1','rescue lost the oil field');
+    assert.equal(firm(s).generation,1,'rescue unexpectedly restarted firm');
+  }
+  assert.equal(s.phase, 'REPORT');
+  assert.equal(s.lastReport.month, month);
+  assert.equal(s.reports.length, month);
+  return s;
+}
+function next(s, label, month) {
+  s = step(s, command('NEXT_MONTH',label,'NEXT-'+month));
+  assert.equal(s.month, month);
+  assert.equal(s.phase, 'TURN');
+  return s;
+}
+function save(s) {
+  const restored = JSON.parse(JSON.stringify(s));
+  assert.deepEqual(restored, s);
+  assert.equal(E.validate(restored), true);
+  return restored;
+}
+function play(blocked) {
+  const label = blocked ? 'blocked' : 'open';
+  let s = E.fresh({humans:2,ais:0,seed:'NATURAL-EXPORT-'+label});
+  const initialCash = firm(s).cashCent;
+  const initialReserve = s.claims[CLAIM].reserveMilli;
+  const physicalStages=[];
+  const checkpoint=(stage,loss=0,sold=0)=>
+    physicalStages.push(stockAudit(s,stage,loss,sold));
+  const actions = [
+    ['SURVEY',{claimId:CLAIM}],
+    ['BUY',{claimId:CLAIM}],
+    ['DRILL',{claimId:CLAIM}],
+    ['PUMP',{claimId:CLAIM}],
+    ['REFINERY_BUILD',{region:'BERLIN',claimId:CLAIM}],
+    ['ROUTE_BUILD',{region:'BERLIN'}],
+    ['NETWORK_ENABLE',{region:'BERLIN'}],
+    ['NETWORK_BUILD',{region:'BERLIN',kind:'RAW',claimId:CLAIM}],
+    ['NETWORK_BUILD',{region:'BERLIN',kind:'PIPE'}],
+    ['NETWORK_BUILD',{region:'BERLIN',kind:'FINAL'}]
+  ];
+  for (const [type,extra] of actions)
+    s = step(s, command(type,label,'M1-'+type+'-'+(extra.kind||''),extra));
+  assert.equal(s.claims[CLAIM].owner,'H1');
+  assert.equal(s.claims[CLAIM].drilled,true);
+  assert.equal(s.claims[CLAIM].reserveMilli,initialReserve-E.CFG.pumpMilli);
+  assert.equal(s.claims[CLAIM].inventoryMilli,E.CFG.pumpMilli);
+  assert.equal(firm(s).monthProducedMilli,E.CFG.pumpMilli);
+  checkpoint('pumped');
+  reject(s,command('NETWORK_REFINE',label,'PREMATURE-REFINE',
+    {region:'BERLIN',claimId:CLAIM}),/Rohöl noch nicht angeliefert/);
+  s = step(s,command('NETWORK_RAW',label,'RAW-DEPART',
+    {region:'BERLIN',claimId:CLAIM,qtyMilli:10000}));
+  assert.equal(s.claims[CLAIM].inventoryMilli,E.CFG.pumpMilli-10000);
+  assert.equal(s.transport.shipments.length,1);
+  assert.equal(s.transport.shipments[0].arriveMonth,2);
+  checkpoint('raw-dispatched');
+  s = save(close(s,label,1));
+  s = next(s,label,2);
+  assert.equal(s.transport.firms.H1.BERLIN.rawMilli,10000);
+  assert.equal(s.transport.shipments.length,0);
+  checkpoint('raw-arrived');
+  s = step(s,command('NETWORK_REFINE',label,'REFINE',
+    {region:'BERLIN',claimId:CLAIM}));
+  assert.equal(s.transport.firms.H1.BERLIN.rawMilli,0);
+  assert.equal(s.refinery.plants.H1.BERLIN.productMilli,9000);
+  assert.equal(s.claims[CLAIM].inventoryMilli,E.CFG.pumpMilli-10000);
+  checkpoint('refined',1000);
+  s = step(s,command('NETWORK_PRODUCT',label,'PRODUCT-DEPART',
+    {region:'BERLIN',qtyMilli:9000}));
+  assert.equal(s.refinery.plants.H1.BERLIN.productMilli,0);
+  assert.equal(s.transport.shipments.length,1);
+  assert.equal(s.transport.shipments[0].arriveMonth,3);
+  checkpoint('product-dispatched',1000);
+  s = save(close(s,label,2));
+  s = next(s,label,3);
+  assert.equal(s.transport.firms.H1.BERLIN.marketMilli,9000);
+  checkpoint('regional-market',1000);
+  s = step(s,command('PUBLIC_CONNECT',label,'CONNECT',
+    {from:'BERLIN',to:'NORD'}));
+  if (blocked) {
+    // Valid, explicitly injected public disruption, never injected oil.
+    s.publicNetwork.links['BB-N'].downUntil=5;
+    assert.equal(E.validate(s),true);
+  }
+  const queue = command('PUBLIC_QUEUE',label,'QUEUE',
+    {from:'BERLIN',to:'NORD',qtyMilli:9000});
+  s = step(s,queue);
+  assert.equal(s.transport.firms.H1.BERLIN.marketMilli,0);
+  assert.equal(firm(s).ledger.filter(e=>e.code==='PUBLIC_FREIGHT_HOLD').length,1);
+  const duplicate = E.transition(s,queue);
+  assert.equal(duplicate.duplicate,true);
+  assert.deepEqual(duplicate.state,s);
+  checkpoint('public-queued',1000);
+  s = save(close(s,label,3));
+  const freight = s.lastReport.publicNetwork.freight.find(x=>x.companyId==='H1');
+  assert.ok(freight);
+  assert.equal(freight.requestedMilli,9000);
+  assert.equal(freight.acceptedMilli,blocked?0:9000);
+  assert.equal(freight.returnedMilli,blocked?9000:0);
+  assert.equal(s.transport.firms.H1.BERLIN.marketMilli,blocked?9000:0);
+  checkpoint('public-allocated',1000);
+  assert.equal(firm(s).ledger.filter(e=>e.code==='FRACHT_RUECKGABE').length,
+    blocked?1:0);
+  if (blocked) assert.equal(firm(s).ledger.find(e=>e.code==='FRACHT_RUECKGABE').deltaCent,
+    P.freight(9000,ROUTE));
+  else assert.equal(s.publicNetwork.inTransit[0].arriveMonth,5);
+  s = next(s,label,4);
+  reject(s,command('PUBLIC_OFFER',label,'PREMATURE-OFFER',
+    {from:'BERLIN',to:'NORD',qtyMilli:9000}),/Nicht genug angelieferte Ware/);
+  s = save(close(s,label,4));
+  checkpoint('month-four',1000);
+  s = next(s,label,5);
+  assert.equal(s.publicNetwork.received.H1.NORD,blocked?0:9000);
+  checkpoint('public-arrival',1000);
+  let revenue = 0;
+  if (blocked) {
+    reject(s,command('PUBLIC_OFFER',label,'BLOCKED-OFFER',
+      {from:'BERLIN',to:'NORD',qtyMilli:9000}),/Nicht genug angelieferte Ware/);
+  } else {
+    reject(s,command('PUBLIC_OFFER',label,'OVERSELL',
+      {from:'BERLIN',to:'NORD',qtyMilli:10000}),/Nicht genug angelieferte Ware/);
+    revenue=Math.floor((9000*Math.floor((s.prices.NORD*115+50)/100)+500)/1000);
+    s = step(s,command('PUBLIC_OFFER',label,'SELL',
+      {from:'BERLIN',to:'NORD',qtyMilli:9000}));
+    assert.equal(s.publicNetwork.received.H1.NORD,0);
+  }
+  s = save(close(s,label,5));
+  const sale=s.lastReport.publicNetwork.productMarket.NORD.allocations.H1;
+  if (blocked) assert.equal(sale,undefined);
+  else {
+    assert.ok(sale);
+    assert.equal(sale.soldMilli,9000);
+    assert.equal(sale.revenueCent,revenue);
+  }
+  assert.equal(firm(s).ledger.filter(e=>e.code==='AUSSENMARKT').length,
+    blocked?0:1);
+  assert.equal(firm(s).ledger.filter(e=>e.code==='AUSSENMARKT')
+    .reduce((n,e)=>n+e.deltaCent,0),revenue);
+  assert.equal(s.claims[CLAIM].inventoryMilli,E.CFG.pumpMilli-10000);
+  assert.equal(s.claims[CLAIM].reserveMilli,initialReserve-E.CFG.pumpMilli);
+  checkpoint('settled',1000,blocked?0:9000);
+  assert.equal(physicalStages.length,11);
+  assert.throws(()=>stockAudit(s,'inflated-loss',1001,blocked?0:9000),
+    /physical stock mismatch/);
+  assert.throws(()=>stockAudit(s,'inflated-sale',1000,blocked?1:9001),
+    /physical stock mismatch/);
+  assert.equal(s.transport.shipments.length,0);
+  assert.equal(s.publicNetwork.inTransit.length,0);
+  assert.equal(s.publicNetwork.queued.length,0);
+  assert.equal(s.publicNetwork.offers.length,0);
+  // Every cash movement, including wages, must be traceable to the ledger.
+  const bridge=cashBridge(firm(s).ledger);
+  const ledgerNet=firm(s).ledger.reduce((n,e)=>n+e.deltaCent,0);
+  assert.equal(firm(s).cashCent-initialCash,ledgerNet);
+  assert.equal(bridge.netCent,ledgerNet,'cash bridge differs from ledger');
+  assert.ok(bridge.salesCent>=revenue,'external revenue not classified');
+  assert.ok(bridge.investmentCent<0,'investment cash flows absent');
+  assert.ok(bridge.actionCostCent<0,'action cash flows absent');
+  assert.ok(bridge.freightHoldCent<0,'freight prepayment absent');
+  assert.equal(bridge.freightRefundCent,blocked?P.freight(9000,ROUTE):0);
+  assert.equal(bridge.codes.AUSSENMARKT||0,blocked?0:1);
+  assert.equal(firm(s).generation,1);
+  s = save(next(s,label,6));
+  assert.equal(firm(s).ledger.filter(e=>e.code==='AUSSENMARKT').length,
+    blocked?0:1);
+  assert.equal(s.reports.length,5);
+  // A second, naturally produced batch exercises the same installed refinery
+  // and freight network across scheduled local (M6) and public (M8) outages.
+  // No oil, cash, assets or demand are injected.
+  const secondStartReserve=s.claims[CLAIM].reserveMilli;
+  const hadFire=s.claims[CLAIM].burning;
+  if(hadFire) s=step(s,command('FIRE_EXPERT',label,'M6-FIRE',
+    {claimId:CLAIM}));
+  assert.equal(s.claims[CLAIM].burning,false);
+  s=step(s,command('PUMP',label,'M6-PUMP',{claimId:CLAIM}));
+  assert.equal(s.claims[CLAIM].reserveMilli,
+    secondStartReserve-E.CFG.pumpMilli);
+  assert.equal(s.claims[CLAIM].inventoryMilli,190000);
+  const raw2=command('NETWORK_RAW',label,'M6-RAW',
+    {region:'BERLIN',claimId:CLAIM,qtyMilli:10000});
+  s=step(s,raw2);
+  assert.equal(s.claims[CLAIM].inventoryMilli,180000);
+  const rawDuplicate=E.transition(s,raw2);
+  assert.equal(rawDuplicate.duplicate,true);
+  assert.deepEqual(rawDuplicate.state,s);
+  // Legitimate local market sale funds later repairs; no synthetic cash.
+  s=step(s,command('SHIP',label,'M6-LOCAL-SHIP',{claimId:CLAIM}));
+  s=step(s,command('OFFER',label,'M6-LOCAL-OFFER',{claimId:CLAIM}));
+  s=save(close(s,label,6));
+  const domesticSoldMilli=s.lastReport.allocations.BERLIN[CLAIM]||0;
+  assert.ok(domesticSoldMilli>0,'real domestic sale did not settle');
+  s=next(s,label,7);
+  assert.equal(s.transport.firms.H1.BERLIN.rawMilli,10000);
+  s=step(s,command('NETWORK_REFINE',label,'M7-REFINE',
+    {region:'BERLIN',claimId:CLAIM}));
+  assert.equal(s.refinery.plants.H1.BERLIN.productMilli,9000);
+  const pipe=s.transport.firms.H1.BERLIN.edges['H1:BERLIN:PIPE:'];
+  assert.ok(pipe&&pipe.downUntil>=7,
+    'scheduled M6 local pipeline outage not observed');
+  reject(s,command('NETWORK_PRODUCT',label,'M7-DOWN',
+    {region:'BERLIN',qtyMilli:9000}),/Transportstrecke gestört/);
+  s=step(s,command('NETWORK_REPAIR',label,'M7-REPAIR',
+    {region:'BERLIN',kind:'PIPE'}));
+  s=step(s,command('NETWORK_PRODUCT',label,'M7-PRODUCT',
+    {region:'BERLIN',qtyMilli:9000}));
+  assert.equal(s.refinery.plants.H1.BERLIN.productMilli,0);
+  s=save(close(s,label,7));
+  s=next(s,label,8);
+  assert.equal(s.publicNetwork.links['B-BB'].downUntil,10,
+    'scheduled M8 public network outage not observed');
+  assert.equal(s.transport.firms.H1.BERLIN.marketMilli,
+    blocked?18000:9000);
+  const queue2=command('PUBLIC_QUEUE',label,'M8-QUEUE',
+    {from:'BERLIN',to:'NORD',qtyMilli:9000});
+  s=step(s,queue2);
+  const secondDuplicate=E.transition(s,queue2);
+  assert.equal(secondDuplicate.duplicate,true);
+  assert.deepEqual(secondDuplicate.state,s);
+  s=step(s,command('PUBLIC_REPAIR',label,'M8-REPAIR',
+    {link:'B-BB'}));
+  s=save(close(s,label,8));
+  const secondFreight=s.lastReport.publicNetwork.freight
+    .find(x=>x.companyId==='H1');
+  assert.ok(secondFreight);
+  assert.equal(secondFreight.acceptedMilli,9000);
+  assert.equal(secondFreight.returnedMilli,0);
+  s=next(s,label,9);
+  reject(s,command('PUBLIC_OFFER',label,'M9-EARLY',
+    {from:'BERLIN',to:'NORD',qtyMilli:9000}),
+    /Nicht genug angelieferte Ware/);
+  s=save(close(s,label,9));
+  s=next(s,label,10);
+  assert.equal(s.publicNetwork.received.H1.NORD,9000);
+  s=step(s,command('PUBLIC_OFFER',label,'M10-SELL',
+    {from:'BERLIN',to:'NORD',qtyMilli:9000}));
+  s=save(close(s,label,10));
+  const secondSale=s.lastReport.publicNetwork.productMarket.NORD.allocations.H1;
+  assert.ok(secondSale);
+  assert.equal(secondSale.soldMilli,9000);
+  assert.ok(secondSale.revenueCent>0);
+  assert.equal(s.publicNetwork.received.H1.NORD,0);
+  assert.equal(s.transport.shipments.length,0);
+  assert.equal(s.publicNetwork.inTransit.length,0);
+  assert.equal(s.publicNetwork.queued.length,0);
+  assert.equal(s.publicNetwork.offers.length,0);
+  assert.equal(s.claims[CLAIM].reserveMilli,
+    initialReserve-2*E.CFG.pumpMilli);
+  const totalSoldMilli=(blocked?0:9000)+domesticSoldMilli+secondSale.soldMilli;
+  const remainingMilli=s.claims[CLAIM].inventoryMilli+
+    s.transport.firms.H1.BERLIN.marketMilli;
+  assert.equal(2*E.CFG.pumpMilli,
+    totalSoldMilli+remainingMilli+2000,
+    'two-cycle oil conservation incl. refining losses');
+  const twoCycleBridge=cashBridge(firm(s).ledger);
+  assert.equal(firm(s).cashCent-initialCash,twoCycleBridge.netCent);
+  assert.equal(firm(s).ledger.filter(x=>x.code==='AUSSENMARKT').length,
+    blocked?1:2);
+  assert.equal(s.reports.length,10);
+  s=save(next(s,label,11));
+  return {scenario:label,months:10,producedMilli:E.CFG.pumpMilli,
+    processedRawMilli:10000,refinedProductMilli:9000,
+    deliveredMilli:blocked?0:9000,soldMilli:blocked?0:9000,
+    refundedMilli:blocked?9000:0,revenueCent:revenue,
+    jsonRoundtrips:12,duplicateQueueRejected:true,
+    negativeCases:blocked?4:5,ledgerReconciled:true,
+    physicalCheckpoints:physicalStages.length,physicalNegativeTests:2,
+    physicalStages,cashBridge:bridge,
+    secondCycle:{hadFire,rawDuplicateRejected:true,queueDuplicateRejected:true,
+      pipeRepaired:true,publicLinkRepaired:true,domesticSoldMilli,
+      secondSoldMilli:secondSale.soldMilli,
+      secondRevenueCent:secondSale.revenueCent,totalProducedMilli:2*E.CFG.pumpMilli,
+      totalSoldMilli,remainingMilli,processingLossMilli:2000,
+      ledgerReconciled:true,rescueLoanCount:firm(s).ledger.filter(x=>x.code==='RETTUNGSKREDIT').length,
+      finalMonth:s.month}};
+}
+const rows=[false,true].map(blocked=>{
+  const first=play(blocked);
+  assert.deepEqual(play(blocked),first,'non-deterministic '+first.scenario);
+  return first;
+});
+console.log(JSON.stringify({
+  schema:'pppoppi.natural-oil-export/1',
+  scenarios:2,repeatedRuns:2,totalSimulatedMonths:40,
+  checkedCompanyMonths:80,cashBridgeNegativeTests:8,
+  cashBridgeUnknownCodeChecks:1,physicalChecks:44,
+  physicalNegativeTests:8,rows,
+  untouchedProductionFiles:true,
+  limitations:[
+    'Production and infrastructure use real game actions and normal initial budget.',
+    'The blocked-link scenario injects a valid public disruption, not oil inventory.',
+    'One claim, one refinery and two oil batches across ten months do not establish overall balance.',
+    'Physical stock is reconciled at eleven checkpoints per scenario; no money valuation, depreciation or C64 authenticity is claimed.',
+    'Sales revenue is not net profit or asset valuation; no C64 authenticity is claimed.',
+    'Cash bridge separates sales, capital spending, running cash costs, freight prepayments/refunds and unknown bookings; it does not value assets or calculate profit.',
+    'Browser, scaling, accessibility, asset rights and release gate remain open.'
+  ],
+  prereleaseGate:'BLOCKED'
+},null,2));

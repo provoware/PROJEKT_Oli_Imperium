@@ -1,0 +1,35 @@
+name: Projekt C – zwei natuerliche Raffinerie- und Frachtketten
+on:
+  pull_request:
+    paths:
+      - 'project-c/pppoppi-imperium/quality_v194/test_natural_multifirm_refinery_v194.cjs'
+      - 'project-c/pppoppi-imperium/quality_v194/NATURAL_MULTIFIRM_REFINERY_20261030.md'
+      - 'project-c/pppoppi-imperium/SPIEL/src/**'
+      - 'project-c/pppoppi-imperium/prerelease/matrix.json'
+      - '.github/workflows/prerelease-natural-multifirm.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  natural-multifirm:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Zwei reale Felder, Raffinerien, Roh-/Produkt-/Oeffentlichtransport
+        run: |
+          set -o pipefail
+          node --check project-c/pppoppi-imperium/quality_v194/test_natural_multifirm_refinery_v194.cjs
+          node project-c/pppoppi-imperium/quality_v194/test_natural_multifirm_refinery_v194.cjs | tee natural_multifirm_refinery.json
+          node -e "const r=require('./natural_multifirm_refinery.json'),b=r.result?.baseline,c=r.result?.congested; if(r.schema!=='pppoppi.natural-multifirm-refinery/2'||r.scenarios!==2||r.repeatedRuns!==2||r.simulatedMonths!==20||r.companyMonthChecks!==40||r.jsonRoundtrips!==40||r.duplicateQueuesRejected!==8||r.negativeCorruptionsCaught!==24||r.freightCorruptionsCaught!==64||r.noInjectedOilOrCash!==true||r.prereleaseGate!=='BLOCKED'||!b||!c||[b,c].some(x=>x.totals?.soldTotal!==18000||x.jsonRoundtrips!==10||x.negativeChecks!==6||x.freight?.H1?.acceptedMilli!==9000||x.freight?.H2?.acceptedMilli!==9000||x.allocation?.H1?.soldMilli!==9000||x.allocation?.H2?.soldMilli!==9000)||b.totals.inventoryTotal!==180000||c.totals.inventoryTotal!==178000||b.freightCorruptionsCaught!==14||c.freightCorruptionsCaught!==18||b.freight.H1.returnedMilli!==0||b.freight.H2.returnedMilli!==0||c.freight.H1.returnedMilli!==9000||c.freight.H2.returnedMilli!==9000||c.freight.H1.netFreightCent!==50400||c.freight.H2.netFreightCent!==50400)process.exit(1);"
+      - name: Nachweisdatei sichern
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: natural-multifirm-refinery
+          path: natural_multifirm_refinery.json
+          if-no-files-found: warn
+          retention-days: 14

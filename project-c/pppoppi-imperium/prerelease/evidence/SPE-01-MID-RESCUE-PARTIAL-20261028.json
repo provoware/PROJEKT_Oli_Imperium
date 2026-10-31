@@ -1,0 +1,32 @@
+{
+  "gate_id": "SPE-01",
+  "date": "2026-10-28",
+  "result": "PARTIAL",
+  "tested_code_head": "c8540ff832fbbba8536358a33c1975d9c95d693e",
+  "command": "python3 project-c/pppoppi-imperium/quality_v194/test_browser_two_humans_v194.py",
+  "ci_result": "PASS",
+  "ci_run_url": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40609519522",
+  "ci_job": "chromium-roundtrip",
+  "tested_cases": {
+    "human_companies": 2,
+    "ai_companies": 2,
+    "partial_rescue_save_import": 1,
+    "browser_context_restarts_expected": 2,
+    "browser_context_restarts_observed": 2,
+    "partial_rescue_save_import_observed": 1
+  },
+  "original_source_files_changed": 0,
+  "release_gate": "BLOCKED",
+  "limitations": [
+    "partial case only; complete win/loss games and end rules remain blocked",
+    "earlier CI run 40609444650 failed an independent extension serviceworker-start check; final full CI 40609519522 passed all four browser jobs"
+  ],
+  "verified_on_head": "4deb5c4e3f8f59f10012c710c23a7bd57d0a36f3",
+  "verified_properties": [
+    "H1 loan recorded once before and after mid-rescue export/import",
+    "H2 80000-cent obligation and rescueIds preserved after browser context restart",
+    "H2 restart to generation 2 and H1 assets unchanged",
+    "next month without duplicate loan or monthly settlement",
+    "800x600, no external HTTP requests and no page errors"
+  ]
+}

@@ -1,0 +1,140 @@
+{
+  "schema": "pppoppi.berlin.save/0.6",
+  "ruleset": "berlin-slice-0.4.0",
+  "seed": "BERLIN-1792451214438",
+  "month": 1,
+  "generation": 1,
+  "phase": "MONTH_REPORT",
+  "cashCent": 13110000,
+  "debtCent": 0,
+  "actionDaysUsed": 14,
+  "field": {
+    "owned": true,
+    "surveyed": true,
+    "drilled": true,
+    "reserveMilli": 400000
+  },
+  "tankCapacityMilli": 200000,
+  "inventoryMilli": 20000,
+  "preparedMilli": 0,
+  "order": null,
+  "obligations": [
+    {
+      "id": "M1-G1-PERSONAL",
+      "priority": 1,
+      "dueCent": 90000,
+      "paidCent": 90000,
+      "kind": "PERSONAL"
+    },
+    {
+      "id": "M1-G1-ANLAGE",
+      "priority": 1,
+      "dueCent": 50000,
+      "paidCent": 50000,
+      "kind": "ANLAGE"
+    }
+  ],
+  "ledger": [
+    {
+      "id": "L-1-1",
+      "month": 1,
+      "generation": 1,
+      "code": "GUTACHTEN",
+      "deltaCent": -200000,
+      "detail": "Unabhängiges Probegutachten"
+    },
+    {
+      "id": "L-2-2",
+      "month": 1,
+      "generation": 1,
+      "code": "FELDKAUF",
+      "deltaCent": -5000000,
+      "detail": "Konzession erworben"
+    },
+    {
+      "id": "L-3-3",
+      "month": 1,
+      "generation": 1,
+      "code": "BOHRUNG",
+      "deltaCent": -7000000,
+      "detail": "Förderanlage errichtet"
+    },
+    {
+      "id": "L-4-4",
+      "month": 1,
+      "generation": 1,
+      "code": "FOERDERUNG",
+      "deltaCent": -100000,
+      "detail": "100 Barrel gefördert"
+    },
+    {
+      "id": "L-5-5",
+      "month": 1,
+      "generation": 1,
+      "code": "TRANSPORT",
+      "deltaCent": -50000,
+      "detail": "Liefervorbereitung"
+    },
+    {
+      "id": "L-7-6",
+      "month": 1,
+      "generation": 1,
+      "code": "ERLOES",
+      "deltaCent": 5600000,
+      "detail": "80 Barrel am Markt verkauft"
+    },
+    {
+      "id": "L-7-7",
+      "month": 1,
+      "generation": 1,
+      "code": "RECHNUNG_PERSONAL",
+      "deltaCent": -90000,
+      "detail": "M1-G1-PERSONAL"
+    },
+    {
+      "id": "L-7-8",
+      "month": 1,
+      "generation": 1,
+      "code": "RECHNUNG_ANLAGE",
+      "deltaCent": -50000,
+      "detail": "M1-G1-ANLAGE"
+    }
+  ],
+  "processedIds": [
+    "BERLIN-1792451214438-1792451214674-1",
+    "BERLIN-1792451214438-1792451214788-2",
+    "BERLIN-1792451214438-1792451214889-3",
+    "BERLIN-1792451214438-1792451215124-4",
+    "BERLIN-1792451214438-1792451215189-5",
+    "BERLIN-1792451214438-1792451215324-6",
+    "BERLIN-1792451214438-1792451215455-7"
+  ],
+  "sequence": 7,
+  "loanUsed": false,
+  "rescuedGenerations": 0,
+  "awards": [],
+  "marketStreak": 1,
+  "contractsFinished": 0,
+  "monthReport": {
+    "month": 1,
+    "producedMilli": 100000,
+    "soldMilli": 80000,
+    "revenueCent": 5600000,
+    "marketShareBps": 6667,
+    "unsoldMilli": 20000,
+    "initialShortfallCent": 0,
+    "criticalOutstandingCent": 0
+  },
+  "history": [
+    {
+      "month": 1,
+      "generation": 1,
+      "soldMilli": 80000,
+      "revenueCent": 5600000,
+      "marketShareBps": 6667,
+      "criticalOutstandingCent": 0
+    }
+  ],
+  "message": "Monat abgeschlossen – Bericht ansehen.",
+  "lastProducedMilli": 100000
+}

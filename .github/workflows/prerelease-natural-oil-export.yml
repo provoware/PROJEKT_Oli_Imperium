@@ -1,0 +1,55 @@
+name: Projekt C – echte Oelfoerderung bis Aussenmarkt (gezielter Test)
+on:
+  pull_request:
+    paths:
+      - 'project-c/pppoppi-imperium/quality_v194/test_natural_oil_to_export_v194.cjs'
+      - 'project-c/pppoppi-imperium/quality_v194/test_multiclaim_competition_v194.cjs'
+      - 'project-c/pppoppi-imperium/quality_v194/test_multimonth_competition_v194.cjs'
+      - 'project-c/pppoppi-imperium/quality_v194/MULTIMONTH_COMPETITION_20261030.md'
+      - 'project-c/pppoppi-imperium/quality_v194/MARKET_AUDIT_NEGATIVE_20261030.md'
+      - 'project-c/pppoppi-imperium/quality_v194/MULTICYCLE_OIL_FREIGHT_20261030.md'
+      - 'project-c/pppoppi-imperium/quality_v194/MULTICLAIM_COMPETITION_20261030.md'
+      - 'project-c/pppoppi-imperium/quality_v194/NATURAL_OIL_EXPORT_20261030.md'
+      - 'project-c/pppoppi-imperium/prerelease/matrix.json'
+      - '.github/workflows/prerelease-natural-oil-export.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  natural-oil-export:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax und echte Produktions-, Raffinerie- und Frachtkette
+        run: |
+          set -o pipefail
+          node --check project-c/pppoppi-imperium/quality_v194/test_natural_oil_to_export_v194.cjs
+          node project-c/pppoppi-imperium/quality_v194/test_natural_oil_to_export_v194.cjs | tee natural_oil_export.json
+          node -e "const r=require('./natural_oil_export.json'); const a=r.rows; if(r.scenarios!==2 || r.repeatedRuns!==2 || r.totalSimulatedMonths!==40 || r.checkedCompanyMonths!==80 || a.length!==2 || a[0].soldMilli!==9000 || a[0].revenueCent<=0 || a[1].soldMilli!==0 || a[1].refundedMilli!==9000 || !a.every(x=>x.secondCycle && x.secondCycle.hadFire && x.secondCycle.rawDuplicateRejected && x.secondCycle.queueDuplicateRejected && x.secondCycle.pipeRepaired && x.secondCycle.publicLinkRepaired && x.secondCycle.domesticSoldMilli===102000 && x.secondCycle.secondSoldMilli===9000 && x.secondCycle.secondRevenueCent>0 && x.secondCycle.totalProducedMilli===200000 && x.secondCycle.totalSoldMilli+x.secondCycle.remainingMilli+x.secondCycle.processingLossMilli===200000 && x.secondCycle.ledgerReconciled && x.secondCycle.finalMonth===11) || !a.every(x=>x.ledgerReconciled && x.duplicateQueueRejected && x.jsonRoundtrips===12 && x.cashBridge && x.cashBridge.netCent===Object.entries(x.cashBridge).filter(([k])=>k.endsWith('Cent') && k!=='netCent').reduce((n,[,v])=>n+v,0) && x.cashBridge.investmentCent<0 && x.cashBridge.actionCostCent<0 && x.cashBridge.freightHoldCent<0 && x.cashBridge.salesCent>=x.revenueCent) || r.cashBridgeNegativeTests!==8 || r.cashBridgeUnknownCodeChecks!==1 || r.physicalChecks!==44 || r.physicalNegativeTests!==8 || !a.every(x=>x.physicalCheckpoints===11 && x.physicalNegativeTests===2 && x.physicalStages.length===11 && x.physicalStages.every(y=>y.totalMilli===x.producedMilli && Object.values(y.components).reduce((n,v)=>n+v,0)===x.producedMilli)) || r.prereleaseGate!=='BLOCKED') process.exit(1);"
+      - name: Zwei echte Felder und konkurrierende Firmen
+        run: |
+          set -o pipefail
+          node --check project-c/pppoppi-imperium/quality_v194/test_multiclaim_competition_v194.cjs
+          node project-c/pppoppi-imperium/quality_v194/test_multiclaim_competition_v194.cjs | tee multiclaim_competition.json
+          node -e "const r=require('./multiclaim_competition.json'); if(r.schema!=='pppoppi.multiclaim-competition/1'||r.scenarios!==2||r.repeatedRuns!==2||r.simulatedMonths!==4||r.companyMonthChecks!==8||r.foreignActionRejections!==8||r.deliberateCorruptionsCaught!==12||r.jsonRoundtrips!==8||r.noInjectedCashOrInventory!==true||r.rows.length!==2||r.rows[0].soldMilli!==120000||r.rows[0].remainingMilli!==80000||r.rows[1].soldMilli!==200000||r.rows[1].remainingMilli!==0||r.prereleaseGate!=='BLOCKED') process.exit(1);"
+      - name: Drei Konkurrenzmonate mit 120 Manipulationsproben und 40 Fremdaktionssperren
+        run: |
+          set -o pipefail
+          node --check project-c/pppoppi-imperium/quality_v194/test_multimonth_competition_v194.cjs
+          node project-c/pppoppi-imperium/quality_v194/test_multimonth_competition_v194.cjs | tee multimonth_competition.json
+          node -e "const r=require('./multimonth_competition.json');if(r.schema!=='pppoppi.multimonth-competition/1'||r.scenarios!==1||r.repeatedRuns!==2||r.simulatedMonths!==6||r.companyMonthChecks!==12||r.duplicateChecks!==12||r.jsonRoundtrips!==10||r.foreignActionRejections!==40||r.result.foreignActionRejections!==20||r.deliberateCorruptionsCaught!==120||r.result.deliberateCorruptionsCaught!==60||r.noInjectedCashOrInventory!==true||r.result.reports.length!==3||r.result.producedMilli!==r.result.cumulativeSoldMilli+r.result.remainingMilli||r.prereleaseGate!=='BLOCKED')process.exit(1);"
+      - name: Pruefbeleg sichern
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: natural-oil-export
+          path: |
+            natural_oil_export.json
+            multiclaim_competition.json
+            multimonth_competition.json
+          if-no-files-found: warn
+          retention-days: 14

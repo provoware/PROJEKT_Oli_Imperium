@@ -1,0 +1,35 @@
+name: Projekt C – wiederholte echte Mehrfirmen-Frachtengpaesse
+on:
+  pull_request:
+    paths:
+      - 'project-c/pppoppi-imperium/quality_v194/test_repeated_capacity_v194.cjs'
+      - 'project-c/pppoppi-imperium/quality_v194/REPEATED_CAPACITY_20261031.md'
+      - 'project-c/pppoppi-imperium/SPIEL/src/**'
+      - 'project-c/pppoppi-imperium/prerelease/matrix.json'
+      - '.github/workflows/prerelease-repeated-capacity.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  repeated-capacity:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Zwei reale Engpassmonate und M8/M9-Sperre/Reparatur pruefen
+        run: |
+          set -o pipefail
+          node --check project-c/pppoppi-imperium/quality_v194/test_repeated_capacity_v194.cjs
+          node project-c/pppoppi-imperium/quality_v194/test_repeated_capacity_v194.cjs | tee repeated_capacity.json
+          node -e "const r=require('./repeated_capacity.json'),x=r.result; if(r.schema!=='pppoppi.multifirm-repeated-capacity/1'||r.runs!==2||r.simulatedMonths!==22||r.companyMonthChecks!==44||r.jsonRoundtrips!==42||r.duplicatesRejected!==16||r.corruptionsCaught!==20||r.foreignActionsRejected!==2||r.publicRepairs!==2||r.noInjectedInventoryOrCash!==true||r.prereleaseGate!=='BLOCKED'||!x||x.months!==11||x.finalMonth!==11||x.closedMonth!==8||x.repairedMonth!==9||x.sold?.H1!==27000||x.sold?.H2!==27000||JSON.stringify(x.bottleneckMonths)!=='[3,6]'||JSON.stringify(x.freightMonths)!=='[3,6,8,9]')process.exit(1);"
+      - name: Reproduzierbaren JSON-Nachweis sichern
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: repeated-capacity-11months
+          path: repeated_capacity.json
+          if-no-files-found: warn
+          retention-days: 14

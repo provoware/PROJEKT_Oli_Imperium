@@ -1,0 +1,88 @@
+{
+  "tests": [
+    {
+      "name": "Echtes Büro geladen",
+      "passed": true
+    },
+    {
+      "name": "Verteilungsmodul 1.1 geladen",
+      "passed": true
+    },
+    {
+      "name": "Neue Partie im tatsächlichen Browser gestartet",
+      "passed": true
+    },
+    {
+      "name": "Produktverkauf nur vorgemerkt",
+      "passed": true
+    },
+    {
+      "name": "Keine vorzeitige Auszahlung",
+      "passed": true
+    },
+    {
+      "name": "Offener Auftrag im JSON-Export gesichert",
+      "passed": true
+    },
+    {
+      "name": "Gespeicherter Auftrag wieder importiert",
+      "passed": true
+    },
+    {
+      "name": "Deutliche Kennzeichnung als Monatsauftrag",
+      "passed": true
+    },
+    {
+      "name": "Monatsabschluss inklusive Computerzüge",
+      "passed": true
+    },
+    {
+      "name": "Aufträge nach der Abrechnung geleert",
+      "passed": true
+    },
+    {
+      "name": "Angebot bei ausreichender Nachfrage voll verkauft",
+      "passed": true
+    },
+    {
+      "name": "Abrechnungsanzeige erklärt Produktmarkt",
+      "passed": true
+    },
+    {
+      "name": "Testfixture mit zwei echten menschlichen Firmen geladen",
+      "passed": true
+    },
+    {
+      "name": "Verdeckte Spielerübergabe",
+      "passed": true
+    },
+    {
+      "name": "Wettbewerb 18 zu 18 ergibt 13,5 zu 13,5 Barrel",
+      "passed": true
+    },
+    {
+      "name": "Restware geht zurück ins Firmenlager",
+      "passed": true
+    },
+    {
+      "name": "Keine JavaScript-Laufzeitfehler",
+      "passed": true
+    },
+    {
+      "name": "Keine Netzwerkanfragen",
+      "passed": true
+    }
+  ],
+  "passed": 18,
+  "page_errors": [],
+  "network_requests": [],
+  "screenshots": {
+    "04_Monatsabschluss_Markt.png": "b87e146fe81ee4ce51bf79edfa77050f783d56305ee0cb3948eb7b87e9f17cd1",
+    "05_Vertrauliche_Uebergabe.png": "45b7a07393d0de0fa3f5fbaf9bf41968781c34f569631a1d7a2fb7d7383973cc",
+    "06_Fairer_Mehrspielermarkt.png": "bada8f8d1d210393ddd398fdf326106a069c5df938d70c2f6cc0bf5f0add02fd",
+    "03_Monatsauftrag_Vorgemerkt.png": "2659bc4a522d964fb950c2b6d4a4b68ace98da3ab52f538449a053e620e4e669",
+    "02_Raffinerie_Vor_Auftrag.png": "9bc4dc676c7d8df9e98d726f821e8cf74549887f109538371c510c0ff063da59",
+    "01_Buero_V161.png": "d309f097e00cbd59d4584b88a1322f7852d921c4ea4a8aaf87fdff9d13b8735c"
+  },
+  "method": "Chromium echte Bedienung; gleiche Dateien mittels Einbettung offline geladen; bei den Mehrspielerbildern ausdrücklich synthetischer Startspielstand"
+}

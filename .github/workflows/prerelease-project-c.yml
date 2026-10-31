@@ -1,0 +1,39 @@
+name: Projekt C – integrierte Vorrelease-Sperre
+on:
+  pull_request:
+    paths:
+      - 'project-c/pppoppi-imperium/**'
+      - '.github/workflows/prerelease-project-c.yml'
+  push:
+    branches:
+      - 'agent/prerelease-integrated-*'
+    paths:
+      - 'project-c/pppoppi-imperium/**'
+      - '.github/workflows/prerelease-project-c.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  combined-gates:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Vorrelease-Matrix strukturell prüfen
+        run: node project-c/pppoppi-imperium/prerelease/check.mjs --schema
+      - name: Matrix-Regressionsprüfungen
+        run: node --test project-c/pppoppi-imperium/prerelease/test.mjs
+      - name: A/B-Forschungsvertrag und Grundprüfungen
+        run: |
+          python3 tools/validate_project.py
+          python3 -m unittest discover -s tests -v
+      - name: Import-Sicherheitsregressionen
+        run: python3 -m unittest discover -s project-c/pppoppi-imperium/recovery -p 'test_*.py' -v
+      - name: 110 Originalquellen und Manifest tatsächlich prüfen (harte Sperre)
+        run: python3 project-c/pppoppi-imperium/recovery/verify_sources.py
+      - name: Technische Pflichtmatrix (harte Sperre; niemals BLOCKED als PASS)
+        if: ${{ always() }}
+        run: node project-c/pppoppi-imperium/prerelease/check.mjs --technical

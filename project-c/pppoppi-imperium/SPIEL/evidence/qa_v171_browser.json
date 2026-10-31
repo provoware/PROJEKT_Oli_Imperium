@@ -1,0 +1,64 @@
+{
+  "result": "passed",
+  "checks": 28,
+  "screenshots": [
+    {
+      "file": "01_Buero_Neo_Retro.png",
+      "sha256": "868956d732fbfb6a05e4154fdeb51edbed7c3a49eaeba2e5c38d5badde697f71",
+      "test": "Neue öffentliche Netzschicht im Browser geladen"
+    },
+    {
+      "file": "02_Oeffentliches_Netz_Uebersicht.png",
+      "sha256": "7837ba44aa92243ef94c9766ffa815ff398020c7a2b6e01ae0a1ef105f562c6f",
+      "test": "Netzdiagramm Berlin-Brandenburg-Nord wird angezeigt"
+    },
+    {
+      "file": "03_Anschluss_gebaut.png",
+      "sha256": "ae97073a5ac13a9a7de26b6ee9ef7ab5364908bda0cdf200a19555a58c967369",
+      "test": "H1 bezahlt Anschluss Berlin-Brandenburg"
+    },
+    {
+      "file": "04_Transportauftrag_vorgemerkt.png",
+      "sha256": "dae7b29f487b4f365d4c15acb0d74585bbf0408636e0341ca7778ca2d7f7015e",
+      "test": "H1 sichert 9 Barrel für öffentliche Lieferung"
+    },
+    {
+      "file": "05_Zweiter_Spieler.png",
+      "sha256": "8998e24509de38bf80b67b86926e09d7ef156478553277ca7acfeb8ac6b0f2b6",
+      "test": "Vertraulicher Wechsel zu H2 ausgelöst"
+    },
+    {
+      "file": "06_Faire_Zuteilung_Abschluss.png",
+      "sha256": "140c02bc1c4fea1d5986e668da00b392c9dfc6b77415086a2b269887aa1dd40f",
+      "test": "Genau 24 Barrel fair verteilt"
+    },
+    {
+      "file": "07_Zuteilung_im_Netz.png",
+      "sha256": "073c79b613d414151c80ecd34f767ccbc91ea1f0c9eed875f3040540b35acf07",
+      "test": "Fairer Monatsabschluss firmengenau angezeigt"
+    },
+    {
+      "file": "07b_Zuteilung_Detail.png",
+      "sha256": "1883b1c4685a1f1b43caeaaafbc88d9f09a483b365a55b39f0969c8dbebeb4b0",
+      "test": "Fairer Monatsabschluss firmengenau angezeigt"
+    },
+    {
+      "file": "08_Angelieferte_Ware.png",
+      "sha256": "531349dc7de1507e4895d16bb57c1e39498115efd320c202e00f0161f029ed06",
+      "test": "Spielstand einschließlich öffentlicher Lieferungen tatsächlich importiert"
+    },
+    {
+      "file": "08b_Exportangebot.png",
+      "sha256": "0c9eab3fc0b946499e22ff89d555b06e395bdab17a50442ea9468318bc149eed",
+      "test": "Marktmenge aus Zielbestand korrekt reserviert"
+    },
+    {
+      "file": "09_Mobilansicht_Oeffentliches_Netz.png",
+      "sha256": "01dff2b69f425e8db0d75872450785b9e08736a2259d054c2b5c92ce8a6f92d6",
+      "test": "Keine horizontale Überbreite der Mobilansicht"
+    }
+  ],
+  "page_errors": [],
+  "requests": [],
+  "notes": "Browser per eingebetteten HTML/CSS/JS getestet. Direkter Kubuntu-Dateistart nicht geprüft."
+}

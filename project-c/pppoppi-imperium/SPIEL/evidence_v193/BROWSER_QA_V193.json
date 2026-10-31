@@ -1,0 +1,118 @@
+{
+  "version": "1.9.3",
+  "passed": 20,
+  "total": 20,
+  "checks": [
+    {
+      "check": "Strategisches Logistikmodul geladen",
+      "passed": true
+    },
+    {
+      "check": "Logistikversion eindeutig",
+      "passed": true
+    },
+    {
+      "check": "KI-Protokoll verfügbar",
+      "passed": true
+    },
+    {
+      "check": "Partie mit zwei KI-Firmen startet",
+      "passed": true
+    },
+    {
+      "check": "Monatsabschluss erreichbar",
+      "passed": true
+    },
+    {
+      "check": "Entscheidungsfenster öffnet",
+      "passed": true
+    },
+    {
+      "check": "Entscheidungsfenster schließt",
+      "passed": true
+    },
+    {
+      "check": "Folgemonat erreichbar",
+      "passed": true
+    },
+    {
+      "check": "Belegspielstand erfolgreich geladen",
+      "passed": true
+    },
+    {
+      "check": "Echte KI-Logistikhandlungen protokolliert",
+      "passed": true
+    },
+    {
+      "check": "Öffentlicher Transport im KI-Protokoll sichtbar",
+      "passed": true
+    },
+    {
+      "check": "Protokoll verändert keinen Spielzustand",
+      "passed": true
+    },
+    {
+      "check": "Öffentliche Netzübersicht angezeigt",
+      "passed": true
+    },
+    {
+      "check": "Spielstand exportiert",
+      "passed": true
+    },
+    {
+      "check": "Netz-Monatsberichte im Export vorhanden",
+      "passed": true
+    },
+    {
+      "check": "Reimport erfolgreich",
+      "passed": true
+    },
+    {
+      "check": "Mobile Breite ohne horizontalen Überlauf",
+      "passed": true
+    },
+    {
+      "check": "Mobiles KI-Protokoll nutzbar",
+      "passed": true
+    },
+    {
+      "check": "Keine JavaScript-Laufzeitfehler",
+      "passed": true
+    },
+    {
+      "check": "Keine HTTP-Netzwerkanfragen",
+      "passed": true
+    }
+  ],
+  "screenshots": [
+    {
+      "name": "01_Buero_V193.png",
+      "sha256": "3597d707e42c07c4cbd6dff95f2ec633841bb6cf8d9b0b48f51d755db7e58cbf",
+      "bytes": 1151050
+    },
+    {
+      "name": "02_KI_Logistikprotokoll.png",
+      "sha256": "063d6581a5d2931f7c4301d4801ad52b86191c1b8d8609937e14923f4266d542",
+      "bytes": 206511
+    },
+    {
+      "name": "03_Monatsbericht_Konkurrenz.png",
+      "sha256": "b7027da089585f01d1aa8bf3b94d4b66cb493a4f5118ef8ca24026f85b9bee3f",
+      "bytes": 163674
+    },
+    {
+      "name": "04_Oeffentliches_Netz.png",
+      "sha256": "a14e7e8b048dc86f03946be7f1c3edc230cb330d2efa3de22ac76681808651e0",
+      "bytes": 224901
+    },
+    {
+      "name": "05_Mobile_Ansicht.png",
+      "sha256": "2ac3dd017599dcee1746e19d1d64ccf4503d23850864b1dac60da5797e62fbea",
+      "bytes": 215626
+    }
+  ],
+  "errors": [],
+  "requests": [],
+  "method": "Chromium, lokale Programmdateien eingebettet; kein direkter file://-Kubuntu-Test",
+  "referenceC64": "nicht geprüft"
+}

@@ -1,0 +1,35 @@
+{
+  "gate_id": "SPE-01",
+  "related_gate_ids": [
+    "VER-02",
+    "VER-03",
+    "LOG-04",
+    "GRA-03",
+    "SIC-03"
+  ],
+  "date": "2026-10-28",
+  "result": "PARTIAL",
+  "test_scope": "2 Menschen + 2 KI, 8 sichtbare Wirtschaftsaktionen, 2 natuerliche H1-Insolvenzen, Generationen 1 bis 3, 167 Folgemonate, 4 echte Chromium-Prozesse, 3 exakte JSON-Importe, 800x600, Offlinekontrolle",
+  "command": "python3 project-c/pppoppi-imperium/quality_v194/test_browser_multigeneration_rescue_v194.py",
+  "ci_run_url": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40658275568",
+  "ci_job": "browser-multigeneration",
+  "ci_step_result": "PASS",
+  "tested_head": "b87ce84ee3f749c53cf6737e92cca156eed650b9",
+  "final_documentation_head": "PENDING_FINAL_CI",
+  "original_source_files_changed": 0,
+  "release_gate": "BLOCKED",
+  "verified_properties": [
+    "Erste Insolvenz ausschliesslich durch acht sichtbare Wirtschaftsaktionen",
+    "Zweite Insolvenz nach 167 echten Folgemonaten; H1-Generation 3 und zwei Sanierungsereignisse",
+    "Vier getrennte Chromium-Prozesse und drei verlustfreie JSON-Importe",
+    "120er-Ringgrenze der Monatsberichte respektiert; Monatsereignisse genau einmal",
+    "Zweiter Mensch bleibt Generation 1; keine doppelten Buchungskennungen",
+    "800x600 ohne horizontalen Seitenueberlauf, keine externen HTTP-Anfragen, keine JavaScript-Laufzeitfehler"
+  ],
+  "limitations": [
+    "Teiltest, keine vollstaendige Sieg-/Niederlagenpartie",
+    "Endregelvertrag fuer Projekt C nicht freigegeben",
+    "Historische C64-Originalverifikation offen",
+    "Finale CI auf Dokumentations-HEAD ausstehend"
+  ]
+}

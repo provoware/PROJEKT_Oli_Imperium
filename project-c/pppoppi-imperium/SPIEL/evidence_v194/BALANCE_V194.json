@@ -1,0 +1,647 @@
+{
+  "version": "1.9.4",
+  "source": "actual V1.9.3 game engine",
+  "limitations": [
+    "Human agent follows deterministic simple decisions, not actual human players",
+    "No validation of C64 original",
+    "Passing invariants does not demonstrate fair or fun balance"
+  ],
+  "results": [
+    {
+      "name": "passive_normal",
+      "mode": "passive",
+      "months": 36,
+      "passed": true,
+      "final": [
+        {
+          "id": "H1",
+          "kind": "human",
+          "cashCent": 16760000,
+          "debtCent": 0,
+          "fields": 0,
+          "rescues": 0
+        },
+        {
+          "id": "A1",
+          "kind": "ai",
+          "cashCent": 94839291,
+          "debtCent": 0,
+          "fields": 3,
+          "rescues": 0
+        },
+        {
+          "id": "A2",
+          "kind": "ai",
+          "cashCent": 93018238,
+          "debtCent": 0,
+          "fields": 3,
+          "rescues": 0
+        },
+        {
+          "id": "A3",
+          "kind": "ai",
+          "cashCent": 103287233,
+          "debtCent": 0,
+          "fields": 3,
+          "rescues": 0
+        }
+      ],
+      "metrics": {
+        "strategicDecisions": 285,
+        "logisticDecisions": 211,
+        "totalRescues": 0,
+        "companiesWithFields": 3
+      },
+      "annual": [
+        {
+          "month": 12,
+          "firms": [
+            {
+              "id": "H1",
+              "kind": "human",
+              "cashCent": 18920000,
+              "debtCent": 0,
+              "fields": 0,
+              "rescues": 0
+            },
+            {
+              "id": "A1",
+              "kind": "ai",
+              "cashCent": 90731820,
+              "debtCent": 0,
+              "fields": 3,
+              "rescues": 0
+            },
+            {
+              "id": "A2",
+              "kind": "ai",
+              "cashCent": 73256307,
+              "debtCent": 0,
+              "fields": 3,
+              "rescues": 0
+            },
+            {
+              "id": "A3",
+              "kind": "ai",
+              "cashCent": 80618852,
+              "debtCent": 0,
+              "fields": 3,
+              "rescues": 0
+            }
+          ]
+        },
+        {
+          "month": 24,
+          "firms": [
+            {
+              "id": "H1",
+              "kind": "human",
+              "cashCent": 17840000,
+              "debtCent": 0,
+              "fields": 0,
+              "rescues": 0
+            },
+            {
+              "id": "A1",
+              "kind": "ai",
+              "cashCent": 99189291,
+              "debtCent": 0,
+              "fields": 3,
+              "rescues": 0
+            },
+            {
+              "id": "A2",
+              "kind": "ai",
+              "cashCent": 97278238,
+              "debtCent": 0,
+              "fields": 3,
+              "rescues": 0
+            },
+            {
+              "id": "A3",
+              "kind": "ai",
+              "cashCent": 107457233,
+              "debtCent": 0,
+              "fields": 3,
+              "rescues": 0
+            }
+          ]
+        },
+        {
+          "month": 36,
+          "firms": [
+            {
+              "id": "H1",
+              "kind": "human",
+              "cashCent": 16760000,
+              "debtCent": 0,
+              "fields": 0,
+              "rescues": 0
+            },
+            {
+              "id": "A1",
+              "kind": "ai",
+              "cashCent": 94839291,
+              "debtCent": 0,
+              "fields": 3,
+              "rescues": 0
+            },
+            {
+              "id": "A2",
+              "kind": "ai",
+              "cashCent": 93018238,
+              "debtCent": 0,
+              "fields": 3,
+              "rescues": 0
+            },
+            {
+              "id": "A3",
+              "kind": "ai",
+              "cashCent": 103287233,
+              "debtCent": 0,
+              "fields": 3,
+              "rescues": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "active_normal",
+      "mode": "active",
+      "months": 36,
+      "passed": true,
+      "final": [
+        {
+          "id": "H1",
+          "kind": "human",
+          "cashCent": 2424428,
+          "debtCent": 12753687,
+          "fields": 5,
+          "rescues": 0
+        },
+        {
+          "id": "A1",
+          "kind": "ai",
+          "cashCent": 85573672,
+          "debtCent": 0,
+          "fields": 3,
+          "rescues": 0
+        },
+        {
+          "id": "A2",
+          "kind": "ai",
+          "cashCent": 36046039,
+          "debtCent": 0,
+          "fields": 1,
+          "rescues": 0
+        },
+        {
+          "id": "A3",
+          "kind": "ai",
+          "cashCent": 16760000,
+          "debtCent": 0,
+          "fields": 0,
+          "rescues": 0
+        }
+      ],
+      "metrics": {
+        "strategicDecisions": 107,
+        "logisticDecisions": 137,
+        "totalRescues": 0,
+        "companiesWithFields": 3
+      },
+      "annual": [
+        {
+          "month": 12,
+          "firms": [
+            {
+              "id": "H1",
+              "kind": "human",
+              "cashCent": 2711135,
+              "debtCent": 8525945,
+              "fields": 5,
+              "rescues": 0
+            },
+            {
+              "id": "A1",
+              "kind": "ai",
+              "cashCent": 77849541,
+              "debtCent": 0,
+              "fields": 3,
+              "rescues": 0
+            },
+            {
+              "id": "A2",
+              "kind": "ai",
+              "cashCent": 42166039,
+              "debtCent": 0,
+              "fields": 1,
+              "rescues": 0
+            },
+            {
+              "id": "A3",
+              "kind": "ai",
+              "cashCent": 18920000,
+              "debtCent": 0,
+              "fields": 0,
+              "rescues": 0
+            }
+          ]
+        },
+        {
+          "month": 24,
+          "firms": [
+            {
+              "id": "H1",
+              "kind": "human",
+              "cashCent": 3480518,
+              "debtCent": 11400430,
+              "fields": 5,
+              "rescues": 0
+            },
+            {
+              "id": "A1",
+              "kind": "ai",
+              "cashCent": 90943672,
+              "debtCent": 0,
+              "fields": 3,
+              "rescues": 0
+            },
+            {
+              "id": "A2",
+              "kind": "ai",
+              "cashCent": 39106039,
+              "debtCent": 0,
+              "fields": 1,
+              "rescues": 0
+            },
+            {
+              "id": "A3",
+              "kind": "ai",
+              "cashCent": 17840000,
+              "debtCent": 0,
+              "fields": 0,
+              "rescues": 0
+            }
+          ]
+        },
+        {
+          "month": 36,
+          "firms": [
+            {
+              "id": "H1",
+              "kind": "human",
+              "cashCent": 2424428,
+              "debtCent": 12753687,
+              "fields": 5,
+              "rescues": 0
+            },
+            {
+              "id": "A1",
+              "kind": "ai",
+              "cashCent": 85573672,
+              "debtCent": 0,
+              "fields": 3,
+              "rescues": 0
+            },
+            {
+              "id": "A2",
+              "kind": "ai",
+              "cashCent": 36046039,
+              "debtCent": 0,
+              "fields": 1,
+              "rescues": 0
+            },
+            {
+              "id": "A3",
+              "kind": "ai",
+              "cashCent": 16760000,
+              "debtCent": 0,
+              "fields": 0,
+              "rescues": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "active_low_demand",
+      "mode": "active",
+      "months": 36,
+      "passed": true,
+      "final": [
+        {
+          "id": "H1",
+          "kind": "human",
+          "cashCent": 2424428,
+          "debtCent": 12753687,
+          "fields": 5,
+          "rescues": 0
+        },
+        {
+          "id": "A1",
+          "kind": "ai",
+          "cashCent": 87692499,
+          "debtCent": 0,
+          "fields": 3,
+          "rescues": 0
+        },
+        {
+          "id": "A2",
+          "kind": "ai",
+          "cashCent": 36334977,
+          "debtCent": 0,
+          "fields": 1,
+          "rescues": 0
+        },
+        {
+          "id": "A3",
+          "kind": "ai",
+          "cashCent": 16760000,
+          "debtCent": 0,
+          "fields": 0,
+          "rescues": 0
+        }
+      ],
+      "metrics": {
+        "strategicDecisions": 114,
+        "logisticDecisions": 125,
+        "totalRescues": 0,
+        "companiesWithFields": 3
+      },
+      "annual": [
+        {
+          "month": 12,
+          "firms": [
+            {
+              "id": "H1",
+              "kind": "human",
+              "cashCent": 2711135,
+              "debtCent": 8525945,
+              "fields": 5,
+              "rescues": 0
+            },
+            {
+              "id": "A1",
+              "kind": "ai",
+              "cashCent": 71941718,
+              "debtCent": 0,
+              "fields": 3,
+              "rescues": 0
+            },
+            {
+              "id": "A2",
+              "kind": "ai",
+              "cashCent": 42454977,
+              "debtCent": 0,
+              "fields": 1,
+              "rescues": 0
+            },
+            {
+              "id": "A3",
+              "kind": "ai",
+              "cashCent": 18920000,
+              "debtCent": 0,
+              "fields": 0,
+              "rescues": 0
+            }
+          ]
+        },
+        {
+          "month": 24,
+          "firms": [
+            {
+              "id": "H1",
+              "kind": "human",
+              "cashCent": 3480518,
+              "debtCent": 11400430,
+              "fields": 5,
+              "rescues": 0
+            },
+            {
+              "id": "A1",
+              "kind": "ai",
+              "cashCent": 93062499,
+              "debtCent": 0,
+              "fields": 3,
+              "rescues": 0
+            },
+            {
+              "id": "A2",
+              "kind": "ai",
+              "cashCent": 39394977,
+              "debtCent": 0,
+              "fields": 1,
+              "rescues": 0
+            },
+            {
+              "id": "A3",
+              "kind": "ai",
+              "cashCent": 17840000,
+              "debtCent": 0,
+              "fields": 0,
+              "rescues": 0
+            }
+          ]
+        },
+        {
+          "month": 36,
+          "firms": [
+            {
+              "id": "H1",
+              "kind": "human",
+              "cashCent": 2424428,
+              "debtCent": 12753687,
+              "fields": 5,
+              "rescues": 0
+            },
+            {
+              "id": "A1",
+              "kind": "ai",
+              "cashCent": 87692499,
+              "debtCent": 0,
+              "fields": 3,
+              "rescues": 0
+            },
+            {
+              "id": "A2",
+              "kind": "ai",
+              "cashCent": 36334977,
+              "debtCent": 0,
+              "fields": 1,
+              "rescues": 0
+            },
+            {
+              "id": "A3",
+              "kind": "ai",
+              "cashCent": 16760000,
+              "debtCent": 0,
+              "fields": 0,
+              "rescues": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "active_low_price",
+      "mode": "active",
+      "months": 36,
+      "passed": true,
+      "final": [
+        {
+          "id": "H1",
+          "kind": "human",
+          "cashCent": 2424428,
+          "debtCent": 12753687,
+          "fields": 5,
+          "rescues": 0
+        },
+        {
+          "id": "A1",
+          "kind": "ai",
+          "cashCent": 25848303,
+          "debtCent": 0,
+          "fields": 3,
+          "rescues": 0
+        },
+        {
+          "id": "A2",
+          "kind": "ai",
+          "cashCent": 12827789,
+          "debtCent": 0,
+          "fields": 1,
+          "rescues": 0
+        },
+        {
+          "id": "A3",
+          "kind": "ai",
+          "cashCent": 16760000,
+          "debtCent": 0,
+          "fields": 0,
+          "rescues": 0
+        }
+      ],
+      "metrics": {
+        "strategicDecisions": 105,
+        "logisticDecisions": 57,
+        "totalRescues": 0,
+        "companiesWithFields": 3
+      },
+      "annual": [
+        {
+          "month": 12,
+          "firms": [
+            {
+              "id": "H1",
+              "kind": "human",
+              "cashCent": 2711135,
+              "debtCent": 8525945,
+              "fields": 5,
+              "rescues": 0
+            },
+            {
+              "id": "A1",
+              "kind": "ai",
+              "cashCent": 24820242,
+              "debtCent": 0,
+              "fields": 3,
+              "rescues": 0
+            },
+            {
+              "id": "A2",
+              "kind": "ai",
+              "cashCent": 18947789,
+              "debtCent": 0,
+              "fields": 1,
+              "rescues": 0
+            },
+            {
+              "id": "A3",
+              "kind": "ai",
+              "cashCent": 18920000,
+              "debtCent": 0,
+              "fields": 0,
+              "rescues": 0
+            }
+          ]
+        },
+        {
+          "month": 24,
+          "firms": [
+            {
+              "id": "H1",
+              "kind": "human",
+              "cashCent": 3480518,
+              "debtCent": 11400430,
+              "fields": 5,
+              "rescues": 0
+            },
+            {
+              "id": "A1",
+              "kind": "ai",
+              "cashCent": 31558303,
+              "debtCent": 0,
+              "fields": 3,
+              "rescues": 0
+            },
+            {
+              "id": "A2",
+              "kind": "ai",
+              "cashCent": 15887789,
+              "debtCent": 0,
+              "fields": 1,
+              "rescues": 0
+            },
+            {
+              "id": "A3",
+              "kind": "ai",
+              "cashCent": 17840000,
+              "debtCent": 0,
+              "fields": 0,
+              "rescues": 0
+            }
+          ]
+        },
+        {
+          "month": 36,
+          "firms": [
+            {
+              "id": "H1",
+              "kind": "human",
+              "cashCent": 2424428,
+              "debtCent": 12753687,
+              "fields": 5,
+              "rescues": 0
+            },
+            {
+              "id": "A1",
+              "kind": "ai",
+              "cashCent": 25848303,
+              "debtCent": 0,
+              "fields": 3,
+              "rescues": 0
+            },
+            {
+              "id": "A2",
+              "kind": "ai",
+              "cashCent": 12827789,
+              "debtCent": 0,
+              "fields": 1,
+              "rescues": 0
+            },
+            {
+              "id": "A3",
+              "kind": "ai",
+              "cashCent": 16760000,
+              "debtCent": 0,
+              "fields": 0,
+              "rescues": 0
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

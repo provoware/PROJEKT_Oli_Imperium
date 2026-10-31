@@ -1,0 +1,36 @@
+{
+  "gate_id": "BED-02",
+  "result": "PARTIAL",
+  "date": "2026-10-26",
+  "commit": "0b0f54c3fed5abd4d6ab55116a45e277f183ea49",
+  "command": "python3 project-c/pppoppi-imperium/quality_v194/test_browser_keyboard_pipe_fire_v194.py",
+  "ci_url": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40406059761",
+  "checks": {
+    "browser_step": "PASS",
+    "full_browser_workflow": "PASS",
+    "source_workflow": "PASS",
+    "source_ci_url": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40406059619",
+    "viewport_modes": [
+      "800x600",
+      "CSS-200"
+    ],
+    "pipe_stages_per_mode": 3,
+    "pipe_rotations_per_mode": 32,
+    "fire_stages_per_mode": 3,
+    "deliberate_wrong_choice_per_mode": 1,
+    "natural_fire_month": 4,
+    "keyboard": [
+      "Tab",
+      "Enter"
+    ],
+    "economic_state_validation": true,
+    "export_equal": true,
+    "offline_no_http": true
+  },
+  "limits": [
+    "Nur Rohrnetz- und Feuerwehr-Minispiele plus Vorbereitung und Monatswechsel geprueft.",
+    "CSS-200 ist eine verkleinerte CSS-Breite, kein nativer Browserzoom.",
+    "Visueller Fokuskontrast und saemtliche anderen Dialogaktionen nicht vollstaendig geprueft.",
+    "Technische Vorrelease-Gesamtmatrix weiterhin BLOCKED, keine persoenliche Endabnahme."
+  ]
+}

@@ -1,0 +1,159 @@
+{
+  "checks": [
+    {
+      "name": "Chefbüro sichtbar",
+      "ok": true
+    },
+    {
+      "name": "Neue Partie mit 9 Claims",
+      "ok": true
+    },
+    {
+      "name": "Drei regionale Märkte",
+      "ok": true
+    },
+    {
+      "name": "Kartenmarker drei Regionen",
+      "ok": true
+    },
+    {
+      "name": "Illustration der Deutschlandkarte",
+      "ok": true
+    },
+    {
+      "name": "Industrie-Kurzwege an Claim",
+      "ok": true
+    },
+    {
+      "name": "Industriehof erreichbar",
+      "ok": true
+    },
+    {
+      "name": "Darstellung weist Fabrik als Kulisse aus",
+      "ok": true
+    },
+    {
+      "name": "Rückweg von Industrie zu Claim",
+      "ok": true
+    },
+    {
+      "name": "Drei Spielfiguren vorhanden",
+      "ok": true
+    },
+    {
+      "name": "Pete reagiert auf Wirtschaftsdaten",
+      "ok": true
+    },
+    {
+      "name": "Edna reagiert auf Wirtschaftsdaten",
+      "ok": true
+    },
+    {
+      "name": "PPPOPPI reagiert auf Wirtschaftsdaten",
+      "ok": true
+    },
+    {
+      "name": "Dialoge verändern Spielstand nicht",
+      "ok": true
+    },
+    {
+      "name": "Claim gekauft, Status im selben Kern",
+      "ok": true
+    },
+    {
+      "name": "Minispiel Abschnitt 1",
+      "ok": true
+    },
+    {
+      "name": "Minispiel Abschnitt 2",
+      "ok": true
+    },
+    {
+      "name": "Minispiel Abschnitt 3",
+      "ok": true
+    },
+    {
+      "name": "Drei Prüfungen schalten Bohrturm frei",
+      "ok": true
+    },
+    {
+      "name": "Pumpenanimation nur bei erschlossenem Feld",
+      "ok": true
+    },
+    {
+      "name": "Direktweg Tanklager erfolgreich",
+      "ok": true
+    },
+    {
+      "name": "Ereignischronik zeigt reale Simulation",
+      "ok": true
+    },
+    {
+      "name": "Ereignisarchiv besitzt Rückwege",
+      "ok": true
+    },
+    {
+      "name": "Meldungen belasten keine Wirtschaft",
+      "ok": true
+    },
+    {
+      "name": "Telefon bietet Vorstandszimmer",
+      "ok": true
+    },
+    {
+      "name": "Keine Browser-Laufzeitfehler",
+      "ok": true
+    },
+    {
+      "name": "Keine Netzwerkanfragen",
+      "ok": true
+    },
+    {
+      "name": "Mobilansicht ohne horizontale Seitenleiste",
+      "ok": true
+    },
+    {
+      "name": "Mobile Dialogfiguren vollständig",
+      "ok": true
+    }
+  ],
+  "passed": 29,
+  "total": 29,
+  "screenshots": [
+    {
+      "file": "screenshots_v12/01_Buero_V12.png",
+      "sha256": "e05956db9a46aacba020938d0cfe16ef13caa473561b275614bee80a2d1d0499"
+    },
+    {
+      "file": "screenshots_v12/02_Karte_V12.png",
+      "sha256": "0d7992759dee59029e41323c6170acbbe2bd2bd057949e5aad607c224ae8ff36"
+    },
+    {
+      "file": "screenshots_v12/03_Industriehof_V12.png",
+      "sha256": "2b4f35bc8e486bf2714e9cea1299a342c4377874b0560a2205802c7bdebd2d11"
+    },
+    {
+      "file": "screenshots_v12/04_Vorstand_V13.png",
+      "sha256": "9807505a5fe0a0c20366202478dcf6b9b61480977e87331fec371b58229a4f8a"
+    },
+    {
+      "file": "screenshots_v12/05_Foerderung_V12.png",
+      "sha256": "a33a93238e1ea9ec7ba65b6933c26ff8386c414e79e7b97ab693130659938410"
+    },
+    {
+      "file": "screenshots_v12/06_Tanklager_V12.png",
+      "sha256": "0a6f7abf46d6de811f9413c20c711b503d3dbdcaccc7eb5c03919ecdebe8efcf"
+    },
+    {
+      "file": "screenshots_v12/08_Ereignisse_V13.png",
+      "sha256": "32193673dbe565172aa03babdc620c79a91a5b6fb1d61e156f9b4e3dbd11d8fd"
+    },
+    {
+      "file": "screenshots_v12/07_Mobil_V13.png",
+      "sha256": "7713af7d1b8bd24d9b916273d0a8712e6fe23e31e0f280687b1f50274e8dca02"
+    }
+  ],
+  "console_errors": [],
+  "network_requests": [],
+  "source": "Chromium, inline offline files; no Kubuntu double-click test"
+}
