@@ -11,6 +11,8 @@ on:
       - 'project-c/pppoppi-imperium/quality_v194/test_cost_special_cases_v194.cjs'
       - 'project-c/pppoppi-imperium/quality_v194/test_cost_impairment_v194.cjs'
       - 'project-c/pppoppi-imperium/quality_v194/test_cost_multifirm_public_v194.cjs'
+      - 'project-c/pppoppi-imperium/quality_v194/test_cost_raw_damage_v194.cjs'
+      - 'project-c/pppoppi-imperium/quality_v194/RAW_INVENTORY_DAMAGE_20261031.md'
       - 'project-c/pppoppi-imperium/quality_v194/IMPAIRMENT_AND_MULTIFIRM_20261031.md'
       - 'project-c/pppoppi-imperium/quality_v194/COST_SPECIAL_CASES_20261031.md'
       - 'project-c/pppoppi-imperium/quality_v194/ACCOUNTING_MODEL_RULES_20261031.md'
@@ -43,6 +45,7 @@ jobs:
           node --check project-c/pppoppi-imperium/quality_v194/test_cost_special_cases_v194.cjs
           node --check project-c/pppoppi-imperium/quality_v194/test_cost_impairment_v194.cjs
           node --check project-c/pppoppi-imperium/quality_v194/test_cost_multifirm_public_v194.cjs
+          node --check project-c/pppoppi-imperium/quality_v194/test_cost_raw_damage_v194.cjs
       - name: Vorliegende echte Geldpositionstests – keine verdeckte Gewinnfreigabe
         run: node --test project-c/pppoppi-imperium/quality_v194/test_financial_boundaries_v194.cjs
       - name: Unabhaengige Bilanzgrenzen und viermonatige Warenkostenregression
@@ -56,6 +59,8 @@ jobs:
         run: node --test project-c/pppoppi-imperium/quality_v194/test_cost_impairment_v194.cjs
       - name: Zwei Konkurrenten, Teil-Rückerstattung und keine Schein-Forderung
         run: node --test project-c/pppoppi-imperium/quality_v194/test_cost_multifirm_public_v194.cjs
+      - name: Brandschäden mit realen Rohölmengen und eigenem Bewertungsbeleg
+        run: node --test project-c/pppoppi-imperium/quality_v194/test_cost_raw_damage_v194.cjs
       - name: Sperrkennzeichen im Forschungsmodul nachweisen
         run: |
           node - <<'NODE'
@@ -64,8 +69,9 @@ jobs:
           assert.equal(c.POLICY.status,'DRAFT_NOT_APPROVED');
           assert.equal(c.POLICY.releaseGate,'BLOCKED');
           assert.match(c.POLICY.id,/DRAFT/);
-          assert.equal(c.POLICY.id,'PPPOPPI-ADAPT/FIN-COST/3-DRAFT');
+          assert.equal(c.POLICY.id,'PPPOPPI-ADAPT/FIN-COST/4-DRAFT');
           assert.equal(typeof c.recordDamageValuation,'function');
+          assert.equal(typeof c.recordRawInventoryValuation,'function');
           console.log('PASS: Kein Original-, Gewinn-, Matrix- oder Merge-Freigabestatus');
           NODE
   governance:
