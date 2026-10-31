@@ -1,0 +1,48 @@
+name: Projekt C – unabhängige Anschaffungskosten- und Verbindlichkeitenbrücke
+on:
+  pull_request:
+    paths:
+      - 'project-c/pppoppi-imperium/quality_v194/test_asset_cost_bridge_v194.cjs'
+      - 'project-c/pppoppi-imperium/quality_v194/ASSET_COST_BRIDGE_20261031.md'
+      - 'project-c/pppoppi-imperium/prerelease/matrix.json'
+      - '.github/workflows/prerelease-asset-cost-bridge.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  asset-cost-bridge:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Technische Syntax und echte Anschaffungskostenbruecke
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check project-c/pppoppi-imperium/quality_v194/test_asset_cost_bridge_v194.cjs
+          node project-c/pppoppi-imperium/quality_v194/test_asset_cost_bridge_v194.cjs | tee asset_cost_bridge.json
+          node - <<'NODE'
+          const assert=require('node:assert/strict');
+          const fs=require('node:fs');
+          const r=JSON.parse(fs.readFileSync('asset_cost_bridge.json','utf8'));
+          assert.equal(r.schema,'pppoppi.asset-cost-bridge/1');
+          assert.equal(r.scenarios,2);
+          assert.equal(r.companiesChecked,4);
+          assert.equal(r.negativeCases,24);
+          assert.equal(r.summary.valuationStatus,'UNPRICED');
+          assert.equal(r.summary.profitStatus,'NOT_COMPUTABLE');
+          assert.equal(r.summary.companies.length,2);
+          assert.ok(r.summary.totalAcquisitionPaymentsCent>0);
+          assert.ok(r.summary.totalSalesCent>0);
+          assert.equal(r.prereleaseGate,'BLOCKED');
+          NODE
+      - name: Reproduzierbaren Nachweis sichern
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: asset-cost-bridge
+          path: asset_cost_bridge.json
+          if-no-files-found: warn
