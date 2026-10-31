@@ -292,6 +292,8 @@ function recordDamageValuation(original,state,claimId,evidence){
  const f=state?.companies?.find(x=>x.id===b.companyId),claim=state?.claims?.[claimId];
  if(!f||!claim||claim.owner!==b.companyId||!claim.drilled||(!claim.burning&&!claim.damaged))
   throw Error('Keine dokumentierte beschädigte eigene Anlage');
+ if(volume(claim.inventoryMilli)+volume(claim.preparedMilli)>0)
+  throw Error('LAGERWERTMINDERUNG_OFFEN: Beschaedigtes Lager erfordert eigene Menge-/Kostenpruefung');
  if(b.month!==state.month||b.phase!==state.phase||b.generation!==f.generation||
     b.cashCent!==f.cashCent||b.ledgerCount!==f.ledger.length||
     b.ledgerLastId!==(f.ledger.at(-1)?.id||null))
