@@ -243,7 +243,8 @@ function reconcile(previous,current,original){
  // wenn eine spätere Löschaktion das burning-Flag wieder entfernt.
  for(const [cid,pending] of Object.entries(b.rawDamagePending||{}))if(!pending.resolved){
   const c=current.claims?.[cid];
-  if(!c||c.owner!==id||plus(volume(c.inventoryMilli),volume(c.preparedMilli))!==pending.affectedQtyMilli)
+  if(!c||c.owner!==id||plus(volume(c.inventoryMilli),volume(c.preparedMilli))!==pending.affectedQtyMilli||
+     volume(c.inventoryMilli)!==pending.inventoryMilli||volume(c.preparedMilli)!==pending.preparedMilli)
    throw Error('LAGERWERTMINDERUNG_OFFEN: Rohöl wurde vor Bewertung verschoben oder entfernt');
  }
  for(const c of Object.values(current.claims||{}))if(c.owner===id&&(c.burning||c.damaged)){
@@ -253,6 +254,7 @@ function reconcile(previous,current,original){
     throw Error('Weitere Beschädigung trotz offenem Rohöllagergutachten');
    b.rawDamagePending[c.id]={claimId:c.id,region:c.region,month:current.month,
     affectedQtyMilli:plus(volume(c.inventoryMilli),volume(c.preparedMilli)),
+    inventoryMilli:volume(c.inventoryMilli),preparedMilli:volume(c.preparedMilli),
     sourceSequence:current.sequence,resolved:false};
   }
  }
@@ -363,8 +365,9 @@ function recordRawInventoryValuation(original,state,claimId,evidence){
     b.ledgerLastId!==(firm.ledger.at(-1)?.id||null))
   throw Error('Rohöllagerbewertung nicht an aktuellen Buchungsstand gebunden');
  const affected=plus(volume(claim.inventoryMilli),volume(claim.preparedMilli));
- if(affected!==pending.affectedQtyMilli||affected===0)
-  throw Error('Rohöllagermenge seit Beschädigung verändert');
+ if(affected!==pending.affectedQtyMilli||affected===0||
+    volume(claim.inventoryMilli)!==pending.inventoryMilli||volume(claim.preparedMilli)!==pending.preparedMilli)
+  throw Error('Rohöllagermenge oder Lagerart seit Beschädigung verändert');
  assertPools(b,bookTotals(state,b.companyId));
  if(!evidence||evidence.claimId!==claimId||evidence.month!==state.month||
     evidence.affectedQtyMilli!==affected||
