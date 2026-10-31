@@ -2,6 +2,11 @@
 // Versioniertes Forschungsmodell der eigenstaendigen PPPOPPI-Adaption.
 // Keine historische C64-Regel, keine Freigabe und kein Eingriff in den Spielkern.
 const A=require('./accounting_model_v194.cjs');
+function engineSpecs(){const e=globalThis.OliV082?.CFG,p=globalThis.PPProfi?.COSTS;
+ if(!e||!p||!Number.isSafeInteger(e.pumpMilli)||e.pumpMilli<=0||!Number.isSafeInteger(p.rawBatchMilli)||p.rawBatchMilli<=0||!Number.isSafeInteger(p.yieldMilli)||p.yieldMilli<=0)
+  throw Error('Verbindliche Spielkernel-Mengenvorgaben fehlen');
+ return {pumpMilli:e.pumpMilli,rawBatchMilli:p.rawBatchMilli,yieldMilli:p.yieldMilli};
+}
 const POLICY=Object.freeze({
  id:'PPPOPPI-ADAPT/FIN-COST/1-DRAFT',status:'DRAFT_NOT_APPROVED',
  fieldLifeMonths:120,drillLifeMonths:120,tankLifeMonths:60,
@@ -133,14 +138,14 @@ function reconcile(previous,current,original){
    if(x.deltaCent>=0)throw Error('Foerderung ohne Ausgabebetrag');
    const region=current.claims?.[x.info]?.region;
    if(!region||pump[region]===undefined)throw Error('Foerderung ohne konkrete Claim-Region');
-   b.raw[region].qty=plus(b.raw[region].qty,globalThis.OliV082?.CFG?.pumpMilli??100000);
+   b.raw[region].qty=plus(b.raw[region].qty,engineSpecs().pumpMilli);
    b.raw[region].cent=plus(b.raw[region].cent,-x.deltaCent);
-   pump[region]=plus(pump[region],globalThis.OliV082?.CFG?.pumpMilli??100000);
+   pump[region]=plus(pump[region],engineSpecs().pumpMilli);
   }else if(x.code==='RAFFINERIE_VERARBEITUNG'){
    if(x.deltaCent>=0)throw Error('Raffinierung ohne Aufwand');
    const region=current.claims?.[x.info]?.region;
    if(!region||refine[region]===undefined)throw Error('Verarbeitung ohne konkreten Claim');
-   const q=globalThis.PPProfi?.COSTS?.rawBatchMilli??10000,output=globalThis.PPProfi?.COSTS?.yieldMilli??9000;
+   const {rawBatchMilli:q,yieldMilli:output}=engineSpecs();
    const transfer=take(b.raw[region],q);
    b.product[region].qty=plus(b.product[region].qty,output);
    b.product[region].cent=plus(b.product[region].cent,plus(transfer,-x.deltaCent));
