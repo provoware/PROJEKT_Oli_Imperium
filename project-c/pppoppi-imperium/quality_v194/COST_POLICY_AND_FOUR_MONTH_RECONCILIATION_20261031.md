@@ -2,7 +2,7 @@
 
 **Entwicklungsstatus:** Eine **innerhalb des isolierten Forschungsmodells verbindlich festgelegte Version** der Kostenregeln, aber **KEINE fachliche Freigabe** für das endgültige Spiel und **KEINE historische C64-Originalregel**. `main`, der geprüfte Integrations-HEAD von PR #141 (`7ce841ba43d2d2fd94fec90ef206b19d48bae8b2`) und die 110 SHA-geschützten Spielquellen bleiben unverändert. Die 52er-Pflichtmatrix bleibt 6 PASS / 39 BLOCKED / 4 OPEN / 3 DEFERRED.
 
-## 1. Verbindliche Testmodell-Richtlinie `PPPOPPI-ADAPT/FIN-COST/1-DRAFT`
+## 1. Verbindliche Testmodell-Richtlinie `PPPOPPI-ADAPT/FIN-COST/2-DRAFT`
 
 | Posten | Kosten-/Ertragsregel im Forschungstest | Status/Grenze |
 | --- | --- | --- |
@@ -16,7 +16,7 @@
 | Rohöl | Tatsächlich gezahlte `FOERDERUNG`-Kosten werden bei Erzeugung in Rohölvorrat umgebucht | Nicht Marktpreis; unerschlossene Reserven = 0 zusätzlicher Bestand |
 | Fertigware | Pro realer Raffineriecharge **10 Barrel Rohöl → 9 Barrel Fertigware**; ursprüngliche Rohölkosten + echte `RAFFINERIE_VERARBEITUNG`-Auszahlung gehen über | Mengen **aus dem echten Spielkern**, keine freie Annahme |
 | Gleichartige Lagerware | Je Region ein **gewichteter Durchschnitt** mit ganzzahliger anteiliger Kostenabgabe; keine Kosten aus Marktpreis | Standortwechsel nur soweit mengenmäßig beweisbar |
-| Eigenes Transportnetz | Ware in Anfahrt, Werk und Marktdepot bleibt als Bestand erfasst; `FRACHT`/direkte Transporte derzeit als periodenbezogener Vertrieb/Betriebsaufwand | **Offene Freigabefrage:** Bei Rohöl-Anlieferung zur Produktion Fracht möglicherweise aktivierungspflichtig; hier klar als Modellannahme ausgewiesen |
+| Eigenes Transportnetz | Belegte **Rohöl-Anlieferfracht** zum Raffineriewerk erhöht den Rohölbuchwert. **Fertigwaren-Transporte** bleiben als Vertriebskosten Periodenaufwand. | Fachlich begründete **Modellentscheidung**, noch nicht freigegeben; Beleg muss zum realen RAW-Transportschein passen. |
 | Verkäufe | Umsatz **erst** durch tatsächliche Zahlung auf `MARKTERLÖS`, `RAFFINIERT_MONATSVERKAUF` oder `AUSSENMARKT`; beim tatsächlichen Absatz sinkt der Warenbuchwert um Herstellungskosten | Ein Angebot allein ist kein Umsatz; Vertragsfälle separat |
 | Kredite/Tilgung | Kreditzufluss `RETTUNGSKREDIT` / `KI_RETTUNGSKREDIT` und Hauptschuld-Tilgung `ZAHLUNG_TILGUNG` **nicht** erfolgswirksam; Schuldenveränderung muss zu Buchungen passen | Keine zweite Schuld durch offene Tilgungsrechnung |
 | Löhne, Zinsen und sonstige Rechnungen | Tatsächliche Zahlungen plus Veränderung der offenen Nicht-Tilgungsrechnungen; damit auch unbezahlt entstandene Aufwendungen | Nur tatsächlich im Spiel erfasste Rechnungstypen |
@@ -52,27 +52,27 @@ Isolierter Test mit echten Modulen `v07`, `v08`, `v082`, `profi_economy`, `logis
 | Monat | Belegte Aktionen | Kostenwirkung und Bestand |
 | --- | --- | --- |
 | 1 | Gutachten, Kauf, Bohrung, 100 Barrel Förderung, Raffineriebau, 10→9 Barrel Verarbeitung, Vertriebsroute, 90 Barrel Rohöl und 9 Barrel Fertigware verkaufen | **165.000 Cent** tatsächliche Herstellkosten der verkauften Mengen; **7.119.000 Cent** echte Verkaufseinnahmen |
-| 2 | Eigenes Streckennetz (RAW/PIPE/FINAL) errichten, weitere 100 Barrel fördern, 10 Barrel Rohöl zum Werk verschicken | Rohöl-Transit mit **10.000 Cent** Herstellungskosten; kein vorweggenommener Umsatz |
-| 3 | Empfangene 10 Barrel im Werk verarbeiten; 9 Barrel Fertigware über das eigene Netz zum Markt verschicken | Fertigware auf Transport mit **75.000 Cent** Herstellungskosten; noch kein Umsatz |
-| 4 | Fertigware am Markt anbieten und echten Monatsabschluss ausführen | Herstellungskosten der verkauften Mengen + **75.000 Cent**; unverkäufte 90 Barrel Rohöl bleiben mit **90.000 Cent** im Bestand |
+| 2 | Eigenes Streckennetz (RAW/PIPE/FINAL) errichten, weitere 100 Barrel fördern, 10 Barrel Rohöl zum Werk verschicken | Rohöl-Transit mit **11.400 Cent** bewerteten Kosten, darunter **1.400 Cent** anteilige Anlieferfracht; gesamte RAW-Fracht **14.000 Cent** wird in den regionalen 100-Barrel-Vorrat einbezogen |
+| 3 | Empfangene 10 Barrel im Werk verarbeiten; 9 Barrel Fertigware über das eigene Netz zum Markt verschicken | Fertigware auf Transport mit **76.400 Cent** Herstellungskosten; noch kein Umsatz |
+| 4 | Original-Spielbrand fachgerecht durch echte Aktion `FIRE_EXPERT` löschen (1.200.000 Cent), Fertigware anbieten und Monatsabschluss ausführen | Herstellungskosten der verkauften Mengen + **76.400 Cent**; unverkäufte 90 Barrel Rohöl bleiben mit **102.600 Cent** im Bestand; Brand ist **keine** fiktive Wertminderung |
 
 **Kumulativer, synthetisch bewerteter Modellstand nach Monat 4:**
 
 | Position | Tatsächlicher Rechenwert | Bedeutung |
 | --- | ---: | --- |
 | Zahlungseingänge aus Verkäufen | **7.897.311 Cent** | Engine-Kassenbuchungen |
-| Gebuchte laufende Kosten | **850.100 Cent** | Lohn, Wartung, Transporte, Gutachten; inkl. eigener Netzfracht |
-| Herstellungskosten tatsächlich verkaufter Ware | **240.000 Cent** | nicht produzierte, sondern verkaufte Menge |
+| Gebuchte laufende Kosten | **2.036.100 Cent** | Lohn, Wartung, Gutachten, Vertriebsfracht und **1.200.000 Cent reale Brandlöschung**; 14.000 Cent Rohölzulieferfracht sind im Vorratswert statt im laufenden Aufwand |
+| Herstellungskosten tatsächlich verkaufter Ware | **241.400 Cent** | inklusive der mitverkauften anteiligen Rohöl-Anlieferfracht |
 | Abschreibungen gemäß Test-Richtlinie | **444.999 Cent** | keine belegte C64-Regel |
-| **Rechnerisches Periodenergebnis** | **6.362.212 Cent** | **Modellwert, NICHT bilanziell freigegebener Gewinn** |
-| Reinvermögen nach Test-Bewertung | **26.362.212 Cent** | umfasst Kasse + Anlagen + noch vorhandenen Rohölbestand |
+| **Rechnerisches Periodenergebnis** | **5.174.812 Cent** | **Modellwert, NICHT bilanziell freigegebener Gewinn** |
+| Reinvermögen nach Test-Bewertung | **25.174.812 Cent** | umfasst Kasse + Anlagen + noch vorhandenen Rohölbestand |
 | Historisch/gesetzlich bestätigter Gewinn | **nicht ermittelt (`null`)** | Vorrelease weiterhin `BLOCKED` |
 
-Die Bilanzgleichung geht **centgenau** auf: Start-Reinvermögen 20.000.000 + Modell-Periodenergebnis 6.362.212 = 26.362.212 Cent. Das ist eine **Modellrechnung** für das gewählte Spielprofil. Die künstlich festgelegte Anlagen-Nutzungsdauer ist noch fachlich freizugeben; die Aussage darf nicht als historischer oder handelsrechtlicher Jahresabschluss missverstanden werden.
+Die Bilanzgleichung geht **centgenau** auf: Start-Reinvermögen 20.000.000 + Modell-Periodenergebnis 5.174.812 = 25.174.812 Cent. Das ist eine **Modellrechnung** für das gewählte Spielprofil. Die künstlich festgelegte Anlagen-Nutzungsdauer ist noch fachlich freizugeben; die Aussage darf nicht als historischer oder handelsrechtlicher Jahresabschluss missverstanden werden.
 
 ## 4. Unabhängige Validierung und Grenzen
 
-**Lokale, isolierte JavaScript-Ausführung am tatsächlichen Spielkern:** 8/8 gezielte neue Tests PASS, außerdem 8/8 vorgelagerte Modelltests in einem separaten Durchlauf. Auch Übergangssperren, Zahlenüberläufe, Kassenbelege und die Veränderungsfreiheit des vorhandenen Spielzustands wurden geprüft. **Ein echter Node.js-/GitHub-Actions-Gesamtlauf auf dem endgültigen Forschungs-Commit ist getrennt zu belegen**, nicht vorwegzunehmen.
+**Lokale, isolierte JavaScript-Ausführung am tatsächlichen Spielkern:** 8/8 gezielte neue Tests PASS, außerdem 8/8 vorgelagerte Modelltests in einem separaten Durchlauf. Auch Übergangssperren, Zahlenüberläufe, Kassenbelege und die Veränderungsfreiheit des vorhandenen Spielzustands wurden geprüft. **GitHub Actions prüft die technische Modellrechnung separat**, aber fachlich bestätigte Abschreibungszeiten, C64-Originaltreue und Vorrelease-Rechte werden dadurch nicht automatisch freigegeben.
 
 ```bash
 node --check project-c/pppoppi-imperium/quality_v194/accounting_model_v194.cjs
@@ -85,9 +85,9 @@ python3 -m unittest discover -s tests -q
 
 ### Bewusst weiterhin blockierte Fälle
 
-- **Anlieferfracht von Rohöl:** Zuordnung zu Produkt-Herstellungskosten versus Sofortaufwand benötigt eine verbindliche fachliche Entscheidung. Das jetzige Modell ist explizit auf Sofortaufwand eingestellt.
-- **Lagerbewertung mit vollständiger FIFO-Chargenherkunft, regionsübergreifender Transport, öffentliche Frachtvorauszahlungen und alle Rückerstattungen:** vollständige rechtliche/bilanzielle Zuordnung noch nicht abgenommen. Nicht erkannte Fälle müssen fehlschlagen.
-- **Notverkauf/Neustart, fremde Eigentümer-Zahlungen, Beschädigung/Wertminderung, unbezahlte Lieferforderungen, komplexe Vertragsabrechnung:** kein Gesamtprofit behauptet.
+- **Anlieferfracht von Rohöl:** als begründeter **Entwurf** in regionalen Rohölbuchwert aufgenommen, nicht frei erfundener Marktwert. Kaufmännische endgültige Freigabe fehlt; Fertigwaren-Vertriebsfracht bleibt Aufwand. Der echte Brand im vierten Monat wird vor der Bilanz durch eine reguläre Spielaktion gelöscht; unbehandelte Schäden blockieren weiterhin die Bewertungsfreigabe.
+- **Lagerbewertung mit vollständiger Chargenherkunft sowie öffentliche Frachtvorauszahlungen/Rückerstattungen:** im Forschungsmodell gibt es jetzt begrenzte reale Gegenproben, aber nicht alle Kapazitätsverteilungen, Rückerstattungen, Liefer- und Marktfolgen sind fachlich abgenommen. Nicht erkannte Fälle müssen fehlschlagen.
+- **Notverkauf, beschädigte Anlagen, Vertragsforderungen, Sanierungsneustart, Kapitalbewegungen:** reale Sondertests ergänzt; erweiterte Anlagenbewertungen, Schaden-Wertminderung und echte offene Forderungen bleiben gesperrt. Keine vollständige Gewinnfreigabe.
 - **Betriebliche C64-Originaltreue und Rechte zu 77 Archivobjekten:** weiterhin ohne Original- bzw. Nutzungsfreigabe.
 
 ## 5. Nächste drei Schritte
