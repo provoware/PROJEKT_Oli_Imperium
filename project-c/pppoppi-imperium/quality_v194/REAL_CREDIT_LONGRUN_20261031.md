@@ -1,0 +1,66 @@
+# WIR-04 / BAL-01 – Natürliche zweite Kreditkrise über 16 Monate (31.10.2026)
+
+## Fachlicher Zweck und Grenzen
+
+Der vorhandene 2-Monats-Test zeigt eine erste natürliche Zahlungsnot und einen echten Rettungskredit. Die neue **unabhängige 16-Monats-Probe** prüft, ob regelmäßige Rechnungen, Zinsen, Tilgungen, wiederkehrende Rettungen, Kassenbuch und gespeicherte Spielstände über längere Zeit konsistent bleiben. Die Prüfung betrifft **die eigenständige Berliner Adaption**; weder historische C64-Regeln noch buchhalterische Vermögenswerte sind damit bestätigt.
+
+## Reproduzierbarer Spielablauf
+
+- Zwei menschliche Firmen beginnen regulär mit je 20.000.000 Cent, ohne nachträgliche Manipulation der Kasse oder Schulden. H1 führt zehn echte Aktionen aus (Feldsuche/-kauf, Bohrung, Raffinerie, Sicherung, Förderung und Fracht) und hat 100.000 Cent übrig.
+- Monat 1: 140.000 Cent Personal-/Wartungsrechnungen, 40.000 Cent natürlicher Rückstand. Regulärer Rettungskredit: +4.000.000 Cent Kasse und +4.000.000 Cent Verbindlichkeiten; der Rückstand wird ausgeglichen.
+- Monate 2–13: Monatliche Personalkosten und Wartung sowie Zins und Tilgung werden aus der **jeweils vor dem Monatsabschluss vorhandenen Restschuld** unabhängig berechnet und mit den echten Rechnungen, Buchungen, Firmenwerten und Monatsberichten verglichen.
+- Monat 14: Vor dem Abschluss 73.729 Cent Kasse, 2.161.441 Cent Restschuld, 269.686 Cent fällige Rechnungen. Daraus entsteht ein natürlicher Rückstand von **195.957 Cent**. Die zweite reguläre Kreditrettung muss diesen ausgleichen; keine künstliche Kredit- oder Bargeldinjektion in den Spielstand.
+- Monate 15–16: Der nun höhere Kreditbestand wird weiter verzinst und getilgt. Erwartete Endkasse H1 **2.815.799 Cent**, Restschuld H1 **5.463.166 Cent**; H2 bleibt unabhängig schuldenfrei.
+- Zwei identische 16-Monats-Szenarien mit 64 Firmen-Monatsbeobachtungen, fünf JSON-Speicher-/Wiederherstellungsprüfungen pro Szenario (einschließlich einer Rettungsphase), Duplikatsperre bei allen Befehlen, 24 gezielten Manipulationsproben insgesamt (einschließlich vier neuer Buchungs-/Rechnungsangriffe pro Wiederholung). Kein vollständiger Sieg-/Verlust-Spielverlauf.
+
+## Ausführung und überprüfbare Freigabebedingungen
+
+~~~bash
+node --check project-c/pppoppi-imperium/quality_v194/test_real_credit_longrun_v194.cjs
+node project-c/pppoppi-imperium/quality_v194/test_real_credit_longrun_v194.cjs
+~~~
+
+[GitHub-Fachworkflow](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/workflows/prerelease-real-credit-longrun.yml) · [Entwurfs-PR #147](https://github.com/provoware/PROJEKT_Oli_Imperium/pull/147).
+
+**Status bei Erstellung:** CI noch auszuwerten. PASS nur bei erfolgreichem GitHub-Lauf auf dem tatsächlich geprüften Commit; fehlgeschlagene Prüfschritte sind FAIL, nicht BLOCKED. Das übergeordnete Release-Gate bleibt ausdrücklich BLOCKED, selbst bei bestandenem Fachtest.
+
+## Unverändert offene Pflichtarbeit
+
+Die neue Probe zeigt nicht die vollständige Gewinn-/Vermögensrechnung, Forderungsbewertung, Abschreibungen, Rohölwertminderung, vollständige Endpartien oder den intermittierenden Browser-Dateiimport bei 200 %; Medienrechte und historische C64-Originalreferenz bleiben ungeklärt. Benutzer-Sichtprüfung, Kubuntu-Praxistest und persönliche Endabnahme erst nach grünen technischen Gates und eingefrorenem Kandidaten. Kein Merge, kein Release.
+
+**Nächste drei Schritte:** (1) Fach-CI und Gesamtregression auf finalem HEAD prüfen und Fehler beheben; (2) echte Forderungen und langfristige Schulden-/Insolvenzgrenzen in weiteren natürlichen Wirtschaftsabläufen prüfen; (3) Bilanzierungsregeln fachlich klären, bevor Gewinn oder Vermögen als vollständig berechnet gelten.
+
+**Empfehlung:** Bei weiteren Krisentests den unveränderten Spielkern und unabhängig hergeleitete Cent-Sollwerte beibehalten; nicht allein auf vom Spiel selbst gemeldete Bilanzzahlen vertrauen.
+
+## Tatsächlicher erster CI-Fehlversuch (31.10.2026)
+
+[GitHub-Fachlauf #41206123867](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41206123867) **FAIL**: Der unabhängige Test hatte beim zweiten Rettungskredit die anschließend vollständig bezahlte, zuvor offene Tilgungsrechnung über 108.072 Cent nicht von der Restschuld abgezogen. Der Spielkern verbucht diese Zahlung korrekt. Test-Orakel, Endwerte und GitHub-Sollprüfung wurden korrigiert; neuer Fachlauf auf endgültigem HEAD gesondert auszuwerten. Keine behauptete Spielkernänderung.
+
+## Zusatzprüfung – unabhängiger Rechnungs- und Zahlungsabgleich (31.10.2026)
+
+Der bisherige reine Kassenbuch-Summenvergleich konnte zwei gegeneinander verschobene Zahlungen nicht sicher unterscheiden, wenn die Gesamtkasse unverändert blieb. Die Fachprobe gleicht deshalb **jede einzelne Rechnung** mit den tatsächlichen negativen Zahlungseinträgen nach Rechnungskennung und Zahlungsart ab; verwaiste, falsch zugeordnete und doppelt gezählte Zahlungen müssen auffallen. Diese Kontrolle erfolgt bei jedem geprüften Monatsabschluss, nicht nur beim Endstand.
+
+Vier neue Manipulationen je Wiederholung prüfen (1) gegeneinander ausgeglichene falsche Zahlungen, (2) nachträglich umbenannte Rechnungsarten, (3) verwaiste Zahlungskennungen und (4) zusätzliche fingierte Zahlung mit ausgleichender Gutschrift. Zusammen **24 Negativproben** in zwei 16-Monats-Wiederholungen. Die Prüfung nutzt den unveränderten Spielkern und behauptet weder eine echte Forderungsbewertung noch eine vollständige Gewinn-/Vermögensbilanz.
+
+**Status:** Test und CI-Sollwert im Entwurfszweig geändert; tatsächlichen GitHub-Fachlauf auf dem finalen Commit prüfen. Bis dahin kein neuer PASS-Beleg. Release-Matrix weiterhin 6 PASS / 39 BLOCKED / 4 OPEN / 3 DEFERRED.
+
+## Erweiterung: unabhaengige Monatsverbindlichkeiten (31.10.2026)
+
+Die bisherige Endkontrolle konnte trotz korrekter Endschuld einzelne fruehere Monatsrechnungen nur begrenzt auf ihre fachlich richtige Hoehe pruefen. Neu wird die komplette 16-Monats-Folge fuer beide Firmen unabhaengig rekonstruiert: 32 Personal-, 16 Wartungs-, 15 Zins- und 15 Tilgungsrechnungen, zwei Rettungskredite mit festem Buchungsmonat sowie die jeweils bezahlten Betragswerte. Fuer H1 werden genau 62, fuer H2 genau 16 Rechnungen erwartet. Zinsen und Tilgungen werden aus dem zuvor rekonstruierten Schuldenstand berechnet, nicht aus dem aktuellen Bericht uebernommen.
+
+Acht weitere gezielte Negativproben pro Wiederholung pruefen falsche historische Zinsen, Tilgungen, Personal- und Wartungstarife, eine manipulierte Rechnung der zweiten Firma, zwei fingierte Nullrechnungen sowie einen umdatierten Rettungskredit. Damit 20 Manipulationsproben pro Szenario bzw. 40 bei zwei Wiederholungen. Kein Spielkern veraendert, keine Vermoegensbewertung behauptet.
+
+**Pruefziel:** Node-Syntax, beide 16-Monats-Szenarien, 64 Firmen-Monatskontrollen, 40 Negativproben, 5 JSON-Rundlaeufe je Szenario und die neue unabhaengige Verbindlichkeitenpruefung. Der GitHub-CI-Lauf auf dem finalen Commit muss gesondert nachgewiesen werden; bis dahin PENDING, uebergeordnetes Vorrelease weiterhin BLOCKED. Die 18 erfolgreichen Fach-Workflows und der bewusst sperrende integrierte Gate-Lauf wurden auf dem vorherigen HEAD `d7616ccadd4fbe7c17b4cc0451c0acf423e8f69d` ueber die GitHub-API festgestellt (31.10.2026); sie sind kein Nachweis fuer den neuen HEAD.
+
+**Weiterhin offen:** Forderungen aus Vertraegen, rechtlich/fachlich begruendete Anlagen- und Lagerwerte, Abschreibungen, Gesamtgewinn, vollstaendige Endpartien, Browser-Dateidialog bei 200 %, Medienrechte und C64-Originalvergleich. Persoenliche Endabnahmen erst nach eingefrorenem technisch gruenem Kandidaten.
+
+
+## Nachtrag 31.10.2026 – historische Monatsberichte unabhängig gegenprüfen
+
+**Befund vor Änderung:** Die 16-Monats-Probe kontrollierte die Endkasse, alle 78 Rechnungen und deren Zahlungen, aber die im Spielstand gespeicherten **früheren Monatsberichte** nur auf ihre Anzahl. Ein nachträglich veränderter Kassen-, Schulden- oder Rückstandswert in einem alten Bericht konnte dadurch unbemerkt bleiben.
+
+**Neue Regression:** Für alle 16 archivierten Monatsberichte werden die beiden Firmen anhand des bereits unabhängig aus Tarifen, Startkasse, Zinsen und Tilgung hergeleiteten Monats-Sollverlaufs geprüft: H1-Kasse, H1-Restschuld, H1-Rückstände, H2-Kasse sowie H2-Schulden und -Rückstände. Wichtig: Der Monatsbericht wird **vor** einer menschlichen Kreditrettung gespeichert; Monat 1 und Monat 14 werden deshalb gegen die tatsächlichen Werte *vor* dem Kredit verglichen. Auch der letzte Bericht muss mit dem Archiv übereinstimmen.
+
+Vier zusätzliche absichtliche Manipulationen je Wiederholung betreffen historische Kasse (Monat 1), Schuld und Rückstand (Monat 14) sowie die zweite Firma (Monat 16). **Neuer Sollwert: 48 Negativproben insgesamt**, zwei 16-Monats-Szenarien und 16 historische Berichte je Szenario. Die Engine und Spielstände bleiben unverändert; kein buchhalterischer Gewinn- oder Vermögensnachweis.
+
+**Prüfung:** `node --check project-c/pppoppi-imperium/quality_v194/test_real_credit_longrun_v194.cjs`, anschließend `node project-c/pppoppi-imperium/quality_v194/test_real_credit_longrun_v194.cjs`; GitHub-Workflow `prerelease-real-credit-longrun.yml` fordert zusätzlich `historicalReportsChecked=16` und `negativeCases=48`. **PASS erst nach echtem CI-Lauf auf dem neuen HEAD**. Die 52er-Pflichtmatrix bleibt 6 PASS / 39 BLOCKED / 4 OPEN / 3 DEFERRED. Browser-Dateidialog, Endpartien, Bilanzierungsregeln, Rechte und Originalvergleich bleiben offen; kein Merge, kein Release.

@@ -61,7 +61,7 @@ function next(s,month) {
   assert.equal(s.month,month);
   return save(s);
 }
-function audit(s,initial,allocations,stage) {
+function audit(s,initial,allocations,stage,batches) {
   let soldTotal=0, inventoryTotal=0, netLedgerTotal=0;
   for(let i=0;i<IDS.length;i++) {
     const id=IDS[i],claim=s.claims[CLAIMS[i]],f=company(s,id);
@@ -80,7 +80,7 @@ function audit(s,initial,allocations,stage) {
       assert.ok(Number.isSafeInteger(n)&&n>=0,
         'audit: invalid '+name+' '+stage+' '+id);
     assert.equal(claim.inventoryMilli+local.rawMilli+plant.productMilli+
-      local.marketMilli+delivered+sold+1000,E.CFG.pumpMilli,
+      local.marketMilli+delivered+sold+1000*batches,E.CFG.pumpMilli,
       'audit: oil conservation '+stage+' '+id);
     assert.equal(f.cashCent-initial[id].cashCent,ledgerNet,
       'audit: cash/ledger mismatch '+stage+' '+id);
@@ -93,12 +93,43 @@ function audit(s,initial,allocations,stage) {
     inventoryTotal+=claim.inventoryMilli+local.marketMilli+delivered;
     netLedgerTotal+=ledgerNet;
   }
-  assert.equal(soldTotal+inventoryTotal+2000,2*E.CFG.pumpMilli,
+  assert.equal(soldTotal+inventoryTotal+2000*batches,2*E.CFG.pumpMilli,
     'audit: cross-company oil conservation '+stage);
   return {soldTotal,inventoryTotal,netLedgerTotal};
 }
-function play() {
-  let s=E.fresh({humans:2,ais:0,seed:'NATURAL-MULTIFIRM-REFINERY'});
+function auditFreightIntegrity(s, productQty, expected) {
+  const report=s.lastReport.publicNetwork;
+  for(const edge of PATH)
+    assert.equal(report.capacity[edge].usedMilli,18000,
+      'audit: shared freight capacity '+edge);
+  for(const id of IDS) {
+    const entries=report.freight.filter(row=>row.companyId===id);
+    assert.equal(entries.length,1,'audit: freight report count '+id);
+    const entry=entries[0];
+    assert.equal(entry.requestedMilli,productQty,'audit: freight request '+id);
+    assert.equal(entry.acceptedMilli,expected[id].acceptedMilli,'audit: accepted freight '+id);
+    assert.equal(entry.returnedMilli,expected[id].returnedMilli,'audit: returned freight '+id);
+    assert.equal(entry.acceptedMilli+entry.returnedMilli,entry.requestedMilli,
+      'audit: freight quantity conservation '+id);
+    const journal=company(s,id).ledger;
+    const holds=journal.filter(row=>row.code==='PUBLIC_FREIGHT_HOLD');
+    assert.equal(holds.length,1,'audit: freight hold count '+id);
+    assert.equal(holds[0].deltaCent,-P.freight(productQty,PATH),
+      'audit: freight hold amount '+id);
+    const refunds=journal.filter(row=>row.code==='FRACHT_RUECKGABE');
+    assert.equal(refunds.length,entry.returnedMilli>0?1:0,
+      'audit: freight refund entry count '+id);
+    const refund=refunds.reduce((sum,row)=>sum+row.deltaCent,0);
+    assert.equal(refund,P.freight(entry.returnedMilli,PATH),
+      'audit: freight refund amount '+id);
+    assert.equal(-holds[0].deltaCent-refund,expected[id].netFreightCent,
+      'audit: net freight cost '+id);
+  }
+}
+function play(batches) {
+  assert.ok(batches===1||batches===2);
+  const rawQty=10000*batches, productQty=9000*batches;
+  let s=E.fresh({humans:2,ais:0,seed:'NATURAL-MULTIFIRM-REFINERY-'+batches});
   const initial={};
   for(let i=0;i<2;i++)
     initial[IDS[i]]={cashCent:company(s,IDS[i]).cashCent,
@@ -114,10 +145,10 @@ function play() {
       ['NETWORK_BUILD',{region:'BERLIN',kind:'RAW',claimId}],
       ['NETWORK_BUILD',{region:'BERLIN',kind:'PIPE'}],
       ['NETWORK_BUILD',{region:'BERLIN',kind:'FINAL'}],
-      ['NETWORK_RAW',{region:'BERLIN',claimId,qtyMilli:10000}]
+      ['NETWORK_RAW',{region:'BERLIN',claimId,qtyMilli:rawQty}]
     ]) s=step(s,cmd(type,id,'M1-'+type+'-'+(extra.kind||''),extra));
     assert.equal(s.claims[claimId].owner,id);
-    assert.equal(s.claims[claimId].inventoryMilli,E.CFG.pumpMilli-10000);
+    assert.equal(s.claims[claimId].inventoryMilli,E.CFG.pumpMilli-rawQty);
     const rival=CLAIMS[1-i];
     if(s.claims[rival].owner && s.claims[rival].owner!==id) {
       const untouched=copy(s);
@@ -132,21 +163,22 @@ function play() {
   s=next(s,2);jsonRoundtrips++;
   for(let i=0;i<2;i++) {
     const id=IDS[i],claimId=CLAIMS[i];
-    assert.equal(s.transport.firms[id].BERLIN.rawMilli,10000);
-    s=step(s,cmd('NETWORK_REFINE',id,'M2-REFINE',{region:'BERLIN',claimId}));
-    assert.equal(s.refinery.plants[id].BERLIN.productMilli,9000);
+    assert.equal(s.transport.firms[id].BERLIN.rawMilli,rawQty);
+    for(let batch=0;batch<batches;batch++)
+      s=step(s,cmd('NETWORK_REFINE',id,'M2-REFINE-'+batch,{region:'BERLIN',claimId}));
+    assert.equal(s.refinery.plants[id].BERLIN.productMilli,productQty);
     s=step(s,cmd('NETWORK_PRODUCT',id,'M2-PRODUCT',
-      {region:'BERLIN',qtyMilli:9000}));
+      {region:'BERLIN',qtyMilli:productQty}));
     s=end(s,id,2);
   }
   s=close(s,2,true);jsonRoundtrips++;
   s=next(s,3);jsonRoundtrips++;
   for(const id of IDS) {
-    assert.equal(s.transport.firms[id].BERLIN.marketMilli,9000);
+    assert.equal(s.transport.firms[id].BERLIN.marketMilli,productQty);
     s=step(s,cmd('PUBLIC_CONNECT',id,'M3-CONNECT',
       {from:'BERLIN',to:'NORD'}));
     const queue=cmd('PUBLIC_QUEUE',id,'M3-QUEUE',
-      {from:'BERLIN',to:'NORD',qtyMilli:9000});
+      {from:'BERLIN',to:'NORD',qtyMilli:productQty});
     s=step(s,queue);
     const duplicate=E.transition(s,queue);
     assert.equal(duplicate.duplicate,true);
@@ -155,13 +187,17 @@ function play() {
     s=end(s,id,3);
   }
   s=close(s,3,true);jsonRoundtrips++;
+  assert.equal(s.lastReport.publicNetwork.capacity['B-BB'].usedMilli,18000);
+  assert.equal(s.lastReport.publicNetwork.capacity['BB-N'].usedMilli,18000);
   const freight={};
   for(const id of IDS) {
     const entry=s.lastReport.publicNetwork.freight.find(x=>x.companyId===id);
     assert.ok(entry,'missing freight allocation '+id);
-    assert.equal(entry.requestedMilli,9000);
-    assert.equal(entry.acceptedMilli+entry.returnedMilli,9000);
-    const held=P.freight(9000,PATH),refunded=P.freight(entry.returnedMilli,PATH);
+    assert.equal(entry.requestedMilli,productQty);
+    assert.equal(entry.acceptedMilli,9000,'unfair shared capacity allocation');
+    assert.equal(entry.returnedMilli,productQty-9000,'missing capacity refund');
+    assert.equal(entry.acceptedMilli+entry.returnedMilli,productQty);
+    const held=P.freight(productQty,PATH),refunded=P.freight(entry.returnedMilli,PATH);
     const f=company(s,id);
     assert.equal(f.ledger.filter(x=>x.code==='PUBLIC_FREIGHT_HOLD').length,1);
     assert.equal(f.ledger.find(x=>x.code==='PUBLIC_FREIGHT_HOLD').deltaCent,-held);
@@ -170,6 +206,39 @@ function play() {
     assert.equal(held-refunded,P.freight(entry.acceptedMilli,PATH));
     freight[id]={acceptedMilli:entry.acceptedMilli,returnedMilli:entry.returnedMilli,
       netFreightCent:held-refunded};
+  }
+  auditFreightIntegrity(s,productQty,freight);
+  const freightCorruptions=[
+    state=>{state.lastReport.publicNetwork.capacity['B-BB'].usedMilli+=1;},
+    state=>{state.lastReport.publicNetwork.capacity['BB-N'].usedMilli+=1;}
+  ];
+  for(const id of IDS) {
+    freightCorruptions.push(
+      state=>{state.lastReport.publicNetwork.freight.find(row=>row.companyId===id).requestedMilli+=1;},
+      state=>{state.lastReport.publicNetwork.freight.find(row=>row.companyId===id).acceptedMilli+=1;},
+      state=>{state.lastReport.publicNetwork.freight.find(row=>row.companyId===id).returnedMilli+=1;},
+      state=>{company(state,id).ledger.find(row=>row.code==='PUBLIC_FREIGHT_HOLD').deltaCent+=1;}
+    );
+    freightCorruptions.push(
+      state=>{state.lastReport.publicNetwork.freight.push(copy(
+        state.lastReport.publicNetwork.freight.find(row=>row.companyId===id)));},
+      state=>{company(state,id).ledger.push(copy(
+        company(state,id).ledger.find(row=>row.code==='PUBLIC_FREIGHT_HOLD')));}
+    );
+    if(batches===2) freightCorruptions.push(
+      state=>{company(state,id).ledger.find(row=>row.code==='FRACHT_RUECKGABE').deltaCent+=1;},
+      state=>{company(state,id).ledger.push({
+        ...copy(company(state,id).ledger.find(row=>row.code==='FRACHT_RUECKGABE')),
+        deltaCent:0
+      });}
+    );
+  }
+  let freightCorruptionsCaught=0;
+  for(const mutate of freightCorruptions) {
+    const altered=copy(s);
+    mutate(altered);
+    assert.throws(()=>auditFreightIntegrity(altered,productQty,freight),/audit:/);
+    freightCorruptionsCaught++;
   }
   assert.ok(IDS.some(id=>freight[id].acceptedMilli>0),'no actual public shipment');
   s=next(s,4);jsonRoundtrips++;
@@ -188,7 +257,7 @@ function play() {
     allocation[id]={soldMilli:market?.soldMilli||0,
       revenueCent:market?.revenueCent||0};
   }
-  const totals=audit(s,initial,allocation,'settled');
+  const totals=audit(s,initial,allocation,'settled',batches);
   let caught=0;
   for(const id of IDS) {
     const field=CLAIMS[IDS.indexOf(id)];
@@ -198,7 +267,7 @@ function play() {
       state=>{company(state,id).ledger[0].deltaCent+=1;}
     ]) {
       const altered=copy(s);change(altered);
-      assert.throws(()=>audit(altered,initial,allocation,'corrupted'),/audit:/);
+      assert.throws(()=>audit(altered,initial,allocation,'corrupted',batches),/audit:/);
       caught++;
     }
   }
@@ -207,20 +276,22 @@ function play() {
   assert.equal(s.publicNetwork.offers.length,0);
   assert.equal(s.transport.shipments.length,0);
   s=next(s,6);jsonRoundtrips++;
-  return {months:5,companyMonthChecks:10,jsonRoundtrips,
+  return {batches,months:5,companyMonthChecks:10,jsonRoundtrips,
+    freightCorruptionsCaught,
     duplicateQueues,foreignRejections,negativeChecks:caught,
     freight,allocation,totals,finalMonth:s.month};
 }
-const first=play();
-assert.deepEqual(play(),first,'non-deterministic two-firm refinery run');
+const baseline=play(1),congested=play(2);
+assert.deepEqual(play(1),baseline,'non-deterministic baseline refinery run');
+assert.deepEqual(play(2),congested,'non-deterministic congested refinery run');
 console.log(JSON.stringify({
-  schema:'pppoppi.natural-multifirm-refinery/1',
-  scenarios:1,repeatedRuns:2,simulatedMonths:10,companyMonthChecks:20,
-  jsonRoundtrips:20,duplicateQueuesRejected:4,
-  negativeCorruptionsCaught:12,noInjectedOilOrCash:true,
-  result:first,prereleaseGate:'BLOCKED',limitations:[
-    'Two genuinely owned Berlin fields, two firms and two refineries; five completed months.',
-    'External market and public network capacity are exercised, not preloaded.',
+  schema:'pppoppi.natural-multifirm-refinery/2',
+  scenarios:2,repeatedRuns:2,simulatedMonths:20,companyMonthChecks:40,
+  jsonRoundtrips:40,duplicateQueuesRejected:8,
+  negativeCorruptionsCaught:24,freightCorruptionsCaught:64,noInjectedOilOrCash:true,
+  result:{baseline,congested},prereleaseGate:'BLOCKED',limitations:[
+    'Two genuinely owned Berlin fields, two firms and two refineries; five completed months per scenario.',
+    'Baseline and oversubscribed public network: two 18-barrel orders compete for 18-barrel shared capacity.',
     'Cash flow and physical stock are checked; no profit/asset valuation.',
     'No full endgame, C64 reference, resource-rights or browser-dialog clearance.'
   ]

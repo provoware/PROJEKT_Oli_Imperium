@@ -61,3 +61,66 @@ vollstaendig geprueftem und eingefrorenem Kandidaten.**
 - Der aktualisierte CI-Vertrag prueft diese gemessenen Werte nun explizit. Bis zu seiner erfolgreichen Ausfuehrung auf dem finalen Dokumentations-HEAD gilt dafuer **PENDING**.
 
 **Abgrenzung:** 714.690 Cent Verkaufserloes ist kein Gewinn. Die negative Kassenentwicklung und Investitionen sind keine bewertete Bilanz. Die technische Teilpruefung darf deshalb keines der 52 uebergreifenden Vorrelease-Gates vorzeitig freigeben.
+
+## Nachtrag 31.10.2026 – echter Kapazitaetsengpass (WIR-02/WIR-03)
+
+Der bisherige natuerliche Zweifirmenlauf (je 10 Barrel Rohware -> 9 Barrel
+Fertigware) bleibt als **Baseline** erhalten. Ein zweiter unabhaengiger
+Durchlauf nutzt pro Firma zwei echte 10-Barrel-Raffineriechargen, zwei
+unveraenderte Transportketten und 18 Barrel tatsaechlich erzeugte
+Fertigware. Beide Firmen buchen je 18 Barrel Berlin -> Nord; der gemeinsame
+Engpass BB-N hat aber nur 18 Barrel Gesamtkapazitaet.
+
+**Verbindliche Sollwerte des neuen Tests (noch kein PASS):**
+
+- Beide Firmen erhalten bei identischen Auftraegen je 9 Barrel;
+  9 Barrel je Firma werden zurueck ins regionale Marktlager gebucht.
+- Gemeinsame Streckenauslastung B-BB und BB-N: jeweils exakt 18 Barrel.
+- Frachtvorauszahlung und Rueckerstattung werden je Firma anhand
+  `PPPublicNetwork.freight` getrennt mit dem echten Buchungsjournal verglichen;
+  effektive Frachtkosten je Firma: 50.400 Cent.
+- Mengenbruecke fuer den Engpasslauf: 200 Barrel echte Foerderung =
+  160 Barrel Feldlager + 18 Barrel Rueckgabe/Regionalmarkt +
+  18 Barrel Aussenmarktverkauf + 4 Barrel Verarbeitungsschwund.
+- Beide Szenarien je zweimal deterministisch wiederholt: zusammen 20
+  simulierte Spielmonate, 40 Firmen-Monatsbeobachtungen, 40 JSON-Rundlaeufe,
+  acht abgewiesene doppelte Buchungen und 24 Negativproben.
+
+**Pruefstatus: PENDING**, bis der GitHub-Prueflauf auf dem abschliessenden
+Dokumentations-HEAD erfolgreich beendet ist. Der bestehende technische
+PASS auf dem vorherigen HEAD bleibt ein separater Nachweis, nicht die
+Freigabe dieser Erweiterung. Das 52-Punkte-Gate bleibt **BLOCKED**.
+
+**Naechste technische Pflicht:** Nach erfolgreicher Engpasspruefung einen
+zweiten Frachtmonat mit erneuter gemeinsamer Kapazitaetskonkurrenz,
+Reparatur-/Sperrfall und unabhängiger kumulativer Kassen- und Mengenbilanz
+pruefen; danach Gewinn-/Vermoegensbewertung und vollstaendige Endpartien.
+Keine Aussage ueber historische C64-Regeln, Ressourcenrechte, Browser-Zoom
+oder Nutzer-Endabnahme.
+
+## Nachtrag 31.10.2026 – unabhaengiger Fracht-Journal-Manipulationstest
+
+**Vorbefund:** Der vorherige PR-140-HEAD `322a3ca1f18433e2fda594a41651fc4266f2c1d7` hat die [Mehrfirmen-Fachpruefung #41145361270](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41145361270) bestanden. Die integrierte Vorrelease-Sperre blieb erwartungsgemaess rot.
+
+**Neue technische Pflicht, getrennt vom Finanzmodell in PR #141:** Die bereits natuerlich durchgespielten zwei Fracht-Szenarien werden gegen gezielte Datenverfaelschungen gesichert. Ein zweiter Pruefer kontrolliert die Auslastung beider Streckenkanten, pro Firma genau einen Frachtbericht, angeforderte/angenommene/zurueckgebuchte Mengen, die Frachtvorauszahlung und den tatsaechlich verbuchten Rueckerstattungsbetrag. Er vergleicht den Nettobetrag mit einem vor der Verfaelschung festgehaltenen Erwartungswert.
+
+- **Sollumfang:** 10 erkannte Frachtmanipulationen im Basisfall und 12 im Engpassfall, je zweimal wiederholt: **44 negative Frachtproben** zusaetzlich zu den 24 bisherigen Bestands-/Kassenproben.
+- **Fehlerarten:** Beide Streckenauslastungen; je Firma falsche angeforderte, angenommene und zurueckgegebene Menge; falsche Frachtvorauszahlung; im Engpassfall falsche Rueckerstattung.
+- **Verfahren:** Nur Kopien des gueltigen Spielstands werden verfaelscht. Der unveraenderte Spielkern wird weiterhin mit echten Aktionen durchlaufen. Der GitHub-Pflichtworkflow erzwingt das exakte Ergebnis im JSON-Nachweis.
+- **Pruefstatus:** **PENDING**, bis die GitHub-CI auf dem endgueltigen Commit dieses Zweigs erfolgreich abgeschlossen ist. Syntaxpruefung allein ist kein PASS. WIR-02/WIR-03 bleiben **BLOCKED**.
+- **Grenzen:** Noch keine wiederholten Engpaesse ueber mehrere Frachtmonate mit Streckensperre und Reparatur, keine Gewinn-/Vermoegensbilanz, keine durchgaengige Endpartie, keine C64-Originalfreigabe und keine Rechteklaerung der 77 Archivdateien.
+
+**Naechste Implementierung:** Mehrmonatigen erneuten Kapazitaetskonflikt mit Streckensperre/Reparatur und kumulierter unabhaengiger Mengen-/Kassenpruefung modellieren; danach Endpartie- und Vermoegensgates separat bearbeiten. Kein Merge und kein Release.
+
+
+## Nachtrag 31.10.2026 – Frachtbelege gegen doppelte Buchungen absichern
+
+**Ausgangspunkt:** Der 44-Proben-Test von PR #142 wurde in [GitHub-CI #41151173632](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41151173632) erfolgreich ausgefuehrt. Dieser Nachtrag ist ein **neues, noch separat zu pruefendes** Pflichtpaket auf eigenem Entwicklungszweig.
+
+**Fehlerbild und Wirksamkeit:** Der bisherige Journalabgleich verglich bei Rueckerstattungen nur die Summe. Eine zusaetzliche Null-Cent-Rueckerstattung haette die Summe nicht veraendert. Der Pruefer verlangt jetzt bei tatsaechlicher Rueckgabe genau **einen** Rueckerstattungsbeleg, andernfalls **keinen**. Er testet zudem absichtlich doppelte Frachtberichte und doppelte Vorauszahlungsbelege in unveraenderten Spielstandkopien.
+
+**Verbindlicher Testumfang:** Basisfall 14 und Engpassfall 18 erkannte Fracht-Manipulationen je Durchlauf, jeweils zweimal deterministisch wiederholt: **64 Fracht-Negativproben** statt bisher 44. Zusaetzlich unveraendert: 24 Bestands-/Kassen-Negativproben, 20 simulierte Spielmonate, 40 Firmenkontrollen, 40 JSON-Rundlaeufe und acht abgewiesene doppelte Frachtauftraege. Der GitHub-Workflow erzwingt diese Zahlen; der Spielkern bleibt unangetastet.
+
+**Abnahme:** `node --check project-c/pppoppi-imperium/quality_v194/test_natural_multifirm_refinery_v194.cjs` und der komplette Node-Test im Workflow `.github/workflows/prerelease-natural-multifirm.yml`. **Status PENDING**, bis ein erfolgreicher GitHub-Lauf auf dem finalen Commit vorliegt. Dies ist eine Verschaerfung der Testpruefung, kein Beweis fuer eine Reparatur der produktiven Importvalidierung. WIR-02/WIR-03 bleiben BLOCKED. Keine Gewinn-/Vermoegensbewertung, keine vollstaendige Endpartie, keine historische C64-Verifikation oder Rechtefreigabe.
+
+**Naechste Implementierung:** Mehrere aufeinanderfolgende Frachtmonate mit wiederholtem Engpass, Streckensperre und Reparatur sowie kumulierter Mengen- und Kassenbilanz. Kein Merge, kein Release und keine vorgezogene persoenliche Endabnahme.
