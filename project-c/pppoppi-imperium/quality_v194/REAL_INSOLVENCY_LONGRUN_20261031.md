@@ -37,7 +37,7 @@ node project-c/pppoppi-imperium/quality_v194/test_real_insolvency_longrun_v194.c
 
 Der bestehende [GitHub-Fachworkflow](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/workflows/prerelease-real-credit-longrun.yml) führt die neue Prüfung zusätzlich zum bisherigen 16-Monats-Kredittest aus und sichert beide JSON-Ausgaben. [Entwurfs-PR #147](https://github.com/provoware/PROJEKT_Oli_Imperium/pull/147).
 
-**Status der erweiterten Krisenbuchprüfung: PENDING auf neuem HEAD.** PASS erst nach tatsächlich erfolgreicher GitHub-Ausführung auf dem endgültigen Commit. Das Gesamt-Vorrelease-Gate bleibt BLOCKED; keine neue vollständige Pflicht als PASS zählen. Der unveränderte Spielkern wird nur gelesen.
+**Fach-CI PASS:** [GitHub-Lauf #41229983897](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41229983897) auf Test-HEAD `bab800224ff234bceb9a1d77480935f814b13c33`: 2 × 14 Monate, 56 Firmen-Monatskontrollen, 50/50 erkannte Manipulationsproben, darunter 28 Krisenbuch-Verfälschungen, 3 JSON-Rundläufe je Szenario. Der erste Lauf [#41229919990](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41229919990) schlug fehl, weil zwei Zahlungen **derselben** Rechnung gegeneinander verschoben wurden: eine fachlich zulässige Umverteilung. Der Test wurde auf Zahlungen unterschiedlicher Rechnungen korrigiert. Dokumentations-HEAD und Gesamt-CI müssen erneut geprüft werden. PASS erst nach tatsächlich erfolgreicher GitHub-Ausführung auf dem endgültigen Commit. Das Gesamt-Vorrelease-Gate bleibt BLOCKED; keine neue vollständige Pflicht als PASS zählen. Der unveränderte Spielkern wird nur gelesen.
 
 ## Unverändert offen
 
