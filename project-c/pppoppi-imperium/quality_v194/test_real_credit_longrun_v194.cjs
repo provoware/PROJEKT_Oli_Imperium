@@ -38,15 +38,15 @@ function ledgerAudit(f,opening) {
 function verifyFinal(state,opening) {
   const a=firm(state,'H1'),b=firm(state,'H2');
   ledgerAudit(a,opening);ledgerAudit(b,opening);
-  assert.equal(a.cashCent,2803155,'final H1 cash');
-  assert.equal(a.debtCent,5560701,'final H1 debt');
+  assert.equal(a.cashCent,2815799,'final H1 cash');
+  assert.equal(a.debtCent,5463166,'final H1 debt');
   assert.equal(b.cashCent,opening-16*E.CFG.wage,'independent H2 cash');
   assert.equal(b.debtCent,0,'independent H2 debt');
   const loans=a.ledger.filter(e=>e.code==='RETTUNGSKREDIT');
   assert.equal(loans.length,2,'rescue loan count');
   assert.equal(loans.reduce((sum,e)=>sum+e.deltaCent,0),8000000,'rescue loan total');
   assert.equal(invoice(a,14,'ZINS').dueCent,21614,'month 14 interest');
-  assert.equal(invoice(a,16,'TILGUNG').dueCent,292668,'month 16 principal');
+  assert.equal(invoice(a,16,'TILGUNG').dueCent,287535,'month 16 principal');
   assert.equal(E.pending(a),0,'unpaid final invoices');
   for(const o of a.obligations)assert.equal(o.paidCent,o.dueCent,'unpaid H1 invoice');
 }
@@ -119,7 +119,8 @@ function scenario() {
       assert.equal(E.validate(restored),true,'mid-rescue JSON invalid');
       s=step(restored,'RESCUE_LOAN','H1');
       roundtrips++;
-      expectedDebt+=E.CFG.credit;
+      assert.equal(invoice(a,month,'TILGUNG').paidCent,0,'principal paid before rescue despite insufficient priority-1 cash');
+      expectedDebt+=E.CFG.credit-principal;
       expectedCash+=E.CFG.credit-shortfall;
       assert.equal(s.phase,'REPORT','second rescue must finish');
       assert.equal(E.pending(firm(s,'H1')),0,'second rescue left unpaid invoices');
