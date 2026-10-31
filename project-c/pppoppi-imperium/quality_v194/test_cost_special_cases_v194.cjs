@@ -61,7 +61,7 @@ test('Öffentlicher Frachtvorschuss: zunächst Forderungs-/Vorauszahlungsbestand
  const auction=t.state.lastReport.publicNetwork;
  assert.equal(auction.freight.filter(x=>x.companyId==='H1').length,1);
  assert.equal(auction.freight.find(x=>x.companyId==='H1').freightCent,held);
- assert.equal(B.report(t.book,t.state).accountingProfitCent,null);
+ assert.throws(()=>B.report(t.book,t.state),/WERTMINDERUNG_OFFEN/);
 });
 test('Öffentlicher Zielmarkt: kein Erlös bei Angebot/Transport, sondern erst Abrechnung',()=>{
  const t=preparePublic();
