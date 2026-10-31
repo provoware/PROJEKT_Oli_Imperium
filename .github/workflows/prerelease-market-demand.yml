@@ -1,0 +1,35 @@
+name: Projekt C – Marktpreis und begrenzte Mehrfirmen-Nachfrage
+on:
+  pull_request:
+    paths:
+      - 'project-c/pppoppi-imperium/quality_v194/test_market_demand_v194.cjs'
+      - 'project-c/pppoppi-imperium/quality_v194/MARKET_DEMAND_20261031.md'
+      - 'project-c/pppoppi-imperium/SPIEL/src/**'
+      - 'project-c/pppoppi-imperium/prerelease/matrix.json'
+      - '.github/workflows/prerelease-market-demand.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  market-demand:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Vier echte Spielketten mit Preis- und Nachfragelimit pruefen
+        run: |
+          set -o pipefail
+          node --check project-c/pppoppi-imperium/quality_v194/test_market_demand_v194.cjs
+          node project-c/pppoppi-imperium/quality_v194/test_market_demand_v194.cjs | tee market_demand.json
+          node -e "const r=require('./market_demand.json'),a=r.result,b=r.limitedResult; if(r.schema!=='pppoppi.multifirm-market-demand/1'||r.runs!==4||r.simulatedMonths!==44||r.companyMonthChecks!==88||r.jsonRoundtrips!==84||r.duplicatesRejected!==32||r.corruptionsCaught!==52||r.foreignActionsRejected!==4||r.publicRepairs!==4||r.noInjectedInventoryOrCash!==true||r.prereleaseGate!=='BLOCKED'||!a||!b||a.limitedDemand!==false||b.limitedDemand!==true||a.months!==11||b.months!==11||a.sold?.H1!==27000||a.sold?.H2!==27000||b.sold?.H1!==9000||b.sold?.H2!==9000||a.distinctPriceCount<3||b.distinctPriceCount<3||a.distinctDemandCount<3||b.distinctDemandCount<3||JSON.stringify(b.bottleneckMonths)!=='[3,6]')process.exit(1);"
+      - name: Reproduzierbaren JSON-Nachweis sichern
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: market-demand-11months
+          path: market_demand.json
+          if-no-files-found: warn
+          retention-days: 14
