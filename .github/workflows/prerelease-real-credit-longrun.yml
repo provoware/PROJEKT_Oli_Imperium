@@ -1,0 +1,54 @@
+name: Projekt C – natuerliche 16-Monats-Kreditkrise
+on:
+  pull_request:
+    paths:
+      - 'project-c/pppoppi-imperium/quality_v194/test_real_credit_longrun_v194.cjs'
+      - 'project-c/pppoppi-imperium/quality_v194/REAL_CREDIT_LONGRUN_20261031.md'
+      - 'project-c/pppoppi-imperium/prerelease/matrix.json'
+      - '.github/workflows/prerelease-real-credit-longrun.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  real-credit-longrun:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Echte Kreditkrise und wiederholte Rettung
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check project-c/pppoppi-imperium/quality_v194/test_real_credit_longrun_v194.cjs
+          node project-c/pppoppi-imperium/quality_v194/test_real_credit_longrun_v194.cjs | tee real_credit_longrun.json
+          node - <<'NODE'
+          const assert=require('node:assert/strict');
+          const fs=require('node:fs');
+          const r=JSON.parse(fs.readFileSync('real_credit_longrun.json','utf8'));
+          assert.equal(r.schema,'pppoppi.real-credit-longrun/1');
+          assert.equal(r.scenarios,2);
+          assert.equal(r.months,16);
+          assert.equal(r.companyMonthsChecked,64);
+          assert.equal(r.realActions,10);
+          assert.equal(r.firstArrearsCent,40000);
+          assert.equal(r.secondRescueMonth,14);
+          assert.equal(r.secondArrearsCent,195957);
+          assert.equal(r.creditPerRescueCent,4000000);
+          assert.equal(r.finalCashCent,2803155);
+          assert.equal(r.finalDebtCent,5560701);
+          assert.equal(r.jsonRoundtrips,5);
+          assert.equal(r.negativeCases,16);
+          assert.equal(r.noInjectedCashOrDebt,true);
+          assert.equal(r.prereleaseGate,'BLOCKED');
+          NODE
+      - name: Reproduzierbare JSON-Ausgabe sichern
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: real-credit-longrun
+          path: real_credit_longrun.json
+          if-no-files-found: warn
+          retention-days: 14
