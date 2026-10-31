@@ -9,6 +9,12 @@ const copy = value => JSON.parse(JSON.stringify(value));
 const IDS = ['H1','H2'];
 const CLAIMS = {'H1':'BERLIN-1','H2':'BERLIN-2'};
 const INVESTMENT_CODES = ['FELDKAUF','FACHBOHRUNG','RAFFINERIE_BAU','VERTRIEBSROUTE'];
+// Fixed Berlin-adaptation tariffs are test oracles, not historical C64 prices.
+// A balanced, jointly manipulated cashbook must still fail the tariff check.
+const EXPECTED_BERLIN_TARIFF_CENT = Object.freeze({
+  FELDKAUF: 5000000, FACHBOHRUNG: 7000000,
+  RAFFINERIE_BAU: 3000000, VERTRIEBSROUTE: 800000
+});
 const SALE_CODES = new Set(['MARKTERLÖS','VERTRAGSERLÖS','AUSSENMARKT','RAFFINIERT_MONATSVERKAUF']);
 let sequence = 0;
 function move(state,type,id,extra={}) {
@@ -85,6 +91,17 @@ function audit(state,opening) {
       'physical reserve movement mismatch');
     assert.equal(claim.inventoryMilli+claim.preparedMilli+sold,E.CFG.pumpMilli,
       'physical stock conservation mismatch');
+    // Independent tariff check: matching ledger and cash alone cannot prove a real cost.
+    // The scenario deliberately owns exactly one Berlin field, drill, plant and route.
+    for (const [code, info] of [
+      ['FELDKAUF', claim.id], ['FACHBOHRUNG', claim.id],
+      ['RAFFINERIE_BAU', 'BERLIN'], ['VERTRIEBSROUTE', 'BERLIN']
+    ]) {
+      const matching = entries.filter(e => e.code === code && e.info === info);
+      assert.equal(matching.length, 1, 'acquisition tariff booking missing or duplicate');
+      assert.equal(matching[0].deltaCent, -EXPECTED_BERLIN_TARIFF_CENT[code],
+        'acquisition tariff mismatch');
+    }
     const investment=entries.filter(e=>INVESTMENT_CODES.includes(e.code))
       .reduce((sum,e)=>{
         assert.ok(e.deltaCent<0,'asset acquisition has invalid sign');
@@ -137,7 +154,27 @@ function scenario() {
     ['report debt mismatch',s=>{s.companies[0].debtCent++;}],
     ['report arrears mismatch',s=>{s.companies[0].obligations[0].dueCent++;}],
     ['report revenue mismatch',s=>{s.lastReport.companies[0].revenueCent++;}],
-    ['physical stock conservation mismatch',s=>{s.claims['BERLIN-1'].inventoryMilli++;}]
+    ['physical stock conservation mismatch',s=>{s.claims['BERLIN-1'].inventoryMilli++;}],
+    // Both the cash and the published report are manipulated to conceal a wrong tariff.
+    ...INVESTMENT_CODES.map((code,index)=>['acquisition tariff mismatch',s=>{
+      const firm=s.companies[0], report=s.lastReport.companies[0];
+      const booking=firm.ledger.find(e=>e.code===code);
+      const delta=index+1;
+      booking.deltaCent+=delta;firm.cashCent+=delta;report.cashCent+=delta;
+    }]),
+    // Even zero-sum swaps between two acquisitions must not bypass the tariff oracle.
+    ['acquisition tariff mismatch',s=>{
+      const entries=s.companies[0].ledger;
+      entries.find(e=>e.code==='FELDKAUF').deltaCent+=100;
+      entries.find(e=>e.code==='FACHBOHRUNG').deltaCent-=100;
+    }],
+    ['acquisition tariff mismatch',s=>{
+      const firm=s.companies[0], report=s.lastReport.companies[0];
+      firm.ledger.find(e=>e.code==='RAFFINERIE_BAU').deltaCent+=500;
+      firm.ledger.find(e=>e.code==='GUTACHTEN').deltaCent-=500;
+      // The cashbook still balances, but the refinery price is now false.
+      assert.equal(firm.cashCent,report.cashCent);
+    }]
   ];
   for(const [message,corrupt] of cases) {
     const bad=copy(state);corrupt(bad);
