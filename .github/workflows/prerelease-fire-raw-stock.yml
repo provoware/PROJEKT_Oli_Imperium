@@ -1,0 +1,54 @@
+name: Projekt C – Brand und Rohölbestand ohne erfundene Wertminderung
+on:
+  pull_request:
+    paths:
+      - 'project-c/pppoppi-imperium/quality_v194/test_fire_raw_stock_v194.cjs'
+      - 'project-c/pppoppi-imperium/quality_v194/FIRE_RAW_STOCK_20261031.md'
+      - 'project-c/pppoppi-imperium/prerelease/matrix.json'
+      - '.github/workflows/prerelease-fire-raw-stock.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  fire-raw-stock:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax und reproduzierbarer Brand-/Lagerabgleich
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check project-c/pppoppi-imperium/quality_v194/test_fire_raw_stock_v194.cjs
+          node project-c/pppoppi-imperium/quality_v194/test_fire_raw_stock_v194.cjs | tee fire_raw_stock.json
+          node - <<'NODE'
+          const assert = require('node:assert/strict');
+          const fs = require('node:fs');
+          const r = JSON.parse(fs.readFileSync('fire_raw_stock.json', 'utf8'));
+          assert.equal(r.schema, 'pppoppi.fire-raw-stock/1');
+          assert.equal(r.scenarios, 2);
+          assert.equal(r.months, 8);
+          assert.equal(r.negativeCases, 12);
+          assert.equal(r.fireEvents, 1);
+          assert.equal(r.expertExtinguishments, 1);
+          assert.equal(r.blockedPumps, 1);
+          assert.equal(r.jsonRestores, 1);
+          assert.ok(r.producedMilli > 0);
+          assert.equal(r.producedMilli, r.soldMilli);
+          assert.equal(r.remainingStockMilli, 0);
+          assert.equal(r.observedStockLossAtFireMilli, 0);
+          assert.equal(r.valuationStatus, 'UNPRICED');
+          assert.equal(r.fireLossRuleStatus, 'NOT_DEFINED');
+          assert.equal(r.profitStatus, 'NOT_COMPUTABLE');
+          assert.equal(r.prereleaseGate, 'BLOCKED');
+          NODE
+      - name: Nachweis sichern
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fire-raw-stock
+          path: fire_raw_stock.json
+          if-no-files-found: warn
