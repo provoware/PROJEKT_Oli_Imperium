@@ -24,6 +24,8 @@ on:
       - 'project-c/pppoppi-imperium/quality_v194/test_ai_owned_claim_insolvency_v194.cjs'
       - 'project-c/pppoppi-imperium/quality_v194/test_ai_natural_debt_observation_v194.cjs'
       - 'project-c/pppoppi-imperium/quality_v194/test_ai_cashflow_audit_v194.cjs'
+      - 'project-c/pppoppi-imperium/quality_v194/test_financial_boundaries_v194.cjs'
+      - 'project-c/pppoppi-imperium/quality_v194/FINANCIAL_BOUNDARIES_20261031.md'
       - 'project-c/pppoppi-imperium/quality_v194/test_public_freight_monthly_audit_v194.cjs'
       - 'project-c/pppoppi-imperium/quality_v194/test_public_freight_chain_sale_v194.cjs'
       - 'project-c/pppoppi-imperium/quality_v194/AI_CASHFLOW_AUDIT_20261030.md'
@@ -152,6 +154,10 @@ jobs:
           node --check project-c/pppoppi-imperium/quality_v194/test_ai_cashflow_audit_v194.cjs
           node project-c/pppoppi-imperium/quality_v194/test_ai_cashflow_audit_v194.cjs | tee ai_cashflow_audit.json
           node -e "const r=require('./ai_cashflow_audit.json'); if(r.configurations!==2 || r.repeatedRuns!==2 || r.totalSimulatedMonths!==96 || r.accountingChecks<120 || r.revenueChecks!==r.accountingChecks || r.negativeTests!==8 || r.classificationUnitChecks!==2 || r.knownActionCostCodes!==9 || !Number.isSafeInteger(r.classifications.actionCostCent) || !Number.isSafeInteger(r.classifications.freightHoldCent) || !Number.isSafeInteger(r.classifications.freightRefundCent) || !r.classifications || !r.noInjectedCashOrDebt || r.prereleaseGate!=='BLOCKED') process.exit(1);"
+      - name: Geldposition, Rechnungsschulden und unbewertete Anlagen unabhängig prüfen
+        run: |
+          node --check project-c/pppoppi-imperium/quality_v194/test_financial_boundaries_v194.cjs
+          node --test project-c/pppoppi-imperium/quality_v194/test_financial_boundaries_v194.cjs
       - name: Frachtvorauszahlung und Rueckgabe ueber zwei Monatsgrenzen pruefen
         run: |
           set -o pipefail
