@@ -3,6 +3,7 @@ on:
   pull_request:
     paths:
       - 'project-c/pppoppi-imperium/quality_v194/test_real_credit_longrun_v194.cjs'
+      - 'project-c/pppoppi-imperium/quality_v194/test_real_insolvency_longrun_v194.cjs'
       - 'project-c/pppoppi-imperium/quality_v194/REAL_CREDIT_LONGRUN_20261031.md'
       - 'project-c/pppoppi-imperium/prerelease/matrix.json'
       - '.github/workflows/prerelease-real-credit-longrun.yml'
@@ -45,11 +46,38 @@ jobs:
           assert.equal(r.noInjectedCashOrDebt,true);
           assert.equal(r.prereleaseGate,'BLOCKED');
           NODE
+      - name: Natuerliche Insolvenz mit Feldfreigabe und Neustart
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check project-c/pppoppi-imperium/quality_v194/test_real_insolvency_longrun_v194.cjs
+          node project-c/pppoppi-imperium/quality_v194/test_real_insolvency_longrun_v194.cjs | tee real_insolvency_longrun.json
+          node - <<'NODE'
+          const assert=require('node:assert/strict');
+          const fs=require('node:fs');
+          const r=JSON.parse(fs.readFileSync('real_insolvency_longrun.json','utf8'));
+          assert.equal(r.schema,'pppoppi.real-insolvency-longrun/1');
+          assert.equal(r.scenarios,2);
+          assert.equal(r.months,14);
+          assert.equal(r.companyMonthsChecked,56);
+          assert.equal(r.realActions,10);
+          assert.equal(r.firstRescueMonth,1);
+          assert.equal(r.naturalInsolvencyMonth,14);
+          assert.equal(r.arrearsCent,195957);
+          assert.deepEqual(r.releasedClaims,['BERLIN-1','BRANDENBURG-1']);
+          assert.equal(r.roundtrips,3);
+          assert.equal(r.negativeCases,22);
+          assert.equal(r.noInjectedCashOrDebt,true);
+          assert.equal(r.unrelatedCompanyPreserved,true);
+          assert.equal(r.prereleaseGate,'BLOCKED');
+          NODE
       - name: Reproduzierbare JSON-Ausgabe sichern
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: real-credit-longrun
-          path: real_credit_longrun.json
+          path: |
+            real_credit_longrun.json
+            real_insolvency_longrun.json
           if-no-files-found: warn
           retention-days: 14
