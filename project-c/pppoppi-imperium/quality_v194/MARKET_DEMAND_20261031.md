@@ -11,7 +11,7 @@ Neuer Test `test_market_demand_v194.cjs` verwendet ausschließlich echte Spielak
 | Prüffall | Erwartetes Ergebnis |
 | --- | --- |
 | Basisfall | Je Firma 27.000 Milli-Barrel kumuliert verkauft |
-| Nachfragebegrenzung M11 | Je Firma 18.000 Milli-Barrel angeboten; gemeinsames Marktlimit 18.000; je Firma 9.000 verkauft und 9.000 ins Eingangslager zurückgegeben |
+| Nachfragebegrenzung M11 | Nach je 9.000 Milli-Barrel regulärem Verkauf in M5 werden in M11 je 18.000 angeboten; gemeinsames Marktlimit 18.000; je Firma weitere 9.000 verkauft und 9.000 ins Eingangslager zurückgegeben (kumuliert 18.000 je Firma) |
 | Erlöse | `floor((verkauftMilli * berichteterPreisCent + 500) / 1000)` je Firma und Monatsbericht; gleiche Summe und Anzahl im Kassenjournal |
 | Marktpreis | Überregionaler Preis = `floor((regionalerPreis * 115 + 50) / 100)`; regionaler Preis stimmt mit dem tatsächlichen Spielzustand überein |
 | Nachfrage | Regionaler Nachfragesatz entspricht dem Spielzustand; überregionaler Markt verkauft nie mehr als sein 18.000-Milli-Barrel-Limit |
@@ -21,7 +21,7 @@ Neuer Test `test_market_demand_v194.cjs` verwendet ausschließlich echte Spielak
 **Pflichtzahlen:** vier Durchläufe, 44 Spielmonate, 88 Firmen-Monatskontrollen, 84 JSON-Rundläufe, 32 Duplikatsperren, 52 absichtliche Manipulationen, vier Fremdaktionssperren und vier öffentliche Reparaturen. Mindestens drei unterschiedliche natürliche Marktpreise und drei regionale Nachfragewerte pro Durchlauf. Der GitHub-Workflow prüft diese Werte maschinell und archiviert die JSON-Ausgabe.
 
 ## Belegstatus und Grenzen
-**PENDING bis zum erfolgreichen GitHub-Lauf auf dem finalen HEAD.** Die unveränderte historische C64-Referenz fehlt weiterhin; die hier getesteten Marktformeln gehören zur eigenständigen Berlin-/PPPOPPI-Spielvariante und sind **kein Nachweis für originale C64-Algorithmen**. Die vollständige Gewinn-/Anlagenbewertung, gesamte Endpartien, Browser-Dateidialog und Rechteklärung der 77 Archivdateien bleiben offen. Die Pflichtmatrix bleibt unverändert gesperrt; persönliche Sichtprüfung und Kubuntu-Endabnahme folgen erst nach allen eigenständig möglichen technischen Arbeiten.
+**PENDING bis zum erfolgreichen GitHub-Lauf auf dem finalen HEAD.** Erstlauf [#41169089334](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41169089334) FAIL: Der Test erwartete nach nicht erfolgtem M5-Verkauf fälschlich nur 9.000 statt 18.000 Milli-Barrel im Eingangslager. Zweitlauf [#41169136123](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41169136123) FAIL: Ohne M5-Erlös geriet die Firma im M8 in die reguläre Sanierungsphase; der Test behandelte diesen Zustand nicht. Korrektur: M5-Verkauf bleibt als echte Finanzierung bestehen, die begrenzte Nachfrage wird in M11 durch zwei Angebote zu je 18.000 Milli-Barrel geprüft. Diese Fehlversuche sind keine bestandenen Nachweise. Die unveränderte historische C64-Referenz fehlt weiterhin; die hier getesteten Marktformeln gehören zur eigenständigen Berlin-/PPPOPPI-Spielvariante und sind **kein Nachweis für originale C64-Algorithmen**. Die vollständige Gewinn-/Anlagenbewertung, gesamte Endpartien, Browser-Dateidialog und Rechteklärung der 77 Archivdateien bleiben offen. Die Pflichtmatrix bleibt unverändert gesperrt; persönliche Sichtprüfung und Kubuntu-Endabnahme folgen erst nach allen eigenständig möglichen technischen Arbeiten.
 
 ## Nächste drei Schritte
 1. Den GitHub-Fachlauf und die restlichen Gesamtprüfungen auf dem finalen HEAD auswerten und Fehlversuche mit Ursache dokumentieren.
