@@ -77,7 +77,15 @@ function scenario() {
   assert.equal(s.phase,'RESCUE','first natural crisis missing');
   assert.deepEqual(s.rescueIds,['H1']);
   assert.equal(E.pending(firm(s,'H1')),40000,'first arrears wrong');
-  assert.equal(s.lastReport.companies.find(f=>f.id==='H1').arrearsCent,40000);
+  const firstH1=s.lastReport.companies.find(f=>f.id==='H1');
+  const firstH2=s.lastReport.companies.find(f=>f.id==='H2');
+  assert.equal(firstH1.arrearsCent,40000);
+  assert.equal(firstH1.cashCent,0);
+  assert.equal(firstH1.debtCent,0);
+  assert.equal(firstH2.cashCent,E.CFG.startCash-E.CFG.wage);
+  assert.equal(firstH2.debtCent,0);
+  assert.equal(firstH2.arrearsCent,0);
+  assert.equal(s.reports.length,1);
   s=move(s,'RESCUE_LOAN','H1');
   assert.equal(s.phase,'REPORT','first credit rescue failed');
   let cash=3960000,debt=4000000,roundtrips=0;
@@ -95,6 +103,12 @@ function scenario() {
     const shortage=Math.max(0,due-cash);
     s=move(s,'END_TURN','H1');s=move(s,'END_TURN','H2');
     const report=s.lastReport.companies.find(f=>f.id==='H1');
+    const otherReport=s.lastReport.companies.find(f=>f.id==='H2');
+    assert.ok(otherReport,'second company report missing M'+month);
+    assert.equal(otherReport.cashCent,E.CFG.startCash-month*E.CFG.wage,
+      'reported H2 cash M'+month);
+    assert.equal(otherReport.debtCent,0,'reported H2 debt M'+month);
+    assert.equal(otherReport.arrearsCent,0,'reported H2 arrears M'+month);
     assert.equal(report.cashCent,Math.max(0,cash-due),'reported cash M'+month);
     assert.equal(report.debtCent,debt-(shortage?0:principal),
       'reported debt M'+month);
