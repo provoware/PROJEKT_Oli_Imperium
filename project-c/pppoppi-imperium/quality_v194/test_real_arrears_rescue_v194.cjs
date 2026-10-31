@@ -157,8 +157,8 @@ const first=run(),second=run();
 assert.deepEqual(first,second,'natural rescue is not reproducible');
 console.log(JSON.stringify({schema:'pppoppi.real-arrears-rescue/1',
   scenarios:2,companyMonthsChecked:8,
-  negativeCases:first.negativeCases+second.negativeCases,
-  ...first,prereleaseGate:'BLOCKED',
+  ...first,negativeCases:first.negativeCases+second.negativeCases,
+  prereleaseGate:'BLOCKED',
   limitations:['Two months, two human firms, no complete game.',
     'Rescue uses the actual game credit, not synthetic debt.',
     'Historical C64 rules, asset valuation and accounting profit remain unverified.']
