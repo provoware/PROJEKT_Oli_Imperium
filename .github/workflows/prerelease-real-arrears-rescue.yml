@@ -1,0 +1,52 @@
+name: Projekt C – echte Rechnungsrueckstaende und Rettungskredit
+on:
+  pull_request:
+    paths:
+      - 'project-c/pppoppi-imperium/quality_v194/test_real_arrears_rescue_v194.cjs'
+      - 'project-c/pppoppi-imperium/quality_v194/REAL_ARREARS_RESCUE_20261031.md'
+      - 'project-c/pppoppi-imperium/prerelease/matrix.json'
+      - '.github/workflows/prerelease-real-arrears-rescue.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  real-arrears-rescue:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax und echte Rechnungs-/Kreditfolge
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check project-c/pppoppi-imperium/quality_v194/test_real_arrears_rescue_v194.cjs
+          node project-c/pppoppi-imperium/quality_v194/test_real_arrears_rescue_v194.cjs | tee real_arrears_rescue.json
+          node - <<'NODE'
+          const assert=require('node:assert/strict');
+          const fs=require('node:fs');
+          const r=JSON.parse(fs.readFileSync('real_arrears_rescue.json','utf8'));
+          assert.equal(r.schema,'pppoppi.real-arrears-rescue/1');
+          assert.equal(r.scenarios,2);
+          assert.equal(r.companyMonthsChecked,8);
+          assert.equal(r.realActions,10);
+          assert.equal(r.months,2);
+          assert.equal(r.negativeCases,10);
+          assert.equal(r.realActionPaymentsCent,19900000);
+          assert.equal(r.unpaidBeforeRescueCent,40000);
+          assert.equal(r.rescueCreditCent,4000000);
+          assert.equal(r.debtAfterMonth2Cent,3800000);
+          assert.equal(r.noInjectedCashOrDebt,true);
+          assert.equal(r.profitStatus,'NOT_COMPUTABLE');
+          assert.equal(r.valuationStatus,'UNPRICED');
+          assert.equal(r.prereleaseGate,'BLOCKED');
+          NODE
+      - name: Nachweis sichern
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: real-arrears-rescue
+          path: real_arrears_rescue.json
+          if-no-files-found: warn
