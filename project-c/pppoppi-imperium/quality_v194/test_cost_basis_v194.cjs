@@ -22,11 +22,11 @@ function scenario(){
  const next=()=>move('NEXT_MONTH');
  return {get state(){return s},get book(){return b},start,steps,move,close,next,
   valueRaw:(claimId,recoverableCent)=>{const before=cp(b);const c=s.claims[claimId];
-   b=B.recordRawInventoryValuation(b,s,claimId,{claimId,month:s.month,
+   const next=B.recordRawInventoryValuation(b,s,claimId,{claimId,month:s.month,
     affectedQtyMilli:c.inventoryMilli+c.preparedMilli,recoverableCent,
     sourceRef:'SYNTHETIC-SURVIVING-STOCK-REVIEW-NOT-EXTERNAL',
     method:'Synthetisch dokumentierter Wertansatz ohne automatischen Warenschwund'});
-   assert.deepEqual(before.raw,cp(before.raw));}};
+   assert.deepEqual(b,before,'Bewertungsfunktion darf Eingabebuchwerte nicht veraendern');b=next;}};
 }
 test('Startbild: Keine unbekannten historischen Anschaffungskosten erfinden',()=>{
  const x=scenario();
