@@ -13,6 +13,7 @@ on:
   workflow_dispatch:
 permissions:
   contents: read
+  actions: read
 jobs:
   combined-gates:
     runs-on: ubuntu-latest
@@ -26,6 +27,12 @@ jobs:
         run: node project-c/pppoppi-imperium/prerelease/check.mjs --schema
       - name: Matrix-Regressionsprüfungen
         run: node --test project-c/pppoppi-imperium/prerelease/test.mjs
+      - name: CI-Nachweisregressionen
+        run: node --test project-c/pppoppi-imperium/prerelease/test_ci_evidence.mjs
+      - name: GitHub-Live-Nachweise fuer alle technischen PASS-Gates (harte Sperre)
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: node project-c/pppoppi-imperium/prerelease/verify_ci_evidence.mjs
       - name: A/B-Forschungsvertrag und Grundprüfungen
         run: |
           python3 tools/validate_project.py
