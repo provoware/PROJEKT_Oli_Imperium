@@ -43,3 +43,45 @@ def summarize_month_durations(durations):
         "last_10_mean_seconds": rounded(statistics.mean(values[-10:])),
         "measurement_scope": "browser month steps including midpoint reload; excludes build and final archive reload",
     }
+
+def summarize_campaign_phase_timing(durations, phase_timings):
+    """Measure browser I/O separately; preserve the original raw monthly timings.
+
+    The midpoint restart is included in its month step, while archive I/O
+    occurs after the final month step. Values are descriptive, not release gates.
+    """
+    values = [float(value) for value in durations]
+    summarize_month_durations(values)
+    if len(values) < 2:
+        raise ValueError("campaign requires at least two month steps")
+    if not isinstance(phase_timings, dict) or set(phase_timings) != {"midpoint", "archive"}:
+        raise ValueError("expected midpoint and archive timing groups")
+    required = {"export", "restart", "import"}
+    phases = {}
+    for stage in ("midpoint", "archive"):
+        source = phase_timings[stage]
+        if not isinstance(source, dict) or set(source) != required:
+            raise ValueError("incomplete timing phases: " + stage)
+        phases[stage] = {}
+        for key in sorted(required):
+            value = float(source[key])
+            if not math.isfinite(value) or value < 0:
+                raise ValueError("invalid timing phase: " + stage + "/" + key)
+            phases[stage][key] = round(value, 3)
+    midpoint_index = len(values) // 2 - 1
+    midpoint_io = sum(phases["midpoint"].values())
+    # Three independently rounded measurements may differ by a few ms.
+    if midpoint_io > values[midpoint_index] + 0.005:
+        raise ValueError("midpoint I/O exceeds observed month step")
+    normalized = list(values)
+    normalized[midpoint_index] = round(max(0.0, values[midpoint_index] - midpoint_io), 3)
+    return {
+        "midpoint_month": midpoint_index + 1,
+        "midpoint_month_raw_seconds": round(values[midpoint_index], 3),
+        "midpoint_io_total_seconds": round(midpoint_io, 3),
+        "midpoint_month_without_io_seconds": normalized[midpoint_index],
+        "archive_io_total_seconds": round(sum(phases["archive"].values()), 3),
+        "phase_timings_seconds": phases,
+        "month_step_profile_without_midpoint_io": summarize_month_durations(normalized),
+        "measurement_scope": "midpoint I/O inside month step; archive I/O outside month steps",
+    }

@@ -60,3 +60,15 @@ Die folgenden Werte stammen ausschliesslich aus dem abgeschlossenen GitHub-Lauf 
 3. Mehrfachmessungen in einer definierten Umgebung durchfuehren und erst danach technisch begruendete Leistungsgrenzen vorschlagen.
 
 Keine Aenderung an Produktcode, Spielregeln, Speicherformaten, Hauptzweig oder fremden PR-Dateien. Kein Merge, kein Release und keine persoenliche Endabnahme.
+
+## Nachtrag 01.11.2026 – Halbzeitneustart und Archiv-Import getrennt erfassen
+
+**Verifizierter Ausgangsstand:** GitHub-[Prueflauf #41322137669](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41322137669) auf `c01c236bf13d81e51c1d5a05f1794def959b1473`: **4/4 Jobs SUCCESS**. Die vier Jobs einschliesslich der sieben Profilregressionen wurden einzeln mit erfolgreich abgeschlossenen Schritten kontrolliert.
+
+**Neues Paket:** Die 120-/240-Monats-Browserkampagnen messen jetzt Export, Chromium-Prozessneustart und Import sowohl zur Halbzeit als auch beim Abschluss **jeweils getrennt**. Die unveraenderten Rohzeiten enthalten weiterhin die Halbzeitoperationen; ein zusaetzliches Profil rechnet nur diese nachgewiesenen Halbzeit-I/O-Phasen heraus. Der Archiv-Neustart liegt ausserhalb der Monatsreihe und wird separat ausgewiesen. Die Profilfunktion prueft Vollstaendigkeit, nichtnegative endliche Messwerte und den Abgleich der Halbzeitphasen mit der beobachteten Monatsdauer. Drei neue Regressionen pruefen Trennung, ungueltige Phasen und ungerade Zeitreihen.
+
+**Grenze:** Die Werte belegen Messumfang, nicht die Ursache der Langzeitverlangsamung. Unterschiedliche GitHub-Maschinen, Datenmengen und Prozessstarts sind weiterhin Stoerfaktoren. Keine Performancefreigabe ohne Wiederholungsmessung und definierte Zielwerte.
+
+**CI dieses neuen Pakets:** Nach dem Commit erneut auszufuehren. Bis dahin **UNVERIFIED**; keine vorweggenommene Erfolgsmeldung. **Pflichtmatrix bleibt 6 PASS / 39 BLOCKED / 4 OPEN / 3 DEFERRED (52).**
+
+**Naechste Umsetzung:** (1) GitHub-Regressionen und beide Browserkampagnen auf dem neuen HEAD auswerten, (2) Halbzeit-I/O aus echten Laufprotokollen quantifizieren und bei Bedarf korrigieren, (3) wiederholte Leistungsprofile mit gleicher Umgebung vergleichen. Kein Merge, kein Release, keine persoenliche Endabnahme.

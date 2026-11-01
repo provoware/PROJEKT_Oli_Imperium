@@ -2,7 +2,7 @@
 import math
 import unittest
 
-from performance_profile_v194 import summarize_month_durations
+from performance_profile_v194 import summarize_month_durations, summarize_campaign_phase_timing
 
 
 class PerformanceProfileTests(unittest.TestCase):
@@ -59,6 +59,50 @@ class PerformanceProfileTests(unittest.TestCase):
             with self.subTest(samples=samples):
                 with self.assertRaises((ValueError, TypeError)):
                     summarize_month_durations(samples)
+
+
+    def test_midpoint_restart_is_separate_from_gameplay(self):
+        phases = {
+            "midpoint": {"export": 0.2, "restart": 0.3, "import": 0.5},
+            "archive": {"export": 0.2, "restart": 0.3, "import": 0.4},
+        }
+        result = summarize_campaign_phase_timing([1, 2, 3, 4], phases)
+        self.assertEqual(result["midpoint_month"], 2)
+        self.assertEqual(result["midpoint_month_raw_seconds"], 2)
+        self.assertEqual(result["midpoint_io_total_seconds"], 1)
+        self.assertEqual(result["midpoint_month_without_io_seconds"], 1)
+        self.assertEqual(result["archive_io_total_seconds"], 0.9)
+        self.assertEqual(
+            result["month_step_profile_without_midpoint_io"]["second_half_vs_first_half_ratio"], 3.5)
+        self.assertEqual(phases["midpoint"]["restart"], 0.3)
+
+    def test_phase_validation_rejects_incomplete_and_impossible_measurements(self):
+        valid = {
+            "midpoint": {"export": 0.2, "restart": 0.3, "import": 0.5},
+            "archive": {"export": 0.2, "restart": 0.3, "import": 0.4},
+        }
+        for invalid in (
+            {"midpoint": {"export": 0.2}, "archive": valid["archive"]},
+            {"midpoint": {"export": 1, "restart": 2, "import": 3}, "archive": valid["archive"]},
+            {"midpoint": valid["midpoint"], "archive": {"export": math.nan, "restart": 0.3, "import": 0.4}},
+            {"midpoint": valid["midpoint"]},
+        ):
+            with self.subTest(invalid=invalid):
+                with self.assertRaises((ValueError, TypeError)):
+                    summarize_campaign_phase_timing([1, 2, 3, 4], invalid)
+
+    def test_phase_timing_keeps_raw_months_and_handles_odd_series(self):
+        phases = {
+            "midpoint": {"export": 0.1, "restart": 0.2, "import": 0.2},
+            "archive": {"export": 0.1, "restart": 0.2, "import": 0.2},
+        }
+        original = [1, 2, 3, 4, 5]
+        result = summarize_campaign_phase_timing(original, phases)
+        self.assertEqual(original, [1, 2, 3, 4, 5])
+        self.assertEqual(result["midpoint_month"], 2)
+        self.assertEqual(result["midpoint_month_without_io_seconds"], 1.5)
+        with self.assertRaises(ValueError):
+            summarize_campaign_phase_timing([1], phases)
 
 
 if __name__ == "__main__":

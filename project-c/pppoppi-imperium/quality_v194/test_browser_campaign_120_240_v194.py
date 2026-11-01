@@ -5,6 +5,7 @@ Nur sichtbare Tastaturaktionen, echte Sanierungen, Export/Import und neue
 Browserprozesse. Alle Dateien liegen in einem automatisch geloeschten Tempordner.
 """
 import argparse
+from contextlib import contextmanager
 import json
 import subprocess
 import tempfile
@@ -13,7 +14,7 @@ from pathlib import Path
 
 from playwright.sync_api import sync_playwright
 from test_browser_campaign_24months_v194 import check, press_button, state
-from performance_profile_v194 import summarize_month_durations
+from performance_profile_v194 import summarize_month_durations, summarize_campaign_phase_timing
 
 HERE = Path(__file__).resolve().parent
 SCHEMA = "pppoppi.endstate.session.proposal/1"
@@ -77,10 +78,19 @@ def main(months):
         check("110 geschuetzte Quelldateien im isolierten Aufbau",
               build["sourceFiles"] == 110)
         errors, external, durations = [], [], []
+        phase_timings = {"midpoint": {}, "archive": {}}
         processes, rescues = 0, 0
 
         with sync_playwright() as pw:
             browser = None
+
+            @contextmanager
+            def timed_phase(stage, action):
+                began = time.monotonic()
+                try:
+                    yield
+                finally:
+                    phase_timings[stage][action] = round(time.monotonic() - began, 3)
 
             def start():
                 nonlocal browser, processes
@@ -141,23 +151,26 @@ def main(months):
                           == ("finished" if month == months else "active"))
                     if month == months // 2:
                         checkpoint = report
-                        saved, payload = export_session(
-                            page, "zwischenstand-%d.json" % months)
-                        check("Halbzeitexport ohne Archiv und mit vollem Zustand",
-                              payload["state"] == checkpoint
-                              and payload["archive"] is None)
-                        stop()
-                        page = start()
-                        page.locator("#loadSessionFile").set_input_files(str(saved))
-                        page.wait_for_function(
-                            "(m) => NeoEconomy.getState()?.month===m && "
-                            "NeoEconomy.getState()?.phase==='REPORT'",
-                            arg=month)
-                        check("Prozessneustart: Zustand und Vertrag identisch",
-                              state(page) == checkpoint
-                              and page.evaluate(
-                                  "NeoEconomy.endstate.contract().months")
-                              == months)
+                        with timed_phase("midpoint", "export"):
+                            saved, payload = export_session(
+                                page, "zwischenstand-%d.json" % months)
+                            check("Halbzeitexport ohne Archiv und mit vollem Zustand",
+                                  payload["state"] == checkpoint
+                                  and payload["archive"] is None)
+                        with timed_phase("midpoint", "restart"):
+                            stop()
+                            page = start()
+                        with timed_phase("midpoint", "import"):
+                            page.locator("#loadSessionFile").set_input_files(str(saved))
+                            page.wait_for_function(
+                                "(m) => NeoEconomy.getState()?.month===m && "
+                                "NeoEconomy.getState()?.phase==='REPORT'",
+                                arg=month)
+                            check("Prozessneustart: Zustand und Vertrag identisch",
+                                  state(page) == checkpoint
+                                  and page.evaluate(
+                                      "NeoEconomy.endstate.contract().months")
+                                  == months)
                     if month < months:
                         press_button(page, '[data-econ="NEXT_MONTH"]')
                         page.wait_for_function(
@@ -185,23 +198,29 @@ def main(months):
                 page.evaluate("NeoEconomy.send('NEXT_MONTH')")
                 check("Nach Endwertung keine weitere Buchung",
                       state(page) == final)
-                saved, payload = export_session(
-                    page, "abschluss-%d.json" % months)
-                check("Endexport enthaelt nur das Archiv",
-                      payload["state"] is None and payload["archive"] == archive)
-                stop()
-                page = start()
-                page.locator("#loadSessionFile").set_input_files(str(saved))
-                page.wait_for_function("NeoEconomy.endstate.status()==='finished'")
-                check("Archiv und Endstand nach zweitem Neustart identisch",
-                      state(page) == final
-                      and page.evaluate("NeoEconomy.endstate.archive()") == archive)
+                with timed_phase("archive", "export"):
+                    saved, payload = export_session(
+                        page, "abschluss-%d.json" % months)
+                    check("Endexport enthaelt nur das Archiv",
+                          payload["state"] is None and payload["archive"] == archive)
+                with timed_phase("archive", "restart"):
+                    stop()
+                    page = start()
+                with timed_phase("archive", "import"):
+                    page.locator("#loadSessionFile").set_input_files(str(saved))
+                    page.wait_for_function("NeoEconomy.endstate.status()==='finished'")
+                    check("Archiv und Endstand nach zweitem Neustart identisch",
+                          state(page) == final
+                          and page.evaluate("NeoEconomy.endstate.archive()") == archive)
                 check("Drei unabhaengige Chromium-Prozesse", processes == 3)
                 check("Keine externen HTTP/HTTPS-Anfragen", not external)
                 check("Keine JavaScript-Laufzeitfehler", not errors)
                 profile = summarize_month_durations(durations)
+                breakdown = summarize_campaign_phase_timing(durations, phase_timings)
                 check("Profil enthaelt alle tatsaechlichen Spielmonate",
-                      profile["measured_months"] == months)
+                      profile["measured_months"] == months
+                      and breakdown["midpoint_month"] == months // 2
+                      and breakdown["month_step_profile_without_midpoint_io"]["measured_months"] == months)
                 print("BROWSER-LANGKAMPAGNE:", json.dumps({
                     "months": months, "human_turns": months * HUMANS,
                     "retained_reports": len(final["reports"]),
@@ -209,6 +228,7 @@ def main(months):
                     "viewport": "800x600", "keyboard": "Enter",
                     "slowest_month_seconds": max(durations),
                     "month_step_profile": profile,
+                    "timing_breakdown": breakdown,
                     "end_to_end_seconds": round(time.monotonic() - campaign_started, 3),
                     "historical_c64_verified": False,
                     "performance_release_gate": "BLOCKED: no agreed threshold",
