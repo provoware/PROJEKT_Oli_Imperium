@@ -71,3 +71,8 @@ Spielstart** nichts benötigt; Node.js ist nur zum Erzeugen der Fassung nötig.
 Der echte Vergleich mit dem historischen C64-Original bleibt ein getrenntes,
 nicht abgeschlossenes Forschungsziel. Keine automatische Zusammenführung
 nach `main`, kein Release.
+
+
+## 📘 Vorrelease-Hilfe · Dokumentations-Pflichtpaket vom 01.11.2026
+
+Die zusammenhängende [Start-, Speicher-, Versions- und Fehleranleitung](DOKUMENTATION_GATES_20261101.md) stellt die drei offenen Dokumentationskriterien **DOK-01 bis DOK-03** nachvollziehbar zusammen. Sie enthält die tatsächlich vorhandenen Start-/Prüfbefehle und die ausdrücklichen Freigabegrenzen. **Weder ein erfolgreicher Dokumentenaufbau noch diese Anleitung allein ändern die Matrix auf PASS.**
