@@ -25,5 +25,7 @@
   "report_file": "project-c/pppoppi-imperium/SPIEL/evidence_v193/KRISEN_LANGZEIT_V194.json",
   "source_evidence": "Alle 156 Szenariomonate erfolgreich in GitHub wiederholt; der zusaetzliche CI-Berichtstest prueft vier vollstaendig abgeschlossene Fallfolgen, nichtnegative Konten und eine tatsaechlich ausgeloeste Sanierung.",
   "limits": "Szenarien simulieren nur festgelegte Fehler- und Krisenfaelle. Keine Nachweise zu allen moeglichen Konkursvarianten, Gewinnbedingungen, menschlichen Vollpartien oder historischer Originaltreue.",
-  "ci_conclusion": "success"
+  "ci_conclusion": "success",
+  "ci_job_id": 121069803142,
+  "ci_step_name": "Wirtschaftliche Fachprüfungen"
 }
