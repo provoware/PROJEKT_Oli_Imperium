@@ -42,7 +42,7 @@ jobs:
         run: |
           set -euo pipefail
           command -v xvfb-run
-          xvfb-run -a -s "-screen 0 1920x1080x24" python3 project-c/pppoppi-imperium/quality_v194/diagnose_native_picker_strategies_v194.py 2> native_picker_protocol.log
+          xvfb-run -a -s "-screen 0 1920x1080x24" bash -c 'exec python3 project-c/pppoppi-imperium/quality_v194/diagnose_native_picker_strategies_v194.py 2> native_picker_protocol.log'
       - name: Protokollreihenfolge getrennt vom Testergebnis auswerten
         if: always()
         run: python3 project-c/pppoppi-imperium/quality_v194/diagnose_native_picker_strategies_v194.py --summarize-protocol

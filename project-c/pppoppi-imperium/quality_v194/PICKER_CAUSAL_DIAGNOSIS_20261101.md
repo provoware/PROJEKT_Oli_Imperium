@@ -35,3 +35,9 @@ Quellbefund aus dem unveränderten Playwright-1.56.0-Paket: Python `_connection.
 Der bestehende Anzeigevergleich prüft nun vier getrennte Arme: sichtbar/headless jeweils unverändert/bestätigt, mit 48 echten 175/200-%-Tastaturversuchen pro Arm. JSON und unveränderte CDP-Protokolle werden immer gesichert. `PPPOPPI_PICKER_ACKNOWLEDGED=1` nutzt ausdrücklich nur für die Diagnose eine private SDK-Schnittstelle; sie ist **kein Produktfix**. Keine direkte Eingabefeldbefüllung, kein übersprungener Fehlversuch, kein zweiter Öffnungsversuch. Die normalen Diagnosearme bleiben unverändert und dürfen weiterhin rot werden.
 
 Status vor GitHub-Auswertung: lokaler zeitlicher Fehlerpfad reproduziert, Bestätigungsarm in der lokalen Stichprobe erfolgreich; reale Zoom-/Anzeige-Gegenprobe ausstehend. Spielquellen, `main`, Speicherformat und Freigabematrix unverändert.
+
+### Absichtliche Fehlerprobe und erster GitHub-Abgleich
+
+Isolierte lokale SDK-Fehler-Injektion: 100 ms Verzögerung ausschließlich vor dem Aktivieren der Überwachung. Standardarm 6/6 erwartete Fehlversuche; bestätigter Arm 6/6 echte Öffnungsereignisse. Das SDK wurde anschließend byteidentisch wiederhergestellt (SHA-256 der unveränderten `crPage.js`: `79a25e4eac0d0fa97dcc6eae4edce83436bcdb4bb1322731f65610adaa8e150f`). Keine Änderung dieses SDK gehört zum Repository oder Produkt.
+
+GitHub-Anzeigevergleich #41269234234 auf `f090657d05901dff6a422ded3febd377bbb5f2da`: bestätigter Headless-Arm 48/48, bestätigter sichtbarer Arm 48/48. Der sichtbare Arm scheiterte anschließend zu Recht an der Protokollzuordnung: `xvfb-run` führt den Kindprozess mit `2>&1` aus, daher war die außerhalb umgeleitete Rohprotokolldatei leer. Der Workflow legt die Umleitung jetzt innerhalb des Kindprozesses an. Der neue sichtbare Vergleich muss vollständig neu ausgewertet werden; der rote Auswertungsstand wird nicht als Gesamt-PASS ausgegeben.
