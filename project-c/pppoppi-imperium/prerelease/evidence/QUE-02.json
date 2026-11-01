@@ -11,5 +11,7 @@
   "ci_run": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40158404633",
   "ci_event": "push",
   "ci_conclusion": "success",
-  "limits": "Nur Quelleninventar und SHA-256. Rechte, Laufzeitressourcen, Spielfunktionen und Release bleiben eigene Pflichten."
+  "limits": "Nur Quelleninventar und SHA-256. Rechte, Laufzeitressourcen, Spielfunktionen und Release bleiben eigene Pflichten.",
+  "ci_job_id": 121064600924,
+  "ci_step_name": "Vollständige GitHub-Quellen gegen das geprüfte Originalinventar"
 }
