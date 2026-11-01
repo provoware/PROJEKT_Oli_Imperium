@@ -75,3 +75,12 @@ test('Fehlende, unvollstaendige oder gescheiterte GitHub-Antwort wird abgewiesen
   await assert.rejects(fetchWorkflowAtCommit(commit,workflowPath,{request:async()=>({ok:false,status:404})}),/HTTP 404/);
   await assert.rejects(fetchWorkflowAtCommit(commit,workflowPath,{request:async()=>({ok:true,json:async()=>({type:'file',encoding:'base64',size:100,content:'aGVsbG8='})})}),/Groesse/);
 });
+
+test('Geerbte Standardwerte duerfen keinen falschen Arbeitsordner bestaetigen',()=>{
+  for (const changed of [
+    workflow.replace('jobs:', 'defaults:\n  run:\n    working-directory: falscher-ordner\njobs:'),
+    workflow.replace('    steps:', '    defaults:\n      run:\n        working-directory: falscher-ordner\n    steps:')
+  ]) {
+    assert.throws(()=>extractStep(changed,'check-source',item.stepName),/Standardwerte/);
+  }
+});

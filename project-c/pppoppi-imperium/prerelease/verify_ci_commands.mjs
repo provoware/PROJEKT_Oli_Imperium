@@ -33,6 +33,11 @@ export function extractStep(workflow, jobName, stepName) {
     throw new Error('Eindeutiger Workflow-Job fehlt');
   const jobEnd = lines.findIndex((line, i) => i > jobStart && /^  [^\s#][^:]*:\s*$/.test(line));
   const jobLines = lines.slice(jobStart + 1, jobEnd < 0 ? undefined : jobEnd);
+  // This small reader cannot resolve inherited shell/working-directory defaults.
+  // Fail closed instead of falsely confirming an empty/default execution context.
+  if (lines.some(line => /^defaults\s*:/.test(line)) ||
+      jobLines.some(line => /^    defaults\s*:/.test(line)))
+    throw new Error('Geerbte Standardwerte werden nicht unterstuetzt');
   const stepsStart = jobLines.findIndex(line => line === '    steps:');
   if (stepsStart < 0 || jobLines.filter(line => line === '    steps:').length !== 1)
     throw new Error('Eindeutiger steps-Block fehlt');
