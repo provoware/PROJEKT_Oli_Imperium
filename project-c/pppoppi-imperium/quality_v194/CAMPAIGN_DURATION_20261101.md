@@ -74,3 +74,15 @@ Die sichtbare Spielartwahl bietet 12, 24, 60, 120 und 240 Monate. Der bisherige 
 - Andere GitHub-Gesamtjobs muessen getrennt abgeschlossen werden; diese Teilpruefung belegt keine 120/240-Monats-Browserpartien, natuerliche Insolvenz in Monat 24, 175/200-%-Zoom in dieser Partie oder persoenliche Endabnahme.
 
 **Wichtig:** Diese nachtraegliche Dokumentation erzeugt einen weiteren Commit. Dessen CI ist bis zur erneuten Nachkontrolle **PENDING**, nicht automatisch PASS. Die Pflichtmatrix bleibt **6/52 PASS**, keine Integration und kein Release.
+
+## 120-/240-Monats-Grenzfaelle – Erweiterung vom 01.11.2026
+
+**Ausgangs-HEAD:** `4012ab96db4e8455b72f2a3f707b8693ab217dce` (24-Monats-Browserpfad und 24/60-Monats-Enginepfad im zugehoerigen [GitHub-Lauf #41302993652](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41302993652) erfolgreich). **Implementierungs-Commit:** `0cdbbe80189eb0b4a698f4c530c7923745ad1de5`.
+
+Die bestehenden echten Engine-Regressionsfaelle wurden um **120 und 240 Spielmonate** erweitert. Jeder Fall durchlaeuft ausschliesslich reale `END_TURN`-, ggf. `RESTART`- und `NEXT_MONTH`-Aktionen, prueft jeden Monatsbericht, das ausbleibende vorzeitige Archiv, den versionierten Zwischenimport bei Monat 60 bzw. 120, die atomare Ablehnung einer manipulierten Vertragslaufzeit und den unveraenderbaren Endstand samt Rangfolge. Die beiden neuen Faelle ergaenzen die 24/60-Monats-Pruefungen auf insgesamt **444 vorgesehene Testmonate und 888 vorgesehene Zugabschluesse**; dies ist eine **Testumfangsangabe, kein bereits bestaetigtes PASS**.
+
+**CI:** Bestehender Workflow `.github/workflows/prerelease-campaign-duration.yml`, Job `campaign-duration-regression`. **Reproduzierbar:** `node --test project-c/pppoppi-imperium/quality_v194/test_endstate_long_campaign_v194.cjs`. Der neue Commit muss seine GitHub-Pruefungen erst abschliessen; **120/240 = PENDING**, nicht PASS. 120/240-Monats-Browserpartien, tatsaechliche Insolvenzen und Sanierung in diesen Modi, Browserzoom und Langzeit-Performance sind **weiterhin BLOCKED**, bis eigenstaendig belegt. Keine Produktionscode-, Spielstandschema-, `main`- oder Originalquellenaenderung.
+
+**Pflichtmatrix:** unveraendert **6 PASS / 39 BLOCKED / 4 OPEN / 3 DEFERRED (52)**. Keine Gesamtfreigabe, keine persoenliche Abnahme. Nach diesem Dokumentations-Commit alle betroffenen GitHub-Jobs auf dem **neuen finalen HEAD** nachpruefen.
+
+**Naechste Schritte:** (1) CI-Ergebnisse und Dauer der vier Engine-Kampagnen auswerten, (2) bei echten Fehlern gezielt korrigieren und erneut pruefen, (3) danach einen getrennten echten 120-/240-Monats-Browserpfad mit Tastatur, Speicherung und Prozessneustart entwickeln.
