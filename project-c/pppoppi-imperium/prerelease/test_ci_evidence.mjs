@@ -7,7 +7,7 @@ const url = 'https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/1234
 const matrix = {gates:[{id:'QUE-02',stage:'technical',status:'pass',evidence:['project-c/pppoppi-imperium/prerelease/evidence/QUE-02.json']},
   {id:'LOG-01',stage:'technical',status:'blocked',evidence:[]},
   {id:'FRE-02',stage:'personal',status:'deferred',evidence:[]}]};
-const proof = {gate_id:'QUE-02',result:'PASS',commit:sha,ci_run:url,ci_conclusion:'success',ci_event:'push'};
+const proof = {gate_id:'QUE-02',result:'PASS',commit:sha,ci_run:url,ci_conclusion:'success',ci_event:'push',ci_job_id:9876,ci_step_name:'Vollstaendige Quellenpruefung'};
 const read = () => structuredClone(proof);
 const run = {id:12345,html_url:url,repository:{full_name:'provoware/PROJEKT_Oli_Imperium'},
   status:'completed',conclusion:'success',head_sha:sha,event:'push'};
@@ -72,4 +72,9 @@ test('API-Aufruf nutzt nur festgelegtes Repository und Token als Header',async()
 
 test('Zu grosse GitHub-Laufkennungen werden nicht gerundet',()=>{
   assert.throws(()=>collectPassEvidence(matrix,()=>({...proof,ci_run:'https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/999999999999999999999'})),/Laufkennung/);
+});
+
+test('Technischer PASS ohne konkrete Job-/Schrittzuordnung wird verworfen',()=>{
+  assert.throws(()=>collectPassEvidence(matrix,()=>({...proof,ci_job_id:null})),/Job-\/Schrittzuordnung/);
+  assert.throws(()=>collectPassEvidence(matrix,()=>({...proof,ci_step_name:''})),/Job-\/Schrittzuordnung/);
 });
