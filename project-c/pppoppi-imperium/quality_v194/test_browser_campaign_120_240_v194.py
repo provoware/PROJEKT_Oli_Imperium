@@ -13,6 +13,7 @@ from pathlib import Path
 
 from playwright.sync_api import sync_playwright
 from test_browser_campaign_24months_v194 import check, press_button, state
+from performance_profile_v194 import summarize_month_durations
 
 HERE = Path(__file__).resolve().parent
 SCHEMA = "pppoppi.endstate.session.proposal/1"
@@ -66,6 +67,7 @@ def play_month(page, month):
 
 
 def main(months):
+    campaign_started = time.monotonic()
     with tempfile.TemporaryDirectory(prefix="pppoppi-browser-%d-" % months) as tmp:
         root = Path(tmp)
         preview = root / "preview"
@@ -197,12 +199,17 @@ def main(months):
                 check("Drei unabhaengige Chromium-Prozesse", processes == 3)
                 check("Keine externen HTTP/HTTPS-Anfragen", not external)
                 check("Keine JavaScript-Laufzeitfehler", not errors)
+                profile = summarize_month_durations(durations)
+                check("Profil enthaelt alle tatsaechlichen Spielmonate",
+                      profile["measured_months"] == months)
                 print("BROWSER-LANGKAMPAGNE:", json.dumps({
                     "months": months, "human_turns": months * HUMANS,
                     "retained_reports": len(final["reports"]),
                     "natural_rescues": rescues, "chromium_processes": processes,
                     "viewport": "800x600", "keyboard": "Enter",
                     "slowest_month_seconds": max(durations),
+                    "month_step_profile": profile,
+                    "end_to_end_seconds": round(time.monotonic() - campaign_started, 3),
                     "historical_c64_verified": False,
                     "performance_release_gate": "BLOCKED: no agreed threshold",
                     "release_gate": "BLOCKED",
