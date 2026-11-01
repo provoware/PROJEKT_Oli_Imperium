@@ -60,3 +60,17 @@ Die sichtbare Spielartwahl bietet 12, 24, 60, 120 und 240 Monate. Der bisherige 
 **Pruefstand bei Dokumentation:** neuer GitHub-Lauf auf finalem HEAD noch **PENDING**; deshalb **kein PASS** fuer den 24-Monats-Browserpfad. Bisherige Engine-Nachweise 24/60 Monate bleiben auf ihrem getrennt dokumentierten Commit gueltig. Die 52er-Matrix bleibt 6 PASS / 39 BLOCKED / 4 OPEN / 3 DEFERRED. Kein Release und keine persoenliche Endabnahme.
 
 **Naechste technische Schritte:** (1) den neuen GitHub-Job und alle anderen Pflichtjobs auf dem endgueltigen Dokumentations-HEAD auswerten, (2) echte Fehler mit Negativtests beheben und erneut laufen lassen, (3) danach 120/240-Monats-Grenzfaelle oder nachgewiesene Browser-Sanierungswege erweitern. Die Entwurfszweige #150 und #154 werden nicht beruehrt.
+
+### GitHub-Nachpruefung des 24-Monats-Browserpfads – 01.11.2026
+
+**Gepruefter Implementierungs-/Dokumentations-HEAD:** `df21e9afa44d9eb1e34b3e965c4277245f19fe02`.  
+**Beleg:** [GitHub Actions #41302858164](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41302858164), beide Jobs **SUCCESS**, alle verpflichtenden Einzelschritte erfolgreich.
+
+- Python-Syntax und Chromium-Installation samt Browserstart: **PASS**.
+- Echte 24-Monats-Partie: **24/24 Berichte**, **96/96 Tastatur-Zugabschluesse**, **72/72 Uebergaben**, **3 Chromium-Prozesse**, zwei vollstaendige Neustarts und beide Exporte/Importe: **PASS** (Logzusammenfassung `BROWSER-24-MONATE`).
+- 800x600 ohne horizontalen Ueberlauf in jedem Monat, unveraendertes Endarchiv, keine externen HTTP/HTTPS-Anfragen und keine JavaScript-Laufzeitfehler: **PASS**.
+- Die bestehende Engine-Regression (4 Referenztests und 2 Langzeitkampagnen) und die Projektstrukturpruefung sind im selben Workflow **PASS**.
+- [Integrierte Pflichtmatrix #41302858171](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41302858171) bleibt absichtlich **FAIL**: alle vorgelagerten Pruefschritte erfolgreich, letzter Schritt `Technische Pflichtmatrix` verweigert die Gesamtfreigabe.
+- Andere GitHub-Gesamtjobs muessen getrennt abgeschlossen werden; diese Teilpruefung belegt keine 120/240-Monats-Browserpartien, natuerliche Insolvenz in Monat 24, 175/200-%-Zoom in dieser Partie oder persoenliche Endabnahme.
+
+**Wichtig:** Diese nachtraegliche Dokumentation erzeugt einen weiteren Commit. Dessen CI ist bis zur erneuten Nachkontrolle **PENDING**, nicht automatisch PASS. Die Pflichtmatrix bleibt **6/52 PASS**, keine Integration und kein Release.
