@@ -35,3 +35,16 @@ Die sichtbare Spielartwahl bietet 12, 24, 60, 120 und 240 Monate. Der bisherige 
 3. Anschliessend die verbleibenden 120/240-Monats-Modi und mehrfache Insolvenzen gezielt pruefen; offene Releasepflichten weiterhin getrennt bearbeiten.
 
 **Keine Ueberschneidung:** #150 entwickelt Bewertungsregeln, #153 prueft CI-Nachweise. Dieses Paket aendert nur einen neuen Endpartietest, einen neuen Workflow und diese Dokumentation. Vor Integration in #141 Quell-/Ziel-HEAD, PR-Diff und saemtliche relevanten CI-Pruefungen erneut vergleichen.
+
+## Nachpruefung der Implementierung am 01.11.2026
+
+**Getesteter Code-/Dokumentations-HEAD:** `073395469027db34cd4622b72189a93797b116e8`.  
+**GitHub Actions:** [Kampagnen-Pflichtgate #41297867454](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41297867454) – **SUCCESS**, alle Schritte abgeschlossen.
+
+- Syntaxpruefung **PASS**, bisherige Endspiel-Engine-Regressionen **4/4 PASS**.
+- Neue 24-/60-Monats-Regressionen **2/2 PASS**, 24 + 60 = **84 echte Spielmonate** und **168 END_TURN-Aktionen**; jeweils 24 bzw. 60 Monatsberichte, zwei Firmen und ein erfolgreich importiertes Endarchiv.
+- Versionierter Zwischenimport bei Monat 12 bzw. 30, manipulierte Laufzeit abgewiesen und Archiv-Buchungssperre: **PASS** innerhalb der beiden Regressionen.
+- Projektstrukturpruefung **PASS**. Laut GitHub-Protokoll gab es in diesen zwei Langtests **0 natuerliche Sanierungsaktionen**. Insolvenz-/Sanierungsdeckung wird daher durch dieses Paket **nicht** behauptet.
+- Diese Tests verwenden die reale Engine **ohne sichtbaren Browser**; sie belegen **keine** 24-/60-Monats-Bedienung bei 800x600, Tastatur oder Zoom. Die bestehenden 12-Monats-Browsertests sind separate Nachweise.
+
+**Hinweis zur Nachweiskette:** Diese Dokumentation wird nach dem erfolgreich geprueften Implementierungs-HEAD ergaenzt. Der daraus entstehende neue HEAD benoetigt seine eigene CI-Nachkontrolle. VER-01/03 bleiben BLOCKED; 6/52 PASS bleibt unveraendert.
