@@ -44,13 +44,13 @@ def _number(record, path, *, positive=False):
 def validate(record, expected_months):
     if type(expected_months) is not int or expected_months < 4:
         raise ValueError("expected months must be >= 4")
-    if record.get("months") != expected_months:
+    if type(record.get("months")) is not int or record["months"] != expected_months:
         raise ValueError("campaign duration mismatch")
     if record.get("viewport") != "800x600" or record.get("keyboard") != "Enter":
         raise ValueError("campaign browser configuration mismatch")
-    if record.get("human_turns") != 4 * expected_months:
+    if type(record.get("human_turns")) is not int or record["human_turns"] != 4 * expected_months:
         raise ValueError("human turn count mismatch")
-    if record.get("chromium_processes") != 3:
+    if type(record.get("chromium_processes")) is not int or record["chromium_processes"] != 3:
         raise ValueError("expected three independent Chromium processes")
     if record.get("release_gate") != "BLOCKED" or not str(record.get("performance_release_gate", "")).startswith("BLOCKED"):
         raise ValueError("comparison cannot override release gates")
@@ -58,12 +58,22 @@ def validate(record, expected_months):
         raise ValueError("incomplete month timing series")
     if not isinstance(record.get("state_size_profile"), dict) or record["state_size_profile"].get("sampled_months") != expected_months:
         raise ValueError("incomplete state-size series")
-    if record.get("retained_reports") != min(expected_months, 120):
+    if type(record.get("retained_reports")) is not int or record["retained_reports"] != min(expected_months, 120):
         raise ValueError("unexpected report retention")
+    rescues = record.get("natural_rescues")
+    if type(rescues) is not int or not 0 <= rescues <= 10 * expected_months:
+        raise ValueError("invalid natural rescue count")
+    if record.get("historical_c64_verified") is not False:
+        raise ValueError("historical C64 verification must remain unclaimed")
     for path in METRICS:
         _number(record, path, positive=True)
-    if _number(record, ("month_step_profile", "month_steps_total_seconds")) > _number(record, ("end_to_end_seconds",)):
+    total = _number(record, ("month_step_profile", "month_steps_total_seconds"))
+    if total > _number(record, ("end_to_end_seconds",)):
         raise ValueError("monthly time exceeds end-to-end time")
+    profile = record["month_step_profile"]
+    if not (0 < profile["month_step_median_seconds"] <= profile["month_step_p95_seconds"]
+            <= profile["month_step_p99_seconds"] <= profile["month_step_max_seconds"] <= total):
+        raise ValueError("inconsistent month-step percentiles or total")
     correlation = record["state_size_profile"].get("month_to_month_change_pearson_r")
     if correlation is not None and (type(correlation) not in (int, float) or not math.isfinite(correlation) or abs(correlation) > 1):
         raise ValueError("invalid month-to-month correlation")
@@ -83,7 +93,9 @@ def compare(first, second, expected_months):
         "runs": 2,
         "viewport": "800x600",
         "human_turns_per_run": 4 * expected_months,
-        "natural_rescues": [first.get("natural_rescues"), second.get("natural_rescues")],
+        "natural_rescues": [first["natural_rescues"], second["natural_rescues"]],
+        "natural_rescue_counts_match": first["natural_rescues"] == second["natural_rescues"],
+        "comparison_scope": "descriptive timing only; equal rescue counts do not prove equal game states",
         "metrics": metrics,
         "release_gate": "BLOCKED: descriptive repeatability only; no agreed hardware or performance thresholds",
     }
