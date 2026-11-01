@@ -42,7 +42,15 @@ function campaign(months) {
       rescueActions++;
     }
     assert.equal(state.phase, 'REPORT', 'Monatsbericht ' + month);
-    assert.equal(state.reports.length, month, 'Exakt ein Bericht pro Monat');
+    // V0.8.2 behaelt bewusst nur die letzten 120 Monatsberichte im Spielstand.
+    // Alle 240 Monate werden trotzdem real gespielt und per lastReport geprueft.
+    const retained = Math.min(month, 120);
+    assert.equal(state.reports.length, retained, 'Maximal 120 gespeicherte Monatsberichte');
+    assert.equal(state.reports[0].month, month - retained + 1,
+      'Aeltester Bericht des gleitenden 120-Monats-Fensters');
+    assert.equal(state.reports[retained - 1].month, month,
+      'Neuester Bericht entspricht dem gespielten Monat');
+    assert.equal(state.lastReport.month, month, 'Aktueller Monatsabschluss');
     if (month === checkpointMonth) {
       const exported = live.exportSession();
       const data = JSON.parse(exported);
