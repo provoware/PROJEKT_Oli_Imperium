@@ -75,6 +75,11 @@ def summarize_campaign_phase_timing(durations, phase_timings):
         raise ValueError("midpoint I/O exceeds observed month step")
     normalized = list(values)
     normalized[midpoint_index] = round(max(0.0, values[midpoint_index] - midpoint_io), 3)
+    normalized_profile = summarize_month_durations(normalized)
+    normalized_profile["measurement_scope"] = (
+        "browser month steps with midpoint export/restart/import subtracted; "
+        "archive I/O excluded"
+    )
     return {
         "midpoint_month": midpoint_index + 1,
         "midpoint_month_raw_seconds": round(values[midpoint_index], 3),
@@ -82,6 +87,6 @@ def summarize_campaign_phase_timing(durations, phase_timings):
         "midpoint_month_without_io_seconds": normalized[midpoint_index],
         "archive_io_total_seconds": round(sum(phases["archive"].values()), 3),
         "phase_timings_seconds": phases,
-        "month_step_profile_without_midpoint_io": summarize_month_durations(normalized),
+        "month_step_profile_without_midpoint_io": normalized_profile,
         "measurement_scope": "midpoint I/O inside month step; archive I/O outside month steps",
     }
