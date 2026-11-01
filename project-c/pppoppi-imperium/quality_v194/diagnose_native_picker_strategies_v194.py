@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 """Diagnose nativer Chromium-Dateiauswahl bei echtem Tab-Zoom; KEIN Release-Gate."""
 import json
+from importlib.metadata import version
 import os
+import re
 import sys
 import tempfile
 from pathlib import Path
@@ -12,7 +14,10 @@ from test_browser_native_zoom_v194 import (
 
 METHODS = ("showpicker", "inputclick", "direct")
 ZOOMS = (1.75, 2.0)
-REPETITIONS = 4
+REPETITIONS = int(os.environ.get("PPPOPPI_PICKER_REPETITIONS", "4"))
+ACKNOWLEDGED = os.environ.get("PPPOPPI_PICKER_ACKNOWLEDGED", "0") == "1"
+if not 1 <= REPETITIONS <= 12:
+    raise ValueError("Diagnosewiederholungen muessen zwischen 1 und 12 liegen")
 RESULT = Path("native_picker_diagnostic.json")
 HTML = """<!doctype html><html lang="de"><meta charset="utf-8">
 <title>Dateiauswahl-Diagnose</title>
@@ -46,7 +51,9 @@ def one(pw, root, fixture, method, zoom, repeat):
     directory = root / ("profile-" + method + "-" + str(int(zoom * 100))
                         + "-" + str(repeat))
     result = {"method": method, "zoomPercent": round(zoom * 100),
-              "repetition": repeat, "result": "FAIL", "error": None}
+              "repetition": repeat, "acknowledgedInterception": ACKNOWLEDGED,
+              "result": "FAIL", "error": None}
+    print("PICKER_CASE " + json.dumps(result), file=sys.stderr, flush=True)
     context = None
     try:
         extension = root / "zoom-extension"
@@ -63,6 +70,8 @@ def one(pw, root, fixture, method, zoom, repeat):
         actual = set_real_zoom(worker, page.url, zoom)
         if abs(actual["factor"] - zoom) > 0.01:
             raise AssertionError("Echter Chrome-Tab-Zoom nicht aktiv")
+        result["actualZoom"] = actual["factor"]
+        result["browserVersion"] = context.browser.version if context.browser else None
         selector = "#" + method
         target = page.locator(selector)
         if not target.is_visible() or not target.is_enabled():
@@ -71,6 +80,15 @@ def one(pw, root, fixture, method, zoom, repeat):
         result["focusBeforeKey"] = target.evaluate(
             "(e) => document.activeElement === e")
         result["documentFocus"] = page.evaluate("document.hasFocus()")
+        if ACKNOWLEDGED:
+            # DIAGNOSE ONLY: await the existing dispatcher BEFORE registering
+            # expect_file_chooser. Its automatic subscription is fire-and-forget.
+            # Private SDK API is intentional for this causal control, not a
+            # production fix or an alternative file-import implementation.
+            page._sync(page._impl_obj._channel.send(
+                "updateSubscription", None,
+                {"event": "fileChooser", "enabled": True}))
+            result["interceptionAcknowledgedBeforeKey"] = True
         try:
             # Only authentic keyboard input; never silently set input files.
             with page.expect_file_chooser(timeout=5000) as event:
@@ -91,6 +109,75 @@ def one(pw, root, fixture, method, zoom, repeat):
     return result
 
 
+def summarize_protocol(text, payload):
+    """Read-only classification; protocol ACK order is evidence, not release PASS."""
+    chunks = re.split(r"^PICKER_CASE ", text, flags=re.MULTILINE)[1:]
+    if len(chunks) != len(payload["results"]):
+        raise ValueError("Protokoll und JSON haben unterschiedliche Versuchszahlen")
+    rows = []
+    for chunk, result in zip(chunks, payload["results"]):
+        label, _, body = chunk.partition("\n")
+        case = json.loads(label)
+        for key in ("method", "zoomPercent", "repetition", "acknowledgedInterception"):
+            if case[key] != result[key]:
+                raise ValueError("Protokoll und JSON stimmen beim Versuch nicht ueberein")
+        events = []
+        pending = {}
+        for line in body.splitlines():
+            match = re.search(r"(SEND ►|◀ RECV) (\{.*\})$", line)
+            if not match:
+                continue
+            message = json.loads(match[2])
+            key = (message.get("sessionId"), message.get("id"))
+            if match[1].startswith("SEND"):
+                method = message.get("method")
+                if method == "Page.setInterceptFileChooserDialog" and message["params"].get("enabled"):
+                    pending[key] = "interceptionAck"
+                    events.append("interceptionSend")
+                elif method == "Input.dispatchKeyEvent" and message["params"].get("type") == "keyDown":
+                    pending[key] = "keyAck"
+                    events.append("keySend")
+            elif key in pending:
+                event = pending.pop(key)
+                events.append(event + ("Error" if "error" in message else ""))
+            elif message.get("method") == "Page.fileChooserOpened":
+                events.append("rawFileChooser")
+        ack = events.index("interceptionAck") if "interceptionAck" in events else None
+        key_send = events.index("keySend") if "keySend" in events else None
+        before = ack is not None and key_send is not None and key_send < ack
+        if result["result"] == "PASS":
+            classification = "PASS"
+        elif "rawFileChooser" in events:
+            classification = "RAW_EVENT_WITHOUT_PLAYWRIGHT_EVENT"
+        elif before:
+            classification = "ENTER_BEFORE_INTERCEPTION_ACK"
+        else:
+            classification = "UNEXPLAINED"
+        rows.append({k: result[k] for k in (
+            "method", "zoomPercent", "repetition", "acknowledgedInterception", "result")})
+        rows[-1].update(events=events, enterBeforeAck=before,
+                        classification=classification)
+    return {"scope": "causal diagnostic only, no game/release proof",
+            "headless": payload["headless"],
+            "acknowledgedInterception": payload["acknowledgedInterception"],
+            "total": len(rows), "failed": payload["failed"], "cases": rows}
+
+
+def write_protocol_summary():
+    report = summarize_protocol(
+        Path("native_picker_protocol.log").read_text(encoding="utf-8"),
+        json.loads(RESULT.read_text(encoding="utf-8")))
+    Path("native_picker_causal_summary.json").write_text(
+        json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
+    print("CAUSAL_SUMMARY", json.dumps({
+        "headless": report["headless"],
+        "acknowledgedInterception": report["acknowledgedInterception"],
+        "total": report["total"], "failed": report["failed"],
+        "failedCases": [r for r in report["cases"] if r["result"] != "PASS"],
+        "enterBeforeAck": sum(r["enterBeforeAck"] for r in report["cases"])
+    }), flush=True)
+
+
 def main():
     results = []
     try:
@@ -109,6 +196,9 @@ def main():
         payload = {
             "schema": "pppoppi.native-picker-diagnostic/1",
             "scope": "Chromium automation control only; NOT the game or release proof",
+            "playwrightVersion": version("playwright"),
+            "acknowledgedInterception": ACKNOWLEDGED,
+            "repetitions": REPETITIONS,
             "headless": os.environ.get("PPPOPPI_PICKER_HEADLESS", "1") != "0",
             "total": len(results), "passed": len(results) - len(failed),
             "failed": len(failed), "results": results,
@@ -125,4 +215,9 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    if sys.argv[1:] == ["--summarize-protocol"]:
+        write_protocol_summary()
+    elif sys.argv[1:]:
+        raise SystemExit("Unbekannte Diagnoseargumente")
+    else:
+        main()

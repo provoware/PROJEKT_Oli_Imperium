@@ -15,6 +15,7 @@ jobs:
       fail-fast: false
       matrix:
         headless: ['1', '0']
+        acknowledged: ['0', '1']
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -22,24 +23,36 @@ jobs:
           python-version: '3.12'
       - name: Reproduzierbar Chromium-1.56-Testumgebung herstellen
         run: bash project-c/pppoppi-imperium/quality_v194/install_chromium_ci.sh
-      - name: Headless 24 native Datei-Picker-Pruefungen
+      - name: Headless 48 native Datei-Picker-Pruefungen
         if: matrix.headless == '1'
         env:
           PPPOPPI_PICKER_HEADLESS: '1'
-        run: python3 project-c/pppoppi-imperium/quality_v194/diagnose_native_picker_strategies_v194.py
-      - name: Echter sichtbarer Browser in virtueller Linux-Anzeige – 24 Pruefungen
+          PPPOPPI_PICKER_ACKNOWLEDGED: ${{ matrix.acknowledged }}
+          PPPOPPI_PICKER_REPETITIONS: '8'
+          DEBUG: 'pw:protocol'
+        run: python3 project-c/pppoppi-imperium/quality_v194/diagnose_native_picker_strategies_v194.py 2> native_picker_protocol.log
+      - name: Echter sichtbarer Browser in virtueller Linux-Anzeige – 48 Pruefungen
         if: matrix.headless == '0'
         env:
           PPPOPPI_PICKER_HEADLESS: '0'
+          PPPOPPI_PICKER_ACKNOWLEDGED: ${{ matrix.acknowledged }}
+          PPPOPPI_PICKER_REPETITIONS: '8'
+          DEBUG: 'pw:protocol'
         shell: bash
         run: |
           set -euo pipefail
           command -v xvfb-run
-          xvfb-run -a -s "-screen 0 1920x1080x24" python3 project-c/pppoppi-imperium/quality_v194/diagnose_native_picker_strategies_v194.py
+          xvfb-run -a -s "-screen 0 1920x1080x24" python3 project-c/pppoppi-imperium/quality_v194/diagnose_native_picker_strategies_v194.py 2> native_picker_protocol.log
+      - name: Protokollreihenfolge getrennt vom Testergebnis auswerten
+        if: always()
+        run: python3 project-c/pppoppi-imperium/quality_v194/diagnose_native_picker_strategies_v194.py --summarize-protocol
       - name: Alle Messdaten sichern – auch bei Fehler
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: native-picker-display-headless-${{ matrix.headless }}
-          path: native_picker_diagnostic.json
+          name: native-picker-display-headless-${{ matrix.headless }}-ack-${{ matrix.acknowledged }}
+          path: |
+            native_picker_diagnostic.json
+            native_picker_protocol.log
+            native_picker_causal_summary.json
           if-no-files-found: warn

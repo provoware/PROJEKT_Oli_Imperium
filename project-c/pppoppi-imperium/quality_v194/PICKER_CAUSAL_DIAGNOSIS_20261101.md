@@ -23,3 +23,15 @@ Ein lokaler, deutlich vereinfachter Chromium-/Playwright-Kurztest ohne echten Ta
 Nur wenn reproduzierbare, getrennte Läufe einen stabilen Unterschied zeigen, folgt ein **minimaler gezielter Codefix** des abgeleiteten Technikaufbaus. **Danach** mindestens sechs native 175/200-%-Importversuche über echte Tastatur, identische Spielstände, Save-Sicherheit, mehrfache unabhängige CI und Gesamtgates. Ein Erfolg der isolierten Kontrollseite ist **kein** Spielimport-PASS.
 
 **Freigabe:** #141/#150 bleiben DRAFT, 52er-Matrix unverändert **6 PASS / 39 BLOCKED / 4 OPEN / 3 DEFERRED**. Keine Änderung an Originalquellen, Spielregeln, Save-Schema, `main` oder Release.
+
+## Gezielte Ursachenprüfung: Interception vor Tastendruck bestätigen
+
+Lokaler Kontrollversuch mit Playwright 1.56.0 und Chromium Headless Shell 141.0.7390.37: drei Methoden, acht frische Browserprozesse je Methode und Arm, insgesamt 48. Unverändert 23/24 erfolgreich; bestätigte Überwachung 24/24. Keine Wiederholung eines fehlgeschlagenen Versuchs. Diese lokale Teilprüfung besitzt keinen echten Tab-Zoom; sie ersetzt den GitHub-Vergleich nicht. Der vollständige persistente Chromium-Prozess ist in der lokalen Umgebung wegen nicht erlaubter Unix-Sockets nicht startfähig.
+
+Der fehlgeschlagene showPicker-Versuch protokolliert: `Page.setInterceptFileChooserDialog` SEND id=32 um 03:23:40.339; Enter SEND id=33 um .340; Enter ACK um .341 **vor** Interception ACK id=32 um .341; kein `Page.fileChooserOpened` bis Timeout. Vertrauenswürdiger Klick und aktive Nutzerinteraktion vorhanden. Der unmittelbar geplante Kontrollarm wartet zuerst auf die Bestätigung des bestehenden Playwright-Dispatchers und empfängt das echte Dateiauswahlereignis. Eine bloße längere Wartezeit wird nicht als Reparatur verwendet.
+
+Quellbefund aus dem unveränderten Playwright-1.56.0-Paket: Python `_connection.py::_update_subscription` sendet `updateSubscription` über `send_no_reply`; der Server `pageDispatcher.js::updateSubscription` wartet intern auf `setFileChooserInterceptedBy`. Tastaturbefehle sind dadurch nicht automatisch hinter dieser Browserbestätigung gesperrt. Dies ist ein nachgewiesener zeitlicher Fehlerpfad der lokalen Testansteuerung, noch kein Nachweis für jeden bisherigen GitHub-Fehler oder einen behobenen Spielimport.
+
+Der bestehende Anzeigevergleich prüft nun vier getrennte Arme: sichtbar/headless jeweils unverändert/bestätigt, mit 48 echten 175/200-%-Tastaturversuchen pro Arm. JSON und unveränderte CDP-Protokolle werden immer gesichert. `PPPOPPI_PICKER_ACKNOWLEDGED=1` nutzt ausdrücklich nur für die Diagnose eine private SDK-Schnittstelle; sie ist **kein Produktfix**. Keine direkte Eingabefeldbefüllung, kein übersprungener Fehlversuch, kein zweiter Öffnungsversuch. Die normalen Diagnosearme bleiben unverändert und dürfen weiterhin rot werden.
+
+Status vor GitHub-Auswertung: lokaler zeitlicher Fehlerpfad reproduziert, Bestätigungsarm in der lokalen Stichprobe erfolgreich; reale Zoom-/Anzeige-Gegenprobe ausstehend. Spielquellen, `main`, Speicherformat und Freigabematrix unverändert.
