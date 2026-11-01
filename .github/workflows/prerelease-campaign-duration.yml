@@ -8,6 +8,9 @@ on:
       - project-c/pppoppi-imperium/quality_v194/test_endstate_long_campaign_v194.cjs
       - project-c/pppoppi-imperium/quality_v194/test_browser_campaign_24months_v194.py
       - project-c/pppoppi-imperium/quality_v194/test_browser_campaign_120_240_v194.py
+      - project-c/pppoppi-imperium/quality_v194/performance_profile_v194.py
+      - project-c/pppoppi-imperium/quality_v194/test_performance_profile_v194.py
+      - project-c/pppoppi-imperium/quality_v194/PERFORMANCE_PROFILE_20261101.md
       - project-c/pppoppi-imperium/quality_v194/CAMPAIGN_DURATION_20261101.md
       - .github/workflows/prerelease-campaign-duration.yml
   workflow_dispatch:
@@ -26,6 +29,8 @@ jobs:
           node-version: '22'
       - name: Syntax des neuen Kampagnenpruefers
         run: node --check project-c/pppoppi-imperium/quality_v194/test_endstate_long_campaign_v194.cjs
+      - name: Fuenf Profilierungs-Regressionen ohne unbelegte Freigabegrenzen
+        run: python3 -m unittest discover -s project-c/pppoppi-imperium/quality_v194 -p 'test_performance_profile_v194.py' -v
       - name: Bisherige 12-Monats-Enginepruefung als Referenz
         run: node --test project-c/pppoppi-imperium/quality_v194/test_endstate_live_v194.cjs
       - name: Echte 24- und 60-Monats-Kampagnen mit Zwischenimport und Endarchiv
