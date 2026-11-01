@@ -34,7 +34,7 @@ def prepare_filechooser(page, timeout_seconds=5):
         raise FileChooserReadinessError("SDK-Bereitschaftsschnittstelle fehlt")
     listeners = impl.listeners("filechooser")
     if page in _READY:
-        if len(listeners) != 1:
+        if len(listeners) != 1 or listeners[0] is not _READY[page]:
             raise FileChooserReadinessError("Dateiauswahl-Beobachter veraendert")
         return
     if listeners:

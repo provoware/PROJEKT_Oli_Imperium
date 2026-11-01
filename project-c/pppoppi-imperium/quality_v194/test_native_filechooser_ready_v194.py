@@ -91,6 +91,17 @@ class ReadinessTests(unittest.TestCase):
         with self.assertRaises(FileChooserReadinessError):
             prepare_filechooser(page)
 
+    def test_replaced_observer_rejected_even_with_same_count(self, _version):
+        page = PageDouble()
+        prepare_filechooser(page)
+        page.handlers[:] = [object()]
+        entered = False
+        with self.assertRaises(FileChooserReadinessError):
+            with ready_filechooser(page):
+                entered = True
+        self.assertFalse(entered)
+        self.assertEqual(page.send_count, 1)
+
     def test_closed_page_rejected(self, _version):
         page = PageDouble();page.closed = True
         with self.assertRaises(FileChooserReadinessError):
