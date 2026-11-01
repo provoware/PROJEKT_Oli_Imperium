@@ -59,3 +59,26 @@ Beide Laeufe: 120 Monate, 480 menschliche Tastaturzuege, drei Chromium-Prozesse,
 **Pflichtmatrix weiterhin 6 PASS / 39 BLOCKED / 4 OPEN / 3 DEFERRED = 52.** Performance bleibt BLOCKED bis zu reproduzierbaren Ergebnissen und begruendeten Zielgrenzen; 175/200-%-Langzeitzoom, 240-Monats-Archivierungsumfang, Vermoegensbewertung, Medienrechte und C64-Abgleich offen. Keine persoenliche Endabnahme, kein Merge, kein Release.
 
 **Naechste Schritte:** (1) neuen GitHub-HEAD mit acht Vergleichstests und beiden 240-Monats-Partien auswerten, (2) bei Abweichungen technische Ursachen eingrenzen, (3) erst nach mehrfachen Messungen ein begruendetes Leistungsziel fuer die Zielhardware definieren.
+
+
+## Nachtrag 01.11.2026, 22:29 MEZ – 240-Monats-Wiederholung ausgewertet und Vergleich abgesichert
+
+**Nachgewiesener Ausgangs-HEAD:** [166ec6c7743d79e59629abf58be9987003186690](https://github.com/provoware/PROJEKT_Oli_Imperium/commit/166ec6c7743d79e59629abf58be9987003186690). **Echter GitHub-Prueflauf:** [41347849370](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41347849370), **6/6 Kampagnenjobs SUCCESS** einschliesslich beider 240-Monats-Chromium-Laeufe und der damaligen acht Vergleichsregressionen. Quelle: Job `browser-campaign-240-repeatability`, abschliessende Zeile `REPEATABILITY-CAMPAIGN` (nicht aus synthetischen Beispielwerten abgeleitet).
+
+| Messung auf demselben GitHub-Runner | 120 Monate, Lauf 1 / 2 | 240 Monate, Lauf 1 / 2 |
+|---|---:|---:|
+| Gesamtlaufzeit (s) | 249,562 / 240,956 | 691,858 / 758,424 |
+| Abweichung Lauf 2 zu Lauf 1 | -3,45 % | +9,62 % |
+| P95 eines Monats (s) | 3,683 / 3,641 | 4,144 / 4,961 |
+| P95-Abweichung | -1,14 % | +19,72 % |
+| Spaete / fruehe Spielhaelfte | 2,586 / 2,632 | 2,023 / 2,387 |
+| Natuerliche Sanierungen | 0 / 0 | 4 / 4 |
+| Tastatur-Zugabschluesse je Lauf | 480 | 960 |
+
+**Interpretation:** Die spaete Spielhaelfte bleibt in beiden Laengen und Wiederholungen deutlich langsamer. Die Abweichungen zwischen den Laeufen sind nicht vernachlaessigbar, besonders bei 240 Monaten und P95. Gleich viele Sanierungen belegen allein noch keine identischen Spielzustaende. Diese Messungen stammen von GitHub-Ubuntu-Runnern, **nicht** vom spaeteren Kubuntu-Zielrechner; keine verbindlichen Leistungsgrenzen und keine Kausaldiagnose.
+
+**Neues Pflichtpaket auf PR #155:** Der vorhandene Vergleichspruefer weist nun falsch typisierte Laufzeiten-/Zugzaehler, negative oder unplausible Sanierungszahlen, unbewiesene C64-Originaltreue und unmoegliche Perzentilreihenfolgen zurueck. Er zeigt explizit an, ob die beiden Sanierungszaehler gleich sind, ohne daraus gleiche Spielzustaende oder eine Freigabe abzuleiten. Drei neue Regressionstests wurden ergaenzt (insgesamt **11** Vergleichstests). Der GitHub-Workflow fuehrt sie weiter im bestehenden Job aus. **Status der neuen 11 Tests und aller Jobs auf dem neuen HEAD: PENDING bis zum tatsaechlichen CI-Abschluss; kein vorweggenommenes PASS.**
+
+**Vorrelease-Pflichtmatrix:** unveraendert **6 PASS / 39 BLOCKED / 4 OPEN / 3 DEFERRED = 52**. Performance weiterhin BLOCKED; Langzeitzoom 175/200 %, Umfang der 240-Monats-Archivberichte, Vermoegensbewertung, Medienrechte und historische Originalquellen ebenfalls offen. Die Benutzer-Sichtpruefung und der Kubuntu-Praxistest bleiben bis zum eingefrorenen technischen Release-Kandidaten zurueckgestellt.
+
+**Naechste drei Schritte:** (1) alle neuen CI-Jobs auf finalem HEAD auswerten und Fehler beheben; (2) echte 175/200-%-Langzeit-Browserpfade bei 800x600 mit Tastatur, Import und Archiv pruefen; (3) die Verlangsamung mit getrennten UI-/Engine-Messungen kausal eingrenzen und erst danach begruendete Zielwerte festlegen. Kein Merge, kein Release, keine Aenderung an `main` oder den fuenf ausgeschlossenen Repositories.
