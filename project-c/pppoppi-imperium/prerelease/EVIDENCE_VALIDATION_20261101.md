@@ -52,3 +52,20 @@ GitHub-Actions-Laufmetadaten wurden ueber die GitHub-API einzeln gelesen. Bei **
 **Grenzen:** Ein erfolgreicher GitHub-Gesamtlauf beweist nicht automatisch, dass der in `command` dokumentierte Einzeltest darin ausgefuehrt wurde. Die Live-Pruefung belegt Laufzuordnung und Abschlussstatus, keine vollstaendige Testschritt-Provenienz oder historische Originaltreue. Matrix **6/52 PASS, 39 BLOCKED, 4 OPEN, 3 DEFERRED**; persoenliche Abnahmen bleiben vertagt.
 
 **Naechste technische Pflichtarbeit:** GitHub-Live-Pruefung auf dem letzten PR-HEAD kontrollieren und bei Fehlern korrigieren. Danach die Zuordnung jedes PASS-Belegs zum konkret ausgefuehrten GitHub-Job/Pruefschritt maschinenpruefbar ergaenzen; anschliessend unabhaengige Endspiel-/Vermoegens- und Browserpakete aus den getrennten PRs konsolidieren, ohne deren Dateien hier zu bearbeiten. Kein Merge, kein Release.
+
+## GitHub-Jobschritte statt nur erfolgreicher Gesamtlaeufe (01.11.2026)
+
+Neues eigenstaendiges Pflichtpaket auf PR #153: Jeder technische PASS-Nachweis benoetigt eine **konkrete numerische GitHub-Job-ID** und den **exakten Namen eines erfolgreich abgeschlossenen Schritts**. Der Live-Pruefer kontrolliert Jobzugehoerigkeit zum belegten Lauf, Jobabschluss und eindeutigen Schrittabschluss. Fehlende, doppelte, fremde, fehlgeschlagene oder nicht erreichbare Jobdaten ergeben FAIL. Bei mehr als 100 Jobs wird eine unvollstaendige API-Antwort ausdruecklich abgewiesen. Keine Rechte zum Schreiben oder Umgehen von Sperren.
+
+| Pflicht | Historische GitHub-Job-ID | Erwarteter erfolgreicher Schritt |
+|---|---:|---|
+| QUE-02 | 121064600924 | Vollstaendige GitHub-Quellen gegen das gepruefte Originalinventar |
+| QUE-03 | 121066291329 | Technische Spielablaeufe und statische Oberflaechenvertraege |
+| BAL-02 | 121069143534 | Wirtschaftliche Fachpruefungen |
+| BAL-03 | 121069803142 | Wirtschaftliche Fachpruefungen |
+| TES-01 | 121067189357 | Wirtschaftliche Fachpruefungen |
+| TES-02 | 121068323252 | Wirtschaftliche Fachpruefungen |
+
+**Vorab tatsaechlich geprueft:** GitHub lieferte fuer alle sechs historischen Laeufe jeweils genau einen passenden, erfolgreichen Job mit dem genannten erfolgreichen Schritt. Der neue isolierte lokale Node-Test (node --test project-c/pppoppi-imperium/prerelease/test_ci_steps.mjs) bestand **10/10**; Syntax beider neuen Dateien PASS. Die neue CI auf dem finalen GitHub-Commit muss gesondert kontrolliert werden. Die bestehende Matrix bleibt **6 PASS / 39 BLOCKED / 4 OPEN / 3 DEFERRED**.
+
+**Wichtige Grenze:** Die GitHub-Job-API belegt den erfolgreichen benannten Schritt, aber noch nicht bytegenau dessen ausgefuehrte Shell-Befehle. Als naechstes die zugehoerige Workflow-Datei auf dem historischen Commit gegen die dokumentierten Einzelbefehle abgleichen. Endpartien, Vermoegensregeln, Medienrechte, C64-Referenz und persoenliche Abnahme bleiben unabhaengig BLOCKED/DEFERRED. Kein Merge, kein Release.
