@@ -102,6 +102,16 @@ class ReadinessTests(unittest.TestCase):
         self.assertFalse(entered)
         self.assertEqual(page.send_count, 1)
 
+    def test_sdk_wrapped_observer_is_recognized(self, _version):
+        page = PageDouble()
+        def wrapped_on(event, handler):
+            page.handlers.append(lambda chooser: handler(chooser))
+        page.on = wrapped_on
+        prepare_filechooser(page)
+        with ready_filechooser(page):
+            self.assertTrue(page.acknowledged)
+        self.assertEqual(page.send_count, 1)
+
     def test_closed_page_rejected(self, _version):
         page = PageDouble();page.closed = True
         with self.assertRaises(FileChooserReadinessError):

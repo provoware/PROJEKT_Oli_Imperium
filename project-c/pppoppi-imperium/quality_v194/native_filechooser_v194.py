@@ -52,7 +52,11 @@ def prepare_filechooser(page, timeout_seconds=5):
     def keep_interception(_chooser):
         pass
     page.on("filechooser", keep_interception)
-    _READY[page] = keep_interception
+    registered = impl.listeners("filechooser")
+    if len(registered) != 1:
+        raise FileChooserReadinessError("Dateiauswahl-Beobachter nicht eindeutig")
+    # The sync SDK may wrap public callbacks; retain the actual implementation listener.
+    _READY[page] = registered[0]
 
 
 @contextmanager
