@@ -64,7 +64,7 @@ export function auditMatrix(data, readEvidence = () => null, mode = "schema") {
         const validCi = g.stage !== "technical" ||
           (typeof e?.ci_run === "string" &&
            /^https:\/\/github\.com\/provoware\/PROJEKT_Oli_Imperium\/actions\/runs\/[1-9]\d*$/.test(e.ci_run) &&
-           (e.ci_conclusion === undefined || e.ci_conclusion === "success"));
+           e.ci_conclusion === "success");
         if (!e || e.gate_id !== id || e.result !== "PASS" || !/^[0-9a-f]{40}$/.test(e.commit || "") ||
             typeof e.command !== "string" || !e.command.trim() || !validDate || !validCi)
           errors.push(`${id}: Nachweis fehlt oder ist ungueltig.`);

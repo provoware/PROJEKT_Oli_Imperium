@@ -13,11 +13,17 @@
     "Preisverfall und Ressourcenknappheit",
     "Erzwungener Forderungsausfall und Sanierung"
   ],
-  "months_by_case": [48,36,36,36],
+  "months_by_case": [
+    48,
+    36,
+    36,
+    36
+  ],
   "months": 156,
   "completed": 156,
   "human_rescues_in_restructuring": 1,
   "report_file": "project-c/pppoppi-imperium/SPIEL/evidence_v193/KRISEN_LANGZEIT_V194.json",
   "source_evidence": "Alle 156 Szenariomonate erfolgreich in GitHub wiederholt; der zusaetzliche CI-Berichtstest prueft vier vollstaendig abgeschlossene Fallfolgen, nichtnegative Konten und eine tatsaechlich ausgeloeste Sanierung.",
-  "limits": "Szenarien simulieren nur festgelegte Fehler- und Krisenfaelle. Keine Nachweise zu allen moeglichen Konkursvarianten, Gewinnbedingungen, menschlichen Vollpartien oder historischer Originaltreue."
+  "limits": "Szenarien simulieren nur festgelegte Fehler- und Krisenfaelle. Keine Nachweise zu allen moeglichen Konkursvarianten, Gewinnbedingungen, menschlichen Vollpartien oder historischer Originaltreue.",
+  "ci_conclusion": "success"
 }

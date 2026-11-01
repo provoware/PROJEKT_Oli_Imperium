@@ -48,6 +48,10 @@ test('Technischer PASS verlangt einen passenden GitHub-CI-Link',()=>{
     {ci_run:'https://evil.example/provoware/PROJEKT_Oli_Imperium/actions/runs/40158404633'},
     {ci_run:'https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/0'},
     {ci_run:'https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/12/extra'},
+    {ci_conclusion:undefined},
+    {ci_conclusion:null},
+    {ci_conclusion:'pending'},
+    {ci_conclusion:'cancelled'},
     {ci_conclusion:'failure'}
   ]) {
     assert.match(proof({...good,...changed}).errors.join(' '),/QUE-01: Nachweis fehlt/);
@@ -64,4 +68,14 @@ test('Unmoegliche Nachweisdaten werden abgewiesen',()=>{
 test('Blockierte Pflichten benoetigen eine nichtleere naechste Handlung',()=>{
   const m=clone();m.gates[0].next='   ';
   assert.match(auditMatrix(m,readEvidence).errors.join(' '),/QUE-01: naechste Handlung fehlt/);
+});
+
+test('Alle bestehenden technischen PASS-Nachweise nennen explizit CI-Erfolg',()=>{
+  for (const gate of source.gates.filter(g=>g.stage==='technical' && g.status==='pass')) {
+    for (const p of gate.evidence) {
+      const proof=readEvidence(p);
+      assert.equal(proof?.ci_conclusion,'success',`${gate.id}: CI-Schlussstatus fehlt`);
+      assert.match(proof.ci_run,/^https:\/\/github\.com\/provoware\/PROJEKT_Oli_Imperium\/actions\/runs\/[1-9]\d*$/);
+    }
+  }
 });
