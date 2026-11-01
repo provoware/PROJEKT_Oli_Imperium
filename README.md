@@ -1,5 +1,47 @@
 # OLI IMPERIUM | C64-Forschung, Architektur & Spielentwicklung
 
+<!-- OLI_DREISTUFEN_20261101 -->
+## 🚀 Einstieg – drei Schritte zum Kopieren
+
+> [!IMPORTANT]
+> **`main` ist die Forschungs- und Planungsbasis, noch kein freigegebenes Spiel.** Die folgenden Befehle holen das Projekt und prüfen die dokumentierten Quellen; sie starten **kein** Oil-Imperium-Spiel.
+
+1. **Projekt holen**
+   ```bash
+   git clone https://github.com/provoware/PROJEKT_Oli_Imperium.git
+   ```
+2. **Ordner öffnen**
+   ```bash
+   cd PROJEKT_Oli_Imperium
+   ```
+3. **Basis prüfen**
+   ```bash
+   python3 tools/validate_project.py
+   ```
+
+## 🧭 Drei Hilfestufen
+
+| Stufe | Das erfährst du | Hier weiterlesen |
+|---|---|---|
+| 🟢 **1 · Schnell** | Projekt laden und prüfen | [Drei Befehle](#-einstieg--drei-schritte-zum-kopieren) |
+| 🔵 **2 · Ausführlich** | Trennung von Originalforschung, Architektur und Spielentwicklung | [Projektweg](#projektweg) · [Roadmap](docs/08_ROADMAP_CHECKPOINTS.md) |
+| 🟠 **3 · Ohne Fachwissen** | Was du zuerst lesen und bei Fehlern tun solltest | [Einsteigerhilfe](#-hilfe-für-einsteiger) · [Handzettel](docs/09_HANDZETTEL.md) |
+
+## 🧩 Hilfe für Einsteiger
+
+- **Terminal:** Unter Kubuntu meist **Strg + Alt + T**. Jeden Befehl einzeln einfügen und mit **Enter** bestätigen.
+- **Git fehlt:** Das Projekt als ZIP von GitHub laden, vollständig entpacken und im entpackten Ordner ein Terminal öffnen. Dann nur Schritt 3 ausführen.
+- **Python fehlt:** Der dritte Befehl benötigt Python 3; die Fehlermeldung nicht als erfolgreiche Prüfung werten.
+- **Was gehört hierher?** Forschungsbelege, Quellenstatus, Regeln und technische Planung. Die spielbare Umsetzung **Projekt C** liegt auf getrennten Entwicklungszweigen.
+- **Was ist blockiert?** Eine Veröffentlichung oder Zusammenführung von [Entwurf #141](https://github.com/provoware/PROJEKT_Oli_Imperium/pull/141) ist noch nicht freigegeben. Offene Originalquellen, Medienrechte und Vorrelease-Kriterien dürfen nicht übersprungen werden.
+- **Weitere Prüfung:** `python3 -m unittest discover -s tests -v` ist ein zusätzlicher Projekttest; keine automatische Originalspiel-Abnahme.
+
+> [!WARNING]
+> 🔴 **Keine Releasefreigabe:** Die Entwicklungs-Prüfmatrix meldete zuletzt **6 PASS / 39 BLOCKED / 4 OPEN / 3 DEFERRED**. 🟢 = belegter Teilstand, 🟠 = noch offen, 🔴 = gesperrt. Die aktuelle GitHub-Prüfung hat **70 offene Entwürfe** ergeben (Momentaufnahme vom 01.11.2026).
+
+---
+
+
 ![Arbeit A](https://img.shields.io/badge/Arbeit_A-C64--Forschung-2563eb)
 ![Arbeit B](https://img.shields.io/badge/Arbeit_B-Architektur-7c3aed)
 ![Projekt C](https://img.shields.io/badge/Projekt_C-Entwicklungsentwurf-d97706)
@@ -7,7 +49,7 @@
 ![Betrieb](https://img.shields.io/badge/Zielbetrieb-Offline--HTML-059669)
 
 **Repository:** [provoware/PROJEKT_Oli_Imperium](https://github.com/provoware/PROJEKT_Oli_Imperium)  
-**Dokumentationsstand:** 31.10.2026 · **Version:** 3.1 · **Hauptzweig:** `main`  
+**Dokumentationsstand:** 01.11.2026 · **Version:** 3.1 · **Hauptzweig:** `main`  
 **Wissenschaftlicher Status:** Originalreferenz noch nicht verifiziert · **Spielstatus:** technische Entwicklung auf getrennten Entwurfszweigen, keine Gesamtfreigabe.
 
 > [!IMPORTANT]
@@ -24,7 +66,7 @@
 | 🛠️ **Änderungen** | Vorschläge prüfen, Entwurfsketten auflösen, nur Freigegebenes integrieren | [Offene PRs](https://github.com/provoware/PROJEKT_Oli_Imperium/pulls?q=is%3Aopen) · [PR-Abbau #138](https://github.com/provoware/PROJEKT_Oli_Imperium/issues/138) |
 
 > [!WARNING]
-> **Prüfstand vom 31.10.2026, kein Live-Zähler:** 52 Pflichtkriterien → **6 bestanden · 39 blockiert · 4 offen · 3 zurückgestellt**. Dazu 73 offene PR-Entwürfe bei der Bestandsaufnahme. Maßgeblich sind immer die aktuellen [PRs](https://github.com/provoware/PROJEKT_Oli_Imperium/pulls?q=is%3Aopen), [Prüfnachweise](https://github.com/provoware/PROJEKT_Oli_Imperium/actions) und die zugehörige Pflichtmatrix im Projekt-C-Entwicklungszweig. Die Daten sind ausdrücklich **keine Releasefreigabe**.
+> **Prüfstand vom 31.10.2026, kein Live-Zähler:** 52 Pflichtkriterien → **6 bestanden · 39 blockiert · 4 offen · 3 zurückgestellt**. Dazu 70 offene PR-Entwürfe bei der Bestandsaufnahme vom 01.11.2026. Maßgeblich sind immer die aktuellen [PRs](https://github.com/provoware/PROJEKT_Oli_Imperium/pulls?q=is%3Aopen), [Prüfnachweise](https://github.com/provoware/PROJEKT_Oli_Imperium/actions) und die zugehörige Pflichtmatrix im Projekt-C-Entwicklungszweig. Die Daten sind ausdrücklich **keine Releasefreigabe**.
 
 ## 🎨 Projektablauf
 
