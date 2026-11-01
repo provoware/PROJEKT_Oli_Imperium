@@ -41,6 +41,8 @@ jobs:
         run: node project-c/pppoppi-imperium/quality_v194/test_contract_breach_roundtrip_v194.cjs
       - name: Natuerliche Teillieferung, Vertragsstrafe und JSON-Rundlauf (Teiltest)
         run: node project-c/pppoppi-imperium/quality_v194/test_contract_partial_delivery_v194.cjs
+      - name: Chromium-Installation mit fuenf Fehler- und Fallback-Regressionsfaellen
+        run: python3 -m unittest discover -s project-c/pppoppi-imperium/quality_v194 -p 'test_install_chromium_ci.py' -v
       - name: Chromium-Testumgebung installieren (begrenzt, Startprobe)
         run: bash project-c/pppoppi-imperium/quality_v194/install_chromium_ci.sh
       - name: Offline-Dateistart, Tastatur, 800x600, Speichern, Neustart, defekter Import
@@ -125,6 +127,10 @@ jobs:
   # Ein Fehler in anderen Browser-Tests darf ihre Diagnose nicht verhindern.
   native-zoom-regression:
     runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        independent-run: [1, 2]
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
@@ -136,6 +142,8 @@ jobs:
           python-version: '3.12'
       - name: Chromium-Testumgebung installieren (begrenzt, Startprobe)
         run: bash project-c/pppoppi-imperium/quality_v194/install_chromium_ci.sh
+      - name: Bereitschaftsgrenze mit Fehler- und Versionsproben pruefen
+        run: python3 -m unittest discover -s project-c/pppoppi-imperium/quality_v194 -p 'test_native_filechooser_ready_v194.py' -v
       - name: Sitzungsimport und -export per Tastatur bei echtem 175/200-Prozent-Zoom
         run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_session_native_zoom_v194.py
       - name: Alle neun Claim-Parameter bei echtem 175/200-Prozent-Zoom

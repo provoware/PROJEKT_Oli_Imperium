@@ -12,6 +12,8 @@ from test_browser_native_zoom_v194 import (
     extension_at, set_real_zoom, wait_for_zoom_worker,
 )
 
+from native_filechooser_v194 import prepare_filechooser
+
 METHODS = ("showpicker", "inputclick", "direct")
 ZOOMS = (1.75, 2.0)
 REPETITIONS = int(os.environ.get("PPPOPPI_PICKER_REPETITIONS", "4"))
@@ -81,13 +83,7 @@ def one(pw, root, fixture, method, zoom, repeat):
             "(e) => document.activeElement === e")
         result["documentFocus"] = page.evaluate("document.hasFocus()")
         if ACKNOWLEDGED:
-            # DIAGNOSE ONLY: await the existing dispatcher BEFORE registering
-            # expect_file_chooser. Its automatic subscription is fire-and-forget.
-            # Private SDK API is intentional for this causal control, not a
-            # production fix or an alternative file-import implementation.
-            page._sync(page._impl_obj._channel.send(
-                "updateSubscription", None,
-                {"event": "fileChooser", "enabled": True}))
+            prepare_filechooser(page)
             result["interceptionAcknowledgedBeforeKey"] = True
         try:
             # Only authentic keyboard input; never silently set input files.

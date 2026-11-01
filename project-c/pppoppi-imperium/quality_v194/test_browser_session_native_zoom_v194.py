@@ -5,6 +5,7 @@ Prueft 175/200 %, 800x600, versionierten Export/Import, Fokus und Spielschutz.
 Keine persoenliche Sichtabnahme und kein Nachweis vollstaendiger Endpartien.
 """
 import json
+import hashlib
 import subprocess
 import tempfile
 from pathlib import Path
@@ -13,6 +14,8 @@ from playwright.sync_api import TimeoutError as PlaywrightTimeoutError, sync_pla
 from test_browser_native_zoom_v194 import (
     extension_at, set_real_zoom, tab_to, wait_for_zoom_worker,
 )
+
+from native_filechooser_v194 import ready_filechooser
 
 HERE = Path(__file__).resolve().parent
 ZOOMS = (1.75, 2.0)
@@ -60,7 +63,7 @@ def isolated_filechooser_control(page):
         }""")
         page.locator('#__pickerControlButton').focus()
         try:
-            with page.expect_file_chooser(timeout=2500):
+            with ready_filechooser(page, timeout=2500):
                 page.keyboard.press('Enter')
             return 'OPENED_AFTER_ORIGINAL_FAILURE'
         except PlaywrightTimeoutError:
@@ -84,7 +87,7 @@ def isolated_filechooser_control(page):
                 focused = page.evaluate(
                     "document.activeElement?.id === '__pickerVisibleControl'")
                 try:
-                    with page.expect_file_chooser(timeout=2500):
+                    with ready_filechooser(page, timeout=2500):
                         page.keyboard.press('Enter')
                     outcome = 'OPENED_ON_VISIBLE_NATIVE_INPUT'
                 except PlaywrightTimeoutError:
@@ -213,7 +216,7 @@ def audit_session(page, worker, zoom, download_dir):
     # Die alte 200-ms-Wartezeit konnte bei Chromium-Zoom zu frueh enden.
     # Kein direkter Eingabefeld-Ersatz: ohne nativen Dateidialog FAIL.
     try:
-        with page.expect_file_chooser(timeout=5000) as chooser_event:
+        with ready_filechooser(page, timeout=5000) as chooser_event:
             page.keyboard.press("Enter")
     except PlaywrightTimeoutError:
         # Strikter Fehler: keine direkte Befuellung des Datei-Inputs und
@@ -256,8 +259,12 @@ def audit_session(page, worker, zoom, download_dir):
     page.wait_for_function("window.__sessionImportClicks === 1")
     check(label + ": Import-Schalter reagiert auf echte Enter-Taste",
           page.evaluate("window.__sessionImportClicks") == 1)
-    check(label + ": nativer Datei-Picker statt kuenstlichem Input-Klick",
-          page.evaluate("typeof document.getElementById('loadSessionFile').showPicker === 'function' && window.__sessionFileInputClicks === 0"))
+    check(label + ": genau ein Datei-Eingabeklick mit echter Nutzeraktivierung",
+          page.evaluate("window.__sessionFileInputClicks === 1 && "
+                        "window.__sessionInputActivation === true && "
+                        "window.__nativePickerProbe.calls === 0 && "
+                        "window.__nativePickerProbe.buttonTrusted === true && "
+                        "window.__nativePickerProbe.buttonActivation === true"))
     check(label + ": Datei-Auswahldialog durch Enter geoeffnet",
           chooser_event.value is not None)
     chooser_event.value.set_files(str(saved))
@@ -272,11 +279,34 @@ def audit_session(page, worker, zoom, download_dir):
           page.evaluate("NeoEconomy.endstate.status()") == "active")
     check(label + ": Wirtschaftskern nach Import gueltig",
           page.evaluate("NeoEconomy.engine.validate(NeoEconomy.getState())"))
+    # A second real chooser on the same page proves the observer survives the
+    # first waiter. Malformed input must preserve the restored session exactly.
+    exported_bytes = saved.read_bytes()
+    malformed = download_dir / ("malformed-" + label + ".json")
+    malformed.write_text('{"schema":', encoding="utf-8")
+    page.evaluate("NeoEconomy.open('startup')")
+    keyboard_button(page, '#dialogContent [data-ui="session-import"]',
+                    label + "/Beschaedigten Import pruefen")
+    with ready_filechooser(page, timeout=5000) as rejected_event:
+        page.keyboard.press("Enter")
+    rejected_event.value.set_files(str(malformed))
+    page.wait_for_function(
+        "document.querySelector('#toast').textContent.includes("
+        "'Sitzungsimport abgelehnt:')")
+    check(label + ": beschaedigter Import erhaelt Spielstand unveraendert",
+          page.evaluate("JSON.stringify(NeoEconomy.getState())") == original)
+    check(label + ": beschaedigter Import erhaelt aktiven Vertrag",
+          page.evaluate("NeoEconomy.endstate.status() === 'active' && "
+                        "NeoEconomy.endstate.contract().months === 12"))
+    check(label + ": Exportdatei bleibt byteidentisch",
+          saved.read_bytes() == exported_bytes)
     check(label + ": keine JavaScript-Laufzeitfehler", not errors)
     check(label + ": Offline-Dateistart ohne Netzanforderung", not external)
     return {"zoom_percent": round(zoom * 100), "native_zoom": True,
             "keyboard_export_import": "PASS", "filechooser": chooser_status,
             "session_restored": True,
+            "malformed_import_preserves_state": True,
+            "export_sha256": hashlib.sha256(exported_bytes).hexdigest(),
             "full_endgame": "NOT_TESTED"}
 
 
