@@ -1,10 +1,10 @@
 {
   "gate_id": "BAL-03",
   "result": "PASS",
-  "commit": "0a2173895a089d77c4d4da1ec2d4372569b7312f",
+  "commit": "7ecbd3654e381702e25a59230ed62a318b3784d5",
   "command": "cd project-c/pppoppi-imperium/SPIEL && node analyze_stress_v194.cjs && node ../quality_v194/test_stress_report_v194.cjs",
   "date": "2026-10-25",
-  "ci_run": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40160147127",
+  "ci_run": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41285485847",
   "game_engine": "V1.9.3",
   "scenario_runner": "V1.9.4",
   "cases": [
@@ -13,11 +13,27 @@
     "Preisverfall und Ressourcenknappheit",
     "Erzwungener Forderungsausfall und Sanierung"
   ],
-  "months_by_case": [48,36,36,36],
+  "months_by_case": [
+    48,
+    36,
+    36,
+    36
+  ],
   "months": 156,
   "completed": 156,
   "human_rescues_in_restructuring": 1,
   "report_file": "project-c/pppoppi-imperium/SPIEL/evidence_v193/KRISEN_LANGZEIT_V194.json",
-  "source_evidence": "Alle 156 Szenariomonate erfolgreich in GitHub wiederholt; der zusaetzliche CI-Berichtstest prueft vier vollstaendig abgeschlossene Fallfolgen, nichtnegative Konten und eine tatsaechlich ausgeloeste Sanierung.",
-  "limits": "Szenarien simulieren nur festgelegte Fehler- und Krisenfaelle. Keine Nachweise zu allen moeglichen Konkursvarianten, Gewinnbedingungen, menschlichen Vollpartien oder historischer Originaltreue."
+  "source_evidence": "Erst der erfolgreiche GitHub-Quellworkflow #41285485847 auf HEAD 7ecbd3654e381702e25a59230ed62a318b3784d5 enthaelt beide genannten Fach- und Berichtstests im Schritt 'Wirtschaftliche Fachprüfungen'. Der zuvor zitierte historische Workflow enthielt den jeweiligen Berichtstest noch nicht.",
+  "limits": "Szenarien simulieren nur festgelegte Fehler- und Krisenfaelle. Keine Nachweise zu allen moeglichen Konkursvarianten, Gewinnbedingungen, menschlichen Vollpartien oder historischer Originaltreue.",
+  "ci_conclusion": "success",
+  "ci_job_id": 124785795949,
+  "ci_step_name": "Wirtschaftliche Fachprüfungen",
+  "ci_event": "pull_request",
+  "ci_expected_commands": [
+    "node analyze_stress_v194.cjs",
+    "node ../quality_v194/test_stress_report_v194.cjs"
+  ],
+  "ci_working_directory": "project-c/pppoppi-imperium/SPIEL",
+  "ci_workflow_path": ".github/workflows/pppoppi-imperium-recovery.yml",
+  "ci_job_name": "check-source"
 }
