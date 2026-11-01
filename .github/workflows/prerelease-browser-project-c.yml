@@ -10,7 +10,7 @@ permissions:
 jobs:
   chromium-roundtrip:
     runs-on: ubuntu-24.04
-    timeout-minutes: 25
+    timeout-minutes: 35
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -41,10 +41,17 @@ jobs:
         run: node project-c/pppoppi-imperium/quality_v194/test_contract_breach_roundtrip_v194.cjs
       - name: Natuerliche Teillieferung, Vertragsstrafe und JSON-Rundlauf (Teiltest)
         run: node project-c/pppoppi-imperium/quality_v194/test_contract_partial_delivery_v194.cjs
-      - name: Chromium-Testumgebung installieren
+      - name: Chromium-Testumgebung installieren (apt zeitlich begrenzen)
         run: |
+          set -euo pipefail
           python -m pip install playwright==1.56.0
-          python -m playwright install --with-deps chromium
+          # GitHub-Runner: apt-Mirror darf den gesamten Browser-Pflichtlauf nicht blockieren.
+          # Nach 180 s ohne erfolgreiche Systeminstallation Browser separat installieren;
+          # die folgenden echten Chromium-Tests entscheiden ueber PASS oder FAIL.
+          if ! timeout --signal=TERM --kill-after=10s 180s python -m playwright install --with-deps chromium; then
+            echo "::warning::Playwright-Systeminstallation fehlgeschlagen oder nach 180 s abgebrochen; Chromium ohne apt installieren. Browserstarts bleiben Pflicht."
+            python -m playwright install chromium
+          fi
       - name: Offline-Dateistart, Tastatur, 800x600, Speichern, Neustart, defekter Import
         run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_roundtrip_v194.py
       - name: Alle Spielszenen, Tastatur und zoom-aequivalente CSS-Viewports
