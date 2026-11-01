@@ -38,3 +38,17 @@ GitHub-Actions-Laufmetadaten wurden ueber die GitHub-API einzeln gelesen. Bei **
 | TES-02 | [40159644336](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40159644336) | `51f86277bc858451b95df700196df2d1f70b8f64` | PASS |
 
 **Pruefgrenze:** Der Schema-Checker fragt GitHub nicht selbst ab. Er erzwingt die dokumentierte Erfolgsangabe, aber externe Nachweise koennen weiterhin nur durch separaten GitHub-API-Abgleich als echt bestaetigt werden. Vorrelease-Pflichtstand unveraendert: **6 PASS / 39 BLOCKED / 4 OPEN / 3 DEFERRED**. Vor jedem Merge aktuelle CI auf dem neuen PR-HEAD erneut pruefen. Keine Freigabe, kein Merge, kein Release.
+
+## Live-Pruefer als verbindlicher CI-Schritt (01.11.2026, 07 Uhr MEZ)
+
+**Umsetzung auf PR #153:** `verify_ci_evidence.mjs` gleicht jetzt jeden technischen PASS-Nachweis mit dem **echten** GitHub-Actions-Lauf ueber die GitHub-API ab. Pflichtfelder: Lauf-ID, kanonische URL, Repository, `status=completed`, `conclusion=success`, identischer `head_sha` und (falls hinterlegt) identischer Ereignistyp. Fremde, abgebrochene, noch laufende oder nicht erreichbare Laeufe zaehlen **nicht** als PASS. Ein API-Ausfall liefert FAIL statt einer stillschweigenden Freigabe. Der API-Pfad ist fest auf dieses Repository begrenzt; das Lesetoken wird nur als HTTP-Header uebergeben und nicht protokolliert.
+
+**Pflicht-CI:** `.github/workflows/prerelease-project-c.yml` fuehrt nun `test_ci_evidence.mjs` und die Live-Pruefung mit `actions: read` vor den Forschungs-/Importpruefungen aus. Die bestehende harte technische Sperre bleibt unveraendert und wird nicht als PASS umgedeutet.
+
+**Lokal tatsaechlich ausgefuehrt:** `node --check verify_ci_evidence.mjs`, `node --check test_ci_evidence.mjs`, `node --test test_ci_evidence.mjs` => **13/13 PASS**. Getestet: echter und falscher Lauf, Repository, Commit, URL, Ereignis, Fehl-/Wartestatus, ungueltige Belege, Pfadtraversal, API-Ausfall, Token-Header, Mehrfachabfrage und uebergrosse Kennungen. Die lokale Testausfuehrung verwendet simulierte API-Antworten; sie ersetzt den Live-Test nicht.
+
+**Externer Ist-Abgleich vor Implementierung:** Alle sechs historischen PASS-Lauf-IDs 40158404633, 40158971232, 40159924132, 40160147127, 40159267861 und 40159644336 wurden am 01.11.2026 erneut ueber GitHub abgefragt: jeweils `completed/success`, eigenes Repository und exakt der in der Nachweisdatei genannte Commit. Der **neue automatisierte GitHub-Live-Test auf dem finalen PR-HEAD** muss noch erfolgreich abschliessen; bis dahin kein behaupteter CI-PASS dieses Pakets.
+
+**Grenzen:** Ein erfolgreicher GitHub-Gesamtlauf beweist nicht automatisch, dass der in `command` dokumentierte Einzeltest darin ausgefuehrt wurde. Die Live-Pruefung belegt Laufzuordnung und Abschlussstatus, keine vollstaendige Testschritt-Provenienz oder historische Originaltreue. Matrix **6/52 PASS, 39 BLOCKED, 4 OPEN, 3 DEFERRED**; persoenliche Abnahmen bleiben vertagt.
+
+**Naechste technische Pflichtarbeit:** GitHub-Live-Pruefung auf dem letzten PR-HEAD kontrollieren und bei Fehlern korrigieren. Danach die Zuordnung jedes PASS-Belegs zum konkret ausgefuehrten GitHub-Job/Pruefschritt maschinenpruefbar ergaenzen; anschliessend unabhaengige Endspiel-/Vermoegens- und Browserpakete aus den getrennten PRs konsolidieren, ohne deren Dateien hier zu bearbeiten. Kein Merge, kein Release.
