@@ -34,7 +34,7 @@ jobs:
         run: node --check project-c/pppoppi-imperium/quality_v194/test_endstate_long_campaign_v194.cjs
       - name: Fuenfzehn Profilregressionen inklusive Trendkontrolle und Neustartmessung
         run: python3 -m unittest discover -s project-c/pppoppi-imperium/quality_v194 -p 'test_performance_profile_v194.py' -v
-      - name: Sechs strikte Wiederholungsmessungs-Regressionen
+      - name: Acht strikte Wiederholungsmessungs-Regressionen
         run: python3 -m unittest discover -s project-c/pppoppi-imperium/quality_v194 -p 'test_compare_campaign_repeats_v194.py' -v
       - name: Bisherige 12-Monats-Enginepruefung als Referenz
         run: node --test project-c/pppoppi-imperium/quality_v194/test_endstate_live_v194.cjs
@@ -117,3 +117,24 @@ jobs:
           python3 project-c/pppoppi-imperium/quality_v194/test_browser_campaign_120_240_v194.py --months 120 | tee "$RUNNER_TEMP/oli-repeat-120-a.log"
           python3 project-c/pppoppi-imperium/quality_v194/test_browser_campaign_120_240_v194.py --months 120 | tee "$RUNNER_TEMP/oli-repeat-120-b.log"
           python3 project-c/pppoppi-imperium/quality_v194/compare_campaign_repeats_v194.py "$RUNNER_TEMP/oli-repeat-120-a.log" "$RUNNER_TEMP/oli-repeat-120-b.log" --months 120
+
+  browser-campaign-240-repeatability:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Chromium installieren
+        run: bash project-c/pppoppi-imperium/quality_v194/install_chromium_ci.sh
+      - name: Zwei 240-Monats-Browserkampagnen auf demselben Runner
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 project-c/pppoppi-imperium/quality_v194/test_browser_campaign_120_240_v194.py --months 240 | tee "$RUNNER_TEMP/oli-repeat-240-a.log"
+          python3 project-c/pppoppi-imperium/quality_v194/test_browser_campaign_120_240_v194.py --months 240 | tee "$RUNNER_TEMP/oli-repeat-240-b.log"
+          python3 project-c/pppoppi-imperium/quality_v194/compare_campaign_repeats_v194.py "$RUNNER_TEMP/oli-repeat-240-a.log" "$RUNNER_TEMP/oli-repeat-240-b.log" --months 240
