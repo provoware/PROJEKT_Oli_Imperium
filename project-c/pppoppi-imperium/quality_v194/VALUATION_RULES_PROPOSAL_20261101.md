@@ -1,3 +1,9 @@
+# Aktueller Bewertungsvertrag V1
+
+Massgebliche vollstaendige Modellfestlegung: [VALUATION_CONTRACT_V1_20261101.md](VALUATION_CONTRACT_V1_20261101.md) und [valuation_contract_v1.json](valuation_contract_v1.json). Der folgende Text beschreibt den bisherigen Entwurf. Neu getrennt: bekannte Bestandskosten nach Leerung und unbekannte historische Verbrauchskosten. Keine produktive Anbindung oder Freigabe.
+
+---
+
 # PPPOPPI-Wirtschaft · isolierte Regeln V1 (Entwurf, 01.11.2026)
 
 **Arbeitsbereich:** Projekt C, eigenständige PPPOPPI-Adaption. **Keine** Aussage über C64-Originalmechaniken, keine produktive Spielstandsänderung, keine Freigabe.
@@ -45,3 +51,4 @@
 5. **Perioden und Schutz:** Eingänge einmal nach Ereignis-ID, Buchung nur in der zugehörigen abgeschlossenen Spielperiode, keine Doppelbuchung nach Export/Import. Kreditaufnahme und Tilgung wirken auf Kasse/Schulden, nicht auf das Betriebsergebnis. Eine **produktive Gesamtgewinn- und Vermögenszahl** bleibt ohne geprüfte Anlagen-, Lager- und Vertragsherkunft `NOT_COMPUTABLE`.
 
 **Prüfpflicht vor Spielintegration:** Die eindeutige Aktivierungsbuchung und Produktionskostenherkunft je tatsächlich verwendeter Engine-Aktion nachweisen; anschließend unabhängige 12-/36-/120-Monats- und Browser-/Save-Rundläufe mit negativen Kosten-/Doppelbuchungsproben. Die isolierte Rechenfunktion und das V1-Modell bleiben bis dahin **nicht produktiv angeschlossen**. #150 und #141 DRAFT, keine Umgehung der Vorrelease-Sperre und kein Merge nach `main`.
+

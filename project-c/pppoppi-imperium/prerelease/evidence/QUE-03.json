@@ -15,5 +15,13 @@
     "Der reproduzierbare Technikaufbau verändert nur Versionshinweis, Beschreibung, Dokumentation und den Unterprozess-Test; keine Wirtschaftsregeln.",
     "Die Benutzeranzeige unterscheidet ausdrücklich Spielkern V1.9.3 und Prüfschicht V1.9.4."
   ],
-  "limits": "Versionstrennung ist keine Freigabe der Balance, C64-Originaltreue oder persönlichen Sichtprüfung."
+  "limits": "Versionstrennung ist keine Freigabe der Balance, C64-Originaltreue oder persönlichen Sichtprüfung.",
+  "ci_job_id": 121066291329,
+  "ci_step_name": "Technische Spielabläufe und statische Oberflächenverträge",
+  "ci_workflow_path": ".github/workflows/pppoppi-imperium-recovery.yml",
+  "ci_job_name": "check-source",
+  "ci_working_directory": "",
+  "ci_expected_commands": [
+    "node project-c/pppoppi-imperium/quality_v194/test_ui_integrity_v194.cjs"
+  ]
 }

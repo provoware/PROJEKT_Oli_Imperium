@@ -32,31 +32,33 @@ function inventory(events){
   if(!Array.isArray(events))throw Error('Lagerereignisse fehlen');
   if(events.length>10000)throw Error('Zu viele Lagerereignisse');
   let quantity=0n,cost=0n,consumed=0n;const seen=new Set();
-  let unpriced=false;
+  let stockUnpriced=false,consumedUnpriced=false;
   for(const event of events){
     if(!event||typeof event.id!=='string'||!event.id.trim()||seen.has(event.id))
       throw Error('Fehlende oder doppelte Ereigniskennung');
     seen.add(event.id);
     const qty=integer(event.qtyMilli,'Lagermenge',{positive:true});
     if(event.type==='receive'){
-      if(event.costCent===null||event.costCent===undefined)unpriced=true;
+      if(event.costCent===null||event.costCent===undefined)stockUnpriced=true;
       else integer(event.costCent,'Lagerkosten');
       quantity+=qty;
-      if(!unpriced)cost+=BigInt(event.costCent);
+      if(!stockUnpriced)cost+=BigInt(event.costCent);
     }else if(event.type==='consume'){
       if(qty>quantity)throw Error('Lagerueberziehung');
-      if(!unpriced){
+      if(stockUnpriced)consumedUnpriced=true;
+      if(!stockUnpriced){
         const costUsed=qty===quantity?cost:(cost*qty+quantity/2n)/quantity;
         cost-=costUsed;consumed+=costUsed;
       }
       quantity-=qty;
+      if(quantity===0n){stockUnpriced=false;cost=0n;}
     }else throw Error('Unbekannter Lagervorgang');
     if(quantity>max||cost>max||consumed>max)throw Error('Ueberlauf Lager');
   }
-  return {model:MODEL,valuationStatus:unpriced?'UNPRICED':'VALUED_FROM_EXPLICIT_COSTS',
+  return {model:MODEL,valuationStatus:(stockUnpriced||consumedUnpriced)?'UNPRICED':'VALUED_FROM_EXPLICIT_COSTS',
     stockMilli:safe(quantity,'Bestand'),
-    stockCostCent:unpriced?null:safe(cost,'Bestandskosten'),
-    consumedCostCent:unpriced?null:safe(consumed,'Verbrauchskosten'),
+    stockCostCent:stockUnpriced?null:safe(cost,'Bestandskosten'),
+    consumedCostCent:consumedUnpriced?null:safe(consumed,'Verbrauchskosten'),
     ruleStatus:'DRAFT_ONLY'};
 }
 function receivables(events){
@@ -127,3 +129,4 @@ function prepareSnapshot(state,companyId){
     source:'validated-game-state-read-only',ruleStatus:'DRAFT_ONLY'};
 }
 module.exports={MODEL,DURATION,depreciate,inventory,receivables,prepareSnapshot};
+

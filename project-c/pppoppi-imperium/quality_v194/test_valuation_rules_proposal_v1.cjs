@@ -155,3 +155,25 @@ test('nach Ende der Nutzungsdauer darf kein weiterer Cent abgeschrieben werden',
     a.equal(muchLater.currentMonthDepreciationCent,0);
   }
 });
+
+
+test('Leerer Bestand und neuer bekannter Zugang heilen keine unbekannten Verbrauchskosten',()=>{
+  const v=inventory([{id:'U',type:'receive',qtyMilli:1,costCent:null},
+    {id:'E',type:'consume',qtyMilli:1},{id:'K',type:'receive',qtyMilli:2,costCent:100}]);
+  a.equal(v.stockMilli,2);a.equal(v.stockCostCent,100);
+  a.equal(v.consumedCostCent,null);a.equal(v.valuationStatus,'UNPRICED');
+});
+test('Vollstaendig leerer unbewerteter Bestand hat null bekannte Bestandkosten',()=>{
+  const v=inventory([{id:'U',type:'receive',qtyMilli:1,costCent:null},
+    {id:'E',type:'consume',qtyMilli:1}]);
+  a.equal(v.stockMilli,0);a.equal(v.stockCostCent,0);a.equal(v.consumedCostCent,null);
+});
+test('Versionierter Bewertungsvertrag haelt Modell und produktive Freigabe getrennt',()=>{
+  const c=require('./valuation_contract_v1.json');
+  a.equal(c.schema,'pppoppi.valuation.contract/1');
+  a.deepEqual(c.assetLifetimesMonths,DURATION);
+  a.equal(c.productConnected,false);a.equal(c.historicalC64Claim,false);
+  a.equal(c.unknownOrUnmappedInput,'NOT_COMPUTABLE');
+  a.equal(c.inventory.unknownConsumedCostSurvivesDepletion,true);
+  a.equal(c.recognition.cashSales,'cash-at-settlement-no-additional-receivable');
+});

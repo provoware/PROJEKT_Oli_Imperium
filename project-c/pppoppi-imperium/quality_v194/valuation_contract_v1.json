@@ -1,0 +1,37 @@
+{
+  "schema": "pppoppi.valuation.contract/1",
+  "scope": "independent-pppoppi-game-model",
+  "historicalC64Claim": false,
+  "productConnected": false,
+  "moneyUnit": "integer-game-cent",
+  "quantityUnit": "milli-barrel",
+  "assetLifetimesMonths": {"FACHBOHRUNG":60,"RAFFINERIE_BAU":120,"VERTRIEBSROUTE":60},
+  "fieldBookValue": "documented-acquisition-cost-until-disposal",
+  "fieldAutomaticDepreciation": false,
+  "activation": "first-settled-active-month-counts-as-one",
+  "depreciation": "floor-cumulative-last-month-remainder",
+  "inventory": {
+    "method": "per-owner-company-generation-product-moving-average",
+    "receiptCost": "documented-input-cost-plus-direct-production-cost",
+    "consumptionRounding": "nearest-cent-half-up-full-depletion-takes-remainder",
+    "emptyStockCost": 0,
+    "unknownConsumedCostSurvivesDepletion": true,
+    "newKnownReceiptAfterEmptyStockCanBeValued": true,
+    "reserveInGroundSeparatelyValued": false
+  },
+  "recognition": {
+    "cashSales": "cash-at-settlement-no-additional-receivable",
+    "futureCreditSales": "not-supported-requires-new-contract-version",
+    "invoiceExpense": "recognize-on-incurrence-payment-only-settles-payable",
+    "wagesMaintenanceTransport": "period-expense-not-inventory-overhead",
+    "loanDrawdownPrincipalRepayment": "balance-sheet-only",
+    "interestPenalties": "period-expense-once"
+  },
+  "identity": ["sessionId","companyId","generation","eventId"],
+  "periodBoundary": "settled-report-only",
+  "unknownOrUnmappedInput": "NOT_COMPUTABLE",
+  "oldArchives": "immutable-legacy-score-no-silent-revaluation",
+  "newCampaignValuation": "explicit-new-session-contract-required",
+  "profitIdentity": "closing-equity-minus-opening-equity-minus-owner-contributions-plus-owner-withdrawals",
+  "technicalReleaseGate": "BLOCKED-until-productive-adapter-and-acceptance-evidence"
+}
