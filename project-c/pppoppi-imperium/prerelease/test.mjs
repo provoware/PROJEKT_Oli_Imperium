@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import { auditMatrix, REQUIRED_AREAS } from './check.mjs';
 const source = JSON.parse(fs.readFileSync(new URL('./matrix.json', import.meta.url), 'utf8'));
 const clone = () => structuredClone(source);
-const good = { gate_id:'QUE-01',result:'PASS',commit:'a'.repeat(40),command:'node --test',date:'2026-10-22' };
+const good = { gate_id:'QUE-01',result:'PASS',commit:'a'.repeat(40),command:'node --test',date:'2026-10-22',ci_run:'https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40158404633',ci_conclusion:'success' };
 const readEvidence = rel => {
   const prefix = 'project-c/pppoppi-imperium/prerelease/evidence/';
   if (!rel.startsWith(prefix) || rel.slice(prefix.length).includes('/')) return null;
@@ -38,3 +38,60 @@ test('Technische Pflicht darf nicht persoenlich vertagt werden',()=>{const m=clo
 test('Persoenliche Pflicht bleibt persoenlich',()=>{const m=clone();const g=m.gates.find(g=>g.id==='FRE-02');g.stage='technical';g.status='open';assert.match(auditMatrix(m).errors.join(' '),/Stufe muss personal/);});
 test('Vorzeitige persoenliche PASS-Abnahme wird abgewiesen',()=>{const m=clone();const g=m.gates.find(g=>g.id==='FRE-02');g.status='pass';g.evidence=['project-c/pppoppi-imperium/prerelease/evidence/FRE-02.json'];assert.match(auditMatrix(m,()=>({...good,gate_id:'FRE-02'})).errors.join(' '),/vor technischem Abschluss/);});
 test('Unbekannte Fachpraefixe werden abgewiesen',()=>{const m=clone();const g=structuredClone(m.gates.find(g=>g.id==='LOG-02'));g.id='XYZ-01';m.gates.push(g);assert.match(auditMatrix(m).errors.join(' '),/unbekannter Pflichtpraefix/);});
+
+test('Technischer PASS verlangt einen passenden GitHub-CI-Link',()=>{
+  const m=clone();m.gates[0].status='pass';m.gates[0].evidence=['project-c/pppoppi-imperium/prerelease/evidence/QUE-01.json'];
+  const proof=(value)=>auditMatrix(m,rel=>rel.endsWith('/QUE-01.json')?value:readEvidence(rel));
+  for (const changed of [
+    {ci_run:undefined},
+    {ci_run:'https://github.com/fremd/repo/actions/runs/40158404633'},
+    {ci_run:'https://evil.example/provoware/PROJEKT_Oli_Imperium/actions/runs/40158404633'},
+    {ci_run:'https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/0'},
+    {ci_run:'https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/12/extra'},
+    {ci_conclusion:undefined},
+    {ci_conclusion:null},
+    {ci_conclusion:'pending'},
+    {ci_conclusion:'cancelled'},
+    {ci_conclusion:'failure'}
+  ]) {
+    assert.match(proof({...good,...changed}).errors.join(' '),/QUE-01: Nachweis fehlt/);
+  }
+  assert.deepEqual(proof(good).errors,[]);
+});
+test('Unmoegliche Nachweisdaten werden abgewiesen',()=>{
+  const m=clone();m.gates[0].status='pass';m.gates[0].evidence=['project-c/pppoppi-imperium/prerelease/evidence/QUE-01.json'];
+  for(const date of ['2026-02-30','2026-13-01','2026-00-10','2026-11-1','unbekannt']){
+    const r=auditMatrix(m,rel=>rel.endsWith('/QUE-01.json')?{...good,date}:readEvidence(rel));
+    assert.match(r.errors.join(' '),/QUE-01: Nachweis fehlt/);
+  }
+});
+test('Blockierte Pflichten benoetigen eine nichtleere naechste Handlung',()=>{
+  const m=clone();m.gates[0].next='   ';
+  assert.match(auditMatrix(m,readEvidence).errors.join(' '),/QUE-01: naechste Handlung fehlt/);
+});
+
+test('Alle bestehenden technischen PASS-Nachweise nennen explizit CI-Erfolg',()=>{
+  for (const gate of source.gates.filter(g=>g.stage==='technical' && g.status==='pass')) {
+    for (const p of gate.evidence) {
+      const proof=readEvidence(p);
+      assert.equal(proof?.ci_conclusion,'success',`${gate.id}: CI-Schlussstatus fehlt`);
+      assert.match(proof.ci_run,/^https:\/\/github\.com\/provoware\/PROJEKT_Oli_Imperium\/actions\/runs\/[1-9]\d*$/);
+    }
+  }
+});
+
+// Regression: Historische CI-Lauf-Links duerfen keine spaeter eingefuehrten Berichtstests belegen.
+test('BAL-02 und BAL-03 zitieren den nachweislich beide Berichtstests enthaltenden CI-HEAD',()=>{
+  for (const id of ['BAL-02','BAL-03']) {
+    const gate=source.gates.find(g=>g.id===id);
+    const proof=readEvidence(gate.evidence[0]);
+    assert.equal(proof.commit,'7ecbd3654e381702e25a59230ed62a318b3784d5');
+    assert.equal(proof.ci_run,'https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41285485847');
+    assert.equal(proof.ci_job_id,124785795949);
+    assert.equal(proof.ci_event,'pull_request');
+    assert.equal(proof.ci_working_directory,'project-c/pppoppi-imperium/SPIEL');
+    assert.equal(proof.ci_expected_commands.length,2);
+    assert.ok(proof.command.includes(proof.ci_expected_commands[0]));
+    assert.ok(proof.command.includes(proof.ci_expected_commands[1]));
+  }
+});
