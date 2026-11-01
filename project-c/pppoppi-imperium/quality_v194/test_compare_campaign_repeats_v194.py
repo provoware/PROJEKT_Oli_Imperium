@@ -36,6 +36,7 @@ class CampaignRepeatTests(unittest.TestCase):
         second = sample()
         second["end_to_end_seconds"] = 121
         second["month_step_profile"]["month_step_p95_seconds"] = 1.56
+        second["month_step_profile"]["month_step_p99_seconds"] = 1.7
         result = compare(sample(), second, 120)
         self.assertEqual(result["metrics"]["end_to_end_seconds"]["run_2_vs_run_1_percent"], 10)
         self.assertEqual(result["metrics"]["month_step_profile.month_step_p95_seconds"]["run_2_vs_run_1_percent"], 20)
