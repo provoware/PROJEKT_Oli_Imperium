@@ -39,3 +39,23 @@ Unveraendert **6 PASS / 39 BLOCKED / 4 OPEN / 3 DEFERRED = 52**. Performance ble
 3. Erst nach reproduzierbaren Messungen, definierter Zielumgebung und begruendeten Grenzwerten ein verbindliches Performance-Freigabekriterium vorschlagen.
 
 **Schutz:** Nur PR #155; keine Produktlogik, Speicherformate, Spielregeln, Originalmaterialien, main oder Top-5-Repositories veraendert. Kein Merge, kein Release.
+
+## Nachtrag: 120-Monats-Wiederholung abgeschlossen; 240-Monats-Wiederholung gestartet
+
+**Pruefquelle:** [GitHub-Actions-Lauf 41342963014](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41342963014) auf [HEAD c2a47a7d](https://github.com/provoware/PROJEKT_Oli_Imperium/commit/c2a47a7d7bc1cd59e9c651db8b2545e0d656542c), 01.11.2026. **5/5 Kampagnenjobs SUCCESS**: 24, 120, 240 Monate, 120-Monats-Doppellauf und Regression. **15/15 Profil- und 6/6 Vergleichsregressionen PASS.** Die separate integrierte Vorrelease-Sperre bleibt erwartungsgemaess FAIL und ist **kein** freigegebenes Release-Gate.
+
+| Echte 120-Monats-Messung auf demselben GitHub-Runner | Lauf 1 | Lauf 2 | Differenz Lauf 2 |
+|---|---:|---:|---:|
+| Gesamtlaufzeit | 292,437 s | 260,464 s | -10,93 % |
+| Summe der Monatsschritte | 286,474 s | 254,763 s | -11,07 % |
+| P95 eines Monatsschritts | 4,269 s | 3,911 s | -8,39 % |
+| Median eines Monatsschritts | 2,312 s | 2,125 s | -8,09 % |
+| Verhaeltnis zweite/erste Spielhaelfte | 2,577 | 2,673 | +3,73 % |
+
+Beide Laeufe: 120 Monate, 480 menschliche Tastaturzuege, drei Chromium-Prozesse, 800x600, 120 behaltene Berichte, keine natuerlichen Sanierungen. Die Streuung ist messbar; eine einzelne Wiederholung liefert **noch keine** verlaessliche Leistungsgrenze. Die spaetere Spielhaelfte bleibt in beiden Laeufen deutlich langsamer. Die parallel bestandene 240-Monats-Partie dauerte 705,392 s und enthielt vier natuerliche Sanierungen; sie ist **noch keine** 240-Monats-Wiederholungsmessung.
+
+**Neues zusammenhaengendes Pflichtpaket:** Zwei zusaetzliche deterministische Negativ-/Positivtests sichern bei 240 Monaten 960 Tastaturzuege, das 120-Berichte-Fenster, die aktive Freigabesperre und das Abweisen einer falsch gemischten 120-/240-Monats-Messung. Ein neuer GitHub-Job fuehrt **zwei komplette 240-Monats-Chromium-Partien nacheinander auf demselben Runner** aus, vergleicht sie mit dem vorhandenen strikten Protokollpruefer und stoppt bei einem Fehler durch `set -euo pipefail`. Der neue Job und die acht Vergleichsregressionen sind bis zum Abschluss der CI **PENDING, nicht PASS**. Keine Produktlogik und kein Speicherformat geaendert.
+
+**Pflichtmatrix weiterhin 6 PASS / 39 BLOCKED / 4 OPEN / 3 DEFERRED = 52.** Performance bleibt BLOCKED bis zu reproduzierbaren Ergebnissen und begruendeten Zielgrenzen; 175/200-%-Langzeitzoom, 240-Monats-Archivierungsumfang, Vermoegensbewertung, Medienrechte und C64-Abgleich offen. Keine persoenliche Endabnahme, kein Merge, kein Release.
+
+**Naechste Schritte:** (1) neuen GitHub-HEAD mit acht Vergleichstests und beiden 240-Monats-Partien auswerten, (2) bei Abweichungen technische Ursachen eingrenzen, (3) erst nach mehrfachen Messungen ein begruendetes Leistungsziel fuer die Zielhardware definieren.
