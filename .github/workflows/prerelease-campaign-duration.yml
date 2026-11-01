@@ -1,0 +1,32 @@
+name: OLI Vorrelease - Kampagnen 24 und 60 Monate
+
+on:
+  pull_request:
+    branches:
+      - integration/oli-main-pr140-20261031
+    paths:
+      - project-c/pppoppi-imperium/quality_v194/test_endstate_long_campaign_v194.cjs
+      - project-c/pppoppi-imperium/quality_v194/CAMPAIGN_DURATION_20261101.md
+      - .github/workflows/prerelease-campaign-duration.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  campaign-duration-regression:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax des neuen Kampagnenpruefers
+        run: node --check project-c/pppoppi-imperium/quality_v194/test_endstate_long_campaign_v194.cjs
+      - name: Bisherige 12-Monats-Enginepruefung als Referenz
+        run: node --test project-c/pppoppi-imperium/quality_v194/test_endstate_live_v194.cjs
+      - name: Echte 24- und 60-Monats-Kampagnen mit Zwischenimport und Endarchiv
+        run: node --test project-c/pppoppi-imperium/quality_v194/test_endstate_long_campaign_v194.cjs
+      - name: Grundlegende Projektstruktur pruefen
+        run: python3 tools/validate_project.py
