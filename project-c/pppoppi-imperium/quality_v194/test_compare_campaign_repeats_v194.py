@@ -73,6 +73,24 @@ class CampaignRepeatTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             compare(bad, sample(), 120)
 
+    def test_240_month_repeat_requires_120_report_window(self):
+        first, second = sample(240), sample(240)
+        second["end_to_end_seconds"] = 121.0
+        result = compare(first, second, 240)
+        self.assertEqual(result["months_per_run"], 240)
+        self.assertEqual(result["human_turns_per_run"], 960)
+        self.assertEqual(result["runs"], 2)
+        self.assertTrue(result["release_gate"].startswith("BLOCKED"))
+        second["retained_reports"] = 240
+        with self.assertRaises(ValueError):
+            compare(first, second, 240)
+
+    def test_240_month_repeat_rejects_120_month_record(self):
+        with self.assertRaises(ValueError):
+            compare(sample(240), sample(120), 240)
+        with self.assertRaises(ValueError):
+            compare(sample(120), sample(240), 240)
+
     def test_log_reader_rejects_missing_or_duplicate_summary(self):
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp) / "run.log"
