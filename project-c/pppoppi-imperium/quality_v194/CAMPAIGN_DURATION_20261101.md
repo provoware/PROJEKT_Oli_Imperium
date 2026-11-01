@@ -48,3 +48,15 @@ Die sichtbare Spielartwahl bietet 12, 24, 60, 120 und 240 Monate. Der bisherige 
 - Diese Tests verwenden die reale Engine **ohne sichtbaren Browser**; sie belegen **keine** 24-/60-Monats-Bedienung bei 800x600, Tastatur oder Zoom. Die bestehenden 12-Monats-Browsertests sind separate Nachweise.
 
 **Hinweis zur Nachweiskette:** Diese Dokumentation wird nach dem erfolgreich geprueften Implementierungs-HEAD ergaenzt. Der daraus entstehende neue HEAD benoetigt seine eigene CI-Nachkontrolle. VER-01/03 bleiben BLOCKED; 6/52 PASS bleibt unveraendert.
+
+## Eigenstaendiger Browser-Pflichtpfad: 24 Monate (01.11.2026)
+
+**Implementierungsstand:** `93cb89cd25e7e5110eac01e6f43126bfa68217ad`; neuer Test `test_browser_campaign_24months_v194.py` und zusaetzlicher, unabhaengiger Job `browser-campaign-24-months` in `.github/workflows/prerelease-campaign-duration.yml`.
+
+**Testvertrag:** 24 Monate mit vier echten menschlichen Firmen, 96 ueber sichtbare Schaltflaechen per Enter abgeschlossene Zuege und 72 bestaetigte Spieleruebergaben; keine KI, keine Geld-/Zustandsinjektion. Nach Monat 12 versionierten Sitzungsexport, vollstaendigen Chromium-Prozess beenden, neuen Prozess starten und denselben Zustand samt Laufzeit importieren. Nach Monat 24 echte Abschlusswertung, Rangfolge, schreibgeschuetztes Archiv, Endexport ohne aktiven Zustand und zweiten echten Chromium-Prozessneustart nachweisen. Durchgehend 800x600, kein horizontaler Seitenueberlauf, keine HTTP-Anfragen oder JavaScript-Laufzeitfehler.
+
+**Vorab-Risiko:** Bei natuerlicher Insolvenz ist ein roter Test ein fachlicher Befund, kein Grund, eine Sanierung zu simulieren oder die Sperre zu umgehen. In diesem Fall die tatsaechliche Sanierungsoberflaeche als gesonderte Erweiterung pruefen. Browserinstallation und sichtbare Bedienung werden erst durch den neuen GitHub-Job nachgewiesen.
+
+**Pruefstand bei Dokumentation:** neuer GitHub-Lauf auf finalem HEAD noch **PENDING**; deshalb **kein PASS** fuer den 24-Monats-Browserpfad. Bisherige Engine-Nachweise 24/60 Monate bleiben auf ihrem getrennt dokumentierten Commit gueltig. Die 52er-Matrix bleibt 6 PASS / 39 BLOCKED / 4 OPEN / 3 DEFERRED. Kein Release und keine persoenliche Endabnahme.
+
+**Naechste technische Schritte:** (1) den neuen GitHub-Job und alle anderen Pflichtjobs auf dem endgueltigen Dokumentations-HEAD auswerten, (2) echte Fehler mit Negativtests beheben und erneut laufen lassen, (3) danach 120/240-Monats-Grenzfaelle oder nachgewiesene Browser-Sanierungswege erweitern. Die Entwurfszweige #150 und #154 werden nicht beruehrt.
