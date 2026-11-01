@@ -37,7 +37,7 @@
 - **Weitere Prüfung:** `python3 -m unittest discover -s tests -v` ist ein zusätzlicher Projekttest; keine automatische Originalspiel-Abnahme.
 
 > [!WARNING]
-> 🔴 **Keine Releasefreigabe:** Die Entwicklungs-Prüfmatrix meldete zuletzt **6 PASS / 39 BLOCKED / 4 OPEN / 3 DEFERRED**. 🟢 = belegter Teilstand, 🟠 = noch offen, 🔴 = gesperrt. Die aktuelle GitHub-Prüfung hat **70 offene Entwürfe** ergeben (Momentaufnahme vom 01.11.2026).
+> 🔴 **Keine Releasefreigabe:** Die Entwicklungs-Prüfmatrix meldete zuletzt **6 PASS / 39 BLOCKED / 4 OPEN / 3 DEFERRED**. 🟢 = belegter Teilstand, 🟠 = noch offen, 🔴 = gesperrt. Den aktuellen Bestand zeigt die [Liste offener Änderungsanträge](https://github.com/provoware/PROJEKT_Oli_Imperium/pulls?q=is%3Aopen); eine fest eingetragene Anzahl würde schnell veralten.
 
 ---
 
@@ -66,7 +66,7 @@
 | 🛠️ **Änderungen** | Vorschläge prüfen, Entwurfsketten auflösen, nur Freigegebenes integrieren | [Offene PRs](https://github.com/provoware/PROJEKT_Oli_Imperium/pulls?q=is%3Aopen) · [PR-Abbau #138](https://github.com/provoware/PROJEKT_Oli_Imperium/issues/138) |
 
 > [!WARNING]
-> **Prüfstand vom 31.10.2026, kein Live-Zähler:** 52 Pflichtkriterien → **6 bestanden · 39 blockiert · 4 offen · 3 zurückgestellt**. Dazu 70 offene PR-Entwürfe bei der Bestandsaufnahme vom 01.11.2026. Maßgeblich sind immer die aktuellen [PRs](https://github.com/provoware/PROJEKT_Oli_Imperium/pulls?q=is%3Aopen), [Prüfnachweise](https://github.com/provoware/PROJEKT_Oli_Imperium/actions) und die zugehörige Pflichtmatrix im Projekt-C-Entwicklungszweig. Die Daten sind ausdrücklich **keine Releasefreigabe**.
+> **Prüfstand vom 31.10.2026, kein Live-Zähler:** 52 Pflichtkriterien → **6 bestanden · 39 blockiert · 4 offen · 3 zurückgestellt**. Maßgeblich sind immer die aktuellen [PRs](https://github.com/provoware/PROJEKT_Oli_Imperium/pulls?q=is%3Aopen), [Prüfnachweise](https://github.com/provoware/PROJEKT_Oli_Imperium/actions) und die zugehörige Pflichtmatrix im Projekt-C-Entwicklungszweig. Die Daten sind ausdrücklich **keine Releasefreigabe**.
 
 ## 🎨 Projektablauf
 
