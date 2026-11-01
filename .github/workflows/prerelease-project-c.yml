@@ -29,6 +29,8 @@ jobs:
         run: node --test project-c/pppoppi-imperium/prerelease/test.mjs
       - name: CI-Nachweisregressionen
         run: node --test project-c/pppoppi-imperium/prerelease/test_ci_evidence.mjs
+      - name: CI-Jobschrittregressionen
+        run: node --test project-c/pppoppi-imperium/prerelease/test_ci_steps.mjs
       - name: GitHub-Live-Nachweise fuer alle technischen PASS-Gates (harte Sperre)
         env:
           GITHUB_TOKEN: ${{ github.token }}
