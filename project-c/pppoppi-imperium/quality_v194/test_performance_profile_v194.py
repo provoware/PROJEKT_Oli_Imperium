@@ -35,6 +35,25 @@ class PerformanceProfileTests(unittest.TestCase):
         self.assertEqual(result["month_step_p99_seconds"], 2.0)
         self.assertEqual(result["month_step_max_seconds"], 4.0)
 
+    def test_drift_ratios_use_chronological_months(self):
+        result = summarize_month_durations([4, 1, 3, 2])
+        self.assertEqual(result["second_half_vs_first_half_ratio"], 1.0)
+        self.assertEqual(result["first_quarter_mean_seconds"], 4.0)
+        self.assertEqual(result["last_quarter_mean_seconds"], 2.0)
+        self.assertEqual(result["last_quarter_vs_first_quarter_ratio"], 0.5)
+        result = summarize_month_durations([1, 2, 3, 4, 5])
+        self.assertEqual(result["second_half_vs_first_half_ratio"], 2.667)
+        self.assertEqual(result["last_quarter_vs_first_quarter_ratio"], 5.0)
+
+    def test_zero_baseline_and_short_series_do_not_fake_growth(self):
+        result = summarize_month_durations([0, 0, 1, 1])
+        self.assertIsNone(result["second_half_vs_first_half_ratio"])
+        self.assertIsNone(result["last_quarter_vs_first_quarter_ratio"])
+        result = summarize_month_durations([0.125])
+        self.assertIsNone(result["first_quarter_mean_seconds"])
+        self.assertIsNone(result["last_quarter_mean_seconds"])
+        self.assertIsNone(result["second_half_vs_first_half_ratio"])
+
     def test_invalid_measurements_rejected(self):
         for samples in ([], [-0.1], [math.nan], [math.inf], ["bad"]):
             with self.subTest(samples=samples):
