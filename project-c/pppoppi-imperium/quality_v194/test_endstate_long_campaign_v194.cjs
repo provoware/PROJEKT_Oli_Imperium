@@ -97,3 +97,10 @@ test('24-Monats-Kampagne: vollstaendige Engine-Partie, Zwischenimport, Abschluss
 test('60-Monats-Kampagne: vollstaendige Engine-Partie, Zwischenimport, Abschluss', () => {
   campaign(60);
 });
+
+// Grenzfaelle der laengsten in der sichtbaren Spielartwahl angebotenen Modi.
+// Beide nutzen denselben realen Engine-/Sitzungs-/Archivpfad wie 24/60 Monate.
+test('120-Monats-Kampagne: Endmonat, Zwischenimport, Vertrags- und Archivschutz',
+  {timeout: 180000}, () => campaign(120));
+test('240-Monats-Kampagne: Endmonat, Zwischenimport, Vertrags- und Archivschutz',
+  {timeout: 240000}, () => campaign(240));
