@@ -13,6 +13,7 @@ on:
       - project-c/pppoppi-imperium/quality_v194/compare_campaign_repeats_v194.py
       - project-c/pppoppi-imperium/quality_v194/test_compare_campaign_repeats_v194.py
       - project-c/pppoppi-imperium/quality_v194/REPEATABILITY_20261101.md
+      - project-c/pppoppi-imperium/quality_v194/NATIVE_ZOOM_LONGRUN_20261102.md
       - project-c/pppoppi-imperium/quality_v194/PERFORMANCE_PROFILE_20261101.md
       - project-c/pppoppi-imperium/quality_v194/CAMPAIGN_DURATION_20261101.md
       - .github/workflows/prerelease-campaign-duration.yml
