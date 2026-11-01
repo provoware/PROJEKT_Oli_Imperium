@@ -44,3 +44,19 @@ Eine Aufgabe gilt fertig, wenn ihr Ausgangsproblem behoben oder Erkenntnisziel e
 3. Büro→Karte→Feldinformation→Zurück als Pilotpaket erfassen und an B übergeben.
 
 **Weiterführende Empfehlung:** Erst mit einem durchgängigen Piloten die Projektmethode validieren, dann skalieren.
+
+---
+
+<!-- OLI_20261101_QUEUE -->
+## 📋 Aktuelle Prüfliste – 01.11.2026
+
+**Bestehende Arbeit A/B bleibt maßgeblich.** Diese Liste ergänzt nur die dokumentierte Integrations- und Freigabeprüfung; keine neue historisch unbelegte Originalregel und keine automatische Projekt-C-Freigabe.
+
+- [x] 2026-11-01 | Dokumentation | Forschungs-README um dreistufigen Einstieg und konkrete Kopierbefehle erweitert | prüfen: `README.md`, Commit `ff0422042d7d` | fertig wenn: bestehende Forschungshinweise unverändert erhalten.
+- [ ] 2026-11-01 | P0 · Integration | 70 offene Projekt-C-Entwürfe nachvollziehbar auf Doppelungen und Abhängigkeiten prüfen | prüfen: [Backlog #138](https://github.com/provoware/PROJEKT_Oli_Imperium/issues/138), PR-HEADs, CI, Vergleich mit #141 | fertig wenn: jeder Entwurf mit Sicherheits- und Quellenbeleg eingeordnet ist.
+- [ ] 2026-11-01 | P0 · Freigabe | Integrationsentwurf #141 erst nach vollständig erfüllter Pflichtmatrix bewerten | prüfen: [PR #141](https://github.com/provoware/PROJEKT_Oli_Imperium/pull/141), Browserdateidialog und offene Medienrechte | fertig wenn: alle erforderlichen Gates am finalen HEAD erfüllt; bis dahin kein Merge nach main.
+- [ ] 2026-11-01 | P1 · Originalbelege | Deutsches C64-PAL-Referenzobjekt und vollständigen Pilotablauf fixieren | prüfen: Hash, Emulatorprotokoll, Screens, Quellenverweis | fertig wenn: die überprüfte Abfolge Büro → Weltkarte → Feldinformation → Rückweg als A→B-Paket vorliegt.
+- [ ] 2026-11-01 | P1 · Prüfung | Dokumentationsänderungen mit bestehender Projektvalidierung kontrollieren | prüfen: `python3 tools/validate_project.py` und `python3 -m unittest discover -s tests -v` am aktuellen main | fertig wenn: sämtliche Prüfungen auf derselben Revision erfolgreich.
+
+> [!WARNING]
+> Zahlen sind eine Momentaufnahme. Die vorliegenden 52 Vorrelease-Kriterien weisen 6 PASS, 39 BLOCKED, 4 OPEN und 3 DEFERRED aus; technische Teilerfolge sind keine Spiel- oder Veröffentlichungsfreigabe.
