@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Diagnose nativer Chromium-Dateiauswahl bei echtem Tab-Zoom; KEIN Release-Gate."""
 import json
+import os
 import sys
 import tempfile
 from pathlib import Path
@@ -50,7 +51,7 @@ def one(pw, root, fixture, method, zoom, repeat):
     try:
         extension = root / "zoom-extension"
         context = pw.chromium.launch_persistent_context(
-            str(directory), channel="chromium", headless=True,
+            str(directory), channel="chromium", headless=os.environ.get("PPPOPPI_PICKER_HEADLESS", "1") != "0",
             viewport={"width": 800, "height": 600},
             reduced_motion="reduce",
             args=["--disable-extensions-except=" + str(extension),
@@ -108,6 +109,7 @@ def main():
         payload = {
             "schema": "pppoppi.native-picker-diagnostic/1",
             "scope": "Chromium automation control only; NOT the game or release proof",
+            "headless": os.environ.get("PPPOPPI_PICKER_HEADLESS", "1") != "0",
             "total": len(results), "passed": len(results) - len(failed),
             "failed": len(failed), "results": results,
             "releaseGate": "BLOCKED"
