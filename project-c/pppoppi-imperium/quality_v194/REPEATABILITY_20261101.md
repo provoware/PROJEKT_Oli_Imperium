@@ -82,3 +82,14 @@ Beide Laeufe: 120 Monate, 480 menschliche Tastaturzuege, drei Chromium-Prozesse,
 **Vorrelease-Pflichtmatrix:** unveraendert **6 PASS / 39 BLOCKED / 4 OPEN / 3 DEFERRED = 52**. Performance weiterhin BLOCKED; Langzeitzoom 175/200 %, Umfang der 240-Monats-Archivberichte, Vermoegensbewertung, Medienrechte und historische Originalquellen ebenfalls offen. Die Benutzer-Sichtpruefung und der Kubuntu-Praxistest bleiben bis zum eingefrorenen technischen Release-Kandidaten zurueckgestellt.
 
 **Naechste drei Schritte:** (1) alle neuen CI-Jobs auf finalem HEAD auswerten und Fehler beheben; (2) echte 175/200-%-Langzeit-Browserpfade bei 800x600 mit Tastatur, Import und Archiv pruefen; (3) die Verlangsamung mit getrennten UI-/Engine-Messungen kausal eingrenzen und erst danach begruendete Zielwerte festlegen. Kein Merge, kein Release, keine Aenderung an `main` oder den fuenf ausgeschlossenen Repositories.
+
+
+## Nachtrag 01.11.2026, 23:29 MEZ – fehlgeschlagene Regression korrigiert
+
+**Pruefbefund auf HEAD [f53fc0af](https://github.com/provoware/PROJEKT_Oli_Imperium/commit/f53fc0af938416bf6d7a5e5d6833d4a6193d9600):** [GitHub-Kampagnenlauf 41352440783](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41352440783) ist **FAIL**, nicht PASS. Fuenf Browserjobs (24, 120, 240 Monate sowie beide Wiederholungsmessungen) sind **PASS**; der Job `campaign-duration-regression` ist **FAIL** mit **10/11 PASS, 1 ERROR** in `test_observed_variation_is_descriptive`. Die 15 Leistungsprofil-Regressionen waren PASS.
+
+**Ursache:** Der synthetische Testfall erhoehte P95 auf 1,56 s, liess aber P99 bei 1,50 s. Die neue strikte Datenintegritaetspruefung verwirft korrekt P95 > P99. Das ist ein fehlerhafter Testdatensatz, kein belegter Browser- oder Produktfehler.
+
+**Gezielte Korrektur:** [Commit 70523a6b](https://github.com/provoware/PROJEKT_Oli_Imperium/commit/70523a6b31da6f6da657bdaf60f0aeca50ad4ddf) setzt im betroffenen positiven Vergleichstest P99 auf 1,70 s, so dass Median 0,70 <= P95 1,56 <= P99 1,70 <= Maximum 2,00 <= Summe 100,00 gilt. Der separate Negativtest fuer unmoegliche Perzentilreihenfolge bleibt unveraendert. Die eigentliche strikte Validierung wird nicht abgeschwaecht.
+
+**Nachweisstatus:** Die Ursache wurde im GitHub-Fehlerprotokoll eindeutig nachgewiesen und die Testdaten korrigiert. Die CI auf dem neuen Commit muss noch tatsaechlich erfolgreich abschliessen; bis dahin **PENDING**, kein behauptetes PASS. **Pflichtmatrix unveraendert: 6 PASS / 39 BLOCKED / 4 OPEN / 3 DEFERRED.** Die naechste unabhaengige Pflichtarbeit ist der 175/200-%-Langzeit-Browserpfad. Kein Merge, kein Release, keine persoenliche Endabnahme.
