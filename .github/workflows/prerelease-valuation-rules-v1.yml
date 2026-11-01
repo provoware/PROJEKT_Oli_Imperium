@@ -3,6 +3,9 @@ on:
   pull_request:
     paths:
       - 'project-c/pppoppi-imperium/quality_v194/valuation_rules_proposal_v1.cjs'
+      - 'project-c/pppoppi-imperium/quality_v194/valuation_live_event_adapter_v1.cjs'
+      - 'project-c/pppoppi-imperium/quality_v194/test_valuation_live_event_adapter_v1.cjs'
+      - 'project-c/pppoppi-imperium/quality_v194/VALUATION_LIVE_EVENTS_20261101.md'
       - 'project-c/pppoppi-imperium/quality_v194/test_valuation_rules_proposal_v1.cjs'
       - 'project-c/pppoppi-imperium/quality_v194/VALUATION_RULES_PROPOSAL_20261101.md'
       - '.github/workflows/prerelease-valuation-rules-v1.yml'
@@ -24,5 +27,7 @@ jobs:
           set -euo pipefail
           node --check project-c/pppoppi-imperium/quality_v194/valuation_rules_proposal_v1.cjs
           node --check project-c/pppoppi-imperium/quality_v194/test_valuation_rules_proposal_v1.cjs
-          node --test project-c/pppoppi-imperium/quality_v194/test_valuation_rules_proposal_v1.cjs
+          node --check project-c/pppoppi-imperium/quality_v194/valuation_live_event_adapter_v1.cjs
+          node --check project-c/pppoppi-imperium/quality_v194/test_valuation_live_event_adapter_v1.cjs
+          node --test project-c/pppoppi-imperium/quality_v194/test_valuation_rules_proposal_v1.cjs project-c/pppoppi-imperium/quality_v194/test_valuation_live_event_adapter_v1.cjs
 
