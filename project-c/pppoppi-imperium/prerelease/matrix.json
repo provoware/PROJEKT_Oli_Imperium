@@ -711,7 +711,9 @@
       "basis": "Nutzerauftrag",
       "stage": "technical",
       "status": "blocked",
-      "evidence": [],
+      "evidence": [
+        "project-c/pppoppi-imperium/quality_v194/CHROMIUM_INSTALL_TIMEOUTS_20261101.md"
+      ],
       "blocker": "Quellimport vorhanden; vollstaendige fachliche End-to-End-Abnahme und Ressourcennachweis fehlen.",
       "next": "CI auf finalem HEAD: nativer Sitzungsexport/-import bei 175/200 Prozent in drei unabhaengigen Browserpaaren ohne verdeckte Wiederholung; Datei-Eingangsklick und Nutzeraktivierung bei Timeout diagnostizieren. Danach alle Workflows auf demselben Commit pruefen; Gesamtgate bleibt BLOCKED. CI #41014701108 auf d485e555 FAIL: nativer Sitzungsimport bei 175 Prozent ohne filechooser trotz Tastaturaktivierung und Input-Klick. Fehlgeschlagene Jobs erneut angefordert, Ergebnis pruefen. Neuer KI-Klassifikationstest CI PENDING. Kein Gesamt-PASS. Browser-CI #41042109507 auf 216aad1485 FAIL: 175-%-Dateiauswahl trotz echtem Tab/Enter und Input-Klick ohne filechooser; fehlgeschlagene Jobs erneut gestartet. Ursache offen; kein Gesamt-PASS. CI #41064742670 auf dda551b5 FAIL: dritter echter 175%-Dateiimport ohne filechooser trotz 1 Button- und 1 Datei-Eingangsklick sowie aktiver Nutzeraktivierung; Ursache weiterhin offen. Neuer Dreimonatstest separat in CI; keine Gesamtfreigabe. Nachtrag 30.10.2026: Browser-CI #41116524784 auf 8fc298a9bdb3ecad66d8b80b3f13477ec8cfb43e FAIL im native-zoom-regression-Job: 200% Dateiauswahl bleibt nach Enter trotz Button- und Input-Klick und aktiver Nutzeraktivierung aus. Ursache nicht nachgewiesen; keine Freigabe oder versteckter Dateiinput-Ersatz. Neue Frachtprüfung unabhängig bearbeiten; TES-04 BLOCKED. Nachtrag 31.10.2026: CI #41173320564 bei 200%-Dateiimport FAIL trotz vertrauenswuerdigem Klick, aktiver Nutzeraktivierung und normal zurueckgekehrtem showPicker; neue unabhängige Picker-Fehlerisolation im Test und SESSION_NATIVE_ZOOM_STABILITY_20261029.md, CI auf finalem HEAD PENDING. Kein Umgehen des Fehlers, Gate BLOCKED."
     },
