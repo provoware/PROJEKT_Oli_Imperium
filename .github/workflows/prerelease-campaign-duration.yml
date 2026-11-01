@@ -7,6 +7,7 @@ on:
     paths:
       - project-c/pppoppi-imperium/quality_v194/test_endstate_long_campaign_v194.cjs
       - project-c/pppoppi-imperium/quality_v194/test_browser_campaign_24months_v194.py
+      - project-c/pppoppi-imperium/quality_v194/test_browser_campaign_120_240_v194.py
       - project-c/pppoppi-imperium/quality_v194/CAMPAIGN_DURATION_20261101.md
       - .github/workflows/prerelease-campaign-duration.yml
   workflow_dispatch:
@@ -49,3 +50,39 @@ jobs:
         run: python3 -m py_compile project-c/pppoppi-imperium/quality_v194/test_browser_campaign_24months_v194.py
       - name: 24 echte Spielmonate, 96 Tastatur-Zuege, zwei Prozessneustarts, Archiv
         run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_campaign_24months_v194.py
+
+  browser-campaign-120-months:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Chromium installieren
+        run: bash project-c/pppoppi-imperium/quality_v194/install_chromium_ci.sh
+      - name: Python-Syntax der 120/240-Monats-Pruefung
+        run: python3 -m py_compile project-c/pppoppi-imperium/quality_v194/test_browser_campaign_120_240_v194.py
+      - name: 120 echte Monate, Tastatur, Sanierung, Archiv und Prozessneustarts
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_campaign_120_240_v194.py --months 120
+
+  browser-campaign-240-months:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Chromium installieren
+        run: bash project-c/pppoppi-imperium/quality_v194/install_chromium_ci.sh
+      - name: Python-Syntax der 120/240-Monats-Pruefung
+        run: python3 -m py_compile project-c/pppoppi-imperium/quality_v194/test_browser_campaign_120_240_v194.py
+      - name: 240 echte Monate, Tastatur, Sanierung, Archiv und Prozessneustarts
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_campaign_120_240_v194.py --months 240
