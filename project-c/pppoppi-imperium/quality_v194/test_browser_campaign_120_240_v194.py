@@ -14,6 +14,8 @@ from pathlib import Path
 
 from playwright.sync_api import sync_playwright
 from test_browser_campaign_24months_v194 import check, press_button, state
+from test_browser_native_zoom_v194 import (extension_at, set_real_zoom,
+                                          wait_for_zoom_worker)
 from performance_profile_v194 import (summarize_month_durations,
                                      summarize_campaign_phase_timing,
                                      summarize_campaign_state_growth)
@@ -69,7 +71,7 @@ def play_month(page, month):
     return report, rescues
 
 
-def main(months):
+def main(months, zoom_percent=100):
     campaign_started = time.monotonic()
     with tempfile.TemporaryDirectory(prefix="pppoppi-browser-%d-" % months) as tmp:
         root = Path(tmp)
@@ -79,6 +81,9 @@ def main(months):
         build = json.loads((preview / "BUILD_INFO.json").read_text(encoding="utf-8"))
         check("110 geschuetzte Quelldateien im isolierten Aufbau",
               build["sourceFiles"] == 110)
+        extension = root / "zoom-extension"
+        if zoom_percent != 100:
+            extension_at(extension)
         errors, external, durations, state_sizes = [], [], [], []
         phase_timings = {"midpoint": {}, "archive": {}}
         processes, rescues = 0, 0
@@ -96,11 +101,23 @@ def main(months):
 
             def start():
                 nonlocal browser, processes
-                browser = pw.chromium.launch(headless=True)
+                if zoom_percent == 100:
+                    browser = pw.chromium.launch(headless=True)
+                    context = browser.new_context(
+                        viewport={"width": 800, "height": 600},
+                        accept_downloads=True, reduced_motion="reduce")
+                else:
+                    # Every restart uses a fresh Chromium process AND profile.
+                    # Native tab zoom needs the real MV3 tabs API, not CSS zoom.
+                    browser = pw.chromium.launch_persistent_context(
+                        str(root / ("profile-" + str(processes + 1))),
+                        channel="chromium", headless=True,
+                        viewport={"width": 800, "height": 600},
+                        accept_downloads=True, reduced_motion="reduce",
+                        args=["--disable-extensions-except=" + str(extension),
+                              "--load-extension=" + str(extension)])
+                    context = browser
                 processes += 1
-                context = browser.new_context(
-                    viewport={"width": 800, "height": 600},
-                    accept_downloads=True, reduced_motion="reduce")
                 page = context.new_page()
                 page.set_default_timeout(15000)
                 page.on("pageerror", lambda err: errors.append(str(err)))
@@ -108,6 +125,25 @@ def main(months):
                         if req.url.startswith(("http://", "https://")) else None)
                 page.goto((preview / "index.html").as_uri(), wait_until="load")
                 page.wait_for_function("window.NeoEconomy && window.NeoEconomy.endstate")
+                if zoom_percent != 100:
+                    worker = wait_for_zoom_worker(context)
+                    reset = set_real_zoom(worker, page.url, 1.0)
+                    check("Zoom vor jedem Prozesslauf auf 100 % zurueckgesetzt",
+                          abs(reset["factor"] - 1.0) < 0.01)
+                    page.wait_for_function("innerWidth >= 790")
+                    baseline = page.evaluate(
+                        "() => ({width: innerWidth, dpr: devicePixelRatio})")
+                    check("800x600-Basisfenster vor nativem Zoom",
+                          790 <= baseline["width"] <= 810)
+                    factor = zoom_percent / 100
+                    actual = set_real_zoom(worker, page.url, factor)
+                    check("Echter Chromium-Tab-Zoom %d%%" % zoom_percent,
+                          abs(actual["factor"] - factor) < 0.01)
+                    page.wait_for_function(
+                        "({factor, dpr}) => devicePixelRatio >= dpr * (factor - 0.05)",
+                        arg={"factor": factor, "dpr": baseline["dpr"]})
+                    check("Nativer Zoom reduziert die CSS-Breite",
+                          page.evaluate("innerWidth") < baseline["width"] * 0.65)
                 check("Neuer Chromium-Prozess ohne fremde Sitzung",
                       state(page) is None)
                 return page
@@ -235,6 +271,9 @@ def main(months):
                     "retained_reports": len(final["reports"]),
                     "natural_rescues": rescues, "chromium_processes": processes,
                     "viewport": "800x600", "keyboard": "Enter",
+                    "native_zoom_percent": zoom_percent,
+                    "native_zoom_api": ("chrome.tabs.setZoom/getZoom"
+                                        if zoom_percent != 100 else None),
                     "slowest_month_seconds": max(durations),
                     "month_step_profile": profile,
                     "timing_breakdown": breakdown,
@@ -251,4 +290,6 @@ def main(months):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--months", type=int, choices=(120, 240), required=True)
-    main(parser.parse_args().months)
+    parser.add_argument("--zoom", type=int, choices=(100, 175, 200), default=100)
+    args = parser.parse_args()
+    main(args.months, args.zoom)
