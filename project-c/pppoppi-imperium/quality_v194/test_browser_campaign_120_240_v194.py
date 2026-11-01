@@ -14,7 +14,9 @@ from pathlib import Path
 
 from playwright.sync_api import sync_playwright
 from test_browser_campaign_24months_v194 import check, press_button, state
-from performance_profile_v194 import summarize_month_durations, summarize_campaign_phase_timing
+from performance_profile_v194 import (summarize_month_durations,
+                                     summarize_campaign_phase_timing,
+                                     summarize_campaign_state_growth)
 
 HERE = Path(__file__).resolve().parent
 SCHEMA = "pppoppi.endstate.session.proposal/1"
@@ -77,7 +79,7 @@ def main(months):
         build = json.loads((preview / "BUILD_INFO.json").read_text(encoding="utf-8"))
         check("110 geschuetzte Quelldateien im isolierten Aufbau",
               build["sourceFiles"] == 110)
-        errors, external, durations = [], [], []
+        errors, external, durations, state_sizes = [], [], [], []
         phase_timings = {"midpoint": {}, "archive": {}}
         processes, rescues = 0, 0
 
@@ -177,6 +179,11 @@ def main(months):
                             "(m) => NeoEconomy.getState()?.month===m && "
                             "NeoEconomy.getState()?.phase==='TURN'", arg=month + 1)
                     durations.append(round(time.monotonic() - start_time, 3))
+                    # Outside the measured month: inspect an already fetched REPORT
+                    # state without changing gameplay or retaining its contents.
+                    state_sizes.append(len(json.dumps(
+                        report, ensure_ascii=False, separators=(",", ":")
+                    ).encode("utf-8")))
 
                 final = state(page)
                 archive = page.evaluate("NeoEconomy.endstate.archive()")
@@ -217,9 +224,11 @@ def main(months):
                 check("Keine JavaScript-Laufzeitfehler", not errors)
                 profile = summarize_month_durations(durations)
                 breakdown = summarize_campaign_phase_timing(durations, phase_timings)
+                state_growth = summarize_campaign_state_growth(durations, state_sizes)
                 check("Profil enthaelt alle tatsaechlichen Spielmonate",
                       profile["measured_months"] == months
                       and breakdown["midpoint_month"] == months // 2
+                      and state_growth["sampled_months"] == months
                       and breakdown["month_step_profile_without_midpoint_io"]["measured_months"] == months)
                 print("BROWSER-LANGKAMPAGNE:", json.dumps({
                     "months": months, "human_turns": months * HUMANS,
@@ -229,6 +238,7 @@ def main(months):
                     "slowest_month_seconds": max(durations),
                     "month_step_profile": profile,
                     "timing_breakdown": breakdown,
+                    "state_size_profile": state_growth,
                     "end_to_end_seconds": round(time.monotonic() - campaign_started, 3),
                     "historical_c64_verified": False,
                     "performance_release_gate": "BLOCKED: no agreed threshold",
