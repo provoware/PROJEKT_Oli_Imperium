@@ -1,0 +1,38 @@
+name: Projekt C – echte 100/150/200-Prozent-Layoutbelege
+on:
+  pull_request:
+    paths:
+      - 'project-c/pppoppi-imperium/quality_v194/test_browser_layout_100_150_200_v194.py'
+      - 'project-c/pppoppi-imperium/quality_v194/LAYOUT_100_150_200_20261101.md'
+      - '.github/workflows/prerelease-layout-100-150-200.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  native-layout-100-150-200:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Syntax und Forschungsbasis
+        run: |
+          python3 -m py_compile project-c/pppoppi-imperium/quality_v194/test_browser_layout_100_150_200_v194.py
+          python3 tools/validate_project.py
+          python3 -m unittest discover -s tests -v
+      - name: Kanonisches Chromium installieren und starten
+        run: bash project-c/pppoppi-imperium/quality_v194/install_chromium_ci.sh
+      - name: Alle 40 Ansichten bei echten 100/150/200 Prozent
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_layout_100_150_200_v194.py
+      - name: Unveraenderte Einzelbelege sichern
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: native-layout-100-150-200-evidence
+          path: layout_100_150_200_evidence/
+          if-no-files-found: error
