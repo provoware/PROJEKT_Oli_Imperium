@@ -121,6 +121,19 @@ class PerformanceProfileTests(unittest.TestCase):
         self.assertIsNone(result["duration_vs_state_size_pearson_r"])
         self.assertEqual(result["last_vs_first_quarter_size_ratio"], 1.0)
 
+    def test_linear_shared_trend_has_no_first_difference_correlation(self):
+        from performance_profile_v194 import summarize_campaign_state_growth
+        result = summarize_campaign_state_growth([1, 2, 3, 4], [100, 200, 300, 400])
+        self.assertEqual(result["duration_vs_state_size_pearson_r"], 1.0)
+        self.assertIsNone(result["month_to_month_change_pearson_r"])
+
+    def test_monthly_changes_can_correlate_independently_of_level(self):
+        from performance_profile_v194 import summarize_campaign_state_growth
+        result = summarize_campaign_state_growth([1, 4, 2, 8, 3], [100, 400, 200, 800, 300])
+        self.assertEqual(result["month_to_month_change_pearson_r"], 1.0)
+        inverse = summarize_campaign_state_growth([1, 4, 2, 8, 3], [900, 600, 800, 200, 700])
+        self.assertEqual(inverse["month_to_month_change_pearson_r"], -1.0)
+
     def test_state_growth_rejects_incomplete_or_invalid_samples(self):
         from performance_profile_v194 import summarize_campaign_state_growth
         for durations, sizes in (
