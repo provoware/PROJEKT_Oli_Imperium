@@ -100,3 +100,26 @@ Keine Aenderung an Produktcode, Spielregeln, Speicherformaten, Hauptzweig oder f
 3. Mehrere gleich konfigurierte Messlaeufe und Zielwerte definieren; erst danach ein reproduzierbares Performance-Gate vorschlagen.
 
 Kein Merge, kein Release, keine Benutzer- oder Kubuntu-Endabnahme. Der getrennte Layout-PR #154 und die Finanz-PR #150 bleiben unberuehrt.
+
+## Nachtrag 01.11.2026 – verifizierte Zustandsgroessen und Trendkontrolle
+
+**Ausgangs-HEAD:** [67e5dfbcaf2e802286daab4e0e83c73216cbbfaa](https://github.com/provoware/PROJEKT_Oli_Imperium/commit/67e5dfbcaf2e802286daab4e0e83c73216cbbfaa). [GitHub-Kampagnenlauf #41332701945](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41332701945) mit **4/4 SUCCESS**: 13/13 Profilregressionen, 24-/120-/240-Monats-Browserpfade und Engine-Regressionen. Die weiteren sechs fachlichen Prueflaeufe waren SUCCESS, die harte Vorrelease-Sperre erwartungsgemaess FAIL. Quelle der Zahlen: tatsaechliche Jobprotokolle der 120-/240-Monats-Browserjobs.
+
+| Beobachtung | 120 Monate | 240 Monate |
+|---|---:|---:|
+| Zustand nach Monat 1 (UTF-8 JSON) | 15.233 Byte | 15.233 Byte |
+| Zustand im letzten Monat | 663.081 Byte | 643.191 Byte |
+| Groesster Zustand | 663.081 Byte | 786.239 Byte |
+| Mittlere Groesse erstes / letztes Viertel | 93.814,4 / 583.727,2 Byte | 175.418,6 / 722.920,4 Byte |
+| Letztes/erstes Viertel | 6,222 | 4,121 |
+| Pearson r: Monatsdauer gegen Zustandsgroesse | +0,988 | +0,930 |
+| Monatszeit erste / zweite Haelfte | 0,949 / 2,516 s | 1,737 / 3,510 s |
+| Gesamtzeit | 212,647 s | 635,429 s |
+
+**Interpretation:** Die sehr hohen positiven Korrelationen beschreiben zwei Zeitreihen, die beide mit der Spielzeit wachsen. Sie beweisen weder, dass die Datenmenge die Verlangsamung verursacht, noch dass die Datenmenge die einzige Ursache ist. Bei 240 Monaten ist die Endgroesse kleiner als das beobachtete Maximum: Die Zustandsgroesse ist nicht streng monoton. Einmalige Laeufe auf GitHub-Maschinen erlauben keine verlaessliche Leistungsfreigabe.
+
+**Neues Pflichtpaket:** Zusaetzlich zur bisherigen Korrelation der Niveaus wird die Pearson-Korrelation der *Monat-zu-Monat-Aenderungen* von Zeit und Zustandsgroesse berechnet. Konstante Differenzen liefern null statt eines Scheinbelegs. Zwei neue deterministische Regressionen pruefen den Fall eines gemeinsam linearen Trends und positiv/negativ gekoppelte Aenderungen. Die Zahl der Profilregressionen steigt von 13 auf **15**. Diese Trendkontrolle ist nur ein Diagnoseinstrument, kein Kausalnachweis. Produktdateien, Speicherformat und Spielregeln bleiben unveraendert.
+
+**Pruefstatus dieses neuen Pakets:** Bis zum Abschluss der GitHub-Pruefungen **PENDING**. Vorrelease-Matrix unveraendert **6 PASS / 39 BLOCKED / 4 OPEN / 3 DEFERRED (52)**. Performance weiterhin BLOCKED; kein Merge, kein Release, keine persoenliche Endabnahme.
+
+**Naechste Implementierung:** 15 Profilregressionen und beide Langzeit-Browserjobs auf dem neuen HEAD kontrollieren, die Differenzen-Korrelationen aus den neuen Logs auswerten und anschliessend wiederholte Messungen auf vergleichbarer Umgebung vorbereiten. Die 175/200-%-Langzeitvergroesserung und die weiteren offenen Pflichten bleiben getrennt.
