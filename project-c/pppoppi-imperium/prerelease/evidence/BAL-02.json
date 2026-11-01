@@ -8,11 +8,18 @@
   "ci_conclusion": "success",
   "game_engine": "V1.9.3",
   "scenario_runner": "V1.9.4",
-  "cases": ["passive_normal","active_normal","active_low_demand","active_low_price"],
+  "cases": [
+    "passive_normal",
+    "active_normal",
+    "active_low_demand",
+    "active_low_price"
+  ],
   "months_per_case": 36,
   "months": 144,
   "annual_snapshots": 12,
   "report_file": "project-c/pppoppi-imperium/SPIEL/evidence_v194/BALANCE_V194.json",
   "source_evidence": "Die zwei historischen und die aktuelle GitHub-CI reproduzierten die 144 Monate; auf dem Folge-PR prueft test_balance_report_v194.cjs auch Szenarionamen, Jahresbelege und nichtnegative Konten.",
-  "limits": "Geprueft ist die vorgegebene Laufzeit mit technischen Invarianten. Der menschliche Akteur folgt einer einfachen deterministischen Heuristik; weder Spielspass noch reale Gewinnchancen oder historisches Originalverhalten sind damit belegt."
+  "limits": "Geprueft ist die vorgegebene Laufzeit mit technischen Invarianten. Der menschliche Akteur folgt einer einfachen deterministischen Heuristik; weder Spielspass noch reale Gewinnchancen oder historisches Originalverhalten sind damit belegt.",
+  "ci_job_id": 121069143534,
+  "ci_step_name": "Wirtschaftliche Fachprüfungen"
 }
