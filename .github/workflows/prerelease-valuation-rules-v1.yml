@@ -1,0 +1,27 @@
+name: Projekt C – PPPOPPI-Bewertungsmodell V1, isolierte Negativtests
+on:
+  pull_request:
+    paths:
+      - 'project-c/pppoppi-imperium/quality_v194/valuation_rules_proposal_v1.cjs'
+      - 'project-c/pppoppi-imperium/quality_v194/test_valuation_rules_proposal_v1.cjs'
+      - 'project-c/pppoppi-imperium/quality_v194/VALUATION_RULES_PROPOSAL_20261101.md'
+      - '.github/workflows/prerelease-valuation-rules-v1.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  isolated-model-audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Modellsyntax und echte Engine-Snapshot-Bruecke
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check project-c/pppoppi-imperium/quality_v194/valuation_rules_proposal_v1.cjs
+          node --check project-c/pppoppi-imperium/quality_v194/test_valuation_rules_proposal_v1.cjs
+          node --test project-c/pppoppi-imperium/quality_v194/test_valuation_rules_proposal_v1.cjs
