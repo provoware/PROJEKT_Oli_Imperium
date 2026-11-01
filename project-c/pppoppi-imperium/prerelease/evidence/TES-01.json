@@ -38,5 +38,16 @@
   "human_parity_sha256": "e9cea8fd1e3320900a31c91bcda27d3400cd06a20cb2ebd26b648cb98f52524a",
   "additional_ci_hardening": "Im naechsten CI-Lauf wird auch die reparierte Vergleichsdatei aus dem isolierten Technikaufbau ausgefuehrt. Die unveraenderten Originaldateien im Ordner SPIEL bleiben unangetastet.",
   "limits": "Erfolg der sechs spezifischen Fachtestprogramme, keine vollstaendige End-to-End-Partie, Browserfreigabe, historische C64-Originaltreue oder Releasefreigabe.",
-  "ci_step_name": "Wirtschaftliche Fachprüfungen"
+  "ci_step_name": "Wirtschaftliche Fachprüfungen",
+  "ci_workflow_path": ".github/workflows/pppoppi-imperium-recovery.yml",
+  "ci_job_name": "check-source",
+  "ci_working_directory": "project-c/pppoppi-imperium/SPIEL",
+  "ci_expected_commands": [
+    "node test_fair_market_v161.cjs",
+    "node test_human_parity_v192.cjs",
+    "node test_logistics_ai_v193.cjs",
+    "node test_public_network_v171.cjs",
+    "node test_strategy_v192.cjs",
+    "node test_transport_v17.cjs"
+  ]
 }

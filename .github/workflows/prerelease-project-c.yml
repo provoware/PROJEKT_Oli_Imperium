@@ -35,6 +35,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: node project-c/pppoppi-imperium/prerelease/verify_ci_evidence.mjs
+      - name: CI-Workflow-Befehlsregressionen
+        run: node --test project-c/pppoppi-imperium/prerelease/test_ci_commands.mjs
+      - name: Historische CI-Befehle auf den belegten Commits verifizieren (harte Sperre)
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: node project-c/pppoppi-imperium/prerelease/verify_ci_commands.mjs
       - name: A/B-Forschungsvertrag und Grundprüfungen
         run: |
           python3 tools/validate_project.py

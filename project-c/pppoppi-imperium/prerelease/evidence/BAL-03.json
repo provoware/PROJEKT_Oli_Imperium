@@ -33,5 +33,7 @@
     "node analyze_stress_v194.cjs",
     "node ../quality_v194/test_stress_report_v194.cjs"
   ],
-  "ci_working_directory": "project-c/pppoppi-imperium/SPIEL"
+  "ci_working_directory": "project-c/pppoppi-imperium/SPIEL",
+  "ci_workflow_path": ".github/workflows/pppoppi-imperium-recovery.yml",
+  "ci_job_name": "check-source"
 }

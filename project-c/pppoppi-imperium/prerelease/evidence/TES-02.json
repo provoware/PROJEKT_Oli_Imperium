@@ -40,5 +40,12 @@
   },
   "total_scenario_months": 300,
   "limits": "Szenariogesteuerte technische Invarianten sind stabil, aber kein Beweis für ausbalanciertes Gameplay, Sieg-/Verlustbedingungen, echte menschliche Langzeitpartien oder C64-Originaltreue.",
-  "ci_step_name": "Wirtschaftliche Fachprüfungen"
+  "ci_step_name": "Wirtschaftliche Fachprüfungen",
+  "ci_workflow_path": ".github/workflows/pppoppi-imperium-recovery.yml",
+  "ci_job_name": "check-source",
+  "ci_working_directory": "project-c/pppoppi-imperium/SPIEL",
+  "ci_expected_commands": [
+    "node evaluate_balance_v194.cjs",
+    "node analyze_stress_v194.cjs"
+  ]
 }
