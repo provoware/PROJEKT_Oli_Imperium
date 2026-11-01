@@ -144,3 +144,14 @@ test('Schutz: mathematische Vorschläge sind keine C64-Spielregel oder Release',
   a.equal(r.ruleStatus,'DRAFT_ONLY');
   a.match(r.qualification,/independent proof/);
 });
+test('nach Ende der Nutzungsdauer darf kein weiterer Cent abgeschrieben werden',()=>{
+  for(const assetType of Object.keys(DURATION)){
+    const atEnd=dep(assetType,101,DURATION[assetType]);
+    const oneLater=dep(assetType,101,DURATION[assetType]+1);
+    const muchLater=dep(assetType,101,DURATION[assetType]+1000);
+    a.equal(atEnd.bookValueCent,0);
+    a.equal(oneLater.bookValueCent,0);
+    a.equal(oneLater.currentMonthDepreciationCent,0);
+    a.equal(muchLater.currentMonthDepreciationCent,0);
+  }
+});
