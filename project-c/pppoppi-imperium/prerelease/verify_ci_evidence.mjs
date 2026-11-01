@@ -4,6 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { auditMatrix } from './check.mjs';
+import { verifyPassSteps, fetchGitHubJobs } from './verify_ci_steps.mjs';
 
 const REPO = 'provoware/PROJEKT_Oli_Imperium';
 const PREFIX = 'project-c/pppoppi-imperium/prerelease/evidence/';
@@ -31,8 +32,12 @@ export function collectPassEvidence(matrix, readEvidence) {
       }
       const runId = Number(match[1]);
       if (!Number.isSafeInteger(runId)) throw new Error(gate.id + ': ungueltige CI-Laufkennung');
+      if (!Number.isSafeInteger(proof.ci_job_id) || proof.ci_job_id <= 0 ||
+          typeof proof.ci_step_name !== 'string' || !proof.ci_step_name.trim())
+        throw new Error(gate.id + ': fehlende Job-/Schrittzuordnung');
       items.push({gate:gate.id, runId, url:proof.ci_run,
-        commit:proof.commit, event:proof.ci_event});
+        commit:proof.commit, event:proof.ci_event,
+        jobId:proof.ci_job_id, stepName:proof.ci_step_name});
     }
   }
   return items;
@@ -59,7 +64,8 @@ export async function verifyPassEvidence(matrix, readEvidence, getRun) {
       if (!cache.has(item.runId)) cache.set(item.runId, await getRun(item.runId));
       const failures = validateRun(item, cache.get(item.runId));
       if (failures.length) errors.push(item.gate + ': Lauf ' + item.runId + ': ' + failures.join(', '));
-      else verified.push({gate:item.gate, runId:item.runId, commit:item.commit});
+      else verified.push({gate:item.gate, runId:item.runId, commit:item.commit,
+        jobId:item.jobId, stepName:item.stepName});
     } catch (error) {
       errors.push(item.gate + ': Lauf ' + item.runId + ': API-Pruefung nicht moeglich (' + error.message + ')');
     }
@@ -97,7 +103,11 @@ async function main() {
   for (const entry of result.verified) console.log('PASS ' + entry.gate + ': GitHub-Lauf ' + entry.runId + ', Commit ' + entry.commit);
   for (const error of result.errors) console.error('FAIL ' + error);
   console.log('GitHub-Live-Nachweise: ' + result.verified.length + '/' + result.total + ' bestaetigt');
-  if (!result.ok) process.exitCode = 1;
+  const steps = await verifyPassSteps(result.verified, fetchGitHubJobs);
+  for (const entry of steps.verified) console.log('PASS ' + entry.gate + ': Job ' + entry.jobId + ', Schritt ' + entry.stepName);
+  for (const error of steps.errors) console.error('FAIL ' + error);
+  console.log('GitHub-Jobschritte: ' + steps.verified.length + '/' + result.total + ' bestaetigt');
+  if (!result.ok || !steps.ok || steps.verified.length !== result.total) process.exitCode = 1;
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
