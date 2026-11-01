@@ -105,5 +105,35 @@ class PerformanceProfileTests(unittest.TestCase):
             summarize_campaign_phase_timing([1], phases)
 
 
+    def test_state_growth_tracks_observed_size(self):
+        from performance_profile_v194 import summarize_campaign_state_growth
+        result = summarize_campaign_state_growth([1, 2, 3, 4], [100, 200, 300, 400])
+        self.assertEqual(result["sampled_months"], 4)
+        self.assertEqual(result["first_month_state_bytes"], 100)
+        self.assertEqual(result["last_month_state_bytes"], 400)
+        self.assertEqual(result["max_state_bytes"], 400)
+        self.assertEqual(result["last_vs_first_quarter_size_ratio"], 4.0)
+        self.assertEqual(result["duration_vs_state_size_pearson_r"], 1.0)
+
+    def test_state_growth_constant_size_has_no_correlation(self):
+        from performance_profile_v194 import summarize_campaign_state_growth
+        result = summarize_campaign_state_growth([1, 2, 3, 4], [100] * 4)
+        self.assertIsNone(result["duration_vs_state_size_pearson_r"])
+        self.assertEqual(result["last_vs_first_quarter_size_ratio"], 1.0)
+
+    def test_state_growth_rejects_incomplete_or_invalid_samples(self):
+        from performance_profile_v194 import summarize_campaign_state_growth
+        for durations, sizes in (
+            ([1, 2, 3], [100, 200, 300]),
+            ([1, 2, 3, 4], [100, 200, 300]),
+            ([1, 2, 3, 4], [100, 200, 300, True]),
+            ([1, 2, 3, 4], [100, 200, 300, -1]),
+            ([1, 2, math.nan, 4], [100, 200, 300, 400]),
+        ):
+            with self.subTest(durations=durations, sizes=sizes):
+                with self.assertRaises(ValueError):
+                    summarize_campaign_state_growth(durations, sizes)
+
+
 if __name__ == "__main__":
     unittest.main()
