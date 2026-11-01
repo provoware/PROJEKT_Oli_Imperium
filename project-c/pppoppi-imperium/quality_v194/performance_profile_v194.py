@@ -15,6 +15,11 @@ def summarize_month_durations(durations):
     ordered = sorted(values)
     count = len(values)
     halfway = count // 2
+    quarter = count // 4
+    first_half_mean = statistics.mean(values[:halfway or count])
+    second_half_mean = statistics.mean(values[halfway:]) if halfway else None
+    first_quarter_mean = statistics.mean(values[:quarter]) if quarter else None
+    last_quarter_mean = statistics.mean(values[-quarter:]) if quarter else None
 
     def rounded(value):
         return round(value, 3)
@@ -29,8 +34,12 @@ def summarize_month_durations(durations):
         "month_step_p95_seconds": nearest_rank(0.95),
         "month_step_p99_seconds": nearest_rank(0.99),
         "month_step_max_seconds": rounded(ordered[-1]),
-        "first_half_mean_seconds": rounded(statistics.mean(values[:halfway or count])),
-        "second_half_mean_seconds": rounded(statistics.mean(values[halfway:])) if halfway else None,
+        "first_half_mean_seconds": rounded(first_half_mean),
+        "second_half_mean_seconds": rounded(second_half_mean) if second_half_mean is not None else None,
+        "second_half_vs_first_half_ratio": rounded(second_half_mean / first_half_mean) if second_half_mean is not None and first_half_mean > 0 else None,
+        "first_quarter_mean_seconds": rounded(first_quarter_mean) if first_quarter_mean is not None else None,
+        "last_quarter_mean_seconds": rounded(last_quarter_mean) if last_quarter_mean is not None else None,
+        "last_quarter_vs_first_quarter_ratio": rounded(last_quarter_mean / first_quarter_mean) if first_quarter_mean is not None and first_quarter_mean > 0 else None,
         "last_10_mean_seconds": rounded(statistics.mean(values[-10:])),
         "measurement_scope": "browser month steps including midpoint reload; excludes build and final archive reload",
     }
