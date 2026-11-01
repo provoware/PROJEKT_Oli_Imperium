@@ -16,18 +16,29 @@
   "balance": {
     "script": "SPIEL/evaluate_balance_v194.cjs",
     "evidence": "SPIEL/evidence_v194/BALANCE_V194.json",
-    "cases": ["passive_normal","active_normal","active_low_demand","active_low_price"],
+    "cases": [
+      "passive_normal",
+      "active_normal",
+      "active_low_demand",
+      "active_low_price"
+    ],
     "case_count": 4,
     "months": 144
   },
   "stress": {
     "script": "SPIEL/analyze_stress_v194.cjs",
     "evidence": "SPIEL/evidence_v193/KRISEN_LANGZEIT_V194.json",
-    "cases": ["Basis mit drei KI-Firmen","Monatlicher Nachfrageeinbruch","Preisverfall und Ressourcenknappheit","Erzwungener Forderungsausfall und Sanierung"],
+    "cases": [
+      "Basis mit drei KI-Firmen",
+      "Monatlicher Nachfrageeinbruch",
+      "Preisverfall und Ressourcenknappheit",
+      "Erzwungener Forderungsausfall und Sanierung"
+    ],
     "case_count": 4,
     "months": 156,
     "months_completed": 156
   },
   "total_scenario_months": 300,
-  "limits": "Szenariogesteuerte technische Invarianten sind stabil, aber kein Beweis für ausbalanciertes Gameplay, Sieg-/Verlustbedingungen, echte menschliche Langzeitpartien oder C64-Originaltreue."
+  "limits": "Szenariogesteuerte technische Invarianten sind stabil, aber kein Beweis für ausbalanciertes Gameplay, Sieg-/Verlustbedingungen, echte menschliche Langzeitpartien oder C64-Originaltreue.",
+  "ci_step_name": "Wirtschaftliche Fachprüfungen"
 }
