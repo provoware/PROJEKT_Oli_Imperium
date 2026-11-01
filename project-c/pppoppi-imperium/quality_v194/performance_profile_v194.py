@@ -109,6 +109,13 @@ def summarize_campaign_state_growth(durations, state_bytes):
     correlation = None
     if statistics.pstdev(values) > 0 and statistics.pstdev(state_bytes) > 0:
         correlation = round(statistics.correlation(values, state_bytes), 3)
+    # First differences reduce a shared linear time trend. A correlation here
+    # remains descriptive: it is not evidence of a causal relationship.
+    duration_changes = [b - a for a, b in zip(values, values[1:])]
+    size_changes = [b - a for a, b in zip(state_bytes, state_bytes[1:])]
+    change_correlation = None
+    if statistics.pstdev(duration_changes) > 0 and statistics.pstdev(size_changes) > 0:
+        change_correlation = round(statistics.correlation(duration_changes, size_changes), 3)
     return {
         "sampled_months": len(values),
         "first_month_state_bytes": state_bytes[0],
@@ -118,6 +125,7 @@ def summarize_campaign_state_growth(durations, state_bytes):
         "last_quarter_mean_bytes": round(last_mean, 1),
         "last_vs_first_quarter_size_ratio": round(last_mean / first_mean, 3),
         "duration_vs_state_size_pearson_r": correlation,
+        "month_to_month_change_pearson_r": change_correlation,
         "measurement_scope": (
             "UTF-8 JSON bytes of monthly REPORT state, measured outside month-step timer; "
             "correlation is not causation"
