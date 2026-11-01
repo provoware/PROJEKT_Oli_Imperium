@@ -284,7 +284,7 @@ def audit_session(page, worker, zoom, download_dir):
     exported_bytes = saved.read_bytes()
     malformed = download_dir / ("malformed-" + label + ".json")
     malformed.write_text('{"schema":', encoding="utf-8")
-    page.evaluate("NeoEconomy.open('startup')")
+    page.evaluate("NeoEconomy.open('computer')")
     keyboard_button(page, '#dialogContent [data-ui="session-import"]',
                     label + "/Beschaedigten Import pruefen")
     with ready_filechooser(page, timeout=5000) as rejected_event:
