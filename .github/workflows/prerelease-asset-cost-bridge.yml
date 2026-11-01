@@ -4,6 +4,9 @@ on:
     paths:
       - 'project-c/pppoppi-imperium/quality_v194/test_asset_cost_bridge_v194.cjs'
       - 'project-c/pppoppi-imperium/quality_v194/ASSET_COST_BRIDGE_20261031.md'
+      - 'project-c/pppoppi-imperium/quality_v194/valuation_explicit_v194.cjs'
+      - 'project-c/pppoppi-imperium/quality_v194/test_valuation_explicit_v194.cjs'
+      - 'project-c/pppoppi-imperium/quality_v194/VALUATION_EXPLICIT_20261101.md'
       - 'project-c/pppoppi-imperium/prerelease/matrix.json'
       - '.github/workflows/prerelease-asset-cost-bridge.yml'
   workflow_dispatch:
@@ -39,6 +42,13 @@ jobs:
           assert.ok(r.summary.totalSalesCent>0);
           assert.equal(r.prereleaseGate,'BLOCKED');
           NODE
+      - name: Explizite Bilanzpositionen – Sicherheits- und Negativtests
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check project-c/pppoppi-imperium/quality_v194/valuation_explicit_v194.cjs
+          node --check project-c/pppoppi-imperium/quality_v194/test_valuation_explicit_v194.cjs
+          node --test project-c/pppoppi-imperium/quality_v194/test_valuation_explicit_v194.cjs
       - name: Reproduzierbaren Nachweis sichern
         if: always()
         uses: actions/upload-artifact@v4
