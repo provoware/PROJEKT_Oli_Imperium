@@ -1,0 +1,32 @@
+name: Diagnose – echter Chromium-Dateipicker bei 175 und 200 Prozent
+on:
+  pull_request:
+    paths:
+      - 'project-c/pppoppi-imperium/quality_v194/diagnose_native_picker_strategies_v194.py'
+      - 'project-c/pppoppi-imperium/quality_v194/PICKER_CAUSAL_DIAGNOSIS_20261101.md'
+      - '.github/workflows/diagnose-native-picker-20261101.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  picker-a-b:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Technische Syntax
+        run: python3 -m py_compile project-c/pppoppi-imperium/quality_v194/diagnose_native_picker_strategies_v194.py
+      - name: Chromium mit echten Systempaketen und Startprobe installieren
+        run: bash project-c/pppoppi-imperium/quality_v194/install_chromium_ci.sh
+      - name: 24 echte Tastatur-Dateiauswahlen vergleichen (FAIL bleibt FAIL)
+        run: python3 project-c/pppoppi-imperium/quality_v194/diagnose_native_picker_strategies_v194.py
+      - name: Alle Einzelversuche sichern – auch bei Fehler
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: native-picker-ab-evidence
+          path: native_picker_diagnostic.json
+          if-no-files-found: warn
