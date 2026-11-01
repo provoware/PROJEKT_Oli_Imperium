@@ -49,7 +49,7 @@ export function auditMatrix(data, readEvidence = () => null, mode = "schema") {
     if (g.status === "blocked" || g.status === "fail") {
       if (typeof g.blocker !== "string" || !g.blocker.trim()) errors.push(`${id}: Blockadegrund fehlt.`);
     }
-    if (g.status !== "pass" && typeof g.next !== "string") errors.push(`${id}: naechste Handlung fehlt.`);
+    if (g.status !== "pass" && (typeof g.next !== "string" || !g.next.trim())) errors.push(`${id}: naechste Handlung fehlt.`);
     if (g.status === "pass") {
       if (!Array.isArray(g.evidence) || g.evidence.length === 0) errors.push(`${id}: PASS ohne Nachweis.`);
       else for (const p of g.evidence) {
@@ -57,7 +57,17 @@ export function auditMatrix(data, readEvidence = () => null, mode = "schema") {
           errors.push(`${id}: unzulaessiger Nachweispfad.`); continue;
         }
         const e = readEvidence(p);
-        if (!e || e.gate_id !== id || e.result !== "PASS" || !/^[0-9a-f]{40}$/.test(e.commit || "") || typeof e.command !== "string" || !e.command.trim() || typeof e.date !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(e.date)) errors.push(`${id}: Nachweis fehlt oder ist ungueltig.`);
+        const validDate = typeof e?.date === "string" && /^\d{4}-\d{2}-\d{2}$/.test(e.date) &&
+          !Number.isNaN(Date.parse(e.date)) && new Date(e.date).toISOString().slice(0, 10) === e.date;
+        // Nur ein CI-Link aus dem eigenen Repository ist ein formal zulaessiger Technikbeleg.
+        // Die tatsaechliche GitHub-Ausfuehrung muss weiterhin unabhaengig geprueft werden.
+        const validCi = g.stage !== "technical" ||
+          (typeof e?.ci_run === "string" &&
+           /^https:\/\/github\.com\/provoware\/PROJEKT_Oli_Imperium\/actions\/runs\/[1-9]\d*$/.test(e.ci_run) &&
+           (e.ci_conclusion === undefined || e.ci_conclusion === "success"));
+        if (!e || e.gate_id !== id || e.result !== "PASS" || !/^[0-9a-f]{40}$/.test(e.commit || "") ||
+            typeof e.command !== "string" || !e.command.trim() || !validDate || !validCi)
+          errors.push(`${id}: Nachweis fehlt oder ist ungueltig.`);
       }
     }
     if (g.stage === "technical" && g.status !== "pass") blockers.push(`${id}: ${g.status}`);
