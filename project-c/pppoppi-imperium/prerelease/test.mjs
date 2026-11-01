@@ -79,3 +79,19 @@ test('Alle bestehenden technischen PASS-Nachweise nennen explizit CI-Erfolg',()=
     }
   }
 });
+
+// Regression: Historische CI-Lauf-Links duerfen keine spaeter eingefuehrten Berichtstests belegen.
+test('BAL-02 und BAL-03 zitieren den nachweislich beide Berichtstests enthaltenden CI-HEAD',()=>{
+  for (const id of ['BAL-02','BAL-03']) {
+    const gate=source.gates.find(g=>g.id===id);
+    const proof=readEvidence(gate.evidence[0]);
+    assert.equal(proof.commit,'7ecbd3654e381702e25a59230ed62a318b3784d5');
+    assert.equal(proof.ci_run,'https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41285485847');
+    assert.equal(proof.ci_job_id,124785795949);
+    assert.equal(proof.ci_event,'pull_request');
+    assert.equal(proof.ci_working_directory,'project-c/pppoppi-imperium/SPIEL');
+    assert.equal(proof.ci_expected_commands.length,2);
+    assert.ok(proof.command.includes(proof.ci_expected_commands[0]));
+    assert.ok(proof.command.includes(proof.ci_expected_commands[1]));
+  }
+});
