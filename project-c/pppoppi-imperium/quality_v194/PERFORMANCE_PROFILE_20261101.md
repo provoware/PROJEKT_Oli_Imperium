@@ -72,3 +72,31 @@ Keine Aenderung an Produktcode, Spielregeln, Speicherformaten, Hauptzweig oder f
 **CI dieses neuen Pakets:** Nach dem Commit erneut auszufuehren. Bis dahin **UNVERIFIED**; keine vorweggenommene Erfolgsmeldung. **Pflichtmatrix bleibt 6 PASS / 39 BLOCKED / 4 OPEN / 3 DEFERRED (52).**
 
 **Naechste Umsetzung:** (1) GitHub-Regressionen und beide Browserkampagnen auf dem neuen HEAD auswerten, (2) Halbzeit-I/O aus echten Laufprotokollen quantifizieren und bei Bedarf korrigieren, (3) wiederholte Leistungsprofile mit gleicher Umgebung vergleichen. Kein Merge, kein Release, keine persoenliche Endabnahme.
+
+
+## Nachtrag 01.11.2026, 18:38 MEZ – I/O-Auswertung und Zustandsgroesse als unabhaengige Beobachtung
+
+**Nachweis vor diesem Folgepaket:** [GitHub-Kampagnenlauf #41327064539](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41327064539), HEAD 4b337634d311a2128db921ff66719a10dde37124, **4/4 Jobs SUCCESS** (darunter **10/10** Profilregressionen und 24/120/240 Browsermonate). Die weiteren sieben Workflow-Laeufe auf demselben HEAD endeten mit sechs SUCCESS und einem erwarteten FAIL der harten Vorrelease-Sperre. Die Werte stammen aus den tatsaechlichen Jobprotokollen der beiden Langzeit-Browserjobs, nicht aus Schaetzungen.
+
+| GitHub-Beobachtung (ein Durchlauf pro Dauer) | 120 Monate | 240 Monate |
+|---|---:|---:|
+| Summe aller Monatsaktionen inkl. Halbzeit-I/O | 248,643 s | 824,605 s |
+| Halbzeit Export + Neustart + Import | 0,783 s | 1,162 s |
+| Anteil Halbzeit-I/O an Monatsschritten | ca. 0,315 % | ca. 0,141 % |
+| Rohes Spaet/Frueh-Verhaeltnis | 2,610 | 2,335 |
+| Nach Abzug der Halbzeit-I/O | 2,640 | 2,346 |
+| Archiv Export + Neustart + Import (ausserhalb Monatsschritten) | 1,863 s | 2,054 s |
+| Ende-zu-Ende inkl. Aufbau/Archivkontrolle | 253,183 s | 829,437 s |
+
+**Befund:** Die getrennt gemessenen Halbzeit-I/O-Phasen erklaeren die Verlangsamung innerhalb dieser zwei Laeufe nicht: Auch nach Abzug liegt die zweite Spielhaelfte bei mehr als dem Doppelten der ersten. Das belegt **keine Ursache** und noch keine reproduzierbare Leistungsgrenze; Unterschiede zu aelteren Laeufen koennen durch GitHub-Maschinen und Spielsituationen entstehen.
+
+**Neues unabhaengiges Pflichtpaket:** Der Langzeit-Browserpruefer erfasst nach jedem Monat ausserhalb des Monats-Zeitfensters die UTF-8-JSON-Bytezahl des bereits vorhandenen REPORT-Zustands. Das neue state_size_profile protokolliert erste/letzte Monatsgroesse, Maximum, erstes/letztes Viertel, Groessenverhaeltnis und eine deskriptive Pearson-Korrelation mit der Monatsdauer (bei konstanten Werten null). Die Funktion lehnt fehlende, nichtpositive oder ungueltige Groessen und unvollstaendige Reihen ab. Drei neue deterministische Regressionen ergaenzen die zehn bisherigen; der bestehende Kampagnen-Workflow fordert jetzt **13 Tests**. Die vollstaendigen Spielzustaende werden dafuer nicht zusaetzlich gespeichert oder in CI-Protokolle geschrieben. Keine Aenderung an Wirtschaftsregeln, Spielstandformaten oder Produktdateien.
+
+**Status der neuen Implementierung:** Drei isolierte Python-Funktionspruefungen lokal PASS vor dem GitHub-Schreibvorgang; **vollstaendiger GitHub-CI-Nachweis des neuen HEAD bis zum tatsaechlichen Abschluss PENDING**, nicht vorzeitig PASS. Die bestehende Vorrelease-Pflichtmatrix bleibt **6 PASS / 39 BLOCKED / 4 OPEN / 3 DEFERRED = 52**; insbesondere Performance weiterhin BLOCKED.
+
+**Naechste drei technische Schritte:**
+1. Neue 13 Profilregressionen und 120/240-Monats-Browserjobs auf dem endgueltigen HEAD kontrollieren; echte Fehler korrigieren.
+2. Beobachtete Zustandsgroessen und deren Korrelation mit Monatsdauer aus den GitHub-Protokollen vergleichen; Korrelation nicht als Kausalitaet ausgeben.
+3. Mehrere gleich konfigurierte Messlaeufe und Zielwerte definieren; erst danach ein reproduzierbares Performance-Gate vorschlagen.
+
+Kein Merge, kein Release, keine Benutzer- oder Kubuntu-Endabnahme. Der getrennte Layout-PR #154 und die Finanz-PR #150 bleiben unberuehrt.
