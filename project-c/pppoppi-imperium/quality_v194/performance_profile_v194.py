@@ -90,3 +90,36 @@ def summarize_campaign_phase_timing(durations, phase_timings):
         "month_step_profile_without_midpoint_io": normalized_profile,
         "measurement_scope": "midpoint I/O inside month step; archive I/O outside month steps",
     }
+
+
+def summarize_campaign_state_growth(durations, state_bytes):
+    """Describe state-size growth alongside timings, without claiming causation.
+
+    Each state size is a UTF-8 JSON byte count measured outside the month timer.
+    This is observational instrumentation, never a performance release gate.
+    """
+    values = [float(value) for value in durations]
+    if len(values) < 4 or any(not math.isfinite(v) or v < 0 for v in values):
+        raise ValueError("expected at least four finite nonnegative month durations")
+    if len(state_bytes) != len(values) or any(type(n) is not int or n <= 0 for n in state_bytes):
+        raise ValueError("expected one positive integer byte count per month")
+    quarter = len(values) // 4
+    first_mean = statistics.mean(state_bytes[:quarter])
+    last_mean = statistics.mean(state_bytes[-quarter:])
+    correlation = None
+    if statistics.pstdev(values) > 0 and statistics.pstdev(state_bytes) > 0:
+        correlation = round(statistics.correlation(values, state_bytes), 3)
+    return {
+        "sampled_months": len(values),
+        "first_month_state_bytes": state_bytes[0],
+        "last_month_state_bytes": state_bytes[-1],
+        "max_state_bytes": max(state_bytes),
+        "first_quarter_mean_bytes": round(first_mean, 1),
+        "last_quarter_mean_bytes": round(last_mean, 1),
+        "last_vs_first_quarter_size_ratio": round(last_mean / first_mean, 3),
+        "duration_vs_state_size_pearson_r": correlation,
+        "measurement_scope": (
+            "UTF-8 JSON bytes of monthly REPORT state, measured outside month-step timer; "
+            "correlation is not causation"
+        ),
+    }
