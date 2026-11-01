@@ -34,7 +34,7 @@ jobs:
         run: node --check project-c/pppoppi-imperium/quality_v194/test_endstate_long_campaign_v194.cjs
       - name: Fuenfzehn Profilregressionen inklusive Trendkontrolle und Neustartmessung
         run: python3 -m unittest discover -s project-c/pppoppi-imperium/quality_v194 -p 'test_performance_profile_v194.py' -v
-      - name: Acht strikte Wiederholungsmessungs-Regressionen
+      - name: Elf strikte Wiederholungsmessungs-Regressionen einschliesslich Datenintegritaet
         run: python3 -m unittest discover -s project-c/pppoppi-imperium/quality_v194 -p 'test_compare_campaign_repeats_v194.py' -v
       - name: Bisherige 12-Monats-Enginepruefung als Referenz
         run: node --test project-c/pppoppi-imperium/quality_v194/test_endstate_live_v194.cjs
