@@ -14,6 +14,7 @@ def sample(months=120):
         "human_turns": months * 4, "chromium_processes": 3,
         "release_gate": "BLOCKED", "performance_release_gate": "BLOCKED: no agreed threshold",
         "retained_reports": min(months, 120), "natural_rescues": 2,
+        "historical_c64_verified": False,
         "end_to_end_seconds": 110.0,
         "month_step_profile": {
             "measured_months": months, "month_steps_total_seconds": 100.0,
@@ -103,6 +104,38 @@ class CampaignRepeatTests(unittest.TestCase):
             path.write_text(line + line, encoding="utf-8")
             with self.assertRaises(ValueError):
                 read_campaign_log(path)
+
+
+    def test_rejects_false_precision_and_unverified_history(self):
+        for key, value in (("months", 120.0), ("human_turns", 480.0),
+                           ("chromium_processes", True), ("retained_reports", 120.0),
+                           ("natural_rescues", -1), ("natural_rescues", "4"),
+                           ("natural_rescues", 1201), ("historical_c64_verified", True)):
+            with self.subTest(key=key, value=value):
+                bad = sample()
+                bad[key] = value
+                with self.assertRaises(ValueError):
+                    compare(sample(), bad, 120)
+
+    def test_rejects_impossible_percentile_order(self):
+        for field, value in (("month_step_median_seconds", 1.4),
+                             ("month_step_p95_seconds", 1.6),
+                             ("month_step_p99_seconds", 2.1),
+                             ("month_step_max_seconds", 101.0)):
+            with self.subTest(field=field):
+                bad = sample()
+                bad["month_step_profile"][field] = value
+                with self.assertRaises(ValueError):
+                    compare(sample(), bad, 120)
+
+    def test_different_rescue_counts_are_visible_not_release_approval(self):
+        second = sample(240)
+        second["natural_rescues"] = 4
+        result = compare(sample(240), second, 240)
+        self.assertEqual(result["natural_rescues"], [2, 4])
+        self.assertFalse(result["natural_rescue_counts_match"])
+        self.assertIn("do not prove equal game states", result["comparison_scope"])
+        self.assertTrue(result["release_gate"].startswith("BLOCKED"))
 
 
 if __name__ == "__main__":
