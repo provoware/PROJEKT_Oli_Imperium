@@ -4,7 +4,7 @@ from types import SimpleNamespace
 from unittest import TestCase, main
 from unittest.mock import Mock, patch
 
-from campaign_native_import_v194 import import_saved_session
+from campaign_native_import_v194 import import_saved_session, require_two_imports
 
 
 class NativeImportTests(TestCase):
@@ -66,6 +66,24 @@ class NativeImportTests(TestCase):
                 import_saved_session(self.page, "save.json", native=True)
         chooser.assert_not_called()
         self.page.keyboard.press.assert_not_called()
+
+
+class ImportEvidenceTests(TestCase):
+    def test_two_native_imports_are_required(self):
+        self.assertEqual(require_two_imports(
+            ["NATIVE_FILECHOOSER", "NATIVE_FILECHOOSER"], native=True),
+            "NATIVE_FILECHOOSER")
+        for paths in ([], ["NATIVE_FILECHOOSER"],
+                      ["NATIVE_FILECHOOSER", "DIRECT_INPUT"],
+                      ["NATIVE_FILECHOOSER", "NATIVE_FILECHOOSER", "NATIVE_FILECHOOSER"]):
+            with self.subTest(paths=paths), self.assertRaises(AssertionError):
+                require_two_imports(paths, native=True)
+
+    def test_direct_path_cannot_be_misreported_as_native(self):
+        self.assertEqual(require_two_imports(
+            ["DIRECT_INPUT", "DIRECT_INPUT"], native=False), "DIRECT_INPUT")
+        with self.assertRaises(AssertionError):
+            require_two_imports(["DIRECT_INPUT", "NATIVE_FILECHOOSER"], native=False)
 
 
 if __name__ == "__main__":
