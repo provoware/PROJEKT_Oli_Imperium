@@ -41,3 +41,14 @@ def import_saved_session(page, filename, *, native=False):
         raise AssertionError("Kein nativer Datei-Auswahldialog")
     pending.value.set_files(str(filename))
     return "NATIVE_FILECHOOSER"
+
+
+def require_two_imports(import_paths, *, native):
+    """Require two independent imports through the declared path; never fall back."""
+    expected = "NATIVE_FILECHOOSER" if native else "DIRECT_INPUT"
+    if import_paths != [expected, expected]:
+        raise AssertionError(
+            "Zwei unabhaengige Sitzungsimporte erforderlich: "
+            f"erwartet {[expected, expected]!r}, erhalten {import_paths!r}"
+        )
+    return expected
