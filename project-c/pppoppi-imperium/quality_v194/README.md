@@ -135,3 +135,7 @@ Die [strenge Minispiel-Tastaturpruefung](MINIGAME_KEYBOARD_GATE_20261102.md) kon
 ## Tastatur-Fokusring ohne Verzögerung – Teilkorrektur 02.11.2026
 
 [Browser-CI #41492796482](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41492796482) zeigte bei echtem Tab auf `#startGame` eine berechnete Outline von 0px trotz `:focus-visible`. Im abgeleiteten Technikaufbau wird deshalb die Outline der Toolbar nicht mehr über `transition:.16s` animiert. Ein isolierter Chromium-Vergleich belegt die sofortige 3px-Outline; die vollständigen GitHub-Browserprüfungen auf dem neuen HEAD bleiben bis zum Abschluss **PENDING**. [Technischer Nachweis und offene Gates](FOCUS_TRANSITION_20261102.md). Keine Änderung am Spieloriginal, keine Freigabe.
+
+## BED-03 – Bohrdruckregler per Tastatur (02.11.2026)
+
+[Technischer Pflichtbericht](DRILL_PRESSURE_KEYBOARD_20261102.md): Im abgeleiteten Technikaufbau sichtbarer Fokusring fuer den Druckregler, echte Tab-/Geometrie-/Verdeckungspruefung vor Pfeiltasten, Fokusnachkontrolle und fuenf neue Negativtests. GitHub-CI und echte Browserzoompruefungen auf endgueltigem HEAD muessen separat bestaetigt werden. **Matrix unveraendert 6/52 PASS; kein Merge, kein Release.**
