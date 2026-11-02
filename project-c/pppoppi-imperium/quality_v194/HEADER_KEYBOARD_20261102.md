@@ -37,3 +37,13 @@ python3 project-c/pppoppi-imperium/quality_v194/test_browser_header_keyboard_v19
 **Freigabesperre:** Die persoenliche Sichtpruefung und der Kubuntu-Praxistest erfolgen erst nach allen technischen Pflichten und eingefrorenem Kandidaten. Kein automatischer Merge und kein Release.
 
 **Naechste drei Schritte:** (1) neue drei CI-Jobs auf endgueltigem HEAD pruefen und echte Fehler korrigieren; (2) #motionBtn, weitere Kopfzeilenaktionen und Minispiel-Dialoge in echte Tastaturpfade aufnehmen; (3) Performance-, Archiv-, Bewertungs- und Rechtepflichten getrennt weiterbearbeiten.
+
+## Erweiterung 02.11.2026 – Escape und Fokus-Rueckkehr bei echtem Zoom
+
+**Ausgangsnachweis:** [CI #41445779151](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41445779151) auf `8df37ba10d9f6051fc0d8d65263f73c866a1a223`: **3/3 PASS** (Unit, Chromium 175 %, Chromium 200 %). Der parallele [integrierte Vorrelease-Gate #41445779037](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41445779037) ist **erwartungsgemaess BLOCKED**: `check.mjs --technical` meldet 6 PASS, 39 BLOCKED, 4 OPEN, 3 DEFERRED; das ist keine neue Tastatur-Regression und darf nicht umgangen werden.
+
+**Neues Teilpaket:** Hilfedialog per echtem Tab/Enter oeffnen, mit **Escape** schliessen und den wiederhergestellten sichtbaren Tastaturfokus am urspruenglichen Hilfe-Schalter pruefen. Danach erneut mit Tab/Enter oeffnen, per Tab/Enter am Dialog-Schliessen-Schalter schliessen und den Fokus nochmals pruefen. Drei neue isolierte Negativ-/Regressionstests sichern die Pruefung gegen falschen, unsichtbaren oder fehlenden Rueckkehrfokus ab. Kein `locator.focus()`, kein direktes `dialog.close()` durch den Test, keine Aenderung am geschuetzten Spielkern. Beide Zoomstufen 175/200 % bei 800x600 bleiben verpflichtend.
+
+**Nachweisstatus:** Code und Tests auf PR #155 uebertragen; der neue CI-Nachweis auf dem endgueltigen Dokumentations-HEAD ist **PENDING**. Keine PASS-Aussage fuer die neuen Browserfaelle vor deren Ausfuehrung. **BED-02/03 bleiben BLOCKED**, da weitere Dialog- und Minispielpfade fehlen. Matrix unveraendert **6/52 PASS**; persoenliche Endabnahme zuletzt, kein Merge/Release.
+
+**Naechste Pflichtarbeit:** (1) Drei Kopfzeilen-CI-Jobs auf finalem HEAD auswerten und Fehler korrigieren; (2) die verbleibenden Modal- und Minispielaktionen mit realen Tastaturpfaden und unveraendertem Spielstand absichern; (3) Performance-/Speicher-/Rechte-Gates unabhaengig weiterbearbeiten.
