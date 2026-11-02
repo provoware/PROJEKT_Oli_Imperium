@@ -140,6 +140,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - name: Bohrregler-Gate vor Chromium-Installation strukturell pruefen
+        run: python3 -m unittest discover -s project-c/pppoppi-imperium/quality_v194 -p 'test_native_zoom_drill_gate_contract_v194.py' -v
       - name: Chromium-Testumgebung installieren (begrenzt, Startprobe)
         run: bash project-c/pppoppi-imperium/quality_v194/install_chromium_ci.sh
       - name: Bereitschaftsgrenze mit Fehler- und Versionsproben pruefen
