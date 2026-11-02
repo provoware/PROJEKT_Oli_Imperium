@@ -30,3 +30,7 @@ Der bestehende [GitHub-Workflow](https://github.com/provoware/PROJEKT_Oli_Imperi
 1. Neuen GitHub-Job auf **dem neuen HEAD** pruefen; bei FAIL gezielt korrigieren.
 2. Unterbrechung nach spaeteren Minispielphasen und nativen 175/200-%-Zoom getrennt pruefen.
 3. Verbleibende technische, rechtliche und historische Freigabepflichten ohne voreilige Endabnahme abarbeiten.
+
+## Ausgefuehrter Zwischenstand
+
+[GitHub-CI #41538410505](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41538410505) auf `92f7424dce34e6ad567fe7fdde88b61b77e6c8ee`: **PASS** fuer Python-Syntax und vollstaendige echte Chromium-Kampagne. Log meldet `chromium_processes=4`, `session_exports=3`, `drill_stages=3`, `months=12`, `reports=12`, keine JavaScript-Fehler oder HTTP-Anfragen. Nach diesem Lauf wurde ausschliesslich die missverstaendliche Beschriftung des Archivtests von drittem auf vierten Prozess berichtigt; **erneute CI auf dem letzten HEAD erforderlich**.

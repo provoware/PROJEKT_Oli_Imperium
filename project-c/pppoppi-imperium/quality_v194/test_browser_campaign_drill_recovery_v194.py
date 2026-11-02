@@ -190,7 +190,7 @@ def main():
                 page = start()
                 page.locator("#loadSessionFile").set_input_files(str(archived))
                 page.wait_for_function("NeoEconomy.endstate.status()==='finished'")
-                check("Archiv nach drittem Prozess unveraendert",
+                check("Archiv nach viertem Prozess unveraendert",
                       state(page) == final
                       and page.evaluate("NeoEconomy.endstate.archive()") == archive)
                 page.evaluate("NeoEconomy.send('NEXT_MONTH')")
