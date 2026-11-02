@@ -114,3 +114,8 @@ Der neue Pruefer verlangt zusaetzlich zu echtem Tab-Fokus und `:focus-visible` e
 ## Nachtrag 02.11.2026 – alle 14 Tab-Ziele und nativer Dateiimport
 
 Die CSS-Fokusmarkierung wird jetzt im gemeinsamen `audit()`-Pfad fuer **alle 14** Tab-Kontrollen einschliesslich der beiden Dateiimporte geprueft. Im auditierten Dateiimport verwenden Start und Neue Partie ausschliesslich `page.keyboard.press("Enter")` statt `locator.press("Enter")`, da letzteres unbemerkt automatisch fokussieren kann. Zwei weitere Negativ-/Regressionstests erhoehen die Importtests auf **10**. Die nicht auditierte Importvariante bleibt unveraendert. **CI auf diesem neuen HEAD: PENDING**; keine Behauptung einer abgeschlossenen Browserpruefung. Geschuetzte Quelldateien und Speicherformat bleiben unveraendert.
+
+
+## Nachtrag 02.11.2026 – Bewegungsschalter mit echter Tastatur und dauerhafter Einstellung
+
+Der [Bewegungs-Pflichtbericht](MOTION_KEYBOARD_20261102.md) erweitert die Kopfzeilen-Pruefung um `#motionBtn`: zweimalige Aktivierung ausschliesslich per Tab/Shift+Tab/Enter, echte ARIA-Umschaltung, passende Beschriftung und lokale Speicherung sowie Wiederherstellung nach Seitenneustart. Drei neue Negativ-/Regressionstests. Die [vorherige Kopfzeilen-CI #41438727245](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41438727245) war **3/3 PASS** auf `8ad25061adbe425689c6b8169fbecaf4e5d104ce`. Die neue CI ist **PENDING** und kein Gesamt-Gate-PASS. Matrix unveraendert 6/52; kein Merge, kein Release, Endabnahme zuletzt.

@@ -25,6 +25,15 @@ def require_toggle_change(before, after, selector):
         raise AssertionError("Enter hat Schalter nicht umgeschaltet: " + selector)
 
 
+def require_motion_preference(pressed, stored, label):
+    """ARIA, lokale Einstellung und sichtbare Beschriftung muessen uebereinstimmen."""
+    if pressed not in ("true", "false") or stored != pressed:
+        raise AssertionError("Bewegung: Zustand nicht konsistent gespeichert")
+    expected = "Bewegung an" if pressed == "true" else "Bewegung aus"
+    if expected not in label:
+        raise AssertionError("Bewegung: Schaltertext widerspricht dem Zustand")
+
+
 def keyboard_activate(page, selector):
     steps = tab_to_target(page, selector)
     verify_reverse_tab_roundtrip(page, selector)
@@ -89,6 +98,17 @@ def run(zoom):
                         require_toggle_change(before, after, selector)
                         checked.append({"selector": selector, "tabs": steps,
                                         "before": before, "after": after})
+                motion = page.locator("#motionBtn")
+                for _ in range(2):
+                    before = motion.get_attribute("aria-pressed")
+                    steps = keyboard_activate(page, "#motionBtn")
+                    after = motion.get_attribute("aria-pressed")
+                    require_toggle_change(before, after, "#motionBtn")
+                    stored = page.evaluate("localStorage.getItem('pppoppi-motion-enabled')")
+                    require_motion_preference(after, stored, motion.inner_text())
+                    checked.append({"selector": "#motionBtn", "tabs": steps,
+                                    "before": before, "after": after,
+                                    "preference_saved": True})
                 steps = keyboard_activate(page, "#helpBtn")
                 page.locator("#dialog").wait_for(state="visible")
                 if not page.locator("#dialog").evaluate("el => el.open"):
@@ -97,6 +117,15 @@ def run(zoom):
                 steps = keyboard_activate(page, "#closeBtn")
                 page.wait_for_function("!document.querySelector('#dialog').open")
                 checked.append({"selector": "#closeBtn", "tabs": steps})
+                saved_motion = motion.get_attribute("aria-pressed")
+                page.reload(wait_until="load")
+                page.wait_for_function("window.NeoEconomy && window.NeoEconomy.endstate")
+                require_motion_preference(
+                    page.locator("#motionBtn").get_attribute("aria-pressed"),
+                    page.evaluate("localStorage.getItem('pppoppi-motion-enabled')"),
+                    page.locator("#motionBtn").inner_text())
+                if page.locator("#motionBtn").get_attribute("aria-pressed") != saved_motion:
+                    raise AssertionError("Bewegungseinstellung nach Neustart verloren")
                 if page.evaluate("NeoEconomy.getState()") is not None:
                     raise AssertionError("Tastaturpruefung hat einen Spielstand erzeugt")
                 if page.evaluate("document.documentElement.scrollWidth > innerWidth + 2"):
@@ -107,7 +136,7 @@ def run(zoom):
                 print("PASS: HEADER-KEYBOARD " + json.dumps({
                     "zoom": zoom, "viewport": "800x600", "controls": checked,
                     "external_requests": 0, "page_errors": 0,
-                    "state_unchanged": True,
+                    "state_unchanged": True, "motion_reload_verified": True,
                 }, ensure_ascii=False), flush=True)
             finally:
                 context.close()

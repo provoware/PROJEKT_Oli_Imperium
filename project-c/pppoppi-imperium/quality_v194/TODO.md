@@ -56,3 +56,11 @@ Stand 02.11.2026. Dies ist die **auf PR #155 begrenzte Arbeitsliste**; die verbi
 
 - [x] 2026-11-02 | BED-02/03 | CSS-Fokusring auf alle 14 Tab-Ziele einschliesslich nativer Importe ausdehnen; erzwungenes Locator-Fokussieren im auditierten Import vermeiden | zwei neue Importregressionen, 10 statt 8 | Code implementiert, CI auf neuem HEAD offen
 - [ ] 2026-11-02 | BED-02/03 | Zehn Importregressionen und 19 Fokusregressionen plus vier 175/200-%-Browserjobs auf finalem HEAD nachweisen | [GitHub Actions](https://github.com/provoware/PROJEKT_Oli_Imperium/actions) | fertig bei tatsaechlichem PASS
+
+## Nachtrag 02.11.2026 – Bewegungsschalter, Zustand und Neustart
+
+- [x] 2026-11-02 | BED-02/03 Teilpaket | `#motionBtn` bei 175/200 % und 800x600 mit Tab/Shift+Tab/Enter, `aria-pressed`, sichtbarem Text und lokaler Speicherung in den Browserpruefer aufnehmen; Wiederherstellung nach Neuladen absichern | Code und drei isolierte Negativtests ergaenzt; [Bericht](MOTION_KEYBOARD_20261102.md) | implementiert, CI-Nachweis auf neuem HEAD noch PENDING
+- [ ] 2026-11-02 | BED-02/03 CI | Drei Kopfzeilen-Jobs (1x Unit, 2x echter Chromium-Zoom) auf finalem HEAD auswerten und echte Fehler korrigieren | vorheriger [Lauf #41438727245](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41438727245) 3/3 PASS, jedoch vor dieser Aenderung | fertig wenn alle drei Jobs auf neuem HEAD PASS
+- [ ] 2026-11-02 | BED-02/03 Rest | Nicht erfasste Dialog- und Minispielaktionen mit echtem Fokus und Zustandssicherung vervollstaendigen | getrennte, reproduzierbare Browserfaelle | fertig wenn alle vorgesehenen Bedienwege nachgewiesen sind
+
+**Vorrelease:** 6/52 PASS; 39 BLOCKED, 4 OPEN, 3 DEFERRED. PR-Drafts vor Aenderung 4; kein Merge, kein Release, persoenliche Endabnahme zuletzt.

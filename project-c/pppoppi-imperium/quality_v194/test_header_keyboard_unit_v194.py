@@ -2,7 +2,8 @@
 import unittest
 from unittest.mock import Mock, patch
 
-from test_browser_header_keyboard_v194 import require_toggle_change, keyboard_activate, run
+from test_browser_header_keyboard_v194 import (require_toggle_change, require_motion_preference,
+                                               keyboard_activate, run)
 
 
 class HeaderKeyboardTests(unittest.TestCase):
@@ -20,6 +21,23 @@ class HeaderKeyboardTests(unittest.TestCase):
                               ("1", "true"), ("false", "TRUE")):
             with self.subTest(before=before, after=after), self.assertRaisesRegex(AssertionError, "Ungueltiger"):
                 require_toggle_change(before, after, "#soundBtn")
+
+    def test_motion_preference_accepts_both_states(self):
+        require_motion_preference("true", "true", "✦ Bewegung an")
+        require_motion_preference("false", "false", "✦ Bewegung aus")
+
+    def test_motion_preference_rejects_missing_or_mismatched_storage(self):
+        for pressed, stored in (("true", None), ("false", "true"),
+                                ("true", "false"), ("TRUE", "TRUE")):
+            with self.subTest(pressed=pressed, stored=stored), self.assertRaises(AssertionError):
+                require_motion_preference(pressed, stored, "Bewegung an")
+
+    def test_motion_preference_rejects_wrong_label(self):
+        for pressed, stored, label in (("true", "true", "Bewegung aus"),
+                                       ("false", "false", "Bewegung an"),
+                                       ("true", "true", "")):
+            with self.subTest(label=label), self.assertRaisesRegex(AssertionError, "Schaltertext"):
+                require_motion_preference(pressed, stored, label)
 
     def test_keyboard_path_never_uses_locator_focus(self):
         page = Mock()

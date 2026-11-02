@@ -8,6 +8,7 @@ on:
       - project-c/pppoppi-imperium/quality_v194/test_browser_header_keyboard_v194.py
       - project-c/pppoppi-imperium/quality_v194/test_header_keyboard_unit_v194.py
       - project-c/pppoppi-imperium/quality_v194/HEADER_KEYBOARD_20261102.md
+      - project-c/pppoppi-imperium/quality_v194/MOTION_KEYBOARD_20261102.md
       - .github/workflows/prerelease-header-keyboard.yml
   workflow_dispatch:
 
@@ -25,7 +26,7 @@ jobs:
           python-version: '3.12'
       - name: Playwright-Python-Abhaengigkeit begrenzt installieren
         run: timeout --signal=TERM --kill-after=10s 120s python -m pip install playwright==1.56.0
-      - name: Syntax und sechs Negativ-/Regressionstests
+      - name: Syntax und neun Negativ-/Regressionstests
         run: |
           python3 -m py_compile project-c/pppoppi-imperium/quality_v194/test_browser_header_keyboard_v194.py project-c/pppoppi-imperium/quality_v194/test_header_keyboard_unit_v194.py
           python3 -m unittest discover -s project-c/pppoppi-imperium/quality_v194 -p 'test_header_keyboard_unit_v194.py' -v
