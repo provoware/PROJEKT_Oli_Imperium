@@ -13,7 +13,7 @@ from test_browser_native_zoom_v194 import wait_for_zoom_worker
 from playwright.sync_api import sync_playwright
 
 from test_browser_keyboard_drill_v194 import (
-    activate, assert_pressure_keyboard_ready, check, state,
+    activate, assert_pressure_keyboard_ready, check, state, tab_to,
 )
 from test_browser_native_zoom_minigames_v194 import layout_diagnostic
 from test_browser_native_zoom_v194 import extension_at, set_real_zoom

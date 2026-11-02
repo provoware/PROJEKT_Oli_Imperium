@@ -56,5 +56,28 @@ class NativeZoomDrillGateContract(unittest.TestCase):
         self.assertGreaterEqual(self.source.count("el.matches(':focus-visible')"), 2)
 
 
+    def test_layout_tab_helper_is_imported(self):
+        """Verhindert NameError im echten Zoomlauf vor dem ersten Bohrabschnitt."""
+        source = TARGET.read_text(encoding="utf-8")
+        tree = ast.parse(source, filename=str(TARGET))
+        imported = {
+            alias.name
+            for node in tree.body
+            if isinstance(node, ast.ImportFrom)
+            and node.module == "test_browser_keyboard_drill_v194"
+            for alias in node.names
+        }
+        self.assertIn("tab_to", imported, "Tastatur-Helfer muss explizit importiert sein")
+        layout = next(node for node in tree.body
+                      if isinstance(node, ast.FunctionDef) and node.name == "layout")
+        calls = [node for node in ast.walk(layout)
+                 if isinstance(node, ast.Call)
+                 and isinstance(node.func, ast.Name)
+                 and node.func.id == "tab_to"]
+        self.assertEqual(len(calls), 1, "Dialog-Schliessen per echtem Tab pruefen")
+        self.assertEqual(ast.literal_eval(calls[0].args[1]), "#closeBtn")
+
+
+
 if __name__ == "__main__":
     unittest.main()

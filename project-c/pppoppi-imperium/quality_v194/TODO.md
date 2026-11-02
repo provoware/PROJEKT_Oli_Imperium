@@ -129,3 +129,12 @@ Stand 02.11.2026. Dies ist die **auf PR #155 begrenzte Arbeitsliste**; die verbi
 - [ ] 2026-11-02 | BED-03 Rest | Weitere dynamische Minispielphasen und Zustand nach Speicher-/Neustart pruefen | 800x600, echte Tastatur und Zoom | fertig wenn vorgesehene Bedienwege reproduzierbar belegt
 
 **Matrix unveraendert:** 6 PASS / 39 BLOCKED / 4 OPEN / 3 DEFERRED. Keine Endabnahme, kein Merge, kein Release.
+
+## Nachtrag 02.11.2026 – nativer Zoom: undefinierter Tab-Helfer
+
+- [x] 2026-11-02 | BED-03 / CI | Echten [Chromium-FAIL #41520201346](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41520201346) diagnostizieren: beide Zoom-Matrixjobs scheiterten an `NameError: tab_to is not defined` in `test_browser_native_zoom_drill_v194.py:36`; die uebrigen sieben Fach-Workflows waren SUCCESS, die integrierte Freigabesperre erwartungsgemaess FAIL | Ursache im fehlenden Import, nicht in einer nachgewiesenen Spielregelabweichung | Diagnose erledigt
+- [x] 2026-11-02 | BED-03 / CI | Bestehenden echten Tab-Helfer importieren und AST-Regression fuer die explizite Bindung plus `#closeBtn`-Aufruf hinzufuegen | [Bericht](CI_NATIVE_ZOOM_NAMEERROR_20261102.md) | Code implementiert, Browserbeleg ausstehend
+- [ ] 2026-11-02 | BED-03 / CI | Beide nativen 175/200-%-Chromium-Jobs auf neuem HEAD inklusive Druckregler, drei Bohrstufen, Dialogkopf und Export erfolgreich nachweisen | CI erst nach Abschluss PASS oder FAIL nennen | fertig wenn beide Zoom-Jobs auf demselben HEAD gruen sind
+- [ ] 2026-11-02 | BED-03 / Rest | Weitere dynamische Minispielzustaende und 800x600-Tastaturpfade einschliesslich Speichern/Wiederherstellen vervollstaendigen | keine direkte Fokussetzung oder Gate-Abschwaechung | fertig wenn Matrix-Nachweise vollstaendig
+
+**Vorrelease-Matrix unveraendert:** 6 PASS / 39 BLOCKED / 4 OPEN / 3 DEFERRED = 52. Keine persoenliche Abnahme, kein Merge, kein Release.
