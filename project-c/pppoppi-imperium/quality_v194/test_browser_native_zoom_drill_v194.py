@@ -12,7 +12,9 @@ from test_browser_native_zoom_v194 import wait_for_zoom_worker
 
 from playwright.sync_api import sync_playwright
 
-from test_browser_keyboard_drill_v194 import activate, check, state, tab_to
+from test_browser_keyboard_drill_v194 import (
+    activate, assert_pressure_keyboard_ready, check, state,
+)
 from test_browser_native_zoom_minigames_v194 import layout_diagnostic
 from test_browser_native_zoom_v194 import extension_at, set_real_zoom
 
@@ -65,17 +67,20 @@ def run_drill(page, label):
         )
         check(label + ": Druckziel gueltig",
               isinstance(target, int) and 0 <= target <= 100)
-        check(label + ": Druckregler per Tab erreichbar",
-              tab_to(page, "#skillPressure"))
-        check(label + ": Druckregler mit sichtbarem Fokus",
-              page.evaluate("document.activeElement.matches(':focus-visible')"))
+        assert_pressure_keyboard_ready(page, label + ": Druckregler")
         page.keyboard.press("Home")
         check(label + ": Home setzt Druck auf null",
               page.locator("#skillPressure").input_value() == "0")
+        check(label + ": Reglerfokus nach Home erhalten",
+              page.locator("#skillPressure").evaluate(
+                  "(el) => document.activeElement === el && el.matches(':focus-visible')"))
         for _ in range(target):
             page.keyboard.press("ArrowRight")
         check(label + ": Zielwert ausschliesslich per Pfeiltasten",
               page.locator("#skillPressure").input_value() == str(target))
+        check(label + ": Reglerfokus nach Pfeiltasten erhalten",
+              page.locator("#skillPressure").evaluate(
+                  "(el) => document.activeElement === el && el.matches(':focus-visible')"))
         activate(page, '[data-arcade="drill-check"]',
                  label + f": Abschnitt {stage + 1} abschliessen")
         after = state(page)
