@@ -14,6 +14,7 @@ on:
       - project-c/pppoppi-imperium/quality_v194/test_compare_campaign_repeats_v194.py
       - project-c/pppoppi-imperium/quality_v194/REPEATABILITY_20261101.md
       - project-c/pppoppi-imperium/quality_v194/NATIVE_ZOOM_LONGRUN_20261102.md
+      - project-c/pppoppi-imperium/quality_v194/NATIVE_ZOOM_240_LONGRUN_20261102.md
       - project-c/pppoppi-imperium/quality_v194/PERFORMANCE_PROFILE_20261101.md
       - project-c/pppoppi-imperium/quality_v194/CAMPAIGN_DURATION_20261101.md
       - .github/workflows/prerelease-campaign-duration.yml
@@ -161,3 +162,25 @@ jobs:
         run: python3 -m py_compile project-c/pppoppi-imperium/quality_v194/test_browser_campaign_120_240_v194.py
       - name: 120 Monate bei echtem 175/200-Prozent-Zoom mit zwei Prozessneustarts
         run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_campaign_120_240_v194.py --months 120 --zoom ${{ matrix.zoom }}
+
+  browser-campaign-240-native-zoom:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 55
+    strategy:
+      fail-fast: false
+      matrix:
+        zoom: [175, 200]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Chromium samt echtem Tab-Zoom installieren
+        run: bash project-c/pppoppi-imperium/quality_v194/install_chromium_ci.sh
+      - name: Python-Syntax des 240-Monats-Zoompfads
+        run: python3 -m py_compile project-c/pppoppi-imperium/quality_v194/test_browser_campaign_120_240_v194.py
+      - name: 240 Monate mit 175/200-Prozent-Zoom, drei Prozessen und Archiv
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_campaign_120_240_v194.py --months 240 --zoom ${{ matrix.zoom }}
