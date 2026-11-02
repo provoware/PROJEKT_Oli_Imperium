@@ -81,6 +81,14 @@ try {
     assert.equal(rendered.split(rule).length - 1, 1);
     assert.equal(rendered.split('id="pppoppi-toolbar-focus-v194"').length - 1, 1);
   });
+  check('Druckregler-Fokusring nur einmal im Technikaufbau, nicht im Original', () => {
+    const source = fs.readFileSync(path.join(original, 'index.html'), 'utf8');
+    const rendered = renderPatched('index.html');
+    const rule = '#dialog[open] #skillPressure:focus-visible{outline:3px solid #ffda8d;outline-offset:3px;transition:none}';
+    assert.ok(!source.includes('pppoppi-pressure-focus-v194'));
+    assert.equal(rendered.split(rule).length - 1, 1);
+    assert.equal(rendered.split('id="pppoppi-pressure-focus-v194"').length - 1, 1);
+  });
   console.log('ERGEBNIS', passed, '/', passed, 'Aufbau-Sicherheitspruefungen bestanden');
 } finally {
   // Ausschliesslich das eigens erzeugte temporaere Testverzeichnis.
