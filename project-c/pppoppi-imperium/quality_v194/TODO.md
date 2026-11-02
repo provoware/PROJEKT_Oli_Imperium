@@ -64,3 +64,11 @@ Stand 02.11.2026. Dies ist die **auf PR #155 begrenzte Arbeitsliste**; die verbi
 - [ ] 2026-11-02 | BED-02/03 Rest | Nicht erfasste Dialog- und Minispielaktionen mit echtem Fokus und Zustandssicherung vervollstaendigen | getrennte, reproduzierbare Browserfaelle | fertig wenn alle vorgesehenen Bedienwege nachgewiesen sind
 
 **Vorrelease:** 6/52 PASS; 39 BLOCKED, 4 OPEN, 3 DEFERRED. PR-Drafts vor Aenderung 4; kein Merge, kein Release, persoenliche Endabnahme zuletzt.
+
+## Nachtrag 02.11.2026 – Hilfedialog Escape und Fokus-Rueckkehr
+
+- [x] 2026-11-02 | BED-02/03 | Escape-Schliessen und anschliessende echte Tab-/Enter-Schliessung des Hilfedialogs bei 175/200 % um Fokus-Rueckkehr und CSS-Fokusring erweitern | [Pflichtbericht](HEADER_KEYBOARD_20261102.md) | Code und drei Negativtests implementiert, CI offen
+- [ ] 2026-11-02 | BED-02/03 | Drei Kopfzeilen-CI-Jobs auf finalem HEAD auswerten | [Actions](https://github.com/provoware/PROJEKT_Oli_Imperium/actions) | fertig wenn Unit und beide Chromium-Zoomstufen PASS
+- [ ] 2026-11-02 | BED-02/03 | Weitere Dialoge und Minispiele vollstaendig per Tastatur, mit Zustandserhalt und Fokus-Rueckkehr pruefen | echte Browserpfade ohne Fokus-Trick | fertig wenn die vollstaendige Aktionsmatrix nachgewiesen ist
+
+**Wichtig:** Die integrierte Vorrelease-Sperre ist bei 6/52 PASS absichtlich rot; nicht deaktivieren oder als Testfehler kaschieren. Kein Merge/Release.
