@@ -72,6 +72,15 @@ try {
     assert.equal(fs.readFileSync(path.join(destination, 'src/profi_economy.js'), 'utf8'),
       fs.readFileSync(path.join(original, 'src/profi_economy.js'), 'utf8'));
   });
+  check('Tab-Fokusring der Toolbar wird nicht durch CSS-Transition verzoegert', () => {
+    const source = fs.readFileSync(path.join(original, 'index.html'), 'utf8');
+    const rendered = renderPatched('index.html');
+    const rule = '.toolbar button:focus-visible{transition-property:background-color,border-color}';
+    assert.ok(source.includes('transition:.16s'));
+    assert.ok(!source.includes('pppoppi-toolbar-focus-v194'));
+    assert.equal(rendered.split(rule).length - 1, 1);
+    assert.equal(rendered.split('id="pppoppi-toolbar-focus-v194"').length - 1, 1);
+  });
   console.log('ERGEBNIS', passed, '/', passed, 'Aufbau-Sicherheitspruefungen bestanden');
 } finally {
   // Ausschliesslich das eigens erzeugte temporaere Testverzeichnis.
