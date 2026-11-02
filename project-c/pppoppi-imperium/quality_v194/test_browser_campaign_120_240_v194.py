@@ -16,6 +16,7 @@ from playwright.sync_api import sync_playwright
 from test_browser_campaign_24months_v194 import check, press_button, state
 from campaign_native_import_v194 import import_saved_session, require_two_imports
 from campaign_keyboard_audit_v194 import tab_to_target, press_tab_focused
+from campaign_keyboard_reverse_v194 import verify_reverse_tab_roundtrip
 from test_browser_native_zoom_v194 import (extension_at, set_real_zoom,
                                           wait_for_zoom_worker)
 from performance_profile_v194 import (summarize_month_durations,
@@ -89,7 +90,8 @@ def play_month(page, month, audit=None):
     return report, rescues
 
 
-def main(months, zoom_percent=100, native_import=False, keyboard_audit=False):
+def main(months, zoom_percent=100, native_import=False, keyboard_audit=False,
+         reverse_tab_audit=False):
     campaign_started = time.monotonic()
     with tempfile.TemporaryDirectory(prefix="pppoppi-browser-%d-" % months) as tmp:
         root = Path(tmp)
@@ -111,7 +113,10 @@ def main(months, zoom_percent=100, native_import=False, keyboard_audit=False):
         def audit(page, selector):
             if keyboard_audit:
                 steps = tab_to_target(page, selector)
-                keyboard_audit_hits.append({"selector": selector, "tabs": steps})
+                if reverse_tab_audit:
+                    verify_reverse_tab_roundtrip(page, selector)
+                keyboard_audit_hits.append({"selector": selector, "tabs": steps,
+                                            "reverse_verified": reverse_tab_audit})
 
         with sync_playwright() as pw:
             browser = None
@@ -305,6 +310,9 @@ def main(months, zoom_percent=100, native_import=False, keyboard_audit=False):
                           len(keyboard_audit_hits) == 14)
                     check("Tab-Nachweise mit positiven Tastendruecken",
                           all(hit["tabs"] >= 1 for hit in keyboard_audit_hits))
+                    if reverse_tab_audit:
+                        check("14 echte Shift+Tab/Tab-Rueckwege mit Fokus",
+                              all(hit["reverse_verified"] for hit in keyboard_audit_hits))
                 check("Keine externen HTTP/HTTPS-Anfragen", not external)
                 check("Keine JavaScript-Laufzeitfehler", not errors)
                 profile = summarize_month_durations(durations)
@@ -352,7 +360,12 @@ if __name__ == "__main__":
                         help="Echte Enter-Dateiauswahl bei beiden Prozessneustarts")
     parser.add_argument("--keyboard-audit", action="store_true",
                         help="Tab-Erreichbarkeit vor Bedienung von 14 Schluesselkontrollen")
+    parser.add_argument("--reverse-tab-audit", action="store_true",
+                        help="14 echte Shift+Tab/Tab-Rueckwege mit sichtbarem Fokus")
     args = parser.parse_args()
     if args.keyboard_audit and not args.native_import:
         parser.error("--keyboard-audit erfordert --native-import")
-    main(args.months, args.zoom, args.native_import, args.keyboard_audit)
+    if args.reverse_tab_audit and not args.keyboard_audit:
+        parser.error("--reverse-tab-audit erfordert --keyboard-audit")
+    main(args.months, args.zoom, args.native_import, args.keyboard_audit,
+         args.reverse_tab_audit)
