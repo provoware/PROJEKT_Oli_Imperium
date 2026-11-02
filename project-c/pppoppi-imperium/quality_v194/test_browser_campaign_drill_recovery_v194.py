@@ -4,13 +4,15 @@
 Echte Browser- und Tastaturaktionen, versionierter Sitzungs-Rundlauf und
 Abschlussarchiv. Nur technische PPPOPPI-Adaption, keine C64-Originaltreue.
 """
+import argparse
 import json
 import subprocess
 import tempfile
 from pathlib import Path
 
 from playwright.sync_api import sync_playwright
-from test_browser_keyboard_drill_v194 import activate, check, state, tab_to
+from test_browser_native_zoom_v194 import extension_at, set_real_zoom, wait_for_zoom_worker
+from test_browser_keyboard_drill_v194 import activate, assert_pressure_keyboard_ready, check, state
 from test_browser_campaign_lastmonth_rescue_v194 import finish_four_human_turns
 
 HERE = Path(__file__).resolve().parent
@@ -19,6 +21,10 @@ SCHEMA = "pppoppi.endstate.session.proposal/1"
 
 
 def main():
+    parser = argparse.ArgumentParser(description="Bohrspiel-Neustarts mit optionalem echtem Tab-Zoom")
+    parser.add_argument("--zoom", type=int, choices=(175, 200), default=None)
+    args = parser.parse_args()
+    factor = args.zoom / 100 if args.zoom else None
     with tempfile.TemporaryDirectory(prefix="pppoppi-campaign-drill-") as temp:
         root = Path(temp)
         preview = root / "preview"
@@ -29,16 +35,30 @@ def main():
               info["sourceFiles"] == 110)
         errors, external = [], []
         processes = 0
+        if factor:
+            extension = root / "zoom-extension"
+            extension_at(extension)
         with sync_playwright() as playwright:
             browser = None
 
             def start():
                 nonlocal browser, processes
-                browser = playwright.chromium.launch(headless=True)
+                if factor:
+                    browser = playwright.chromium.launch_persistent_context(
+                        str(root / ("browser-profile-%d" % (processes + 1))),
+                        channel="chromium", headless=True,
+                        viewport={"width": 800, "height": 600},
+                        accept_downloads=True, reduced_motion="reduce",
+                        args=["--disable-extensions-except=" + str(extension),
+                              "--load-extension=" + str(extension)])
+                    context = browser
+                    worker = wait_for_zoom_worker(context)
+                else:
+                    browser = playwright.chromium.launch(headless=True)
+                    context = browser.new_context(
+                        viewport={"width": 800, "height": 600},
+                        accept_downloads=True, reduced_motion="reduce")
                 processes += 1
-                context = browser.new_context(
-                    viewport={"width": 800, "height": 600},
-                    accept_downloads=True, reduced_motion="reduce")
                 page = context.new_page()
                 page.set_default_timeout(15000)
                 page.on("pageerror", lambda error: errors.append(str(error)))
@@ -46,6 +66,14 @@ def main():
                         if request.url.startswith(("http://", "https://")) else None)
                 page.goto((preview / "index.html").as_uri(), wait_until="load")
                 page.wait_for_function("window.NeoEconomy && window.NeoEconomy.endstate")
+                if factor:
+                    zoom = set_real_zoom(worker, page.url, factor)
+                    check("Echter Tab-Zoom nach jedem Chromium-Neustart",
+                          abs(zoom["factor"] - factor) < 0.01)
+                    page.wait_for_function(
+                        "(f) => Math.abs(devicePixelRatio - f) < 0.1", arg=factor)
+                    check("CSS-Breite unter 500 bei echtem Zoom",
+                          page.evaluate("innerWidth < 500"))
                 check("Neuer Prozess ohne fremden In-Memory-Spielstand",
                       state(page) is None)
                 return page
@@ -116,13 +144,16 @@ def main():
                         " NeoEconomy.getState().minigame)")
                     check("Gueltiger Druckzielwert", isinstance(target, int)
                           and 0 <= target <= 100)
-                    check("Druckregler ueber Tab erreichbar",
-                          tab_to(page, "#skillPressure"))
+                    assert_pressure_keyboard_ready(
+                        page, "Druckregler vor Home und Pfeiltasten")
                     page.keyboard.press("Home")
                     for _ in range(target):
                         page.keyboard.press("ArrowRight")
                     check("Druck ausschliesslich ueber Tastatur eingestellt",
                           page.locator("#skillPressure").input_value() == str(target))
+                    check("Druckregler-Fokus nach Pfeiltasten erhalten",
+                          page.locator("#skillPressure").evaluate(
+                              "(el) => document.activeElement === el && el.matches(':focus-visible')"))
                     activate(page, '[data-arcade="drill-check"]',
                              "Bohrabschnitt %d bestaetigen" % (stage + 1))
                     check("Spielkern nach Bohrabschnitt gueltig",
@@ -197,6 +228,9 @@ def main():
                 check("Nach Archivierung keine weitere Buchung",
                       state(page) == final)
                 check("Vier echte Chromium-Prozesse", processes == 4)
+                if factor:
+                    check("Zoom bleibt nach allen drei Neustarts wirksam",
+                          abs(page.evaluate("devicePixelRatio") - factor) < 0.1)
                 check("800x600 ohne horizontalen Seitenueberlauf",
                       page.evaluate("document.documentElement.scrollWidth <= innerWidth + 2"))
                 check("Offline ohne HTTP/HTTPS", not external)
@@ -204,7 +238,8 @@ def main():
                 print("KAMPAGNEN-BOHRSPIEL:", json.dumps({
                     "months": 12, "reports": 12, "drill_stages": 3,
                     "pressure_targets": targets, "chromium_processes": processes,
-                    "session_exports": 3, "historical_c64_verified": False,
+                    "session_exports": 3, "native_zoom_percent": args.zoom,
+                    "historical_c64_verified": False,
                     "prerelease_gate": "BLOCKED",
                 }, ensure_ascii=False, sort_keys=True), flush=True)
             finally:
