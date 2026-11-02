@@ -12,6 +12,8 @@ on:
       - project-c/pppoppi-imperium/quality_v194/test_campaign_native_import_v194.py
       - project-c/pppoppi-imperium/quality_v194/campaign_keyboard_audit_v194.py
       - project-c/pppoppi-imperium/quality_v194/test_campaign_keyboard_audit_v194.py
+      - project-c/pppoppi-imperium/quality_v194/campaign_keyboard_reverse_v194.py
+      - project-c/pppoppi-imperium/quality_v194/test_campaign_keyboard_reverse_v194.py
       - project-c/pppoppi-imperium/quality_v194/KEYBOARD_TAB_CAMPAIGN_20261102.md
       - project-c/pppoppi-imperium/quality_v194/NATIVE_IMPORT_LONGRUN_20261102.md
       - project-c/pppoppi-imperium/quality_v194/NATIVE_IMPORT_240_LONGRUN_20261102.md
@@ -51,6 +53,8 @@ jobs:
         run: python3 -m unittest discover -s project-c/pppoppi-imperium/quality_v194 -p 'test_campaign_native_import_v194.py' -v
       - name: Neun Negativ- und Regressionstests fuer Tab-Fokus und Enter-Aktivierung
         run: python3 -m unittest discover -s project-c/pppoppi-imperium/quality_v194 -p 'test_campaign_keyboard_audit_v194.py' -v
+      - name: Sechs strikte Rueckwaerts-Tab-Regressionen
+        run: python3 -m unittest discover -s project-c/pppoppi-imperium/quality_v194 -p 'test_campaign_keyboard_reverse_v194.py' -v
       - name: Bisherige 12-Monats-Enginepruefung als Referenz
         run: node --test project-c/pppoppi-imperium/quality_v194/test_endstate_live_v194.cjs
       - name: Echte 24- und 60-Monats-Kampagnen mit Zwischenimport und Endarchiv
@@ -270,3 +274,27 @@ jobs:
           python3 -m unittest discover -s project-c/pppoppi-imperium/quality_v194 -p 'test_campaign_native_import_v194.py' -v
       - name: 120 Monate, 14 echte Tab-Nachweise und echte Enter-Aktivierung
         run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_campaign_120_240_v194.py --months 120 --zoom ${{ matrix.zoom }} --native-import --keyboard-audit
+
+  browser-campaign-120-reverse-tab:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        zoom: [175, 200]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Chromium mit echtem Tab-Zoom installieren
+        run: bash project-c/pppoppi-imperium/quality_v194/install_chromium_ci.sh
+      - name: Strikte Rueckwaerts-Tab-Regressionen und Syntax
+        run: |
+          python3 -m py_compile project-c/pppoppi-imperium/quality_v194/campaign_keyboard_reverse_v194.py project-c/pppoppi-imperium/quality_v194/test_browser_campaign_120_240_v194.py
+          python3 -m unittest discover -s project-c/pppoppi-imperium/quality_v194 -p 'test_campaign_keyboard_reverse_v194.py' -v
+      - name: 120 Monate mit 14 echten Shift-Tab-Rueckwegen und Enter
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_campaign_120_240_v194.py --months 120 --zoom ${{ matrix.zoom }} --native-import --keyboard-audit --reverse-tab-audit
