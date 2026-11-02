@@ -1,0 +1,53 @@
+"""Fail-closed isolated regressions for actual Tab navigation evidence."""
+from unittest import TestCase, main
+from unittest.mock import Mock
+
+from campaign_keyboard_audit_v194 import tab_to_target
+
+
+class TabReachabilityTests(TestCase):
+    def setUp(self):
+        self.page = Mock()
+        self.target = self.page.locator.return_value
+        self.target.count.return_value = 1
+        self.target.is_visible.return_value = True
+        self.target.is_enabled.return_value = True
+
+    def test_reaches_target_after_three_real_tabs(self):
+        self.target.evaluate.side_effect = [False, False, True]
+        self.assertEqual(tab_to_target(self.page, "#startGame", max_tabs=4), 3)
+        self.assertEqual(self.page.keyboard.press.call_count, 3)
+        self.page.keyboard.press.assert_called_with("Tab")
+        self.target.focus.assert_not_called()
+
+    def test_unreachable_target_fails_instead_of_forcing_focus(self):
+        self.target.evaluate.return_value = False
+        with self.assertRaisesRegex(AssertionError, "nicht erreichbar"):
+            tab_to_target(self.page, "#startGame", max_tabs=3)
+        self.assertEqual(self.page.keyboard.press.call_count, 3)
+        self.target.focus.assert_not_called()
+
+    def test_hidden_or_disabled_target_fails_before_keyboard(self):
+        for attr in ("is_visible", "is_enabled"):
+            with self.subTest(attr=attr):
+                getattr(self.target, attr).return_value = False
+                with self.assertRaisesRegex(AssertionError, "nicht eindeutig"):
+                    tab_to_target(self.page, "#startGame")
+                getattr(self.target, attr).return_value = True
+        self.page.keyboard.press.assert_not_called()
+
+    def test_duplicate_target_fails_before_keyboard(self):
+        self.target.count.return_value = 2
+        with self.assertRaises(AssertionError):
+            tab_to_target(self.page, "#startGame")
+        self.page.keyboard.press.assert_not_called()
+
+    def test_invalid_budget_rejected(self):
+        for limit in (0, -1, 201, True, 1.5):
+            with self.subTest(limit=limit), self.assertRaises(ValueError):
+                tab_to_target(self.page, "#startGame", max_tabs=limit)
+        self.page.keyboard.press.assert_not_called()
+
+
+if __name__ == "__main__":
+    main()
