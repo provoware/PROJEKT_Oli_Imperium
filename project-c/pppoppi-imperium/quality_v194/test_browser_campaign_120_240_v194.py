@@ -15,6 +15,7 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 from test_browser_campaign_24months_v194 import check, press_button, state
 from campaign_native_import_v194 import import_saved_session, require_two_imports
+from campaign_keyboard_audit_v194 import tab_to_target
 from test_browser_native_zoom_v194 import (extension_at, set_real_zoom,
                                           wait_for_zoom_worker)
 from performance_profile_v194 import (summarize_month_durations,
@@ -27,7 +28,7 @@ HUMANS = 4
 MAX_REPORTS = 120
 
 
-def play_month(page, month):
+def play_month(page, month, audit=None):
     before = state(page)
     retained_before = min(month - 1, MAX_REPORTS)
     check("Monat %d beginnt ohne Doppelabschluss" % month,
@@ -36,6 +37,8 @@ def play_month(page, month):
           and len(before["reports"]) == retained_before)
     for index in range(HUMANS):
         page.evaluate("NeoEconomy.open('calendar')")
+        if audit is not None and month == 1 and index == 0:
+            audit(page, '[data-econ="END_TURN"]')
         press_button(page, '[data-econ="END_TURN"]')
         if index < HUMANS - 1:
             page.locator('[data-ui="handoff-ok"]').wait_for(state="visible")
@@ -44,6 +47,8 @@ def play_month(page, month):
                   handoff["turnIndex"] == index + 1
                   and handoff["phase"] == "TURN"
                   and len(handoff["reports"]) == retained_before)
+            if audit is not None and month == 1 and index == 0:
+                audit(page, '[data-ui="handoff-ok"]')
             press_button(page, '[data-ui="handoff-ok"]')
     page.wait_for_function(
         "['REPORT','RESCUE'].includes(NeoEconomy.getState()?.phase)")
@@ -72,7 +77,7 @@ def play_month(page, month):
     return report, rescues
 
 
-def main(months, zoom_percent=100, native_import=False):
+def main(months, zoom_percent=100, native_import=False, keyboard_audit=False):
     campaign_started = time.monotonic()
     with tempfile.TemporaryDirectory(prefix="pppoppi-browser-%d-" % months) as tmp:
         root = Path(tmp)
@@ -89,6 +94,12 @@ def main(months, zoom_percent=100, native_import=False):
         phase_timings = {"midpoint": {}, "archive": {}}
         processes, rescues = 0, 0
         import_paths = []
+        keyboard_audit_hits = []
+
+        def audit(page, selector):
+            if keyboard_audit:
+                steps = tab_to_target(page, selector)
+                keyboard_audit_hits.append({"selector": selector, "tabs": steps})
 
         with sync_playwright() as pw:
             browser = None
@@ -159,6 +170,7 @@ def main(months, zoom_percent=100, native_import=False):
             def export_session(page, filename):
                 page.evaluate("NeoEconomy.open('computer')")
                 with page.expect_download() as download:
+                    audit(page, '#dialogContent [data-ui="session-export"]')
                     press_button(page, '#dialogContent [data-ui="session-export"]')
                 target = root / filename
                 download.value.save_as(target)
@@ -170,10 +182,12 @@ def main(months, zoom_percent=100, native_import=False):
 
             try:
                 page = start()
+                audit(page, "#startGame")
                 press_button(page, "#startGame")
                 page.locator("#econMode").select_option("4-0")
                 page.get_by_label("Spielart", exact=True).select_option(
                     "campaign:%d" % months)
+                audit(page, '#dialogContent [data-ui="newgame"]')
                 press_button(page, '#dialogContent [data-ui="newgame"]')
                 initial = state(page)
                 check("Vier Menschen und gewaehlte Kampagnendauer",
@@ -184,7 +198,7 @@ def main(months, zoom_percent=100, native_import=False):
 
                 for month in range(1, months + 1):
                     start_time = time.monotonic()
-                    report, count = play_month(page, month)
+                    report, count = play_month(page, month, audit if keyboard_audit else None)
                     rescues += count
                     check("Monat %d: Endstatus korrekt" % month,
                           page.evaluate("NeoEconomy.endstate.status()")
@@ -201,7 +215,9 @@ def main(months, zoom_percent=100, native_import=False):
                             stop()
                             page = start()
                         with timed_phase("midpoint", "import"):
-                            import_paths.append(import_saved_session(page, saved, native=native_import))
+                            import_paths.append(import_saved_session(
+                                page, saved, native=native_import,
+                                focus_by_tab=audit if keyboard_audit else None))
                             page.wait_for_function(
                                 "(m) => NeoEconomy.getState()?.month===m && "
                                 "NeoEconomy.getState()?.phase==='REPORT'",
@@ -212,6 +228,8 @@ def main(months, zoom_percent=100, native_import=False):
                                       "NeoEconomy.endstate.contract().months")
                                   == months)
                     if month < months:
+                        if month in (1, months // 2):
+                            audit(page, '[data-econ="NEXT_MONTH"]')
                         press_button(page, '[data-econ="NEXT_MONTH"]')
                         page.wait_for_function(
                             "(m) => NeoEconomy.getState()?.month===m && "
@@ -252,7 +270,9 @@ def main(months, zoom_percent=100, native_import=False):
                     stop()
                     page = start()
                 with timed_phase("archive", "import"):
-                    import_paths.append(import_saved_session(page, saved, native=native_import))
+                    import_paths.append(import_saved_session(
+                        page, saved, native=native_import,
+                        focus_by_tab=audit if keyboard_audit else None))
                     page.wait_for_function("NeoEconomy.endstate.status()==='finished'")
                     check("Archiv und Endstand nach zweitem Neustart identisch",
                           state(page) == final
@@ -262,6 +282,11 @@ def main(months, zoom_percent=100, native_import=False):
                 check("Zwei bestaetigte Importe ohne Pfadwechsel",
                       len(import_paths) == 2)
                 check("Drei unabhaengige Chromium-Prozesse", processes == 3)
+                if keyboard_audit:
+                    check("Vierzehn echte Tab-Navigationsnachweise",
+                          len(keyboard_audit_hits) == 14)
+                    check("Tab-Nachweise mit positiven Tastendruecken",
+                          all(hit["tabs"] >= 1 for hit in keyboard_audit_hits))
                 check("Keine externen HTTP/HTTPS-Anfragen", not external)
                 check("Keine JavaScript-Laufzeitfehler", not errors)
                 profile = summarize_month_durations(durations)
@@ -276,7 +301,13 @@ def main(months, zoom_percent=100, native_import=False):
                     "months": months, "human_turns": months * HUMANS,
                     "retained_reports": len(final["reports"]),
                     "natural_rescues": rescues, "chromium_processes": processes,
-                    "viewport": "800x600", "keyboard": "Enter",
+                    "viewport": "800x600",
+                    "keyboard": "Enter+Tab" if keyboard_audit else "Enter",
+                    "keyboard_tab_audit": (
+                        {"controls": len(keyboard_audit_hits),
+                         "max_tabs": max(hit["tabs"] for hit in keyboard_audit_hits),
+                         "targets": keyboard_audit_hits}
+                        if keyboard_audit else None),
                     "native_zoom_percent": zoom_percent,
                     "session_import_path": proven_import_path,
                     "session_import_count": len(import_paths),
@@ -301,5 +332,9 @@ if __name__ == "__main__":
     parser.add_argument("--zoom", type=int, choices=(100, 175, 200), default=100)
     parser.add_argument("--native-import", action="store_true",
                         help="Echte Enter-Dateiauswahl bei beiden Prozessneustarts")
+    parser.add_argument("--keyboard-audit", action="store_true",
+                        help="Tab-Erreichbarkeit vor Bedienung von 14 Schluesselkontrollen")
     args = parser.parse_args()
-    main(args.months, args.zoom, args.native_import)
+    if args.keyboard_audit and not args.native_import:
+        parser.error("--keyboard-audit erfordert --native-import")
+    main(args.months, args.zoom, args.native_import, args.keyboard_audit)
