@@ -34,6 +34,22 @@ def require_motion_preference(pressed, stored, label):
         raise AssertionError("Bewegung: Schaltertext widerspricht dem Zustand")
 
 
+def require_focus_return(page, selector):
+    """A closed native dialog must restore visible keyboard focus to its opener."""
+    target = page.locator(selector)
+    if target.count() != 1:
+        raise AssertionError("Dialog-Ausloeser nicht eindeutig: " + selector)
+    result = target.evaluate("""(el) => ({
+        active: document.activeElement === el,
+        visible: el.matches(':focus-visible')
+    })""")
+    if not isinstance(result, dict) or result.get("active") is not True:
+        raise AssertionError("Dialog-Fokus nicht zum Ausloeser zurueck: " + selector)
+    if result.get("visible") is not True:
+        raise AssertionError("Dialog-Fokus nach Schliessen unsichtbar: " + selector)
+    assert_computed_focus_indicator(target, selector)
+
+
 def keyboard_activate(page, selector):
     steps = tab_to_target(page, selector)
     verify_reverse_tab_roundtrip(page, selector)
@@ -114,9 +130,20 @@ def run(zoom):
                 if not page.locator("#dialog").evaluate("el => el.open"):
                     raise AssertionError("Hilfedialog nicht geoeffnet")
                 checked.append({"selector": "#helpBtn", "tabs": steps})
+                # Native Escape must close the modal and restore the original Tab focus.
+                page.keyboard.press("Escape")
+                page.wait_for_function("!document.querySelector('#dialog').open")
+                require_focus_return(page, "#helpBtn")
+                checked.append({"selector": "#helpBtn", "escape": True,
+                                "focus_restored": True})
+                # Reopen with real Tab/Enter, then close with the dialog's button.
+                keyboard_activate(page, "#helpBtn")
+                page.locator("#dialog").wait_for(state="visible")
                 steps = keyboard_activate(page, "#closeBtn")
                 page.wait_for_function("!document.querySelector('#dialog').open")
-                checked.append({"selector": "#closeBtn", "tabs": steps})
+                require_focus_return(page, "#helpBtn")
+                checked.append({"selector": "#closeBtn", "tabs": steps,
+                                "focus_restored": True})
                 saved_motion = motion.get_attribute("aria-pressed")
                 page.reload(wait_until="load")
                 page.wait_for_function("window.NeoEconomy && window.NeoEconomy.endstate")
