@@ -131,3 +131,7 @@ Die [strenge Minispiel-Tastaturpruefung](MINIGAME_KEYBOARD_GATE_20261102.md) kon
 ## CI-Fehlerdiagnose 02.11.2026
 
 [Nachprüfbarer Pflichtbericht](CI_KEYBOARD_FAILURES_20261102.md): Der letzte GitHub-Lauf fand einen Python-Syntaxfehler in den zehn neuen Minispiel-Tastaturtests sowie zwei eigenständige Zoom-/Fokusfehler bei `#closeBtn` und `#startGame`. Syntax und frühe CI-Prüfung sind korrigiert, erneute Browserprüfung steht aus. **6/52 Pflichtpunkte PASS; kein Release.**
+
+## Tastatur-Fokusring ohne Verzögerung – Teilkorrektur 02.11.2026
+
+[Browser-CI #41492796482](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41492796482) zeigte bei echtem Tab auf `#startGame` eine berechnete Outline von 0px trotz `:focus-visible`. Im abgeleiteten Technikaufbau wird deshalb die Outline der Toolbar nicht mehr über `transition:.16s` animiert. Ein isolierter Chromium-Vergleich belegt die sofortige 3px-Outline; die vollständigen GitHub-Browserprüfungen auf dem neuen HEAD bleiben bis zum Abschluss **PENDING**. [Technischer Nachweis und offene Gates](FOCUS_TRANSITION_20261102.md). Keine Änderung am Spieloriginal, keine Freigabe.
