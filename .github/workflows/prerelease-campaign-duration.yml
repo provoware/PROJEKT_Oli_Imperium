@@ -43,6 +43,13 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Playwright-Python-Bibliothek fuer strikte Tastaturregressionen
+        run: |
+          timeout --signal=TERM --kill-after=10s 120s python -m pip install playwright==1.56.0
+          python -c "from playwright.sync_api import TimeoutError as PlaywrightTimeoutError; print('PASS: Playwright-TimeoutError importierbar')"
       - name: Syntax des neuen Kampagnenpruefers
         run: node --check project-c/pppoppi-imperium/quality_v194/test_endstate_long_campaign_v194.cjs
       - name: Fuenfzehn Profilregressionen inklusive Trendkontrolle und Neustartmessung
