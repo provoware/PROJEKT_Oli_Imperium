@@ -81,11 +81,13 @@ class HeaderKeyboardTests(unittest.TestCase):
                 with self.assertRaises(AssertionError):
                     require_focus_return(page, "#helpBtn")
 
-    def test_focus_return_rejects_missing_opener(self):
+    def test_focus_return_rejects_nonunique_opener(self):
         page = Mock()
-        page.locator.return_value.count.return_value = 0
-        with self.assertRaisesRegex(AssertionError, "nicht eindeutig"):
-            require_focus_return(page, "#helpBtn")
+        for count in (0, 2):
+            with self.subTest(count=count):
+                page.locator.return_value.count.return_value = count
+                with self.assertRaisesRegex(AssertionError, "nicht eindeutig"):
+                    require_focus_return(page, "#helpBtn")
 
     def test_rejects_unplanned_zoom(self):
         for value in (100, 150, 201):
