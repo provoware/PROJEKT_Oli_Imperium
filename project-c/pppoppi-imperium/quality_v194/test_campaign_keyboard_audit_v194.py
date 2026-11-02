@@ -75,7 +75,32 @@ class TabReachabilityTests(TestCase):
 
 
     def test_activation_rejects_offscreen_target(self):
-        self.target.evaluate.side_effect = [True, True, {"inViewport": False, "unobstructed": False}]
+        offscreen = {"inViewport": False, "unobstructed": False}
+        self.target.evaluate.side_effect = [True, True, offscreen, offscreen]
+        with self.assertRaisesRegex(AssertionError, "nicht nutzbar im Browserfenster"):
+            press_tab_focused(self.page, "#startGame")
+        self.page.wait_for_function.assert_called_once()
+        self.page.keyboard.press.assert_not_called()
+
+    def test_natural_tab_scroll_can_finish_before_enter(self):
+        offscreen = {"inViewport": False, "unobstructed": False}
+        visible = {"inViewport": True, "unobstructed": True}
+        self.target.evaluate.side_effect = [True, True, offscreen, visible]
+        press_tab_focused(self.page, "#startGame")
+        self.page.wait_for_function.assert_called_once()
+        args, kwargs = self.page.wait_for_function.call_args
+        self.assertIn("document.activeElement !== el", args[0])
+        self.assertEqual(kwargs["arg"], "#startGame")
+        self.assertEqual(kwargs["timeout"], 3000)
+        self.page.keyboard.press.assert_called_once_with("Enter")
+        self.target.focus.assert_not_called()
+        self.target.press.assert_not_called()
+
+    def test_scroll_timeout_still_blocks_offscreen_activation(self):
+        from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
+        offscreen = {"inViewport": False, "unobstructed": False}
+        self.target.evaluate.side_effect = [True, True, offscreen, offscreen]
+        self.page.wait_for_function.side_effect = PlaywrightTimeoutError("Timeout 3000ms")
         with self.assertRaisesRegex(AssertionError, "nicht nutzbar im Browserfenster"):
             press_tab_focused(self.page, "#startGame")
         self.page.keyboard.press.assert_not_called()
