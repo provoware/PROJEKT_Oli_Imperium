@@ -123,3 +123,7 @@ Der [Bewegungs-Pflichtbericht](MOTION_KEYBOARD_20261102.md) erweitert die Kopfze
 ## Hilfedialog: Escape und sichtbarer Rueckkehrfokus (02.11.2026)
 
 [Pflichtbericht](HEADER_KEYBOARD_20261102.md): Die 800x600-Chromium-Pruefung bei 175/200 % verlangt jetzt auch nach Escape und nach dem Dialog-Schliessen-Schalter eine echte Rueckkehr des sichtbaren Tastaturfokus zum Hilfe-Ausloeser. Drei isolierte Negativ-/Regressionstests; neue GitHub-CI auf finalem HEAD **PENDING**. Die vorherige Kopfzeilen-CI #41445779151 war 3/3 PASS auf `8df37ba10d9f6051fc0d8d65263f73c866a1a223`. BED-02/03 und die Gesamtmatrix bleiben BLOCKED; kein Merge, Release oder persoenliche Abnahme.
+
+## Minispiel-Tastaturgate (02.11.2026)
+
+Die [strenge Minispiel-Tastaturpruefung](MINIGAME_KEYBOARD_GATE_20261102.md) kontrolliert vor Enter in Bohrspiel, Rohrnetz und Feuerwehr den tatsaechlichen Tastaturfokus, eine berechnete CSS-Fokusmarkierung, die Sichtbarkeit und die Trefferflaeche. Zehn Negativtests sind in den Pflichtpruefablauf aufgenommen. **Erst ein erfolgreich abgeschlossener GitHub-CI-Lauf auf dem finalen Commit ist ein PASS-Nachweis.** Die Vorrelease-Matrix bleibt 6/52 PASS, keine Freigabe.
