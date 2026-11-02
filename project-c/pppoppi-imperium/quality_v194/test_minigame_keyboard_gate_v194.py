@@ -81,8 +81,8 @@ class DrillPressureSliderTests(unittest.TestCase):
         page = Mock()
         target = page.locator.return_value
         target.evaluate.side_effect = list(focus_results)
-        with patch("test_browser_keyboard_drill_v194.tab_to", return_value=reachable) as tab, \\
-             patch("test_browser_keyboard_drill_v194.assert_computed_focus_indicator") as ring, \\
+        with patch("test_browser_keyboard_drill_v194.tab_to", return_value=reachable) as tab, \
+             patch("test_browser_keyboard_drill_v194.assert_computed_focus_indicator") as ring, \
              patch("test_browser_keyboard_drill_v194.assert_unobstructed_keyboard_target") as geometry:
             if ring_error:
                 ring.side_effect = AssertionError(ring_error)
