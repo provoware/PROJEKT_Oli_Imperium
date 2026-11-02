@@ -88,3 +88,7 @@ Der getrennte [Entwurf #155](https://github.com/provoware/PROJEKT_Oli_Imperium/p
 ## Echte Tab-Navigation bei 175/200 % – Teilprüfung vom 02.11.2026
 
 [CI #41378517223](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41378517223) auf HEAD `3dde8c40f562c2fc6d396e68c1edde3642e2700a`: **14/14 Jobs PASS**, darunter beide 240-Monats-Dateidialogprüfungen mit je zwei bestätigten nativen Importen. Der [neue Tab-Prüfbericht](KEYBOARD_TAB_CAMPAIGN_20261102.md) ergänzt unabhängige 120-Monats-Jobs bei 175/200 %: 14 Schlüsselkontrollen werden ausschließlich per Tab angesteuert, inklusive Start, Monatswechsel, Export und zweimaligem Import. **Neue Prüfungen noch PENDING**, vollständige Tab-Reihenfolge sämtlicher Szenen weiterhin offen. Die 6/52-Gesamtmatrix bleibt unverändert; kein Merge, keine Endabnahme, kein Release.
+
+## Rueckwaerts-Tab-Navigation – neues Teilpaket (02.11.2026)
+
+Die [Rueckwaerts-Tab-Kampagne](REVERSE_TAB_CAMPAIGN_20261102.md) ergaenzt bei 175/200 % Zoom fuer 14 ausgewaehlte Kontrollen echte `Shift+Tab`- und `Tab`-Rueckwege mit sichtbarem Fokus, bevor Enter ausgeloest wird. Sechs isolierte Regressionen **6/6 PASS**, Syntax **PASS**. Die neuen Browserjobs sind bis zur erfolgreichen Ausfuehrung auf finalem HEAD **PENDING**. Die vorherige [CI #41389498165](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41389498165) auf `c7c1b9ad` war **16/16 SUCCESS**; sie ist kein Nachweis fuer das neue Paket. Gesamtmatrix weiterhin **6/52 PASS**; keine vollstaendige Tastatur- oder Releasefreigabe.
