@@ -129,6 +129,29 @@ def main():
                           page.evaluate("NeoEconomy.engine.validate(NeoEconomy.getState())")
                           is True)
                     targets.append(target)
+                    if stage == 0:
+                        # Ein abgeschlossener Abschnitt darf beim Neustart
+                        # weder wiederholt noch uebersprungen werden.
+                        checkpoint = state(page)
+                        check("Abschnitt 2 vor dem zweiten Export aktiv",
+                              checkpoint["minigame"] is not None
+                              and checkpoint["minigame"]["stage"] == 1)
+                        mid_saved, mid_payload = export(
+                            page, "bohrung-nach-abschnitt-1.json")
+                        check("Zwischenexport erhaelt exakt Abschnitt 2",
+                              mid_payload["state"] == checkpoint
+                              and mid_payload["archive"] is None)
+                        stop()
+                        page = start()
+                        page.locator("#loadSessionFile").set_input_files(
+                            str(mid_saved))
+                        page.wait_for_function(
+                            "NeoEconomy.getState()?.minigame?.stage === 1")
+                        check("Abschnitt 2 nach zweitem Prozess identisch",
+                              state(page) == checkpoint
+                              and page.evaluate(
+                                  "NeoEconomy.endstate.status()") == "active")
+                        page.evaluate("NeoEconomy.open('workshop')")
                 drilled = state(page)
                 check("Bohrspiel abgeschlossen ohne doppelte Startkosten",
                       drilled["minigame"] is None
@@ -173,7 +196,7 @@ def main():
                 page.evaluate("NeoEconomy.send('NEXT_MONTH')")
                 check("Nach Archivierung keine weitere Buchung",
                       state(page) == final)
-                check("Drei echte Chromium-Prozesse", processes == 3)
+                check("Vier echte Chromium-Prozesse", processes == 4)
                 check("800x600 ohne horizontalen Seitenueberlauf",
                       page.evaluate("document.documentElement.scrollWidth <= innerWidth + 2"))
                 check("Offline ohne HTTP/HTTPS", not external)
@@ -181,7 +204,7 @@ def main():
                 print("KAMPAGNEN-BOHRSPIEL:", json.dumps({
                     "months": 12, "reports": 12, "drill_stages": 3,
                     "pressure_targets": targets, "chromium_processes": processes,
-                    "session_exports": 2, "historical_c64_verified": False,
+                    "session_exports": 3, "historical_c64_verified": False,
                     "prerelease_gate": "BLOCKED",
                 }, ensure_ascii=False, sort_keys=True), flush=True)
             finally:

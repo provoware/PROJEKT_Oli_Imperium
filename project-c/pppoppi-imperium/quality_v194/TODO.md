@@ -138,3 +138,11 @@ Stand 02.11.2026. Dies ist die **auf PR #155 begrenzte Arbeitsliste**; die verbi
 - [ ] 2026-11-02 | BED-03 / Rest | Weitere dynamische Minispielzustaende und 800x600-Tastaturpfade einschliesslich Speichern/Wiederherstellen vervollstaendigen | keine direkte Fokussetzung oder Gate-Abschwaechung | fertig wenn Matrix-Nachweise vollstaendig
 
 **Vorrelease-Matrix unveraendert:** 6 PASS / 39 BLOCKED / 4 OPEN / 3 DEFERRED = 52. Keine persoenliche Abnahme, kein Merge, kein Release.
+
+## Nachtrag 02.11.2026 – Bohrspiel nach erstem Abschnitt wiederaufnehmen
+
+- [x] 2026-11-02 | BED-03 / SPE-01 / VER-03 | Vorhandenen 12-Monats-Browserlauf um zweiten echten Chromium-Prozessneustart **nach** Bohrabschnitt 1 erweitern; Zwischenexport, identischen Zustand nach Import, Abschnitt 2/3, Abrechnung und Archivierung pruefen | [Pruefbericht](DRILL_MIDSTAGE_RESTART_20261102.md) | Test implementiert; PASS erst nach CI auf neuem HEAD
+- [ ] 2026-11-02 | BED-03 / CI | Bohrspiel-Kampagne mit vier echten Browserprozessen und drei Sitzungsdateien auf finalem HEAD auswerten | [GitHub Actions](https://github.com/provoware/PROJEKT_Oli_Imperium/actions) | fertig wenn alle konkreten Schritte PASS; bei FAIL Fehler beheben
+- [ ] 2026-11-02 | BED-03 / Rest | Weitere Minispielphasen mit Speicherunterbrechung, Tastatur und Zoom pruefen | Spielzustand vor/nach Neustart exakt vergleichen | fertig wenn alle vorgesehenen Spielpfade technisch nachgewiesen
+
+**Letzter belegter Ausgangsstand:** CI [#41530495777](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41530495777) 9/9 Browserjobs PASS auf `5d2722ac3c6a954ad3feab964f36cbdc9435fe2a`; die acht weiteren Fach-Workflows SUCCESS, die integrierte Vorrelease-Sperre weiterhin erwartungsgemaess FAIL. **Matrix unveraendert: 6 PASS / 39 BLOCKED / 4 OPEN / 3 DEFERRED = 52.** Kein Merge, kein Release, persoenliche Endabnahme zuletzt.

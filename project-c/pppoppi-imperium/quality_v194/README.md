@@ -1,5 +1,7 @@
 # PPPOPPI IMPERIUM – technische Fortsetzung nach V1.9.4
 
+**Aktuelles Pflichtpaket:** [Bohr-Minispiel: Neustart nach Abschnitt 1](DRILL_MIDSTAGE_RESTART_20261102.md) – Testimplementierung; CI auf dem neuen HEAD noch ausstehend, kein Gesamtgate.
+
 **Kein Release und keine persönliche Sichtabnahme.** Der hier beschriebene
 Aufbau ist eine reproduzierbare, technisch korrigierte Vorschau des
 **V1.9.3-Spielkerns mit V1.9.4-Prüfschicht**.
