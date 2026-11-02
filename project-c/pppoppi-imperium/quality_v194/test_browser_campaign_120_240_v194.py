@@ -15,7 +15,7 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 from test_browser_campaign_24months_v194 import check, press_button, state
 from campaign_native_import_v194 import import_saved_session, require_two_imports
-from campaign_keyboard_audit_v194 import tab_to_target
+from campaign_keyboard_audit_v194 import tab_to_target, press_tab_focused
 from test_browser_native_zoom_v194 import (extension_at, set_real_zoom,
                                           wait_for_zoom_worker)
 from performance_profile_v194 import (summarize_month_durations,
@@ -28,6 +28,14 @@ HUMANS = 4
 MAX_REPORTS = 120
 
 
+def press_campaign_button(page, selector, *, audited=False):
+    """Audited controls must use real Tab focus and keyboard Enter."""
+    if audited:
+        press_tab_focused(page, selector)
+    else:
+        press_button(page, selector)
+
+
 def play_month(page, month, audit=None):
     before = state(page)
     retained_before = min(month - 1, MAX_REPORTS)
@@ -37,9 +45,11 @@ def play_month(page, month, audit=None):
           and len(before["reports"]) == retained_before)
     for index in range(HUMANS):
         page.evaluate("NeoEconomy.open('calendar')")
-        if audit is not None and month == 1 and index == 0:
+        audited_turn = audit is not None and month == 1 and index == 0
+        if audited_turn:
             audit(page, '[data-econ="END_TURN"]')
-        press_button(page, '[data-econ="END_TURN"]')
+        press_campaign_button(page, '[data-econ="END_TURN"]',
+                              audited=audited_turn)
         if index < HUMANS - 1:
             page.locator('[data-ui="handoff-ok"]').wait_for(state="visible")
             handoff = state(page)
@@ -47,9 +57,11 @@ def play_month(page, month, audit=None):
                   handoff["turnIndex"] == index + 1
                   and handoff["phase"] == "TURN"
                   and len(handoff["reports"]) == retained_before)
-            if audit is not None and month == 1 and index == 0:
+            audited_handoff = audit is not None and month == 1 and index == 0
+            if audited_handoff:
                 audit(page, '[data-ui="handoff-ok"]')
-            press_button(page, '[data-ui="handoff-ok"]')
+            press_campaign_button(page, '[data-ui="handoff-ok"]',
+                                  audited=audited_handoff)
     page.wait_for_function(
         "['REPORT','RESCUE'].includes(NeoEconomy.getState()?.phase)")
     rescues = 0
@@ -171,7 +183,9 @@ def main(months, zoom_percent=100, native_import=False, keyboard_audit=False):
                 page.evaluate("NeoEconomy.open('computer')")
                 with page.expect_download() as download:
                     audit(page, '#dialogContent [data-ui="session-export"]')
-                    press_button(page, '#dialogContent [data-ui="session-export"]')
+                    press_campaign_button(
+                        page, '#dialogContent [data-ui="session-export"]',
+                        audited=keyboard_audit)
                 target = root / filename
                 download.value.save_as(target)
                 payload = json.loads(target.read_text(encoding="utf-8"))
@@ -183,12 +197,14 @@ def main(months, zoom_percent=100, native_import=False, keyboard_audit=False):
             try:
                 page = start()
                 audit(page, "#startGame")
-                press_button(page, "#startGame")
+                press_campaign_button(page, "#startGame", audited=keyboard_audit)
                 page.locator("#econMode").select_option("4-0")
                 page.get_by_label("Spielart", exact=True).select_option(
                     "campaign:%d" % months)
                 audit(page, '#dialogContent [data-ui="newgame"]')
-                press_button(page, '#dialogContent [data-ui="newgame"]')
+                press_campaign_button(
+                    page, '#dialogContent [data-ui="newgame"]',
+                    audited=keyboard_audit)
                 initial = state(page)
                 check("Vier Menschen und gewaehlte Kampagnendauer",
                       [c["id"] for c in initial["companies"]]
@@ -228,9 +244,11 @@ def main(months, zoom_percent=100, native_import=False, keyboard_audit=False):
                                       "NeoEconomy.endstate.contract().months")
                                   == months)
                     if month < months:
-                        if month in (1, months // 2):
+                        audited_next = keyboard_audit and month in (1, months // 2)
+                        if audited_next:
                             audit(page, '[data-econ="NEXT_MONTH"]')
-                        press_button(page, '[data-econ="NEXT_MONTH"]')
+                        press_campaign_button(page, '[data-econ="NEXT_MONTH"]',
+                                              audited=audited_next)
                         page.wait_for_function(
                             "(m) => NeoEconomy.getState()?.month===m && "
                             "NeoEconomy.getState()?.phase==='TURN'", arg=month + 1)

@@ -49,7 +49,7 @@ jobs:
         run: python3 -m unittest discover -s project-c/pppoppi-imperium/quality_v194 -p 'test_compare_campaign_repeats_v194.py' -v
       - name: Acht Fail-Closed-Regressionen fuer echten Datei-Auswahldialog
         run: python3 -m unittest discover -s project-c/pppoppi-imperium/quality_v194 -p 'test_campaign_native_import_v194.py' -v
-      - name: Fuenf Negativ- und Regressionstests fuer echte Tab-Erreichbarkeit
+      - name: Neun Negativ- und Regressionstests fuer Tab-Fokus und Enter-Aktivierung
         run: python3 -m unittest discover -s project-c/pppoppi-imperium/quality_v194 -p 'test_campaign_keyboard_audit_v194.py' -v
       - name: Bisherige 12-Monats-Enginepruefung als Referenz
         run: node --test project-c/pppoppi-imperium/quality_v194/test_endstate_live_v194.cjs
@@ -268,5 +268,5 @@ jobs:
           python3 -m py_compile project-c/pppoppi-imperium/quality_v194/campaign_keyboard_audit_v194.py project-c/pppoppi-imperium/quality_v194/test_browser_campaign_120_240_v194.py
           python3 -m unittest discover -s project-c/pppoppi-imperium/quality_v194 -p 'test_campaign_keyboard_audit_v194.py' -v
           python3 -m unittest discover -s project-c/pppoppi-imperium/quality_v194 -p 'test_campaign_native_import_v194.py' -v
-      - name: 120 Monate und 14 echte Tab-Nachweise einschliesslich beider Dateidialoge
+      - name: 120 Monate, 14 echte Tab-Nachweise und echte Enter-Aktivierung
         run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_campaign_120_240_v194.py --months 120 --zoom ${{ matrix.zoom }} --native-import --keyboard-audit

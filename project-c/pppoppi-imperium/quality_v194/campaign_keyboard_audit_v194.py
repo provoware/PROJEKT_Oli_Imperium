@@ -19,3 +19,16 @@ def tab_to_target(page, selector, *, max_tabs=120):
     raise AssertionError(
         f"Tab-Ziel nach {max_tabs} Tastendruecken nicht erreichbar: {selector}"
     )
+
+
+
+def press_tab_focused(page, selector):
+    """Activate only a real Tab-focused, visibly focused control with Enter."""
+    target = page.locator(selector)
+    if target.count() != 1 or not target.is_visible() or not target.is_enabled():
+        raise AssertionError("Tab-Aktivierung nicht eindeutig bedienbar: " + selector)
+    if not target.evaluate("(el) => document.activeElement === el"):
+        raise AssertionError("Tab-Aktivierung ohne echten Tastaturfokus: " + selector)
+    if not target.evaluate("(el) => el.matches(':focus-visible')"):
+        raise AssertionError("Tab-Aktivierung ohne sichtbaren Fokus: " + selector)
+    page.keyboard.press("Enter")

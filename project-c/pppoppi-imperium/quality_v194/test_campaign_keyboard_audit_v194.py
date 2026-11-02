@@ -2,7 +2,7 @@
 from unittest import TestCase, main
 from unittest.mock import Mock
 
-from campaign_keyboard_audit_v194 import tab_to_target
+from campaign_keyboard_audit_v194 import tab_to_target, press_tab_focused
 
 
 class TabReachabilityTests(TestCase):
@@ -46,6 +46,31 @@ class TabReachabilityTests(TestCase):
         for limit in (0, -1, 201, True, 1.5):
             with self.subTest(limit=limit), self.assertRaises(ValueError):
                 tab_to_target(self.page, "#startGame", max_tabs=limit)
+        self.page.keyboard.press.assert_not_called()
+
+    def test_real_tab_focus_activates_with_keyboard_enter(self):
+        self.target.evaluate.side_effect = [True, True]
+        press_tab_focused(self.page, "#startGame")
+        self.page.keyboard.press.assert_called_once_with("Enter")
+        self.target.focus.assert_not_called()
+        self.target.press.assert_not_called()
+
+    def test_activation_rejects_missing_keyboard_focus(self):
+        self.target.evaluate.return_value = False
+        with self.assertRaisesRegex(AssertionError, "ohne echten Tastaturfokus"):
+            press_tab_focused(self.page, "#startGame")
+        self.page.keyboard.press.assert_not_called()
+
+    def test_activation_rejects_missing_visible_focus_ring(self):
+        self.target.evaluate.side_effect = [True, False]
+        with self.assertRaisesRegex(AssertionError, "ohne sichtbaren Fokus"):
+            press_tab_focused(self.page, "#startGame")
+        self.page.keyboard.press.assert_not_called()
+
+    def test_activation_rejects_disabled_control(self):
+        self.target.is_enabled.return_value = False
+        with self.assertRaisesRegex(AssertionError, "nicht eindeutig"):
+            press_tab_focused(self.page, "#startGame")
         self.page.keyboard.press.assert_not_called()
 
 

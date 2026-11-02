@@ -49,3 +49,16 @@ python3 project-c/pppoppi-imperium/quality_v194/test_browser_campaign_120_240_v1
 3. Leistungsursachen, Speicher-/Archiv-Randfälle und noch offene Fach-/Rechtefragen unabhängig weiterbearbeiten.
 
 **Empfehlung:** Tab-Nachweise dauerhaft als gesonderte Pflicht führen; Enter nach künstlichem Fokus ist kein Ersatz für nachgewiesene Tastatur-Erreichbarkeit.
+
+
+## Nachtrag 02.11.2026, 05:35 MEZ – echte Enter-Aktivierung nach Tab-Fokus
+
+**Bestätigter Vorgänger-HEAD:** [12924ca8](https://github.com/provoware/PROJEKT_Oli_Imperium/commit/12924ca81a61500982f7c1234e61cde767bfa3dd). Im [Kampagnenlauf #41384400318](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41384400318) waren bei der Bestandsaufnahme beide 120-Monats-Tab-Jobs (175 % und 200 %) **SUCCESS**; die übrigen Langläufer waren noch teilweise in Arbeit. Das ist kein Gesamt-PASS.
+
+**Neues Pflichtpaket:** Die 14 bereits per Tab erreichbaren Schlüsselkontrollen werden nun bei der nachfolgenden Aktivierung **ohne künstliches `locator.focus()`** über die tatsächliche Seitentastatur (`page.keyboard.press("Enter")`) ausgelöst. Vor Enter prüft der neue Helfer sowohl `document.activeElement` als auch `:focus-visible`. Fehlender, unsichtbarer, deaktivierter oder nicht wirklich fokussierter Schalter führt zu FAIL, nicht zu einem Fokus-Trick. Ungeprüfte Aktionen behalten den bisherigen Ablauf; Spielkern und Spielstände bleiben unverändert.
+
+**Isolierter Nachweis:** neun Python-Regressionen **9/9 PASS** in der lokalen Ausführung, darunter vier neue Fälle für echte Enter-Aktivierung, fehlenden Fokus, fehlenden sichtbaren Fokus und deaktivierte Kontrolle; `py_compile` **PASS**. Die GitHub-Browserprüfung auf dem neuen Commit bleibt bis zum tatsächlichen CI-Abschluss **PENDING**. Eine bestandene Browserprüfung belegt nur diese 14 Stellen, nicht sämtliche Dialoge, Minispiele oder die vollständige Tab-Reihenfolge.
+
+**Matrix:** BED-02/BED-03 weiterhin **BLOCKED** als Gesamtpflicht; bestehende 6 PASS / 39 BLOCKED / 4 OPEN / 3 DEFERRED unverändert. Kein Merge, kein Release, keine persönliche Endabnahme.
+
+**Nächste Arbeit:** neue CI-Fehler auswerten, die weiteren Dialog-/Minispielpfade mit echter Tab+Enter-Aktivierung prüfen und unabhängig die offenen Leistungs-/Archivgrenzen bearbeiten.
