@@ -35,3 +35,16 @@ python3 -m unittest discover -s project-c/pppoppi-imperium/quality_v194 -p 'test
 1. Neuen GitHub-CI-Lauf einschließlich der 175/200-%-Browserpfade auf exakt demselben HEAD prüfen und echte Fehler korrigieren.
 2. Noch nicht erfasste Dialoge und Minispiele inventarisieren; ihre echten Tastaturwege und Fokusüberdeckungen ergänzen.
 3. Unabhängig Leistungsschwellen und Archiv-Randfälle bearbeiten; Rechte und C64-Originalbelege gesondert offen lassen.
+
+
+## Nachtrag 02.11.2026 – CI-Fehler und verzögerte Tastatur-Bildlaufbewegung
+
+**Echter Befund:** [CI #41400850616](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41400850616) auf HEAD `a820507db8b20908f93b70fff63acecbbe83550e`: **14/18 Jobs PASS, 4/18 FAIL**. Betroffen sind die vier 120-Monats-Tastaturjobs (vorwärts und rückwärts, jeweils 175/200 %). Alle vier scheitern vor der ersten Spielaktion am selben Ziel `#startGame` mit `Tab-Ziel nicht nutzbar im Browserfenster`. Die übrigen 14 Jobs sind erfolgreich; daraus folgt keine Gesamtfreigabe.
+
+**Ursachenhypothese, noch nicht browserbestätigt:** Die Originalseite setzt `html { scroll-behavior: smooth }`; der Startknopf liegt in der unteren Werkzeugleiste. Bei echtem Zoom kann die Tastatur bereits den Fokus setzen, bevor der natürliche, animierte Seitenbildlauf den Knopf ins 800×600-Fenster bewegt hat. Der neue sofortige Geometrietest könnte daher zu früh auslösen. Ein tatsächlich dauerhaft unsichtbarer oder verdeckter Knopf bleibt ein echter Fehler.
+
+**Gezielte Korrektur:** Nur wenn der Knopf unmittelbar nach Tab außerhalb des Fensters liegt, wartet die Prüfschicht bis zu drei Sekunden auf den **natürlichen Browserbildlauf**. Weder `focus()` noch `scrollIntoView()`, künstlicher Klick oder Abschaltung der Überdeckungsprüfung werden verwendet. Danach wird die Geometrie erneut gemessen; ein weiterhin außerhalb liegender oder verdeckter Knopf bleibt **FAIL** und gibt seine Fensterkoordinaten als Diagnose aus.
+
+**Neue Regressionen:** Ein Fall für erfolgreich abgeschlossenen natürlichen Bildlauf und ein Fall für dauerhafte Unsichtbarkeit trotz Zeitablauf; zusammen **14** Tastatur-Einzeltests. Die Korrektur ist erst nach einem tatsächlichen erfolgreichen Browserlauf auf dem neuen HEAD bestätigt; bis dahin **PENDING**.
+
+**Nachweis-/Freigabegrenze:** BED-02/03 weiterhin BLOCKED, Gesamtmatrix 6 PASS / 39 BLOCKED / 4 OPEN / 3 DEFERRED. Keine persönliche Endabnahme, kein Merge und kein Release.
