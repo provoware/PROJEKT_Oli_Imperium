@@ -121,3 +121,11 @@ Stand 02.11.2026. Dies ist die **auf PR #155 begrenzte Arbeitsliste**; die verbi
 - [ ] 2026-11-02 | BED-03 Zoom | Bohrregler-Fokus und Verdeckung auch bei echtem 175/200-%-Chromiumzoom mit 800x600 testen | keine direkte Fokussetzung | fertig wenn beide Zoomstufen reproduzierbar PASS
 
 **Gesamtmatrix unveraendert:** 6 PASS / 39 BLOCKED / 4 OPEN / 3 DEFERRED. Kein Merge, kein Release; persoenliche Endabnahme zuletzt.
+
+## Nachtrag 02.11.2026 – BED-03 Bohrregler im echten Zoom
+
+- [x] 2026-11-02 | BED-03 | Strengen Druckregler-Fokus-/Geometrie-Gate in den echten 175/200-%-Chromium-Bohrpfad uebernehmen; Fokus nach Home/Pfeilen nachpruefen | [Pflichtbericht](DRILL_NATIVE_ZOOM_GATE_20261102.md) | Code umgesetzt, Browser-CI noch offen
+- [ ] 2026-11-02 | BED-03 CI | Drei Strukturregressionen und beide echten Zoomjobs auf finalem HEAD auswerten; FAIL beheben | GitHub Actions PR #155 | fertig wenn alle betroffenen Jobs PASS
+- [ ] 2026-11-02 | BED-03 Rest | Weitere dynamische Minispielphasen und Zustand nach Speicher-/Neustart pruefen | 800x600, echte Tastatur und Zoom | fertig wenn vorgesehene Bedienwege reproduzierbar belegt
+
+**Matrix unveraendert:** 6 PASS / 39 BLOCKED / 4 OPEN / 3 DEFERRED. Keine Endabnahme, kein Merge, kein Release.
