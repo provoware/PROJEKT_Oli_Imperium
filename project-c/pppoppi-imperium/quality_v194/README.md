@@ -83,3 +83,8 @@ Die zusammenhängende [Start-, Speicher-, Versions- und Fehleranleitung](DOKUMEN
 Der getrennte [Entwurf #155](https://github.com/provoware/PROJEKT_Oli_Imperium/pull/155) prueft nun 240 Spielmonate bei **175 % und 200 % echtem Chromium-Zoom** mit je **zwei nativen, per Enter ausgeloesten Dateiauswahldialogen** nach getrennten Browserneustarts. Ein expliziter Zaehler prueft beide Importwege; ein Direktimport gilt nicht als bestandener nativer Dialog. Siehe [Pflichtbericht](NATIVE_IMPORT_240_LONGRUN_20261102.md) und [offene TODO](TODO.md).
 
 **Ausgangsstand:** [CI #41372928433](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41372928433) war auf HEAD `f1809af62782e432f6025dad9d1e6f37533f0ba4` fuer die bisherigen 12 Kampagnenjobs gruen, einschliesslich beider 120-Monats-Dateidialogjobs. **Die neuen 240-Monats-Dateidialogjobs benoetigen eigene aktuelle CI-Belege; bis dahin PENDING.** Die Pflichtmatrix bleibt 6/52 PASS, die persoenliche Endabnahme bleibt zurueckgestellt. Kein Merge, kein Release.
+
+
+## Echte Tab-Navigation bei 175/200 % – Teilprüfung vom 02.11.2026
+
+[CI #41378517223](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41378517223) auf HEAD `3dde8c40f562c2fc6d396e68c1edde3642e2700a`: **14/14 Jobs PASS**, darunter beide 240-Monats-Dateidialogprüfungen mit je zwei bestätigten nativen Importen. Der [neue Tab-Prüfbericht](KEYBOARD_TAB_CAMPAIGN_20261102.md) ergänzt unabhängige 120-Monats-Jobs bei 175/200 %: 14 Schlüsselkontrollen werden ausschließlich per Tab angesteuert, inklusive Start, Monatswechsel, Export und zweimaligem Import. **Neue Prüfungen noch PENDING**, vollständige Tab-Reihenfolge sämtlicher Szenen weiterhin offen. Die 6/52-Gesamtmatrix bleibt unverändert; kein Merge, keine Endabnahme, kein Release.
