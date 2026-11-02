@@ -26,3 +26,13 @@ Stand 02.11.2026. Dies ist die **auf PR #155 begrenzte Arbeitsliste**; die verbi
 - [ ] 2026-11-02 | BED-02/03 Rest | Nicht erfasste Dialoge und Minispiele auf Tastaturfokus, Sichtbarkeit und Überdeckung prüfen | reale Browserpfade | fertig wenn vollständige Szenenabdeckung nachgewiesen ist
 
 **Vorrelease:** 6/52 PASS; 39 BLOCKED, 4 OPEN, 3 DEFERRED. Persönliche Endabnahme zuletzt, kein Merge/Release. PR-Draftbestand zu Beginn 4 (#141, #150, #154, #155), nach Commit erneut live prüfen.
+
+
+## Nachtrag 02.11.2026 – vier echte CI-Fehler nach Sichtbarkeitsprüfung
+
+- [x] 2026-11-02 | BED-02/03 Diagnose | [CI #41400850616](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41400850616) auswerten | **14 PASS / 4 FAIL** auf `a820507d`; alle vier Tastaturjobs scheitern am außerhalb liegenden `#startGame` vor Spielbeginn | tatsächlicher Fehler nachgewiesen, nicht als PASS umdeuten
+- [x] 2026-11-02 | BED-02/03 Korrekturversuch | Bis zu 3 s ausschließlich natürlichen Browserbildlauf abwarten; kein künstliches Fokussieren/Scrollen; Geometrie anschließend streng erneut prüfen | zwei neue Negativ-/Regressionstests ergänzt, insgesamt 14; [Details](KEYBOARD_TARGET_OCCLUSION_20261102.md) | Code implementiert, Wirkung erst durch neue CI zu belegen
+- [ ] 2026-11-02 | BED-02/03 CI-Gate | 4 betroffene Browserjobs 175/200 % vorwärts/rückwärts auf neuem HEAD erneut prüfen | [GitHub Actions](https://github.com/provoware/PROJEKT_Oli_Imperium/actions) | fertig nur bei tatsächlichem PASS auf aktuellem HEAD
+- [ ] 2026-11-02 | BED-02/03 Rest | Bei erneutem FAIL reale Lage, Scroll-Container und CSS des Startknopfs untersuchen; anschließend alle Dialog-/Minispielpfade inventarisieren | Geometriediagnose und echte Browsernachweise | keine Fokus-/Sichtbarkeitsprüfung entfernen
+
+**Matrix unverändert:** 6/52 PASS; 39 BLOCKED, 4 OPEN, 3 DEFERRED. Keine Freigabe, kein Merge, keine persönliche Endabnahme.
