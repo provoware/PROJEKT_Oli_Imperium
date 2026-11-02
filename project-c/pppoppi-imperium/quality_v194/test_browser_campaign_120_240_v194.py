@@ -14,7 +14,7 @@ from pathlib import Path
 
 from playwright.sync_api import sync_playwright
 from test_browser_campaign_24months_v194 import check, press_button, state
-from campaign_native_import_v194 import import_saved_session
+from campaign_native_import_v194 import import_saved_session, require_two_imports
 from test_browser_native_zoom_v194 import (extension_at, set_real_zoom,
                                           wait_for_zoom_worker)
 from performance_profile_v194 import (summarize_month_durations,
@@ -88,6 +88,7 @@ def main(months, zoom_percent=100, native_import=False):
         errors, external, durations, state_sizes = [], [], [], []
         phase_timings = {"midpoint": {}, "archive": {}}
         processes, rescues = 0, 0
+        import_paths = []
 
         with sync_playwright() as pw:
             browser = None
@@ -200,7 +201,7 @@ def main(months, zoom_percent=100, native_import=False):
                             stop()
                             page = start()
                         with timed_phase("midpoint", "import"):
-                            import_saved_session(page, saved, native=native_import)
+                            import_paths.append(import_saved_session(page, saved, native=native_import))
                             page.wait_for_function(
                                 "(m) => NeoEconomy.getState()?.month===m && "
                                 "NeoEconomy.getState()?.phase==='REPORT'",
@@ -251,11 +252,15 @@ def main(months, zoom_percent=100, native_import=False):
                     stop()
                     page = start()
                 with timed_phase("archive", "import"):
-                    import_saved_session(page, saved, native=native_import)
+                    import_paths.append(import_saved_session(page, saved, native=native_import))
                     page.wait_for_function("NeoEconomy.endstate.status()==='finished'")
                     check("Archiv und Endstand nach zweitem Neustart identisch",
                           state(page) == final
                           and page.evaluate("NeoEconomy.endstate.archive()") == archive)
+                proven_import_path = require_two_imports(
+                    import_paths, native=native_import)
+                check("Zwei bestaetigte Importe ohne Pfadwechsel",
+                      len(import_paths) == 2)
                 check("Drei unabhaengige Chromium-Prozesse", processes == 3)
                 check("Keine externen HTTP/HTTPS-Anfragen", not external)
                 check("Keine JavaScript-Laufzeitfehler", not errors)
@@ -273,8 +278,8 @@ def main(months, zoom_percent=100, native_import=False):
                     "natural_rescues": rescues, "chromium_processes": processes,
                     "viewport": "800x600", "keyboard": "Enter",
                     "native_zoom_percent": zoom_percent,
-                    "session_import_path": ("NATIVE_FILECHOOSER" if native_import
-                                            else "DIRECT_INPUT"),
+                    "session_import_path": proven_import_path,
+                    "session_import_count": len(import_paths),
                     "native_zoom_api": ("chrome.tabs.setZoom/getZoom"
                                         if zoom_percent != 100 else None),
                     "slowest_month_seconds": max(durations),
