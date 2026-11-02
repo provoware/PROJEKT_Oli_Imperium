@@ -139,3 +139,5 @@ Die [strenge Minispiel-Tastaturpruefung](MINIGAME_KEYBOARD_GATE_20261102.md) kon
 ## BED-03 – Bohrdruckregler per Tastatur (02.11.2026)
 
 [Technischer Pflichtbericht](DRILL_PRESSURE_KEYBOARD_20261102.md): Im abgeleiteten Technikaufbau sichtbarer Fokusring fuer den Druckregler, echte Tab-/Geometrie-/Verdeckungspruefung vor Pfeiltasten, Fokusnachkontrolle und fuenf neue Negativtests. GitHub-CI und echte Browserzoompruefungen auf endgueltigem HEAD muessen separat bestaetigt werden. **Matrix unveraendert 6/52 PASS; kein Merge, kein Release.**
+
+Der [BED-03-Pflichtbericht zum nativen Bohrregler-Zoom](DRILL_NATIVE_ZOOM_GATE_20261102.md) dokumentiert den strengen Tastatur-Fokus-/Verdeckungs-Gate bei echtem 175/200-%-Chromium-Zoom, Fokusnachkontrollen nach Home/Pfeiltasten und drei vorgeschaltete Strukturregressionen. **Bis zum erfolgreichen GitHub-Lauf auf finalem HEAD PENDING; Matrix 6/52 PASS, kein Merge/Release.**
