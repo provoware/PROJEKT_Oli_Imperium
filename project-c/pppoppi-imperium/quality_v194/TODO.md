@@ -18,3 +18,11 @@ Stand 02.11.2026. Dies ist die **auf PR #155 begrenzte Arbeitsliste**; die verbi
 - [ ] 2026-11-02 | BED-02/03 Rest | Weitere Dialoge und Minispiele samt Vorwaerts-/Rueckwaerts-Tab, Enter und sichtbarem Fokus inventarisieren | echte Browserpfade | fertig wenn vollstaendige Szenenabdeckung nachgewiesen ist
 
 **PR-Draftbestand bei dieser Iteration:** 4 offen (PR #141, #150, #154, #155), danach erneut 4 erwartet, vor Abschluss live pruefen. **Matrix:** 6/52 PASS; kein Merge, kein Release, persoenliche Endabnahme weiterhin zuletzt.
+
+## Nachtrag 02.11.2026 – verdeckte und außerhalb liegende Tab-Ziele
+
+- [x] 2026-11-02 | BED-02/03 Teilpaket | 14 bestehende Tab+Enter-Punkte vor Aktivierung auf nutzbare Fensterfläche und Überdeckung prüfen | lokal 12/12 Python-Regressionen, Syntax PASS, 4/4 isolierte JavaScript-Geometrieszenarien PASS; [Bericht](KEYBOARD_TARGET_OCCLUSION_20261102.md) | technische Prüfschranke implementiert, Gesamtgate bleibt BLOCKED
+- [ ] 2026-11-02 | BED-02/03 CI | Vorhandene 175/200-%-Browserjobs auf dem neuen HEAD auswerten | Ausgangs-CI [#41394778651](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41394778651) 18/18 PASS auf `b286b5dbb238c93a479a12e09e101df80cf0cb09`; neue CI PENDING | fertig wenn die betroffenen Jobs auf endgültigem HEAD PASS sind
+- [ ] 2026-11-02 | BED-02/03 Rest | Nicht erfasste Dialoge und Minispiele auf Tastaturfokus, Sichtbarkeit und Überdeckung prüfen | reale Browserpfade | fertig wenn vollständige Szenenabdeckung nachgewiesen ist
+
+**Vorrelease:** 6/52 PASS; 39 BLOCKED, 4 OPEN, 3 DEFERRED. Persönliche Endabnahme zuletzt, kein Merge/Release. PR-Draftbestand zu Beginn 4 (#141, #150, #154, #155), nach Commit erneut live prüfen.

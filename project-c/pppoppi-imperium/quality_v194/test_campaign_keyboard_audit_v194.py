@@ -49,7 +49,7 @@ class TabReachabilityTests(TestCase):
         self.page.keyboard.press.assert_not_called()
 
     def test_real_tab_focus_activates_with_keyboard_enter(self):
-        self.target.evaluate.side_effect = [True, True]
+        self.target.evaluate.side_effect = [True, True, {"inViewport": True, "unobstructed": True}]
         press_tab_focused(self.page, "#startGame")
         self.page.keyboard.press.assert_called_once_with("Enter")
         self.target.focus.assert_not_called()
@@ -71,6 +71,27 @@ class TabReachabilityTests(TestCase):
         self.target.is_enabled.return_value = False
         with self.assertRaisesRegex(AssertionError, "nicht eindeutig"):
             press_tab_focused(self.page, "#startGame")
+        self.page.keyboard.press.assert_not_called()
+
+
+    def test_activation_rejects_offscreen_target(self):
+        self.target.evaluate.side_effect = [True, True, {"inViewport": False, "unobstructed": False}]
+        with self.assertRaisesRegex(AssertionError, "nicht nutzbar im Browserfenster"):
+            press_tab_focused(self.page, "#startGame")
+        self.page.keyboard.press.assert_not_called()
+
+    def test_activation_rejects_obscured_target(self):
+        self.target.evaluate.side_effect = [True, True, {"inViewport": True, "unobstructed": False}]
+        with self.assertRaisesRegex(AssertionError, "verdeckt"):
+            press_tab_focused(self.page, "#startGame")
+        self.page.keyboard.press.assert_not_called()
+
+    def test_activation_rejects_unexpected_hit_test_result(self):
+        for invalid in (None, True, {}, {"inViewport": 1, "unobstructed": True}):
+            with self.subTest(result=invalid):
+                self.target.evaluate.side_effect = [True, True, invalid]
+                with self.assertRaisesRegex(AssertionError, "nicht nutzbar im Browserfenster"):
+                    press_tab_focused(self.page, "#startGame")
         self.page.keyboard.press.assert_not_called()
 
 
