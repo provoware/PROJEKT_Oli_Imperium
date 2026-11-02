@@ -92,3 +92,8 @@ Der getrennte [Entwurf #155](https://github.com/provoware/PROJEKT_Oli_Imperium/p
 ## Rueckwaerts-Tab-Navigation – neues Teilpaket (02.11.2026)
 
 Die [Rueckwaerts-Tab-Kampagne](REVERSE_TAB_CAMPAIGN_20261102.md) ergaenzt bei 175/200 % Zoom fuer 14 ausgewaehlte Kontrollen echte `Shift+Tab`- und `Tab`-Rueckwege mit sichtbarem Fokus, bevor Enter ausgeloest wird. Sechs isolierte Regressionen **6/6 PASS**, Syntax **PASS**. Die neuen Browserjobs sind bis zur erfolgreichen Ausfuehrung auf finalem HEAD **PENDING**. Die vorherige [CI #41389498165](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41389498165) auf `c7c1b9ad` war **16/16 SUCCESS**; sie ist kein Nachweis fuer das neue Paket. Gesamtmatrix weiterhin **6/52 PASS**; keine vollstaendige Tastatur- oder Releasefreigabe.
+
+
+## Tastatur-Geometrie bei 175/200 % – CI-Korrekturlauf (02.11.2026)
+
+[CI #41400850616](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41400850616) auf `a820507d` endete mit **14 PASS / 4 FAIL**: die vier Tastatur-Langläufer scheiterten an `#startGame` außerhalb des sichtbaren Fensters. Die Prüfschicht wartet jetzt bei diesem Zustand höchstens 3 Sekunden auf den natürlichen, animierten Browserbildlauf und prüft danach unverändert streng. Keine künstliche Fokussetzung, kein Scroll-Befehl, keine Änderung am Spielkern. Die Wirksamkeit muss die neue GitHub-CI erst bestätigen; siehe [Fehlerbericht](KEYBOARD_TARGET_OCCLUSION_20261102.md). Vorrelease bleibt **BLOCKED**.
