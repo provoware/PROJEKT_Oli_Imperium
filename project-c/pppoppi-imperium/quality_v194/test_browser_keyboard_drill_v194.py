@@ -7,6 +7,10 @@ from pathlib import Path
 
 from playwright.sync_api import sync_playwright
 
+from campaign_keyboard_audit_v194 import (
+    assert_computed_focus_indicator, press_tab_focused,
+)
+
 HERE = Path(__file__).resolve().parent
 CLAIM = "BERLIN-1"
 MODES = (("800x600", 800, 600), ("CSS-200", 400, 300))
@@ -34,7 +38,10 @@ def activate(page, selector, label):
     check(label + ": mit Tab erreichbar", tab_to(page, selector))
     check(label + ": sichtbarer Tastaturfokus",
           page.evaluate("document.activeElement.matches(':focus-visible')"))
-    page.keyboard.press("Enter")
+    # Der echte Tastaturfokus allein reicht nicht: CSS-Ring, Sichtbarkeit,
+    # Verdeckung und Fokusverlust unmittelbar vor Enter streng pruefen.
+    assert_computed_focus_indicator(page.locator(selector), selector)
+    press_tab_focused(page, selector)
 
 
 def state(page):
