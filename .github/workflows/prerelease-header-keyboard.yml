@@ -1,0 +1,53 @@
+name: OLI Vorrelease - Kopfzeile und Hilfedialog per Tastatur
+
+on:
+  pull_request:
+    branches:
+      - integration/oli-main-pr140-20261031
+    paths:
+      - project-c/pppoppi-imperium/quality_v194/test_browser_header_keyboard_v194.py
+      - project-c/pppoppi-imperium/quality_v194/test_header_keyboard_unit_v194.py
+      - project-c/pppoppi-imperium/quality_v194/HEADER_KEYBOARD_20261102.md
+      - .github/workflows/prerelease-header-keyboard.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  header-keyboard-unit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Playwright-Python-Abhaengigkeit begrenzt installieren
+        run: timeout --signal=TERM --kill-after=10s 120s python -m pip install playwright==1.56.0
+      - name: Syntax und sechs Negativ-/Regressionstests
+        run: |
+          python3 -m py_compile project-c/pppoppi-imperium/quality_v194/test_browser_header_keyboard_v194.py project-c/pppoppi-imperium/quality_v194/test_header_keyboard_unit_v194.py
+          python3 -m unittest discover -s project-c/pppoppi-imperium/quality_v194 -p 'test_header_keyboard_unit_v194.py' -v
+      - name: Projektstruktur
+        run: python3 tools/validate_project.py
+
+  header-keyboard-browser:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        zoom: [175, 200]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Chromium installieren
+        run: bash project-c/pppoppi-imperium/quality_v194/install_chromium_ci.sh
+      - name: Echte Tab-/Rueckwaerts-Tab-/Enter-Pfade bei 800x600
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_header_keyboard_v194.py --zoom ${{ matrix.zoom }}
