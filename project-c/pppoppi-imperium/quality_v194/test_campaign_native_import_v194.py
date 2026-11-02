@@ -37,6 +37,25 @@ class NativeImportTests(TestCase):
         self.files.set_files.assert_called_once_with("save.json")
         self.page.locator.return_value.set_input_files.assert_not_called()
 
+    def test_tab_audit_used_for_all_three_import_controls(self):
+        calls = []
+        @contextmanager
+        def chooser(_page, timeout):
+            yield SimpleNamespace(value=self.files)
+        def focus_by_tab(page, selector):
+            self.assertIs(page, self.page)
+            calls.append(selector)
+        with patch("campaign_native_import_v194.ready_filechooser", chooser):
+            self.assertEqual(import_saved_session(
+                self.page, "save.json", native=True,
+                focus_by_tab=focus_by_tab), "NATIVE_FILECHOOSER")
+        self.assertEqual(calls, [
+            "#startGame",
+            '#dialogContent [data-ui="newgame"]',
+            '#dialogContent [data-ui="session-import"]',
+        ])
+        self.page.locator.return_value.focus.assert_not_called()
+
     def test_missing_chooser_fails_without_fallback(self):
         @contextmanager
         def chooser(_page, timeout):
