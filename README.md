@@ -155,3 +155,7 @@ python3 -m unittest discover -s tests -v
 1. Hochschulvorgaben und getrennte wissenschaftliche Eigenleistungen abstimmen.
 2. Konkrete deutsche C64-PAL-Referenz bestimmen, Provenienz, Hash und Emulatorprotokoll dokumentieren.
 3. Einen vollständigen Ablauf `Büro → Weltkarte → Feldinformation → Rückweg` als Pilot erforschen und A→B übergeben.
+
+## ⏱️ Prüf- und Stillstandsgrenzen (NI-20261102-02)
+
+Gemeinsamer [PROVOWARE-Zeitlimitstandard](docs/PROVOWARE_TIMEOUT_STANDARD.md) für Prüfungen und lang laufende Spiele-/Datenaufträge. CI erhält eine 25-Minuten-Schranke; längere Kampagnentests bekommen bei belegtem Fortschritt ein gesondertes Profil. Keine automatische Löschung von Spielständen, kein TIMEOUT als PASS. Die dokumentierte Regel ist noch **kein** Beleg einer vollständigen Runtime-Überwachung.
