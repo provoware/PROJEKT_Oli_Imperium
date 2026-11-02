@@ -105,3 +105,11 @@ Stand 02.11.2026. Dies ist die **auf PR #155 begrenzte Arbeitsliste**; die verbi
 - [ ] 2026-11-02 | BED-02/03 Fokus | Berechnete CSS-Werte bei erneutem #startGame-Fokusringfehler auswerten, Ursache korrigieren | keine Lockerung des CSS-Gates | fertig wenn betroffener Browserpfad auf endgültigem HEAD PASS ist
 
 [Nachweis und offene Risiken](ZOOM_DIALOG_FOCUS_FIX_20261102.md). Matrix unverändert 6/52 PASS, kein Merge/Release, Endabnahme zuletzt.
+
+## Nachtrag 02.11.2026 – CSS-Outline beim echten Tab-Fokus
+
+- [x] 2026-11-02 | BED-02/03 | Fehlgeschlagene Browser-CI #41492796482 anhand berechneter CSS-Werte analysieren und nur im abgeleiteten Aufbau die Toolbar-Outline von der 0,16-s-Transition ausnehmen | isolierter echter Chromium-Tab-Vergleich: anfänglich 2px vs. unmittelbar 3px; Build-Sicherheitsregression ergänzt | Implementierung erfolgt, vollständige CI offen
+- [ ] 2026-11-02 | BED-02/03 CI | Build-Sicherheitsprüfung und beide echten 175/200-%-Zoompfade auf dem finalen Commit auswerten; Fehler bei Bedarf korrigieren | [Fehler-/Pflichtbericht](FOCUS_TRANSITION_20261102.md) | fertig erst nach grünem Nachweis auf endgültigem HEAD
+- [ ] 2026-11-02 | BED-03 Rest | Dynamische Minispielphasen und verbleibende Dialogaktionen vollständig per Tab/Shift+Tab/Enter mit Zustandsprüfung absichern | echte Browserkampagne 800×600 und Zoom | fertig wenn gesamte Bedienmatrix geprüft ist
+
+**Gesamtmatrix unverändert:** 6/52 PASS; 39 BLOCKED, 4 OPEN, 3 DEFERRED. Keine Endabnahme, kein Merge, kein Release.
