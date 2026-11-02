@@ -14,6 +14,10 @@ from test_browser_native_zoom_v194 import wait_for_zoom_worker
 from playwright.sync_api import sync_playwright
 
 from test_browser_keyboard_pipe_fire_v194 import check, tab_to
+from campaign_keyboard_reverse_v194 import verify_reverse_tab_roundtrip
+from campaign_keyboard_audit_v194 import (
+    assert_computed_focus_indicator, press_tab_focused,
+)
 from test_browser_native_zoom_flow_v194 import new_page
 from test_browser_native_zoom_v194 import extension_at
 
@@ -60,6 +64,18 @@ def scan(page, scenes):
     return rows
 
 
+def activate_dialog_keyboard(page, selector, label):
+    """Echte Tab-/Rueckwaerts-Tab-/Enter-Aktivierung mit sichtbarem CSS-Fokus.
+
+    Die gemeinsame Pruefung sperrt Enter bei Fokusverlust, Verdeckung oder
+    fehlender berechneter Fokusmarkierung. Kein locator.focus()/click().
+    """
+    check(label + ": per Tab erreichbar", tab_to(page, selector, max_tabs=300))
+    verify_reverse_tab_roundtrip(page, selector)
+    assert_computed_focus_indicator(page.locator(selector), selector)
+    press_tab_focused(page, selector)
+
+
 def exercise(page, item, label):
     scene, action = item["scene"], item["action"]
     name = label + "/" + scene + "/" + action
@@ -74,12 +90,8 @@ def exercise(page, item, label):
                 '[data-qa-matrix-target="yes"]')) window.__qaMatrixClicks++;
         }, {capture:true});
     }""")
-    check(name + ": per Tab erreichbar",
-          tab_to(page, '#dialogContent [data-qa-matrix-target="yes"]',
-                 max_tabs=300))
-    check(name + ": sichtbarer Tastaturfokus",
-          page.evaluate("document.activeElement.matches(':focus-visible')"))
-    page.keyboard.press("Enter")
+    activate_dialog_keyboard(
+        page, '#dialogContent [data-qa-matrix-target="yes"]', name)
     check(name + ": genau ein echter Tastaturklick",
           page.evaluate("window.__qaMatrixClicks") == 1)
     check(name + ": gueltiger Spielstand",

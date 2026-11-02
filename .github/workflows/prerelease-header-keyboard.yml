@@ -8,6 +8,9 @@ on:
       - project-c/pppoppi-imperium/quality_v194/test_browser_header_keyboard_v194.py
       - project-c/pppoppi-imperium/quality_v194/test_header_keyboard_unit_v194.py
       - project-c/pppoppi-imperium/quality_v194/HEADER_KEYBOARD_20261102.md
+      - project-c/pppoppi-imperium/quality_v194/test_browser_dialog_action_matrix_v194.py
+      - project-c/pppoppi-imperium/quality_v194/test_dialog_keyboard_unit_v194.py
+      - project-c/pppoppi-imperium/quality_v194/DIALOG_KEYBOARD_STRICT_20261102.md
       - project-c/pppoppi-imperium/quality_v194/MOTION_KEYBOARD_20261102.md
       - .github/workflows/prerelease-header-keyboard.yml
   workflow_dispatch:
@@ -30,6 +33,10 @@ jobs:
         run: |
           python3 -m py_compile project-c/pppoppi-imperium/quality_v194/test_browser_header_keyboard_v194.py project-c/pppoppi-imperium/quality_v194/test_header_keyboard_unit_v194.py
           python3 -m unittest discover -s project-c/pppoppi-imperium/quality_v194 -p 'test_header_keyboard_unit_v194.py' -v
+      - name: Dialog-Aktionsmatrix - fuenf strenge Negativ-/Regressionstests
+        run: |
+          python3 -m py_compile project-c/pppoppi-imperium/quality_v194/test_browser_dialog_action_matrix_v194.py project-c/pppoppi-imperium/quality_v194/test_dialog_keyboard_unit_v194.py
+          python3 -m unittest discover -s project-c/pppoppi-imperium/quality_v194 -p 'test_dialog_keyboard_unit_v194.py' -v
       - name: Projektstruktur
         run: python3 tools/validate_project.py
 

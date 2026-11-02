@@ -72,3 +72,11 @@ Stand 02.11.2026. Dies ist die **auf PR #155 begrenzte Arbeitsliste**; die verbi
 - [ ] 2026-11-02 | BED-02/03 | Weitere Dialoge und Minispiele vollstaendig per Tastatur, mit Zustandserhalt und Fokus-Rueckkehr pruefen | echte Browserpfade ohne Fokus-Trick | fertig wenn die vollstaendige Aktionsmatrix nachgewiesen ist
 
 **Wichtig:** Die integrierte Vorrelease-Sperre ist bei 6/52 PASS absichtlich rot; nicht deaktivieren oder als Testfehler kaschieren. Kein Merge/Release.
+
+## Nachtrag 02.11.2026 – strenger Tastaturpfad der Wirtschaftsaktionsmatrix
+
+- [x] 2026-11-02 | BED-02/03 Teilpaket | Vor jeder Wirtschaftsaktion echte Shift+Tab/Tab-Rueckkehr, berechnete CSS-Fokusmarkierung, Fenster-Treffbarkeit und Fokus unmittelbar vor Enter pruefen | [Pruefbericht](DIALOG_KEYBOARD_STRICT_20261102.md); fuenf Negativ-/Regressionstests und CI-Schritt implementiert | fertig als Code, **nicht** als Gesamtgate
+- [ ] 2026-11-02 | BED-02/03 CI | Fuenf neue Unit-Tests und den bestehenden 175/200-%-Dialog-Browser-Rundlauf auf dem neuen HEAD abschliessen | [GitHub Actions](https://github.com/provoware/PROJEKT_Oli_Imperium/actions) | fertig nur bei nachweislichem PASS; bei FAIL echte Fokus-/Layoutursache korrigieren
+- [ ] 2026-11-02 | BED-02/03 Rest | Weitere Claim-/Regionsparameter und dynamische Minispielaktionen mit echten Tastaturpfaden und fachlichen Zustandsfolgen absichern | eigene reproduzierbare Browserfaelle | fertig wenn alle vorgesehenen Aktionsfolgen nachgewiesen sind
+
+**Matrix unveraendert:** 6/52 PASS, 39 BLOCKED, 4 OPEN, 3 DEFERRED. Keine Benutzerabnahme, kein Merge, kein Release.
