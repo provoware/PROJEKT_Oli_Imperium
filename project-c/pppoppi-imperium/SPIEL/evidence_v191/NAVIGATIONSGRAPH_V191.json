@@ -1,0 +1,289 @@
+{
+  "total": 39,
+  "reachable": [
+    "case",
+    "phone",
+    "computer",
+    "map",
+    "calendar",
+    "newspaper",
+    "drawer",
+    "plaque",
+    "duck",
+    "bear",
+    "coffee",
+    "plant",
+    "lamp",
+    "window",
+    "help",
+    "quick",
+    "startup",
+    "minigame",
+    "claim",
+    "field",
+    "warehouse",
+    "pipeline",
+    "factory",
+    "market",
+    "contracts",
+    "finance",
+    "security",
+    "newsroom",
+    "boardroom",
+    "workshop",
+    "awards",
+    "region",
+    "report",
+    "refinery",
+    "transport",
+    "publicNetwork",
+    "chronicle"
+  ],
+  "unreachable": [
+    "rescue",
+    "handoff"
+  ],
+  "exceptions": [],
+  "edges": {
+    "help": [
+      "startup",
+      "computer",
+      "map",
+      "calendar",
+      "quick"
+    ],
+    "computer": [
+      "map",
+      "claim",
+      "market",
+      "finance",
+      "field",
+      "workshop",
+      "contracts",
+      "awards"
+    ],
+    "map": [
+      "region"
+    ],
+    "phone": [
+      "contracts",
+      "finance",
+      "security",
+      "newspaper",
+      "newsroom",
+      "boardroom"
+    ],
+    "case": [
+      "claim",
+      "field",
+      "warehouse",
+      "pipeline",
+      "factory",
+      "market"
+    ],
+    "calendar": [
+      "newspaper"
+    ],
+    "newspaper": [
+      "phone",
+      "newsroom",
+      "report"
+    ],
+    "drawer": [
+      "finance",
+      "contracts",
+      "minigame"
+    ],
+    "plaque": [],
+    "duck": [
+      "minigame"
+    ],
+    "bear": [],
+    "coffee": [
+      "minigame"
+    ],
+    "plant": [],
+    "lamp": [],
+    "window": [],
+    "quick": [
+      "computer",
+      "finance",
+      "boardroom",
+      "map",
+      "claim",
+      "field",
+      "warehouse",
+      "pipeline",
+      "factory",
+      "refinery",
+      "market",
+      "contracts",
+      "calendar",
+      "newspaper"
+    ],
+    "minigame": [
+      "drawer"
+    ],
+    "startup": [
+      "computer"
+    ],
+    "region": [
+      "claim",
+      "field",
+      "warehouse",
+      "pipeline",
+      "factory",
+      "market",
+      "map"
+    ],
+    "claim": [
+      "field",
+      "warehouse",
+      "pipeline",
+      "factory",
+      "market",
+      "workshop",
+      "region"
+    ],
+    "field": [
+      "claim",
+      "warehouse",
+      "pipeline",
+      "factory",
+      "market"
+    ],
+    "warehouse": [
+      "claim",
+      "field",
+      "pipeline",
+      "factory",
+      "market"
+    ],
+    "pipeline": [
+      "claim",
+      "field",
+      "warehouse",
+      "factory",
+      "market"
+    ],
+    "market": [
+      "claim",
+      "field",
+      "warehouse",
+      "pipeline",
+      "factory",
+      "contracts",
+      "map"
+    ],
+    "contracts": [
+      "phone"
+    ],
+    "newsroom": [
+      "boardroom",
+      "security",
+      "calendar",
+      "newspaper"
+    ],
+    "boardroom": [
+      "phone",
+      "contracts",
+      "finance",
+      "newspaper",
+      "chronicle"
+    ],
+    "chronicle": [
+      "refinery",
+      "boardroom"
+    ],
+    "factory": [
+      "claim",
+      "field",
+      "warehouse",
+      "pipeline",
+      "market",
+      "refinery",
+      "transport",
+      "publicNetwork"
+    ],
+    "refinery": [
+      "claim",
+      "field",
+      "warehouse",
+      "pipeline",
+      "factory",
+      "market",
+      "transport",
+      "publicNetwork",
+      "finance"
+    ],
+    "transport": [
+      "claim",
+      "publicNetwork",
+      "refinery",
+      "market",
+      "calendar"
+    ],
+    "publicNetwork": [
+      "transport",
+      "calendar",
+      "finance",
+      "map"
+    ],
+    "finance": [
+      "computer",
+      "report"
+    ],
+    "workshop": [
+      "claim",
+      "field",
+      "warehouse",
+      "pipeline",
+      "factory",
+      "market"
+    ],
+    "security": [
+      "claim",
+      "field",
+      "warehouse",
+      "pipeline",
+      "factory",
+      "market",
+      "workshop",
+      "map"
+    ],
+    "report": [
+      "calendar"
+    ],
+    "rescue": [],
+    "handoff": [
+      "computer"
+    ],
+    "awards": []
+  },
+  "entry": [
+    "case",
+    "phone",
+    "computer",
+    "map",
+    "calendar",
+    "newspaper",
+    "drawer",
+    "plaque",
+    "duck",
+    "bear",
+    "coffee",
+    "plant",
+    "lamp",
+    "window",
+    "help",
+    "quick",
+    "startup",
+    "minigame"
+  ],
+  "conditional_states": [
+    "report",
+    "rescue",
+    "handoff"
+  ],
+  "unexpected_unreachable": []
+}

@@ -1,0 +1,33 @@
+{
+  "gate_id": "BED-02",
+  "date": "2026-10-27",
+  "result": "PARTIAL",
+  "tested_code_head": "8114ce388e3b309581f96aa14138710bf2ab8bef",
+  "command": "python3 project-c/pppoppi-imperium/quality_v194/test_browser_claim_parameters_v194.py",
+  "ci_result": "PASS",
+  "browser": "Chromium 800x600; chrome.tabs.setZoom/getZoom",
+  "native_zoom_percent": [
+    175,
+    200
+  ],
+  "expected_claims": 9,
+  "expected_region_count": 3,
+  "expected_isolated_cases": 18,
+  "expected_trusted_keyboard_actions": 180,
+  "expected_successful_actions": 108,
+  "expected_rejected_actions": 72,
+  "original_source_files_changed": 0,
+  "release_gate": "BLOCKED",
+  "limitations": [
+    "CI-PASS ist ein technischer Teilnachweis, kein Gesamt-Vorrelease-PASS",
+    "Feldwahl via HTML-Auswahlfeld, Wirtschaftsaktionen per Tab/Enter",
+    "Kostenwerte gegen implementierte Kernkonstanten, keine historische Fachreferenz",
+    "Dynamische Spielzustaende und regulare Endpartien fehlen"
+  ],
+  "ci_run_url": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40526236853",
+  "actual_isolated_cases": 18,
+  "actual_trusted_keyboard_actions": 180,
+  "actual_successful_actions": 108,
+  "actual_rejected_actions": 72,
+  "tested_on": "2026-10-27"
+}

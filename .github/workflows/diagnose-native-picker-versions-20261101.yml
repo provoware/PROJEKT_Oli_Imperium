@@ -1,0 +1,52 @@
+name: Diagnose – Vergleich Playwright 1.56 und 1.57 im echten Tab-Zoom
+on:
+  pull_request:
+    paths:
+      - 'project-c/pppoppi-imperium/quality_v194/diagnose_native_picker_strategies_v194.py'
+      - '.github/workflows/diagnose-native-picker-versions-20261101.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  compare-picker-versions:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        playwright-version: ['1.56.0', '1.57.0']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Referenz-Chromium mit allen Bibliotheken installieren
+        run: bash project-c/pppoppi-imperium/quality_v194/install_chromium_ci.sh
+      - name: Nur fuer den Vergleich Playwright und Chromium aktualisieren
+        if: matrix.playwright-version != '1.56.0'
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=10s 120s python -m pip install playwright==${{ matrix.playwright-version }}
+          timeout --signal=TERM --kill-after=10s 180s python -m playwright install chromium
+      - name: Versionskennung und echten Chromium-Start pruefen
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip show playwright | grep -E '^Version: '
+          python - <<'PY'
+          from playwright.sync_api import sync_playwright
+          with sync_playwright() as pw:
+              b=pw.chromium.launch(channel='chromium',headless=True)
+              b.close()
+          print('PASS: CI-Chromium mit Tab-Erweiterungskanal gestartet')
+          PY
+      - name: Gleiche 24 echten Datei-Picker-Versuche pro Version
+        run: python3 project-c/pppoppi-imperium/quality_v194/diagnose_native_picker_strategies_v194.py
+      - name: Ungefilterte A/B-Belege aufbewahren
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: picker-playwright-${{ matrix.playwright-version }}
+          path: native_picker_diagnostic.json
+          if-no-files-found: warn

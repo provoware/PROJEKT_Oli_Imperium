@@ -1,0 +1,204 @@
+{
+  "runs": [
+    {
+      "seed": "LANGZEIT-BERLIN-1",
+      "humans": 1,
+      "ais": 3,
+      "months": 96,
+      "legacy": false,
+      "checked": 96,
+      "ai": [
+        {
+          "id": "A1",
+          "profile": "vorsichtig",
+          "cashCent": 76317482,
+          "debtCent": 0,
+          "awards": [],
+          "rescues": 0,
+          "owned": 3,
+          "drilled": 3
+        },
+        {
+          "id": "A2",
+          "profile": "wachstumsorientiert",
+          "cashCent": 78769615,
+          "debtCent": 0,
+          "awards": [],
+          "rescues": 0,
+          "owned": 3,
+          "drilled": 3
+        },
+        {
+          "id": "A3",
+          "profile": "handelsorientiert",
+          "cashCent": 92347509,
+          "debtCent": 0,
+          "awards": [],
+          "rescues": 0,
+          "owned": 3,
+          "drilled": 3
+        }
+      ],
+      "decisions": 322,
+      "actionTypes": {
+        "SURVEY": 10,
+        "BUY": 9,
+        "DRILL": 9,
+        "PUMP": 48,
+        "SHIP": 104,
+        "OFFER": 104,
+        "TANK_UPGRADE": 14,
+        "FIRE_EXPERT": 24
+      },
+      "finalMonth": 97,
+      "totalRescues": 0,
+      "elapsedMs": 3696
+    },
+    {
+      "seed": "LANGZEIT-BERLIN-2",
+      "humans": 2,
+      "ais": 2,
+      "months": 96,
+      "legacy": false,
+      "checked": 96,
+      "ai": [
+        {
+          "id": "A1",
+          "profile": "vorsichtig",
+          "cashCent": 67279202,
+          "debtCent": 0,
+          "awards": [],
+          "rescues": 0,
+          "owned": 3,
+          "drilled": 3
+        },
+        {
+          "id": "A2",
+          "profile": "wachstumsorientiert",
+          "cashCent": 77050397,
+          "debtCent": 0,
+          "awards": [],
+          "rescues": 0,
+          "owned": 3,
+          "drilled": 3
+        }
+      ],
+      "decisions": 203,
+      "actionTypes": {
+        "SURVEY": 8,
+        "BUY": 6,
+        "DRILL": 6,
+        "PUMP": 33,
+        "SHIP": 58,
+        "OFFER": 58,
+        "TANK_UPGRADE": 10,
+        "FIRE_EXPERT": 24
+      },
+      "finalMonth": 97,
+      "totalRescues": 0,
+      "elapsedMs": 3682
+    },
+    {
+      "seed": "LANGZEIT-BERLIN-3",
+      "humans": 1,
+      "ais": 3,
+      "months": 120,
+      "legacy": false,
+      "checked": 120,
+      "ai": [
+        {
+          "id": "A1",
+          "profile": "vorsichtig",
+          "cashCent": 68157482,
+          "debtCent": 0,
+          "awards": [],
+          "rescues": 0,
+          "owned": 3,
+          "drilled": 3
+        },
+        {
+          "id": "A2",
+          "profile": "wachstumsorientiert",
+          "cashCent": 70609615,
+          "debtCent": 0,
+          "awards": [],
+          "rescues": 0,
+          "owned": 3,
+          "drilled": 3
+        },
+        {
+          "id": "A3",
+          "profile": "handelsorientiert",
+          "cashCent": 84187509,
+          "debtCent": 0,
+          "awards": [],
+          "rescues": 0,
+          "owned": 3,
+          "drilled": 3
+        }
+      ],
+      "decisions": 328,
+      "actionTypes": {
+        "SURVEY": 10,
+        "BUY": 9,
+        "DRILL": 9,
+        "PUMP": 48,
+        "SHIP": 104,
+        "OFFER": 104,
+        "TANK_UPGRADE": 14,
+        "FIRE_EXPERT": 30
+      },
+      "finalMonth": 121,
+      "totalRescues": 0,
+      "elapsedMs": 5117
+    },
+    {
+      "seed": "LANGZEIT-BERLIN-1",
+      "humans": 1,
+      "ais": 3,
+      "months": 96,
+      "legacy": true,
+      "checked": 96,
+      "ai": [
+        {
+          "id": "A1",
+          "profile": "vorsichtig",
+          "cashCent": 8790168,
+          "debtCent": 89502,
+          "awards": [],
+          "rescues": 0,
+          "owned": 3,
+          "drilled": 3
+        },
+        {
+          "id": "A2",
+          "profile": "wachstumsorientiert",
+          "cashCent": 48184420,
+          "debtCent": 0,
+          "awards": [],
+          "rescues": 0,
+          "owned": 3,
+          "drilled": 3
+        },
+        {
+          "id": "A3",
+          "profile": "handelsorientiert",
+          "cashCent": 1402762,
+          "debtCent": 0,
+          "awards": [],
+          "rescues": 0,
+          "owned": 3,
+          "drilled": 3
+        }
+      ],
+      "decisions": 0,
+      "actionTypes": {},
+      "finalMonth": 97,
+      "totalRescues": 0,
+      "elapsedMs": 3179
+    }
+  ],
+  "c64Reference": "not-tested",
+  "kubuntuPersonalAcceptance": "deferred",
+  "metricsAreNotBalanceProof": true
+}

@@ -1,0 +1,197 @@
+name: Projekt C – KI-Strategie-Kennzahlen und Reproduzierbarkeit
+on:
+  pull_request:
+    paths:
+      # Die Messungen laden den echten Spielkern. Aenderungen daran muessen
+      # dieselbe KI-Gesamtregression ausloesen, nicht nur Testdatei-Aenderungen.
+      - 'project-c/pppoppi-imperium/SPIEL/src/**'
+      - 'project-c/pppoppi-imperium/quality_v194/test_ai_strategy_metrics_v194.cjs'
+      - 'project-c/pppoppi-imperium/quality_v194/test_ai_strategy_metrics_unit_v194.cjs'
+      - 'project-c/pppoppi-imperium/quality_v194/AI_STRATEGY_BASELINE_20261029.md'
+      - 'project-c/pppoppi-imperium/quality_v194/test_ai_profile_rotation_v194.cjs'
+      - 'project-c/pppoppi-imperium/quality_v194/test_ai_logistics_reserves_v194.cjs'
+      - 'project-c/pppoppi-imperium/quality_v194/test_ai_investment_gates_v194.cjs'
+      - 'project-c/pppoppi-imperium/quality_v194/test_ai_turn_trace_v194.cjs'
+      - 'project-c/pppoppi-imperium/quality_v194/test_ai_turn_order_v194.cjs'
+      - 'project-c/pppoppi-imperium/quality_v194/test_ai_order_isolation_v194.cjs'
+      - 'project-c/pppoppi-imperium/quality_v194/test_ai_turn_rotation_v194.cjs'
+      - 'project-c/pppoppi-imperium/quality_v194/test_ai_turn_rotation_unit_v194.cjs'
+      - 'project-c/pppoppi-imperium/quality_v194/test_ai_turn_rotation_stress_v194.cjs'
+      - 'project-c/pppoppi-imperium/quality_v194/test_ai_turn_rotation_risk_v194.cjs'
+      - 'project-c/pppoppi-imperium/quality_v194/test_ai_turn_rotation_risk_unit_v194.cjs'
+      - 'project-c/pppoppi-imperium/quality_v194/test_ai_debt_rescue_stress_v194.cjs'
+      - 'project-c/pppoppi-imperium/quality_v194/test_ai_multimonth_rescue_v194.cjs'
+      - 'project-c/pppoppi-imperium/quality_v194/test_ai_owned_claim_insolvency_v194.cjs'
+      - 'project-c/pppoppi-imperium/quality_v194/test_ai_natural_debt_observation_v194.cjs'
+      - 'project-c/pppoppi-imperium/quality_v194/test_ai_cashflow_audit_v194.cjs'
+      - 'project-c/pppoppi-imperium/quality_v194/test_financial_boundaries_v194.cjs'
+      - 'project-c/pppoppi-imperium/quality_v194/FINANCIAL_BOUNDARIES_20261031.md'
+      - 'project-c/pppoppi-imperium/quality_v194/test_public_freight_monthly_audit_v194.cjs'
+      - 'project-c/pppoppi-imperium/quality_v194/test_public_freight_chain_sale_v194.cjs'
+      - 'project-c/pppoppi-imperium/quality_v194/AI_CASHFLOW_AUDIT_20261030.md'
+      - 'project-c/pppoppi-imperium/quality_v194/AI_NATURAL_DEBT_OBSERVATION_20261030.md'
+      - 'project-c/pppoppi-imperium/quality_v194/AI_OWNED_CLAIM_INSOLVENCY_20261030.md'
+      - 'project-c/pppoppi-imperium/quality_v194/AI_MULTIMONTH_RESCUE_20261030.md'
+      - 'project-c/pppoppi-imperium/quality_v194/AI_DEBT_RESCUE_STRESS_20261030.md'
+      - 'project-c/pppoppi-imperium/quality_v194/AI_TURN_ROTATION_RISK_20261030.md'
+      - 'project-c/pppoppi-imperium/quality_v194/AI_TURN_ROTATION_STRESS_20261029.md'
+      - 'project-c/pppoppi-imperium/quality_v194/AI_TURN_ROTATION_20261029.md'
+      - 'project-c/pppoppi-imperium/quality_v194/AI_ORDER_ISOLATION_20261029.md'
+      - 'project-c/pppoppi-imperium/quality_v194/AI_TURN_ORDER_20261029.md'
+      - 'project-c/pppoppi-imperium/quality_v194/AI_TURN_TRACE_20261029.md'
+      - 'project-c/pppoppi-imperium/quality_v194/AI_INVESTMENT_GATES_20261029.md'
+      - 'project-c/pppoppi-imperium/quality_v194/AI_LOGISTICS_RESERVES_20261029.md'
+      - 'project-c/pppoppi-imperium/quality_v194/AI_PROFILE_ROTATION_20261029.md'
+      - 'project-c/pppoppi-imperium/prerelease/matrix.json'
+      - '.github/workflows/prerelease-ai-strategy-metrics.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  ai-strategy-baseline:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax und Rechenregression
+        run: |
+          node --check project-c/pppoppi-imperium/quality_v194/test_ai_strategy_metrics_v194.cjs
+          node --check project-c/pppoppi-imperium/quality_v194/test_ai_strategy_metrics_unit_v194.cjs
+          node --test project-c/pppoppi-imperium/quality_v194/test_ai_strategy_metrics_unit_v194.cjs
+      - name: 4 Szenarien, 3 Starts, 36 Monate, je zweimal
+        run: |
+          set -o pipefail
+          node project-c/pppoppi-imperium/quality_v194/test_ai_strategy_metrics_v194.cjs | tee ai_strategy_baseline.json
+          node -e "const r=require('./ai_strategy_baseline.json'); if(r.rows.length!==12 || r.summary.length!==12 || r.totalSimulatedMonths!==864 || r.prereleaseGate!=='BLOCKED') process.exit(1);"
+      - name: Zwei Szenarien und drei strategische Profilzuordnungen kontrollieren
+        run: |
+          set -o pipefail
+          node --check project-c/pppoppi-imperium/quality_v194/test_ai_profile_rotation_v194.cjs
+          node project-c/pppoppi-imperium/quality_v194/test_ai_profile_rotation_v194.cjs | tee ai_profile_rotation.json
+          node -e "const r=require('./ai_profile_rotation.json'); if(r.rows.length!==6 || r.comparisons.length!==12 || r.totalSimulatedMonths!==432 || r.prereleaseGate!=='BLOCKED') process.exit(1);"
+      - name: Logistikreserven mit unveraendertem Kern kontrolliert vergleichen
+        run: |
+          set -o pipefail
+          node --check project-c/pppoppi-imperium/quality_v194/test_ai_logistics_reserves_v194.cjs
+          node project-c/pppoppi-imperium/quality_v194/test_ai_logistics_reserves_v194.cjs | tee ai_logistics_reserves.json
+          node -e "const r=require('./ai_logistics_reserves.json'); if(r.rows.length!==8 || r.comparisons.length!==18 || r.totalSimulatedMonths!==576 || r.prereleaseGate!=='BLOCKED') process.exit(1);"
+      - name: KI-Investitionsschranken und Kapitalgegenproben kontrollieren
+        run: |
+          set -o pipefail
+          node --check project-c/pppoppi-imperium/quality_v194/test_ai_investment_gates_v194.cjs
+          node project-c/pppoppi-imperium/quality_v194/test_ai_investment_gates_v194.cjs | tee ai_investment_gates.json
+          node -e "const r=require('./ai_investment_gates.json'); if(r.rows.length!==18 || r.rows.filter(x=>x.companyId==='A3').length!==6 || r.prereleaseGate!=='BLOCKED') process.exit(1);"
+      - name: Tatsächliche KI-Zugreihenfolge und Ausführungsablehnungen diagnostizieren
+        run: |
+          set -o pipefail
+          node --check project-c/pppoppi-imperium/quality_v194/test_ai_turn_trace_v194.cjs
+          node project-c/pppoppi-imperium/quality_v194/test_ai_turn_trace_v194.cjs | tee ai_turn_trace.json
+          node -e "const r=require('./ai_turn_trace.json'); if(r.reports.length!==2 || r.totalSimulatedMonths!==216 || r.reports.some(x=>x.firstTwelveMonths.length!==36 || !x.baselineParity) || r.prereleaseGate!=='BLOCKED') process.exit(1);"
+      - name: KI-Zugfolge in allen sechs Reihenfolgen und zwei Maerkten vergleichen
+        run: |
+          set -o pipefail
+          node --check project-c/pppoppi-imperium/quality_v194/test_ai_turn_order_v194.cjs
+          node project-c/pppoppi-imperium/quality_v194/test_ai_turn_order_v194.cjs | tee ai_turn_order.json
+          node -e "const r=require('./ai_turn_order.json'); if(r.rows.length!==12 || r.comparisons.length!==6 || r.repeatedCampaigns!==24 || r.totalSimulatedMonths!==936 || r.prereleaseGate!=='BLOCKED') process.exit(1);"
+      - name: Strategische KI-Zugfolge und Logistik-Reihenfolge getrennt pruefen
+        run: |
+          set -o pipefail
+          node --check project-c/pppoppi-imperium/quality_v194/test_ai_order_isolation_v194.cjs
+          node project-c/pppoppi-imperium/quality_v194/test_ai_order_isolation_v194.cjs | tee ai_order_isolation.json
+          node -e "const r=require('./ai_order_isolation.json'); if(r.rows.length!==24 || r.comparisons.length!==36 || r.totalCampaigns!==62 || r.totalSimulatedMonths!==2232 || r.prereleaseGate!=='BLOCKED') process.exit(1);"
+      - name: KI-Monatsreihenfolge gegen feste Startpositionen testen
+        run: |
+          set -o pipefail
+          node --check project-c/pppoppi-imperium/quality_v194/test_ai_turn_rotation_v194.cjs
+          node --check project-c/pppoppi-imperium/quality_v194/test_ai_turn_rotation_unit_v194.cjs
+          node --test project-c/pppoppi-imperium/quality_v194/test_ai_turn_rotation_unit_v194.cjs
+          node project-c/pppoppi-imperium/quality_v194/test_ai_turn_rotation_v194.cjs | tee ai_turn_rotation.json
+          node -e "const r=require('./ai_turn_rotation.json'); if(r.rows.length!==18 || r.comparisons.length!==36 || r.totalCampaigns!==38 || r.totalSimulatedMonths!==1368 || r.prereleaseGate!=='BLOCKED') process.exit(1);"
+      - name: KI-Monatsrotation unter passivem Spieler und Nachfrageeinbruch pruefen
+        run: |
+          set -o pipefail
+          node --check project-c/pppoppi-imperium/quality_v194/test_ai_turn_rotation_stress_v194.cjs
+          node project-c/pppoppi-imperium/quality_v194/test_ai_turn_rotation_stress_v194.cjs | tee ai_turn_rotation_stress.json
+          node -e "const r=require('./ai_turn_rotation_stress.json'); const a=r.aggregate; if(r.rows.length!==18 || r.comparisons.length!==12 || r.exactRepeats!==18 || r.totalCampaigns!==38 || r.totalSimulatedMonths!==1368 || r.prereleaseGate!=='BLOCKED' || a.moreFields+a.equalFields+a.fewerFields!==12 || a.moreLiquidNet+a.equalLiquidNet+a.lessLiquidNet!==12) process.exit(1);"
+      - name: KI-Rotationsrisiken, Bilanzidentitaeten und Firmen-Nachteile pruefen
+        run: |
+          set -o pipefail
+          node --check project-c/pppoppi-imperium/quality_v194/test_ai_turn_rotation_risk_v194.cjs
+          node --check project-c/pppoppi-imperium/quality_v194/test_ai_turn_rotation_risk_unit_v194.cjs
+          node --test project-c/pppoppi-imperium/quality_v194/test_ai_turn_rotation_risk_unit_v194.cjs
+          node project-c/pppoppi-imperium/quality_v194/test_ai_turn_rotation_risk_v194.cjs ai_turn_rotation_stress.json | tee ai_turn_rotation_risk.json
+          node -e "const r=require('./ai_turn_rotation_risk.json'); if(r.checkedPairs!==12 || r.checkedCompanyComparisons!==36 || r.accountingIdentitiesChecked!==144 || r.perScenario.length!==2 || r.prereleaseGate!=='BLOCKED') process.exit(1);"
+      - name: KI-Schulden, automatischen Rettungskredit und Neustart pruefen
+        run: |
+          set -o pipefail
+          node --check project-c/pppoppi-imperium/quality_v194/test_ai_debt_rescue_stress_v194.cjs
+          node project-c/pppoppi-imperium/quality_v194/test_ai_debt_rescue_stress_v194.cjs | tee ai_debt_rescue_stress.json
+          node -e "const r=require('./ai_debt_rescue_stress.json'); if(r.repeatedRuns!==2 || r.scenario.aiRestarts!==1 || r.scenario.aiLoansWithoutRestart!==1 || !r.scenario.duplicateTurnRejected || !r.scenario.jsonRoundtrip || !r.scenario.nextMonthPreserved || r.prereleaseGate!=='BLOCKED') process.exit(1);"
+      - name: Wiederholte KI-Sanierung in drei echten Monatsuebergaengen pruefen
+        run: |
+          set -o pipefail
+          node --check project-c/pppoppi-imperium/quality_v194/test_ai_multimonth_rescue_v194.cjs
+          node project-c/pppoppi-imperium/quality_v194/test_ai_multimonth_rescue_v194.cjs | tee ai_multimonth_rescue.json
+          node -e "const r=require('./ai_multimonth_rescue.json'); if(r.repeatedRuns!==2 || r.monthsPerRun!==3 || r.totalSimulatedMonths!==6 || r.a1Restarts!==2 || r.duplicateMonthClosuresRejected!==6 || r.jsonRoundtrips!==6 || r.rows.length!==3 || r.prereleaseGate!=='BLOCKED') process.exit(1);"
+      - name: KI-Insolvenz mit tatsaechlich erworbenen Oelfeldern pruefen
+        run: |
+          set -o pipefail
+          node --check project-c/pppoppi-imperium/quality_v194/test_ai_owned_claim_insolvency_v194.cjs
+          node project-c/pppoppi-imperium/quality_v194/test_ai_owned_claim_insolvency_v194.cjs | tee ai_owned_claim_insolvency.json
+          node -e "const r=require('./ai_owned_claim_insolvency.json'); if(r.repeatedRuns!==2 || r.result.releasedClaimCount<1 || !r.result.duplicateRejected || !r.result.jsonRoundtrip || !r.result.nextMonthValid || r.prereleaseGate!=='BLOCKED') process.exit(1);"
+      - name: Natuerliche KI-Schuldenentwicklung ueber 48 Monate ohne Geldinjektion pruefen
+        run: |
+          set -o pipefail
+          node --check project-c/pppoppi-imperium/quality_v194/test_ai_natural_debt_observation_v194.cjs
+          node project-c/pppoppi-imperium/quality_v194/test_ai_natural_debt_observation_v194.cjs | tee ai_natural_debt_observation.json
+          node -e "const r=require('./ai_natural_debt_observation.json'); if(r.configurations!==2 || r.repeatedRuns!==2 || r.monthsPerRun!==48 || r.totalSimulatedMonths!==192 || !r.noInjectedCashOrDebt || r.rows.length!==2 || r.prereleaseGate!=='BLOCKED') process.exit(1);"
+      - name: Kassenbuch und Monatsberichte unabhängig gegenpruefen
+        run: |
+          set -o pipefail
+          node --check project-c/pppoppi-imperium/quality_v194/test_ai_cashflow_audit_v194.cjs
+          node project-c/pppoppi-imperium/quality_v194/test_ai_cashflow_audit_v194.cjs | tee ai_cashflow_audit.json
+          node -e "const r=require('./ai_cashflow_audit.json'); if(r.configurations!==2 || r.repeatedRuns!==2 || r.totalSimulatedMonths!==96 || r.accountingChecks<120 || r.revenueChecks!==r.accountingChecks || r.negativeTests!==8 || r.classificationUnitChecks!==2 || r.knownActionCostCodes!==9 || !Number.isSafeInteger(r.classifications.actionCostCent) || !Number.isSafeInteger(r.classifications.freightHoldCent) || !Number.isSafeInteger(r.classifications.freightRefundCent) || !r.classifications || !r.noInjectedCashOrDebt || r.prereleaseGate!=='BLOCKED') process.exit(1);"
+      - name: Geldposition, Rechnungsschulden und unbewertete Anlagen unabhängig prüfen
+        run: |
+          node --check project-c/pppoppi-imperium/quality_v194/test_financial_boundaries_v194.cjs
+          node --test project-c/pppoppi-imperium/quality_v194/test_financial_boundaries_v194.cjs
+      - name: Frachtvorauszahlung und Rueckgabe ueber zwei Monatsgrenzen pruefen
+        run: |
+          set -o pipefail
+          node --check project-c/pppoppi-imperium/quality_v194/test_public_freight_monthly_audit_v194.cjs
+          node project-c/pppoppi-imperium/quality_v194/test_public_freight_monthly_audit_v194.cjs | tee public_freight_monthly_audit.json
+          node -e "const r=require('./public_freight_monthly_audit.json'); if(r.scenarios!==2 || r.repeatedRuns!==2 || r.totalSimulatedMonths!==8 || r.checkedCompanyMonths!==16 || r.duplicateQueuesRejected!==8 || r.jsonRoundtrips!==8 || r.rows.length!==2 || r.prereleaseGate!=='BLOCKED') process.exit(1);"
+      - name: Zweistufige Frachtkette, Lieferverzug und Aussenmarktverkauf pruefen
+        run: |
+          set -o pipefail
+          node --check project-c/pppoppi-imperium/quality_v194/test_public_freight_chain_sale_v194.cjs
+          node project-c/pppoppi-imperium/quality_v194/test_public_freight_chain_sale_v194.cjs | tee public_freight_chain_sale.json
+          node -e "const r=require('./public_freight_chain_sale.json'); if(r.scenarios!==2 || r.repeatedRuns!==2 || r.totalSimulatedMonths!==12 || r.checkedCompanyMonths!==24 || r.duplicatesRejected!==8 || r.jsonRoundtrips!==12 || r.rejectedEarlyOffers!==4 || r.rows.length!==2 || r.rows[0].expectedRevenueCent<=0 || r.rows[1].expectedRevenueCent!==0 || r.prereleaseGate!=='BLOCKED') process.exit(1);"
+      - name: Reproduzierbaren Zahlenbericht sichern
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ai-strategy-baseline
+          path: |
+            ai_strategy_baseline.json
+            ai_profile_rotation.json
+            ai_logistics_reserves.json
+            ai_investment_gates.json
+            ai_turn_trace.json
+            ai_turn_order.json
+            ai_order_isolation.json
+            ai_turn_rotation.json
+            ai_turn_rotation_stress.json
+            ai_turn_rotation_risk.json
+            ai_debt_rescue_stress.json
+            ai_multimonth_rescue.json
+            ai_owned_claim_insolvency.json
+            ai_natural_debt_observation.json
+            ai_cashflow_audit.json
+            public_freight_monthly_audit.json
+            public_freight_chain_sale.json
+          if-no-files-found: warn
+          retention-days: 14

@@ -1,0 +1,104 @@
+[
+  {
+    "id": "RULE-BER-001",
+    "name": "Wertschöpfungszyklus",
+    "origin": "BERLIN",
+    "status": "draft",
+    "module_id": "MOD-PROD"
+  },
+  {
+    "id": "RULE-BER-002",
+    "name": "Markt: Vertrag vor Spot, Pro-Rata innerhalb Rang",
+    "origin": "BERLIN",
+    "status": "draft",
+    "module_id": "MOD-MARKET",
+    "decision_id": "DEC-21"
+  },
+  {
+    "id": "RULE-BER-003",
+    "name": "Zahlungspriorität nach 5 Klassen",
+    "origin": "BERLIN",
+    "status": "draft",
+    "module_id": "MOD-LEDGER",
+    "decision_id": "DEC-22"
+  },
+  {
+    "id": "RULE-BER-004",
+    "name": "Weiche Pleite und Rettung",
+    "origin": "BERLIN",
+    "status": "draft",
+    "module_id": "MOD-RESCUE"
+  },
+  {
+    "id": "RULE-BER-005",
+    "name": "Berliner Marktführer",
+    "origin": "BERLIN",
+    "status": "draft",
+    "module_id": "MOD-MILESTONE"
+  },
+  {
+    "id": "RULE-BER-006",
+    "name": "Vertragsmeister",
+    "origin": "BERLIN",
+    "status": "draft",
+    "module_id": "MOD-MILESTONE"
+  },
+  {
+    "id": "RULE-BER-007",
+    "name": "Endlosspiel",
+    "origin": "BERLIN",
+    "status": "draft",
+    "module_id": "MOD-MILESTONE"
+  },
+  {
+    "id": "RULE-BER-008",
+    "name": "30 Spieltage je Monat (Parameter)",
+    "origin": "BERLIN",
+    "status": "parameter",
+    "module_id": "MOD-TIME"
+  },
+  {
+    "id": "RULE-BER-009",
+    "name": "Monatsphasen idempotent",
+    "origin": "BERLIN",
+    "status": "draft",
+    "module_id": "MOD-TIME"
+  },
+  {
+    "id": "RULE-BER-010",
+    "name": "KI handelt ohne Allwissen",
+    "origin": "BERLIN",
+    "status": "draft",
+    "module_id": "MOD-AI"
+  },
+  {
+    "id": "RULE-ORI-001",
+    "name": "C64 Büro als zentrale Navigation",
+    "origin": "C64_SECONDARY",
+    "status": "open",
+    "module_id": "MOD-RESEARCH",
+    "source_ids": [
+      "SRC-001"
+    ]
+  },
+  {
+    "id": "RULE-ORI-002",
+    "name": "C64 vier Spielziele",
+    "origin": "C64_SECONDARY",
+    "status": "open",
+    "module_id": "MOD-RESEARCH",
+    "source_ids": [
+      "SRC-001"
+    ]
+  },
+  {
+    "id": "RULE-ORI-003",
+    "name": "C64 drei Minispiele",
+    "origin": "C64_SECONDARY",
+    "status": "open",
+    "module_id": "MOD-RESEARCH",
+    "source_ids": [
+      "SRC-001"
+    ]
+  }
+]

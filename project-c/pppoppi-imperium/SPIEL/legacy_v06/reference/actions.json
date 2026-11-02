@@ -1,0 +1,232 @@
+[
+  {
+    "id": "ACT-SETUP",
+    "title": "Spielstart",
+    "module_id": "MOD-START",
+    "time_cost_days_sample": 0,
+    "guard_text": "Validiertes Profil",
+    "effect_text": "Neue Partie",
+    "idempotent": true,
+    "historical_status": "NEU_ENTWURF"
+  },
+  {
+    "id": "ACT-SURVEY",
+    "title": "Gutachten anfordern",
+    "module_id": "MOD-SURVEY",
+    "time_cost_days_sample": 2,
+    "guard_text": "Feld waehlbar, Guthaben",
+    "effect_text": "Gutachten erzeugt",
+    "idempotent": true,
+    "historical_status": "NEU_ENTWURF"
+  },
+  {
+    "id": "ACT-BUY-FIELD",
+    "title": "Feld kaufen",
+    "module_id": "MOD-WORLD",
+    "time_cost_days_sample": 1,
+    "guard_text": "frei, Kredit/Geld deckt Preis",
+    "effect_text": "Besitz und Geld gebucht",
+    "idempotent": true,
+    "historical_status": "NEU_ENTWURF"
+  },
+  {
+    "id": "ACT-DRILL-SELF",
+    "title": "Selbst bohren",
+    "module_id": "MOD-MINI-DRILL",
+    "time_cost_days_sample": 3,
+    "guard_text": "Feld im Eigentum, unerschlossen",
+    "effect_text": "Fortschritt oder Fehlschlag",
+    "idempotent": true,
+    "historical_status": "NEU_ENTWURF"
+  },
+  {
+    "id": "ACT-DRILL-HIRE",
+    "title": "Bohrfirma bestellen",
+    "module_id": "MOD-DRILL",
+    "time_cost_days_sample": 1,
+    "guard_text": "Angebot verfuegbar",
+    "effect_text": "Auftrag mit Frist",
+    "idempotent": true,
+    "historical_status": "NEU_ENTWURF"
+  },
+  {
+    "id": "ACT-HARVEST",
+    "title": "Oel foerdern",
+    "module_id": "MOD-PROD",
+    "time_cost_days_sample": 0,
+    "guard_text": "betriebene Quelle, freies Lager",
+    "effect_text": "Reserve zu Lager",
+    "idempotent": true,
+    "historical_status": "NEU_ENTWURF"
+  },
+  {
+    "id": "ACT-BUY-TANK",
+    "title": "Tank kaufen",
+    "module_id": "MOD-WARE",
+    "time_cost_days_sample": 1,
+    "guard_text": "Standort/Zahlung",
+    "effect_text": "Kapazitaet erhoeht",
+    "idempotent": true,
+    "historical_status": "NEU_ENTWURF"
+  },
+  {
+    "id": "ACT-TRANSFER",
+    "title": "Oel transportieren",
+    "module_id": "MOD-LOG",
+    "time_cost_days_sample": 1,
+    "guard_text": "Menge/Kapazitaet",
+    "effect_text": "Frachtstatus",
+    "idempotent": true,
+    "historical_status": "NEU_ENTWURF"
+  },
+  {
+    "id": "ACT-MARKET-ORDER",
+    "title": "Verkaufsangebot",
+    "module_id": "MOD-MARKET",
+    "time_cost_days_sample": 1,
+    "guard_text": "Lager und Angebot gueltig",
+    "effect_text": "Auftrag vorgemerkt",
+    "idempotent": true,
+    "historical_status": "NEU_ENTWURF"
+  },
+  {
+    "id": "ACT-ACCEPT-CONTRACT",
+    "title": "Vertrag annehmen",
+    "module_id": "MOD-CONTRACT",
+    "time_cost_days_sample": 1,
+    "guard_text": "Angebot und Risiko gesehen",
+    "effect_text": "Verpflichtung erstellt",
+    "idempotent": true,
+    "historical_status": "NEU_ENTWURF"
+  },
+  {
+    "id": "ACT-CLOSE-CONTRACT",
+    "title": "Vertrag erfuellen",
+    "module_id": "MOD-CONTRACT",
+    "time_cost_days_sample": 0,
+    "guard_text": "Lieferung bestaetigt",
+    "effect_text": "Status/Bilanz aktualisiert",
+    "idempotent": true,
+    "historical_status": "NEU_ENTWURF"
+  },
+  {
+    "id": "ACT-SETTLE-SALE",
+    "title": "Verkauf buchen",
+    "module_id": "MOD-LEDGER",
+    "time_cost_days_sample": 0,
+    "guard_text": "Abnahme bestaetigt",
+    "effect_text": "Forderung/Einnahme",
+    "idempotent": true,
+    "historical_status": "NEU_ENTWURF"
+  },
+  {
+    "id": "ACT-CREDIT-DRAW",
+    "title": "Kredit abrufen",
+    "module_id": "MOD-LOAN",
+    "time_cost_days_sample": 1,
+    "guard_text": "Kreditangebot validiert",
+    "effect_text": "Geld und Schuld +",
+    "idempotent": true,
+    "historical_status": "NEU_ENTWURF"
+  },
+  {
+    "id": "ACT-SELL-ASSET",
+    "title": "Anlage verkaufen",
+    "module_id": "MOD-LEDGER",
+    "time_cost_days_sample": 1,
+    "guard_text": "unbelasteter Eigentumstitel",
+    "effect_text": "Geld + Besitz -",
+    "idempotent": true,
+    "historical_status": "NEU_ENTWURF"
+  },
+  {
+    "id": "ACT-SECURITY",
+    "title": "Schutz engagieren",
+    "module_id": "MOD-SABOTAGE",
+    "time_cost_days_sample": 1,
+    "guard_text": "Angebot und Zahlung",
+    "effect_text": "Schutz aktiv",
+    "idempotent": true,
+    "historical_status": "NEU_ENTWURF"
+  },
+  {
+    "id": "ACT-SABOTAGE",
+    "title": "Sabotage beauftragen",
+    "module_id": "MOD-SABOTAGE",
+    "time_cost_days_sample": 1,
+    "guard_text": "Spielprofil erlaubt",
+    "effect_text": "Ereignisfall",
+    "idempotent": true,
+    "historical_status": "NEU_ENTWURF"
+  },
+  {
+    "id": "ACT-EXTINGUISH",
+    "title": "Brand loeschen",
+    "module_id": "MOD-MINI-FIRE",
+    "time_cost_days_sample": 2,
+    "guard_text": "Feld brennt",
+    "effect_text": "Schaden/Ausfall neu",
+    "idempotent": true,
+    "historical_status": "NEU_ENTWURF"
+  },
+  {
+    "id": "ACT-PIPELINE",
+    "title": "Pipeline stoerung beheben",
+    "module_id": "MOD-MINI-PIPE",
+    "time_cost_days_sample": 1,
+    "guard_text": "Stoerung liegt vor",
+    "effect_text": "Lieferfortsetzung",
+    "idempotent": true,
+    "historical_status": "NEU_ENTWURF"
+  },
+  {
+    "id": "ACT-END-TURN",
+    "title": "Zug beenden",
+    "module_id": "MOD-TIME",
+    "time_cost_days_sample": 0,
+    "guard_text": "Befehle validiert",
+    "effect_text": "Zug gesperrt",
+    "idempotent": true,
+    "historical_status": "NEU_ENTWURF"
+  },
+  {
+    "id": "ACT-CLOSE-MONTH",
+    "title": "Monat abrechnen",
+    "module_id": "MOD-TIME",
+    "time_cost_days_sample": 0,
+    "guard_text": "alle Zuege gesperrt",
+    "effect_text": "Abschlussjournal",
+    "idempotent": true,
+    "historical_status": "NEU_ENTWURF"
+  },
+  {
+    "id": "ACT-RESCUE",
+    "title": "Rettungsmassnahme",
+    "module_id": "MOD-RESCUE",
+    "time_cost_days_sample": 0,
+    "guard_text": "Rettungsfenster offen",
+    "effect_text": "Rueckstand reduziert oder Neustart",
+    "idempotent": true,
+    "historical_status": "NEU_ENTWURF"
+  },
+  {
+    "id": "ACT-NEW-GEN",
+    "title": "Sanierungsneustart",
+    "module_id": "MOD-RESCUE",
+    "time_cost_days_sample": 0,
+    "guard_text": "Bestaetigung und Plan",
+    "effect_text": "Generation +1",
+    "idempotent": true,
+    "historical_status": "NEU_ENTWURF"
+  },
+  {
+    "id": "ACT-MILESTONE",
+    "title": "Erfolg pruefen",
+    "module_id": "MOD-MILESTONE",
+    "time_cost_days_sample": 0,
+    "guard_text": "Monat abgerechnet",
+    "effect_text": "Auszeichnung ggf. einmal",
+    "idempotent": true,
+    "historical_status": "NEU_ENTWURF"
+  }
+]

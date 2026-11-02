@@ -1,0 +1,131 @@
+{
+  "browser": "Chromium via playwright, HTML/JS/CSS eingebettet, kein echter file:// Kubuntu-Test",
+  "checks": [
+    {
+      "label": "V1.6-Oberfläche geladen",
+      "passed": true
+    },
+    {
+      "label": "Raffinerieadapter geladen",
+      "passed": true
+    },
+    {
+      "label": "Erweitertes Geschicklichkeitsmodul geladen",
+      "passed": true
+    },
+    {
+      "label": "Neue Partie mit Raffineriedaten",
+      "passed": true
+    },
+    {
+      "label": "Rohöl im Feldlager",
+      "passed": true
+    },
+    {
+      "label": "Raffinerie vom Industriehof erreichbar",
+      "passed": true
+    },
+    {
+      "label": "Raffineriebau verfügbar",
+      "passed": true
+    },
+    {
+      "label": "Bau im echten Spielzustand",
+      "passed": true
+    },
+    {
+      "label": "Verarbeitung erzeugt genau 9 bbl Fertigware",
+      "passed": true
+    },
+    {
+      "label": "Verkauf leert Fertigwarenbestand",
+      "passed": true
+    },
+    {
+      "label": "Absatzbegrenzung zählt Verkäufe",
+      "passed": true
+    },
+    {
+      "label": "Vier gespeicherte verknüpfte Figurenereignisse",
+      "passed": true
+    },
+    {
+      "label": "Firmenchronik im Vorstand erreichbar",
+      "passed": true
+    },
+    {
+      "label": "Ereignisfolge sichtbar",
+      "passed": true
+    },
+    {
+      "label": "Spielstand exportiert Werk und Route",
+      "passed": true
+    },
+    {
+      "label": "Spielstandimport bewahrt Absatz",
+      "passed": true
+    },
+    {
+      "label": "Schwierigkeitswahl im Bohrspiel",
+      "passed": true
+    },
+    {
+      "label": "Profischutz verlangt Vorbereitung ohne Fehlversuch",
+      "passed": true
+    },
+    {
+      "label": "Vorbereitung aktiv",
+      "passed": true
+    },
+    {
+      "label": "Laufendes Minispiel exportierbar",
+      "passed": true
+    },
+    {
+      "label": "Raffinerie ohne horizontales Scrollen auf Mobil",
+      "passed": true
+    },
+    {
+      "label": "Keine ungefangenen JavaScript-Fehler",
+      "passed": true
+    },
+    {
+      "label": "Keine externen Netzwerkanfragen",
+      "passed": true
+    }
+  ],
+  "passed": 23,
+  "total": 23,
+  "screenshots": [
+    {
+      "file": "01_Buero_V16.png",
+      "sha256": "a469141a4ce6858cda1967b513826b26ecd688315cf43502b59c3e13c391a409"
+    },
+    {
+      "file": "02_Raffinerie_vor_Bau.png",
+      "sha256": "ee80845fa27e6c1eed4c00cd0e1adade3e74c0940d8fc6d4766b5e42d83a998f"
+    },
+    {
+      "file": "03_Raffinerie_Produktion.png",
+      "sha256": "a90f8c2997c9fdc7abb09ea73e148ac0f0799c06d20b549f4c53e12e6b294221"
+    },
+    {
+      "file": "04_Raffinerie_Verkauf.png",
+      "sha256": "1911aa98289be953dce99028e5999beaff4104f7562cfddb6a1424b7eba04588"
+    },
+    {
+      "file": "05_Figurenchronik.png",
+      "sha256": "4a8acefb55de431ff449c1a6e2ed169df5879280a17d9fe0d8fe12258d53555d"
+    },
+    {
+      "file": "06_Bohrspiel_Profi.png",
+      "sha256": "277ec240755915f07a725b6e1f24be31556cdeb7f2e78dfca358149bebf089d5"
+    },
+    {
+      "file": "07_Mobil_Raffinerie.png",
+      "sha256": "2a8ff72e9c3171e15cdd52c17e39f011c7e642683e07171ada682413db9d847e"
+    }
+  ],
+  "errors": [],
+  "network": []
+}

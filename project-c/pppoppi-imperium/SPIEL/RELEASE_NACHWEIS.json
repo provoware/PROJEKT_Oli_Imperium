@@ -1,0 +1,65 @@
+{
+  "version": "1.4.0",
+  "project": "PPPOPPI IMPERIUM · Neo-Retro",
+  "source_baseline_zip_sha256": "ce7b57f2448debbebe150d957f999b617acb26f5ad134618831b1c032fc6ece5",
+  "economic_engine_v082_sha256": "368e2f44b10dd78e1aaea97247906d25a1416096f48c09a912728f933c0f7d44",
+  "baseline_engine_unchanged": true,
+  "ui_interactive_acceptance": {
+    "passed": 31,
+    "total": 31
+  },
+  "historical_emulator_test": "NOT_RUN",
+  "kubuntu_file_start_test": "NOT_RUN",
+  "screenshots": [
+    {
+      "file": "01_Profi_Buero.png",
+      "sha256": "62a868649591b52dce2db75a54ddab781f129d0594408435624deecf7592572a",
+      "bytes": 1504776
+    },
+    {
+      "file": "02_Bohrdruck.png",
+      "sha256": "2fce3c36b65b213975aa2b54c084fb7db8a01545305b2b147aeed70754db6bce",
+      "bytes": 143136
+    },
+    {
+      "file": "03_Erschlossenes_Feld.png",
+      "sha256": "9a566fa8a1aa7110c5c997ce2285519995371e0293f43785c9a9323c6b225429",
+      "bytes": 244043
+    },
+    {
+      "file": "04_Pipeline_Puzzle.png",
+      "sha256": "4894c444974870276455466522e203e9ce0ed8d86e72ad4071a4184292a6e32f",
+      "bytes": 165237
+    },
+    {
+      "file": "05_Pipeline_verbunden_1.png",
+      "sha256": "510cf7695cf8163224a34fd90b1c50dab7ad0fc427291685aed8705d326a6858",
+      "bytes": 334203
+    },
+    {
+      "file": "06_Brandbekaempfung.png",
+      "sha256": "15698f80000b35b2507cd0d9e374193df5ff911af580a5fe9ae05e09b85a68f6",
+      "bytes": 167776
+    },
+    {
+      "file": "07_Vorstand.png",
+      "sha256": "3116fceb626d278cc2542b89168eb5efa331252df85ce72527957f1750f5fc71",
+      "bytes": 269107
+    },
+    {
+      "file": "08_Mobil_Minispiel.png",
+      "sha256": "07b011c6cba46d8f0199654ede9dc7af3739fdd59adadeaa92e66fab7580cb0b",
+      "bytes": 118469
+    }
+  ],
+  "new_files": [
+    "src/skill_arcade.js",
+    "src/skill_arcade.css"
+  ],
+  "modified_files": [
+    "index.html",
+    "src/neo_bridge.js"
+  ],
+  "browser_method": "Chromium headless mit eingebetteten lokalen Programmbestandteilen; keine http-Abfrage",
+  "rights": "eigene Grafiken / keine Original-ROM-Inhalte"
+}

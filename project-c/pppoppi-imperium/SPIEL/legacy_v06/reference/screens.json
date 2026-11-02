@@ -1,0 +1,162 @@
+[
+  {
+    "id": "SCR-START",
+    "title": "Start",
+    "status": "DESIGN"
+  },
+  {
+    "id": "SCR-SETUP",
+    "title": "Spielkonfiguration",
+    "status": "DESIGN"
+  },
+  {
+    "id": "SCR-HQ",
+    "title": "Berliner Firmenzentrale",
+    "status": "DESIGN"
+  },
+  {
+    "id": "SCR-MAP",
+    "title": "Deutschlandkarte",
+    "status": "DESIGN"
+  },
+  {
+    "id": "SCR-REGION",
+    "title": "Region",
+    "status": "DESIGN"
+  },
+  {
+    "id": "SCR-FIELD",
+    "title": "Feldansicht",
+    "status": "DESIGN"
+  },
+  {
+    "id": "SCR-EXPERTISE",
+    "title": "Gutachten",
+    "status": "DESIGN"
+  },
+  {
+    "id": "SCR-PURCHASE",
+    "title": "Feldkauf",
+    "status": "DESIGN"
+  },
+  {
+    "id": "SCR-DRILL",
+    "title": "Bohrung",
+    "status": "DESIGN"
+  },
+  {
+    "id": "SCR-MARKET",
+    "title": "Markt",
+    "status": "DESIGN"
+  },
+  {
+    "id": "SCR-CONTRACTS",
+    "title": "Verträge",
+    "status": "DESIGN"
+  },
+  {
+    "id": "SCR-CONTRACT-DETAIL",
+    "title": "Vertragsdetails",
+    "status": "DESIGN"
+  },
+  {
+    "id": "SCR-STOCK",
+    "title": "Lager",
+    "status": "DESIGN"
+  },
+  {
+    "id": "SCR-LOGISTICS",
+    "title": "Logistik",
+    "status": "DESIGN"
+  },
+  {
+    "id": "SCR-PIPELINE",
+    "title": "Pipeline-Minispiel",
+    "status": "DESIGN"
+  },
+  {
+    "id": "SCR-RESULT",
+    "title": "Ergebnis",
+    "status": "DESIGN"
+  },
+  {
+    "id": "SCR-INBOX",
+    "title": "Nachrichten",
+    "status": "DESIGN"
+  },
+  {
+    "id": "SCR-EVENT",
+    "title": "Ereignis",
+    "status": "DESIGN"
+  },
+  {
+    "id": "SCR-DECISION",
+    "title": "Entscheidung",
+    "status": "DESIGN"
+  },
+  {
+    "id": "SCR-COMPETITORS",
+    "title": "Konkurrenz",
+    "status": "DESIGN"
+  },
+  {
+    "id": "SCR-SECURITY",
+    "title": "Sicherheit",
+    "status": "DESIGN"
+  },
+  {
+    "id": "SCR-SABOTAGE",
+    "title": "Sabotage",
+    "status": "DESIGN"
+  },
+  {
+    "id": "SCR-FINANCE",
+    "title": "Finanzen",
+    "status": "DESIGN"
+  },
+  {
+    "id": "SCR-RESCUE",
+    "title": "Rettung",
+    "status": "DESIGN"
+  },
+  {
+    "id": "SCR-REPORTS",
+    "title": "Statistiken",
+    "status": "DESIGN"
+  },
+  {
+    "id": "SCR-MILESTONES",
+    "title": "Erfolge",
+    "status": "DESIGN"
+  },
+  {
+    "id": "SCR-JOURNAL",
+    "title": "Journal",
+    "status": "DESIGN"
+  },
+  {
+    "id": "SCR-SAVE",
+    "title": "Speichern",
+    "status": "DESIGN"
+  },
+  {
+    "id": "SCR-HELP",
+    "title": "Hilfe",
+    "status": "DESIGN"
+  },
+  {
+    "id": "SCR-END-TURN",
+    "title": "Zug beenden",
+    "status": "DESIGN"
+  },
+  {
+    "id": "SCR-NEXT-PLAYER",
+    "title": "Spielerwechsel",
+    "status": "DESIGN"
+  },
+  {
+    "id": "SCR-MONTH-REPORT",
+    "title": "Monatsbericht",
+    "status": "DESIGN"
+  }
+]

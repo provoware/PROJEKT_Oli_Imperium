@@ -1,0 +1,30 @@
+{
+  "gate_id": "BED-02",
+  "result": "PARTIAL",
+  "date": "2026-10-27",
+  "commit": "0ee7a8e027204ccb1464da6828d8c2c671947082",
+  "command": "python3 project-c/pppoppi-imperium/quality_v194/test_browser_keyboard_escape_v194.py",
+  "ci_url": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40427112310",
+  "source_ci_url": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40427112286",
+  "checks": {
+    "full_browser_workflow": "PASS",
+    "source_workflow": "PASS",
+    "viewports": [
+      "800x600",
+      "CSS-200"
+    ],
+    "scenes_per_viewport": 39,
+    "native_escape_closures_total": 78,
+    "keyboard_openers_per_viewport": 2,
+    "focus_return_total": 4,
+    "unchanged_economic_state": true,
+    "offline_no_http": true,
+    "no_javascript_errors": true
+  },
+  "limits": [
+    "39 Szenen je CSS-Bildbereich per Navigations-API geoeffnet; keine 78 unabhaengigen Spielfunktionen.",
+    "Hilfe und Uebersicht je CSS-Bildbereich mit echter Tab/Enter-Taste geoeffnet, mit Escape geschlossen und Fokus-Rueckkehr nachgewiesen.",
+    "CSS-200 ist kein nativer Browserzoom; Fokuskontrast, alle Dialogaktionen und vollstaendige Sieg-/Niederlagenpartien sind nicht freigegeben.",
+    "BED-02 bleibt BLOCKED, keine persoenliche Abnahme oder Releasefreigabe."
+  ]
+}

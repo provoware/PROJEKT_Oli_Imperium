@@ -1,0 +1,32 @@
+{
+  "gate_id": "SPE-01",
+  "related_gate_ids": [
+    "VER-02",
+    "VER-03",
+    "LOG-04"
+  ],
+  "date": "2026-10-28",
+  "result": "PARTIAL",
+  "test_scope": "2 menschliche Firmen; 8 echte Wirtschaftsaktionen; 2 natuerliche H1-Insolvenzen; Generationen 1 bis 3; bis 240 echte Folgemonate; 3 JSON-Rundlaeufe; Duplikat- und Monatsbuchungsschutz",
+  "command": "node project-c/pppoppi-imperium/quality_v194/test_multigeneration_rescue_v194.cjs",
+  "ci_run_url": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40651316766",
+  "ci_step_result": "PASS",
+  "ci_job": "chromium-roundtrip",
+  "tested_head": "1166846587d02054c5f7f3926ecb9c82c3be60d2",
+  "final_documentation_head": "PENDING_FINAL_CI",
+  "original_source_files_changed": 0,
+  "release_gate": "BLOCKED",
+  "verified_properties": [
+    "Erste Insolvenz ausschliesslich durch acht echte Engine-Wirtschaftsaktionen",
+    "Zweite Insolvenz durch reale Monatskosten, ohne synthetischen Spielstand",
+    "H1-Generation 3 und zwei Sanierungsereignisse, H2 bleibt Generation 1",
+    "Drei JSON-Rundlaeufe, davon einer mit offener zweiter Sanierung",
+    "Wiederholte RESTART-Kennung aendert Zustand nicht; Folgemonat ohne Doppelbuchung"
+  ],
+  "limitations": [
+    "Engine-Test, keine Browser-Mehrgenerationen-Partie",
+    "Keine vollstaendige Sieg-/Niederlagenpartie oder fachlich freigegebene Endregeln",
+    "Kein historischer C64-Originalvergleich",
+    "Vollstaendige CI auf finalem Dokumentations-HEAD noch ausstehend"
+  ]
+}

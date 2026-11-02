@@ -1,0 +1,42 @@
+{
+  "version": "1.9.1",
+  "basis": "PPPOPPI IMPERIUM V1.7.1",
+  "kind": "navigation regression implementation",
+  "unchanged_modules": [
+    "src/v082_engine.js",
+    "src/v07_engine.js",
+    "src/profi_economy.js",
+    "src/logistics_v17.js",
+    "src/public_network_v171.js",
+    "src/skill_arcade.js"
+  ],
+  "edited_files": [
+    "src/neo_bridge.js",
+    "index.html"
+  ],
+  "added_files": [
+    "src/navigation_v191.js",
+    "src/navigation_v191.css",
+    "test_navigation_v191.py",
+    "graph_navigation_v191.py",
+    "README_V191.txt"
+  ],
+  "browser_checks": 32,
+  "registered_scenes": 39,
+  "ordinary_reachable_scenes": 37,
+  "special_phase_scenes": [
+    "rescue",
+    "handoff"
+  ],
+  "checks_over_all_scenes": true,
+  "kubuntu_final_acceptance": "deferred",
+  "c64_original_emulator": "not performed",
+  "sha256": {
+    "src/v082_engine.js": "368e2f44b10dd78e1aaea97247906d25a1416096f48c09a912728f933c0f7d44",
+    "src/v07_engine.js": "d450095c0cf1bc67577a76f5f0c06168d2b5d5dabf1054e01172d401cca0065e",
+    "src/profi_economy.js": "b08bfd4a28d5f9b9c362e667f5b3741ef1e6bcf375349042eaa2ba061e2bb60b",
+    "src/logistics_v17.js": "bb5cde813e3038e6f051765f6dded7720f04587e99ee3954a0f0a99df10d5cee",
+    "src/public_network_v171.js": "e7d3083208cf8a95f51a869bff87eae39f780766ee98e9e77770336f6f7aca7e",
+    "src/skill_arcade.js": "6a01b6d5ab14b36a22c51c8bb23e57f63ffcc553bf98e07134b29f11c9695999"
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "gate_id": "BED-03",
+  "result": "PARTIAL",
+  "date": "2026-10-27",
+  "implementation_commit": "05fb2f698566ea35c731660ef96fe0fd0c4de9ef",
+  "test": "python3 project-c/pppoppi-imperium/quality_v194/test_browser_native_zoom_drill_v194.py",
+  "scope": {
+    "zoom_percent": [
+      175,
+      200
+    ],
+    "game": "DRILL",
+    "stages_per_zoom": 3,
+    "controls": [
+      "Tab",
+      "Enter",
+      "Home",
+      "ArrowRight"
+    ],
+    "expected_layout_snapshots": 8,
+    "export_roundtrip": "exact JSON equality"
+  },
+  "ci_status": "PASS_BROWSERS_AND_SOURCE__RELEASE_BLOCKED",
+  "limits": [
+    "Nicht alle Dialogaktionen unter echtem Zoom getestet.",
+    "Fokuskontrast und Zwischenbild-Ueberdeckungen nicht vollstaendig quantifiziert.",
+    "Keine vollstaendigen Sieg- und Niederlagenpartien.",
+    "Persoenliche Endabnahme ausdruecklich zurueckgestellt."
+  ],
+  "verified_head": "4508c6e05a5f3a84f3acf8a1b66ab25ded83030d",
+  "browser_ci": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40450228065",
+  "source_ci": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40450228026",
+  "release_matrix_ci": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40450228096",
+  "actual_checks": {
+    "zoom_percent": [
+      175,
+      200
+    ],
+    "css_width": [
+      457,
+      400
+    ],
+    "stages_per_zoom": 3,
+    "pressure_targets_each_zoom": [
+      39,
+      67,
+      51
+    ],
+    "layout_snapshots": 8,
+    "horizontal_overflow_px": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "close_button_visible": 8,
+    "exact_export_equality": true,
+    "js_errors": 0,
+    "external_http_requests": 0,
+    "browser_workflow": "PASS",
+    "source_workflow": "PASS",
+    "release_gate": "BLOCKED_EXPECTED"
+  }
+}

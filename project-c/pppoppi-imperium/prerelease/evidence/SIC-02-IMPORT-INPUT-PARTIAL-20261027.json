@@ -1,0 +1,30 @@
+{
+  "gate_id": "SIC-02",
+  "date": "2026-10-27",
+  "result": "PARTIAL",
+  "tested_code_head": "23edc84a193d109ac2565f1dfa6dfa72af43e8ef",
+  "command": "python3 project-c/pppoppi-imperium/quality_v194/test_browser_import_input_security_v194.py",
+  "ci_result": "PASS",
+  "ci_run_url": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40588604025",
+  "ci_job": "chromium-roundtrip",
+  "tested_cases": {
+    "invalid_json_structures": 13,
+    "html_injection_scenes": 8,
+    "browser_contexts": 2
+  },
+  "verified_properties": [
+    "untrusted company name remains literal text in eight selected scenes",
+    "no injected onerror/onload handler execution",
+    "invalid JSON imports preserve entire active game state",
+    "export and explicit reimport preserve valid game state",
+    "no external HTTP requests or JS runtime errors"
+  ],
+  "original_source_files_changed": 0,
+  "release_gate": "BLOCKED",
+  "limitations": [
+    "not all possible nested JSON inputs or arbitrary strings",
+    "no proof of full game victory/defeat paths",
+    "not a historical C64 rule comparison",
+    "personal end approval deferred"
+  ]
+}

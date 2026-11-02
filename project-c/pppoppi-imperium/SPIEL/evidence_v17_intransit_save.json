@@ -1,0 +1,1091 @@
+{
+  "schema": "pppoppi.berlin.save/0.8.2",
+  "ruleset": "berlin-economy/0.8.2.0",
+  "seed": "PPPOPPI-2026",
+  "month": 2,
+  "phase": "TURN",
+  "turnIndex": 0,
+  "companies": [
+    {
+      "id": "H1",
+      "name": "PPPOPPI",
+      "type": "human",
+      "generation": 1,
+      "cashCent": 18854900,
+      "debtCent": 0,
+      "daysUsed": 3,
+      "contracts": [],
+      "obligations": [
+        {
+          "id": "M1-G1-LOHN",
+          "priority": 1,
+          "dueCent": 90000,
+          "paidCent": 90000,
+          "kind": "PERSONAL"
+        },
+        {
+          "id": "M1-G1-WARTUNG",
+          "priority": 1,
+          "dueCent": 50000,
+          "paidCent": 50000,
+          "kind": "WARTUNG"
+        }
+      ],
+      "ledger": [
+        {
+          "id": "LG-1-1-0",
+          "month": 1,
+          "deltaCent": -250000,
+          "code": "STRECKENBAU",
+          "info": "H1:BERLIN:RAW:BERLIN-1"
+        },
+        {
+          "id": "LG-1-2-1",
+          "month": 1,
+          "deltaCent": -450000,
+          "code": "STRECKENBAU",
+          "info": "H1:BERLIN:PIPE:"
+        },
+        {
+          "id": "LG-1-3-2",
+          "month": 1,
+          "deltaCent": -200000,
+          "code": "STRECKENBAU",
+          "info": "H1:BERLIN:FINAL:"
+        },
+        {
+          "id": "LG-1-4-3",
+          "month": 1,
+          "deltaCent": -14000,
+          "code": "FRACHT",
+          "info": "H1:BERLIN:RAW:BERLIN-1"
+        },
+        {
+          "id": "B1-7-4",
+          "month": 1,
+          "deltaCent": -90000,
+          "code": "ZAHLUNG_PERSONAL",
+          "info": "M1-G1-LOHN"
+        },
+        {
+          "id": "B1-7-5",
+          "month": 1,
+          "deltaCent": -50000,
+          "code": "ZAHLUNG_WARTUNG",
+          "info": "M1-G1-WARTUNG"
+        },
+        {
+          "id": "RF-2-H1-8-6",
+          "month": 2,
+          "deltaCent": -65000,
+          "code": "RAFFINERIE_VERARBEITUNG",
+          "info": "BERLIN-1"
+        },
+        {
+          "id": "LG-2-9-7",
+          "month": 2,
+          "deltaCent": -26100,
+          "code": "FRACHT",
+          "info": "H1:BERLIN:PIPE: > H1:BERLIN:FINAL:"
+        }
+      ],
+      "stats": {
+        "contractsDone": 0,
+        "contractsOnTime": 0,
+        "contractsProfitable": 0,
+        "contractsProfitCent": 0,
+        "marketStreak": 0,
+        "awards": [],
+        "rescues": 0
+      },
+      "loanUsed": false,
+      "monthRevenueCent": 0,
+      "monthSoldMilli": 0,
+      "monthProducedMilli": 0,
+      "monthContractMilli": 0
+    },
+    {
+      "id": "H2",
+      "name": "Mensch 2",
+      "type": "human",
+      "generation": 1,
+      "cashCent": 19910000,
+      "debtCent": 0,
+      "daysUsed": 0,
+      "contracts": [],
+      "obligations": [
+        {
+          "id": "M1-G1-LOHN",
+          "priority": 1,
+          "dueCent": 90000,
+          "paidCent": 90000,
+          "kind": "PERSONAL"
+        }
+      ],
+      "ledger": [
+        {
+          "id": "B1-7-0",
+          "month": 1,
+          "deltaCent": -90000,
+          "code": "ZAHLUNG_PERSONAL",
+          "info": "M1-G1-LOHN"
+        }
+      ],
+      "stats": {
+        "contractsDone": 0,
+        "contractsOnTime": 0,
+        "contractsProfitable": 0,
+        "contractsProfitCent": 0,
+        "marketStreak": 0,
+        "awards": [],
+        "rescues": 0
+      },
+      "loanUsed": false,
+      "monthRevenueCent": 0,
+      "monthSoldMilli": 0,
+      "monthProducedMilli": 0,
+      "monthContractMilli": 0
+    }
+  ],
+  "claims": {
+    "BERLIN-1": {
+      "id": "BERLIN-1",
+      "region": "BERLIN",
+      "name": "Berlin-Mitte (Satirezone) / Claim 1",
+      "owner": "H1",
+      "surveyedBy": [],
+      "drilled": true,
+      "reserveMilli": 500000,
+      "inventoryMilli": 40000,
+      "preparedMilli": 0,
+      "order": false,
+      "tankLevel": 1,
+      "tankMilli": 250000,
+      "pipeline": false,
+      "burning": false,
+      "damaged": false,
+      "securityUntil": 0
+    },
+    "BERLIN-2": {
+      "id": "BERLIN-2",
+      "region": "BERLIN",
+      "name": "Berlin-Mitte (Satirezone) / Claim 2",
+      "owner": null,
+      "surveyedBy": [],
+      "drilled": false,
+      "reserveMilli": 555000,
+      "inventoryMilli": 0,
+      "preparedMilli": 0,
+      "order": false,
+      "tankLevel": 1,
+      "tankMilli": 250000,
+      "pipeline": false,
+      "burning": false,
+      "damaged": false,
+      "securityUntil": 0
+    },
+    "BERLIN-3": {
+      "id": "BERLIN-3",
+      "region": "BERLIN",
+      "name": "Berlin-Mitte (Satirezone) / Claim 3",
+      "owner": null,
+      "surveyedBy": [],
+      "drilled": false,
+      "reserveMilli": 610000,
+      "inventoryMilli": 0,
+      "preparedMilli": 0,
+      "order": false,
+      "tankLevel": 1,
+      "tankMilli": 250000,
+      "pipeline": false,
+      "burning": false,
+      "damaged": false,
+      "securityUntil": 0
+    },
+    "BRANDENBURG-1": {
+      "id": "BRANDENBURG-1",
+      "region": "BRANDENBURG",
+      "name": "Brandenburg-Nord (fiktiv) / Claim 1",
+      "owner": null,
+      "surveyedBy": [],
+      "drilled": false,
+      "reserveMilli": 600000,
+      "inventoryMilli": 0,
+      "preparedMilli": 0,
+      "order": false,
+      "tankLevel": 1,
+      "tankMilli": 250000,
+      "pipeline": false,
+      "burning": false,
+      "damaged": false,
+      "securityUntil": 0
+    },
+    "BRANDENBURG-2": {
+      "id": "BRANDENBURG-2",
+      "region": "BRANDENBURG",
+      "name": "Brandenburg-Nord (fiktiv) / Claim 2",
+      "owner": null,
+      "surveyedBy": [],
+      "drilled": false,
+      "reserveMilli": 655000,
+      "inventoryMilli": 0,
+      "preparedMilli": 0,
+      "order": false,
+      "tankLevel": 1,
+      "tankMilli": 250000,
+      "pipeline": false,
+      "burning": false,
+      "damaged": false,
+      "securityUntil": 0
+    },
+    "BRANDENBURG-3": {
+      "id": "BRANDENBURG-3",
+      "region": "BRANDENBURG",
+      "name": "Brandenburg-Nord (fiktiv) / Claim 3",
+      "owner": null,
+      "surveyedBy": [],
+      "drilled": false,
+      "reserveMilli": 710000,
+      "inventoryMilli": 0,
+      "preparedMilli": 0,
+      "order": false,
+      "tankLevel": 1,
+      "tankMilli": 250000,
+      "pipeline": false,
+      "burning": false,
+      "damaged": false,
+      "securityUntil": 0
+    },
+    "NORD-1": {
+      "id": "NORD-1",
+      "region": "NORD",
+      "name": "Norddeutsche Küste (fiktiv) / Claim 1",
+      "owner": null,
+      "surveyedBy": [],
+      "drilled": false,
+      "reserveMilli": 420000,
+      "inventoryMilli": 0,
+      "preparedMilli": 0,
+      "order": false,
+      "tankLevel": 1,
+      "tankMilli": 250000,
+      "pipeline": false,
+      "burning": false,
+      "damaged": false,
+      "securityUntil": 0
+    },
+    "NORD-2": {
+      "id": "NORD-2",
+      "region": "NORD",
+      "name": "Norddeutsche Küste (fiktiv) / Claim 2",
+      "owner": null,
+      "surveyedBy": [],
+      "drilled": false,
+      "reserveMilli": 475000,
+      "inventoryMilli": 0,
+      "preparedMilli": 0,
+      "order": false,
+      "tankLevel": 1,
+      "tankMilli": 250000,
+      "pipeline": false,
+      "burning": false,
+      "damaged": false,
+      "securityUntil": 0
+    },
+    "NORD-3": {
+      "id": "NORD-3",
+      "region": "NORD",
+      "name": "Norddeutsche Küste (fiktiv) / Claim 3",
+      "owner": null,
+      "surveyedBy": [],
+      "drilled": false,
+      "reserveMilli": 530000,
+      "inventoryMilli": 0,
+      "preparedMilli": 0,
+      "order": false,
+      "tankLevel": 1,
+      "tankMilli": 250000,
+      "pipeline": false,
+      "burning": false,
+      "damaged": false,
+      "securityUntil": 0
+    }
+  },
+  "prices": {
+    "BERLIN": 67900,
+    "BRANDENBURG": 61110,
+    "NORD": 75660
+  },
+  "demand": {
+    "BERLIN": 114000,
+    "BRANDENBURG": 104500,
+    "NORD": 76000
+  },
+  "processedIds": [
+    "neo-1-1792518775318",
+    "neo-2-1792518775424",
+    "neo-3-1792518775551",
+    "neo-4-1792518775633",
+    "neo-5-1792518776077",
+    "neo-6-1792518776498",
+    "neo-7-1792518776636",
+    "neo-8-1792518776717",
+    "neo-9-1792518777111",
+    "neo-10-1792518777187"
+  ],
+  "sequence": 10,
+  "reports": [
+    {
+      "month": 1,
+      "allocations": {
+        "BERLIN": {
+          "BERLIN-1": 0,
+          "BERLIN-2": 0,
+          "BERLIN-3": 0
+        },
+        "BRANDENBURG": {
+          "BRANDENBURG-1": 0,
+          "BRANDENBURG-2": 0,
+          "BRANDENBURG-3": 0
+        },
+        "NORD": {
+          "NORD-1": 0,
+          "NORD-2": 0,
+          "NORD-3": 0
+        }
+      },
+      "regions": {
+        "BERLIN": {
+          "priceCent": 70000,
+          "demandMilli": 120000,
+          "soldMilli": 0
+        },
+        "BRANDENBURG": {
+          "priceCent": 63000,
+          "demandMilli": 110000,
+          "soldMilli": 0
+        },
+        "NORD": {
+          "priceCent": 78000,
+          "demandMilli": 80000,
+          "soldMilli": 0
+        }
+      },
+      "companies": [
+        {
+          "id": "H1",
+          "name": "PPPOPPI",
+          "soldMilli": 0,
+          "revenueCent": 0,
+          "marketShareBps": 0,
+          "arrearsCent": 0,
+          "cashCent": 18946000,
+          "debtCent": 0
+        },
+        {
+          "id": "H2",
+          "name": "Mensch 2",
+          "soldMilli": 0,
+          "revenueCent": 0,
+          "marketShareBps": 0,
+          "arrearsCent": 0,
+          "cashCent": 19910000,
+          "debtCent": 0
+        }
+      ],
+      "refinery": {
+        "month": 1,
+        "regions": {
+          "BERLIN": {
+            "demandMilli": 27000,
+            "priceCent": 91000,
+            "allocations": {
+              "H1": {
+                "offeredMilli": 0,
+                "soldMilli": 0,
+                "returnedMilli": 0,
+                "revenueCent": 0
+              },
+              "H2": {
+                "offeredMilli": 0,
+                "soldMilli": 0,
+                "returnedMilli": 0,
+                "revenueCent": 0
+              }
+            },
+            "soldMilli": 0
+          },
+          "BRANDENBURG": {
+            "demandMilli": 27000,
+            "priceCent": 81900,
+            "allocations": {
+              "H1": {
+                "offeredMilli": 0,
+                "soldMilli": 0,
+                "returnedMilli": 0,
+                "revenueCent": 0
+              },
+              "H2": {
+                "offeredMilli": 0,
+                "soldMilli": 0,
+                "returnedMilli": 0,
+                "revenueCent": 0
+              }
+            },
+            "soldMilli": 0
+          },
+          "NORD": {
+            "demandMilli": 27000,
+            "priceCent": 101400,
+            "allocations": {
+              "H1": {
+                "offeredMilli": 0,
+                "soldMilli": 0,
+                "returnedMilli": 0,
+                "revenueCent": 0
+              },
+              "H2": {
+                "offeredMilli": 0,
+                "soldMilli": 0,
+                "returnedMilli": 0,
+                "revenueCent": 0
+              }
+            },
+            "soldMilli": 0
+          }
+        },
+        "orderIds": []
+      },
+      "publicNetwork": {
+        "month": 1,
+        "capacity": {
+          "B-BB": {
+            "usedMilli": 0,
+            "capacityMilli": 24000,
+            "downUntil": 0
+          },
+          "BB-B": {
+            "usedMilli": 0,
+            "capacityMilli": 24000,
+            "downUntil": 0
+          },
+          "BB-N": {
+            "usedMilli": 0,
+            "capacityMilli": 18000,
+            "downUntil": 0
+          },
+          "N-BB": {
+            "usedMilli": 0,
+            "capacityMilli": 18000,
+            "downUntil": 0
+          }
+        },
+        "freight": [],
+        "productMarket": {
+          "BERLIN": {
+            "demandMilli": 18000,
+            "priceCent": 80500,
+            "allocations": {}
+          },
+          "BRANDENBURG": {
+            "demandMilli": 18000,
+            "priceCent": 72450,
+            "allocations": {}
+          },
+          "NORD": {
+            "demandMilli": 18000,
+            "priceCent": 89700,
+            "allocations": {}
+          }
+        }
+      }
+    }
+  ],
+  "events": [
+    {
+      "month": 1,
+      "type": "LOGISTIK_START",
+      "message": "Verbindliche Transportlogistik aktiviert",
+      "source": "pppoppi-berlin"
+    },
+    {
+      "month": 1,
+      "type": "LOGISTIK_BAU",
+      "message": "H1:BERLIN:RAW:BERLIN-1",
+      "source": "pppoppi-berlin"
+    },
+    {
+      "month": 1,
+      "type": "LOGISTIK_BAU",
+      "message": "H1:BERLIN:PIPE:",
+      "source": "pppoppi-berlin"
+    },
+    {
+      "month": 1,
+      "type": "LOGISTIK_BAU",
+      "message": "H1:BERLIN:FINAL:",
+      "source": "pppoppi-berlin"
+    },
+    {
+      "month": 1,
+      "type": "LOGISTIK_ABFAHRT",
+      "message": "10 Barrel auf H1:BERLIN:RAW:BERLIN-1",
+      "source": "pppoppi-berlin"
+    },
+    {
+      "month": 1,
+      "type": "PUBLIC_ABRECHNUNG",
+      "message": "Öffentliche Strecken fair verteilt und überregionalen Handel abgerechnet",
+      "source": "berlin-eigenentwicklung"
+    },
+    {
+      "month": 1,
+      "type": "RAFFINIERT_MARKT_ABGERECHNET",
+      "source": "berlin-adaption"
+    },
+    {
+      "month": 1,
+      "type": "MONATSABSCHLUSS",
+      "soldMilli": 0
+    },
+    {
+      "month": 2,
+      "type": "LOGISTIK_ANKUNFT",
+      "message": "10 Barrel RAW in BERLIN",
+      "source": "pppoppi-berlin"
+    },
+    {
+      "month": 2,
+      "type": "RAFFINERIE_REFINE_BATCH",
+      "company": "H1",
+      "region": "BERLIN",
+      "source": "berlin-adaption"
+    },
+    {
+      "month": 2,
+      "type": "LOGISTIK_VERARBEITUNG",
+      "message": "10 bbl Rohöl verarbeitet",
+      "source": "pppoppi-berlin"
+    },
+    {
+      "month": 2,
+      "type": "LOGISTIK_ABFAHRT",
+      "message": "9 Barrel auf H1:BERLIN:PIPE: → H1:BERLIN:FINAL:",
+      "source": "pppoppi-berlin"
+    }
+  ],
+  "rescueIds": [],
+  "lastReport": {
+    "month": 1,
+    "allocations": {
+      "BERLIN": {
+        "BERLIN-1": 0,
+        "BERLIN-2": 0,
+        "BERLIN-3": 0
+      },
+      "BRANDENBURG": {
+        "BRANDENBURG-1": 0,
+        "BRANDENBURG-2": 0,
+        "BRANDENBURG-3": 0
+      },
+      "NORD": {
+        "NORD-1": 0,
+        "NORD-2": 0,
+        "NORD-3": 0
+      }
+    },
+    "regions": {
+      "BERLIN": {
+        "priceCent": 70000,
+        "demandMilli": 120000,
+        "soldMilli": 0
+      },
+      "BRANDENBURG": {
+        "priceCent": 63000,
+        "demandMilli": 110000,
+        "soldMilli": 0
+      },
+      "NORD": {
+        "priceCent": 78000,
+        "demandMilli": 80000,
+        "soldMilli": 0
+      }
+    },
+    "companies": [
+      {
+        "id": "H1",
+        "name": "PPPOPPI",
+        "soldMilli": 0,
+        "revenueCent": 0,
+        "marketShareBps": 0,
+        "arrearsCent": 0,
+        "cashCent": 18946000,
+        "debtCent": 0
+      },
+      {
+        "id": "H2",
+        "name": "Mensch 2",
+        "soldMilli": 0,
+        "revenueCent": 0,
+        "marketShareBps": 0,
+        "arrearsCent": 0,
+        "cashCent": 19910000,
+        "debtCent": 0
+      }
+    ],
+    "refinery": {
+      "month": 1,
+      "regions": {
+        "BERLIN": {
+          "demandMilli": 27000,
+          "priceCent": 91000,
+          "allocations": {
+            "H1": {
+              "offeredMilli": 0,
+              "soldMilli": 0,
+              "returnedMilli": 0,
+              "revenueCent": 0
+            },
+            "H2": {
+              "offeredMilli": 0,
+              "soldMilli": 0,
+              "returnedMilli": 0,
+              "revenueCent": 0
+            }
+          },
+          "soldMilli": 0
+        },
+        "BRANDENBURG": {
+          "demandMilli": 27000,
+          "priceCent": 81900,
+          "allocations": {
+            "H1": {
+              "offeredMilli": 0,
+              "soldMilli": 0,
+              "returnedMilli": 0,
+              "revenueCent": 0
+            },
+            "H2": {
+              "offeredMilli": 0,
+              "soldMilli": 0,
+              "returnedMilli": 0,
+              "revenueCent": 0
+            }
+          },
+          "soldMilli": 0
+        },
+        "NORD": {
+          "demandMilli": 27000,
+          "priceCent": 101400,
+          "allocations": {
+            "H1": {
+              "offeredMilli": 0,
+              "soldMilli": 0,
+              "returnedMilli": 0,
+              "revenueCent": 0
+            },
+            "H2": {
+              "offeredMilli": 0,
+              "soldMilli": 0,
+              "returnedMilli": 0,
+              "revenueCent": 0
+            }
+          },
+          "soldMilli": 0
+        }
+      },
+      "orderIds": []
+    },
+    "publicNetwork": {
+      "month": 1,
+      "capacity": {
+        "B-BB": {
+          "usedMilli": 0,
+          "capacityMilli": 24000,
+          "downUntil": 0
+        },
+        "BB-B": {
+          "usedMilli": 0,
+          "capacityMilli": 24000,
+          "downUntil": 0
+        },
+        "BB-N": {
+          "usedMilli": 0,
+          "capacityMilli": 18000,
+          "downUntil": 0
+        },
+        "N-BB": {
+          "usedMilli": 0,
+          "capacityMilli": 18000,
+          "downUntil": 0
+        }
+      },
+      "freight": [],
+      "productMarket": {
+        "BERLIN": {
+          "demandMilli": 18000,
+          "priceCent": 80500,
+          "allocations": {}
+        },
+        "BRANDENBURG": {
+          "demandMilli": 18000,
+          "priceCent": 72450,
+          "allocations": {}
+        },
+        "NORD": {
+          "demandMilli": 18000,
+          "priceCent": 89700,
+          "allocations": {}
+        }
+      }
+    }
+  },
+  "minigame": null,
+  "lineage": null,
+  "refinery": {
+    "version": "pppoppi.refinery/1.1",
+    "plants": {
+      "H1": {
+        "BERLIN": {
+          "built": true,
+          "route": true,
+          "productMilli": 27000,
+          "processedMilli": 10000
+        },
+        "BRANDENBURG": {
+          "built": false,
+          "route": false,
+          "productMilli": 0,
+          "processedMilli": 0
+        },
+        "NORD": {
+          "built": false,
+          "route": false,
+          "productMilli": 0,
+          "processedMilli": 0
+        }
+      },
+      "H2": {
+        "BERLIN": {
+          "built": false,
+          "route": false,
+          "productMilli": 0,
+          "processedMilli": 0
+        },
+        "BRANDENBURG": {
+          "built": false,
+          "route": false,
+          "productMilli": 0,
+          "processedMilli": 0
+        },
+        "NORD": {
+          "built": false,
+          "route": false,
+          "productMilli": 0,
+          "processedMilli": 0
+        }
+      }
+    },
+    "salesMilli": {
+      "BERLIN": 0,
+      "BRANDENBURG": 0,
+      "NORD": 0
+    },
+    "offers": [],
+    "monthly": [
+      {
+        "month": 1,
+        "regions": {
+          "BERLIN": {
+            "demandMilli": 27000,
+            "priceCent": 91000,
+            "allocations": {
+              "H1": {
+                "offeredMilli": 0,
+                "soldMilli": 0,
+                "returnedMilli": 0,
+                "revenueCent": 0
+              },
+              "H2": {
+                "offeredMilli": 0,
+                "soldMilli": 0,
+                "returnedMilli": 0,
+                "revenueCent": 0
+              }
+            },
+            "soldMilli": 0
+          },
+          "BRANDENBURG": {
+            "demandMilli": 27000,
+            "priceCent": 81900,
+            "allocations": {
+              "H1": {
+                "offeredMilli": 0,
+                "soldMilli": 0,
+                "returnedMilli": 0,
+                "revenueCent": 0
+              },
+              "H2": {
+                "offeredMilli": 0,
+                "soldMilli": 0,
+                "returnedMilli": 0,
+                "revenueCent": 0
+              }
+            },
+            "soldMilli": 0
+          },
+          "NORD": {
+            "demandMilli": 27000,
+            "priceCent": 101400,
+            "allocations": {
+              "H1": {
+                "offeredMilli": 0,
+                "soldMilli": 0,
+                "returnedMilli": 0,
+                "revenueCent": 0
+              },
+              "H2": {
+                "offeredMilli": 0,
+                "soldMilli": 0,
+                "returnedMilli": 0,
+                "revenueCent": 0
+              }
+            },
+            "soldMilli": 0
+          }
+        },
+        "orderIds": []
+      }
+    ],
+    "story": [
+      {
+        "month": 2,
+        "company": "H1",
+        "character": "Milchmädchen Pete",
+        "action": "REFINE_BATCH",
+        "region": "BERLIN",
+        "text": "Zehn Barrel rein, neun raus. Die Differenz heißt Berufserfahrung."
+      }
+    ]
+  },
+  "transport": {
+    "version": "pppoppi.transport/1.0",
+    "firms": {
+      "H1": {
+        "BERLIN": {
+          "enabled": true,
+          "rawMilli": 0,
+          "marketMilli": 0,
+          "edges": {
+            "H1:BERLIN:RAW:BERLIN-1": {
+              "built": true,
+              "usedMilli": 0,
+              "usedMonth": 1,
+              "downUntil": 0
+            },
+            "H1:BERLIN:PIPE:": {
+              "built": true,
+              "usedMilli": 9000,
+              "usedMonth": 2,
+              "downUntil": 0
+            },
+            "H1:BERLIN:FINAL:": {
+              "built": true,
+              "usedMilli": 9000,
+              "usedMonth": 2,
+              "downUntil": 0
+            }
+          },
+          "log": [
+            {
+              "month": 1,
+              "type": "START",
+              "message": "Verbindliche Transportlogistik aktiviert"
+            },
+            {
+              "month": 1,
+              "type": "BAU",
+              "message": "H1:BERLIN:RAW:BERLIN-1"
+            },
+            {
+              "month": 1,
+              "type": "BAU",
+              "message": "H1:BERLIN:PIPE:"
+            },
+            {
+              "month": 1,
+              "type": "BAU",
+              "message": "H1:BERLIN:FINAL:"
+            },
+            {
+              "month": 1,
+              "type": "ABFAHRT",
+              "message": "10 Barrel auf H1:BERLIN:RAW:BERLIN-1"
+            },
+            {
+              "month": 2,
+              "type": "ANKUNFT",
+              "message": "10 Barrel RAW in BERLIN"
+            },
+            {
+              "month": 2,
+              "type": "VERARBEITUNG",
+              "message": "10 bbl Rohöl verarbeitet"
+            },
+            {
+              "month": 2,
+              "type": "ABFAHRT",
+              "message": "9 Barrel auf H1:BERLIN:PIPE: → H1:BERLIN:FINAL:"
+            }
+          ]
+        },
+        "BRANDENBURG": {
+          "enabled": false,
+          "rawMilli": 0,
+          "marketMilli": 0,
+          "edges": {},
+          "log": []
+        },
+        "NORD": {
+          "enabled": false,
+          "rawMilli": 0,
+          "marketMilli": 0,
+          "edges": {},
+          "log": []
+        }
+      },
+      "H2": {
+        "BERLIN": {
+          "enabled": false,
+          "rawMilli": 0,
+          "marketMilli": 0,
+          "edges": {},
+          "log": []
+        },
+        "BRANDENBURG": {
+          "enabled": false,
+          "rawMilli": 0,
+          "marketMilli": 0,
+          "edges": {},
+          "log": []
+        },
+        "NORD": {
+          "enabled": false,
+          "rawMilli": 0,
+          "marketMilli": 0,
+          "edges": {},
+          "log": []
+        }
+      }
+    },
+    "shipments": [
+      {
+        "id": "TR-2",
+        "type": "PRODUCT",
+        "companyId": "H1",
+        "region": "BERLIN",
+        "qtyMilli": 9000,
+        "claimId": null,
+        "path": [
+          "H1:BERLIN:PIPE:",
+          "H1:BERLIN:FINAL:"
+        ],
+        "departMonth": 2,
+        "arriveMonth": 3,
+        "freightCent": 26100
+      }
+    ],
+    "monthly": [
+      {
+        "month": 1,
+        "arrivals": [
+          "TR-1"
+        ],
+        "pending": 0
+      }
+    ],
+    "seq": 2
+  },
+  "publicNetwork": {
+    "version": "pppoppi.publicnetwork/1.0",
+    "connections": {
+      "H1": [],
+      "H2": []
+    },
+    "links": {
+      "B-BB": {
+        "downUntil": 0
+      },
+      "BB-B": {
+        "downUntil": 0
+      },
+      "BB-N": {
+        "downUntil": 0
+      },
+      "N-BB": {
+        "downUntil": 0
+      }
+    },
+    "queued": [],
+    "inTransit": [],
+    "received": {
+      "H1": {
+        "BERLIN": 0,
+        "BRANDENBURG": 0,
+        "NORD": 0
+      },
+      "H2": {
+        "BERLIN": 0,
+        "BRANDENBURG": 0,
+        "NORD": 0
+      }
+    },
+    "offers": [],
+    "monthly": [
+      {
+        "month": 1,
+        "capacity": {
+          "B-BB": {
+            "usedMilli": 0,
+            "capacityMilli": 24000,
+            "downUntil": 0
+          },
+          "BB-B": {
+            "usedMilli": 0,
+            "capacityMilli": 24000,
+            "downUntil": 0
+          },
+          "BB-N": {
+            "usedMilli": 0,
+            "capacityMilli": 18000,
+            "downUntil": 0
+          },
+          "N-BB": {
+            "usedMilli": 0,
+            "capacityMilli": 18000,
+            "downUntil": 0
+          }
+        },
+        "freight": [],
+        "productMarket": {
+          "BERLIN": {
+            "demandMilli": 18000,
+            "priceCent": 80500,
+            "allocations": {}
+          },
+          "BRANDENBURG": {
+            "demandMilli": 18000,
+            "priceCent": 72450,
+            "allocations": {}
+          },
+          "NORD": {
+            "demandMilli": 18000,
+            "priceCent": 89700,
+            "allocations": {}
+          }
+        }
+      }
+    ],
+    "nextId": 0
+  }
+}

@@ -1,0 +1,1 @@
+Unverändertes ZIP der zuvor gelieferten V0.8.2 (SHA256: 946755031cb65414c7a9dbbbabe95536657c9186e5f68f738819d669497fdca0). Neue Büroversion unter index.html.

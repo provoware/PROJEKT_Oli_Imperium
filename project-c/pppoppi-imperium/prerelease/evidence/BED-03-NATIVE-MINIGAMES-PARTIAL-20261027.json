@@ -1,0 +1,40 @@
+{
+  "gate_id": "BED-03",
+  "result": "PARTIAL",
+  "date": "2026-10-27",
+  "implementation_commit": "e8989bf7ec75370a69d5af597abfff6f4928ac2c",
+  "test": "python3 project-c/pppoppi-imperium/quality_v194/test_browser_native_zoom_minigames_v194.py",
+  "browser_ci": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40445202236",
+  "source_ci": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40445202211",
+  "release_matrix_ci": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40445202284",
+  "checks": {
+    "native_zoom_percent": [
+      175,
+      200
+    ],
+    "css_width": [
+      457,
+      400
+    ],
+    "pipe_stages_per_zoom": 3,
+    "pipe_rotations_per_zoom": 32,
+    "fire_stages_per_zoom": 3,
+    "wrong_fire_choices_per_zoom": 1,
+    "fire_month": 4,
+    "export_equal": true,
+    "js_errors": 0,
+    "external_http_requests": 0,
+    "layout_snapshots": 4,
+    "horizontal_overflow_in_snapshots": 0,
+    "close_visible_in_snapshots": 4,
+    "chromium_workflow": "PASS",
+    "source_workflow": "PASS",
+    "release_gate": "BLOCKED_EXPECTED"
+  },
+  "limits": [
+    "Nur Rohrnetz und Feuerwehr, nicht Bohr-Minispiel und alle Dialogaktionen unter echtem Zoom.",
+    "Layoutdiagnosen nur nach Minispiel-Endpunkten; Zwischenbilder und visuelle Ueberdeckungen nicht abgenommen.",
+    "Fokuskontrast nicht quantitativ geprueft.",
+    "Regulaere Sieg-/Niederlagen-Endpartien und persoenliche Endabnahme fehlen."
+  ]
+}

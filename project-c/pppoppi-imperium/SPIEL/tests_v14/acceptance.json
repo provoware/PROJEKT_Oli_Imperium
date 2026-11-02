@@ -1,0 +1,175 @@
+{
+  "checks": [
+    {
+      "test": "V1.4 mit Spielkern geladen",
+      "ok": true
+    },
+    {
+      "test": "Drei Minispieloberflächen geladen",
+      "ok": true
+    },
+    {
+      "test": "Dekorative Animationen abschaltbar",
+      "ok": true
+    },
+    {
+      "test": "Animationsschalter ist wirtschaftlich neutral",
+      "ok": true
+    },
+    {
+      "test": "Unverändertes Speicherformat V0.8.2",
+      "ok": true
+    },
+    {
+      "test": "Ölfeld erfolgreich gekauft",
+      "ok": true
+    },
+    {
+      "test": "Neuer Bohrdruckdialog sichtbar",
+      "ok": true
+    },
+    {
+      "test": "Fehlschlag kostet Versuch, nicht zweiten Startpreis",
+      "ok": true
+    },
+    {
+      "test": "Fehlversuch belastet nicht erneut das Konto",
+      "ok": true
+    },
+    {
+      "test": "Bohrstufe 1 erfolgreich",
+      "ok": true
+    },
+    {
+      "test": "Bohrstufe 2 erfolgreich",
+      "ok": true
+    },
+    {
+      "test": "Bohrstufe 3 erfolgreich",
+      "ok": true
+    },
+    {
+      "test": "Erfolgreiches Minispiel erschließt Feld",
+      "ok": true
+    },
+    {
+      "test": "Rohrleitungs-Puzzle als echte klickbare Bauteile",
+      "ok": true
+    },
+    {
+      "test": "Rohrnetzphase 1 abgeschlossen",
+      "ok": true
+    },
+    {
+      "test": "Rohrnetzphase 2 abgeschlossen",
+      "ok": true
+    },
+    {
+      "test": "Rohrnetzphase 3 abgeschlossen",
+      "ok": true
+    },
+    {
+      "test": "Rohrleitungsbau aktiviert echten Transportvorteil",
+      "ok": true
+    },
+    {
+      "test": "Validierter Brandszenario-Spielstand geladen",
+      "ok": true
+    },
+    {
+      "test": "Feuerwehreinsatz mit eigenständiger Szene",
+      "ok": true
+    },
+    {
+      "test": "Taktische Feuerwehrphase 1 abgeschlossen",
+      "ok": true
+    },
+    {
+      "test": "Taktische Feuerwehrphase 2 abgeschlossen",
+      "ok": true
+    },
+    {
+      "test": "Taktische Feuerwehrphase 3 abgeschlossen",
+      "ok": true
+    },
+    {
+      "test": "Brand wird ausschließlich über bestehendes Regelsystem gelöscht",
+      "ok": true
+    },
+    {
+      "test": "Endzustand ist nach Regeln valide",
+      "ok": true
+    },
+    {
+      "test": "Figurenhumor verändert niemals Wirtschaftswerte",
+      "ok": true
+    },
+    {
+      "test": "Dateiexport nutzt bestehendes Schema",
+      "ok": true
+    },
+    {
+      "test": "Import erhält fertiges Rohrnetz",
+      "ok": true
+    },
+    {
+      "test": "Neue Minispiele verhindern horizontales Seitenscrollen auf Mobil",
+      "ok": true
+    },
+    {
+      "test": "Keine ungefangenen Browserfehler",
+      "ok": true
+    },
+    {
+      "test": "Keine externen Netzwerkanfragen",
+      "ok": true
+    }
+  ],
+  "total": 31,
+  "passed": 31,
+  "screenshots": [
+    {
+      "file": "01_Profi_Buero.png",
+      "sha256": "62a868649591b52dce2db75a54ddab781f129d0594408435624deecf7592572a",
+      "bytes": 1504776
+    },
+    {
+      "file": "02_Bohrdruck.png",
+      "sha256": "cd64f9d716c32e83515fd366f67d6bd88d09625b3974cde118b4f5f4d9b10e3e",
+      "bytes": 143117
+    },
+    {
+      "file": "03_Erschlossenes_Feld.png",
+      "sha256": "8b1871bca93e2fac12f77e757f66400100425ef3b266e7521f05305d7314714e",
+      "bytes": 244144
+    },
+    {
+      "file": "04_Pipeline_Puzzle.png",
+      "sha256": "4894c444974870276455466522e203e9ce0ed8d86e72ad4071a4184292a6e32f",
+      "bytes": 165237
+    },
+    {
+      "file": "05_Pipeline_verbunden_1.png",
+      "sha256": "510cf7695cf8163224a34fd90b1c50dab7ad0fc427291685aed8705d326a6858",
+      "bytes": 334203
+    },
+    {
+      "file": "06_Brandbekaempfung.png",
+      "sha256": "98f1a1632631c5a113df591e02dccc284e6794cf908e9bf5273aaf12ae2641d1",
+      "bytes": 167414
+    },
+    {
+      "file": "07_Vorstand.png",
+      "sha256": "8a60435d2a3660453437802da55363e4357bf2cb0f7f4f430bdbb19a46eb0dd4",
+      "bytes": 267867
+    },
+    {
+      "file": "08_Mobil_Minispiel.png",
+      "sha256": "e260c8c3a78d3105ed187d30259767e554b9f481f9e877ae8206c85e6a53f356",
+      "bytes": 123452
+    }
+  ],
+  "browser_errors": [],
+  "network_requests": [],
+  "test_transport": "Chromium set_content: alle lokalen CSS/JS-Dateien eingebettet"
+}

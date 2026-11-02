@@ -1,0 +1,25 @@
+name: Projekt C – Laufzeitmedien-Inventar
+on:
+  pull_request:
+    paths:
+      - 'project-c/pppoppi-imperium/SPIEL/**'
+      - 'project-c/pppoppi-imperium/prerelease/audit_runtime_assets.py'
+      - 'project-c/pppoppi-imperium/prerelease/test_runtime_assets.py'
+      - 'project-c/pppoppi-imperium/prerelease/runtime_asset_manifest.json'
+      - '.github/workflows/prerelease-runtime-assets.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit-runtime-assets:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Inventar-Regressionen
+        run: python3 -m unittest discover -s project-c/pppoppi-imperium/prerelease -p 'test_runtime_assets.py' -v
+      - name: Versionierte Laufzeitmedien und Rechtenachweise pruefen
+        run: python3 project-c/pppoppi-imperium/prerelease/audit_runtime_assets.py

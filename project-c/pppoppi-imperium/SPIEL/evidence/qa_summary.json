@@ -1,0 +1,214 @@
+{
+  "main": {
+    "test_count": 25,
+    "passed": 25,
+    "tests": [
+      {
+        "test": "Vierzehn anklickbare Bürogegenstände",
+        "passed": true
+      },
+      {
+        "test": "Neue-Partie-Dialog öffnet sich",
+        "passed": true
+      },
+      {
+        "test": "Firmencomputer zeigt echte wirtschaftliche Daten",
+        "passed": true
+      },
+      {
+        "test": "Originaler V0.8.2-Spielkern verbunden",
+        "passed": true
+      },
+      {
+        "test": "Startkapital beträgt 200.000 Euro",
+        "passed": true
+      },
+      {
+        "test": "Grafische Regionskarte erreichbar",
+        "passed": true
+      },
+      {
+        "test": "Drei Claims pro Region erreichbar",
+        "passed": true
+      },
+      {
+        "test": "Claim zeigt echte Aktionsschaltflächen",
+        "passed": true
+      },
+      {
+        "test": "Gutachten trägt Firmenkennung ein",
+        "passed": true
+      },
+      {
+        "test": "100 Barrel real gefördert",
+        "passed": true
+      },
+      {
+        "test": "Bargeldkosten korrekt berechnet",
+        "passed": true
+      },
+      {
+        "test": "Illustrierte Tankszene",
+        "passed": true
+      },
+      {
+        "test": "Ölangebot ist im unveränderten Wirtschaftskern angelegt",
+        "passed": true
+      },
+      {
+        "test": "Kalender startet abschließbaren echten Zug",
+        "passed": true
+      },
+      {
+        "test": "Computergegner beenden Monat nach menschlichem Zug",
+        "passed": true
+      },
+      {
+        "test": "Monatsbericht im echten Spielzustand",
+        "passed": true
+      },
+      {
+        "test": "Folgemonat beginnt",
+        "passed": true
+      },
+      {
+        "test": "Eigentum bleibt zwischen Monaten erhalten",
+        "passed": true
+      },
+      {
+        "test": "Easter Egg ändert keine Wirtschaftsstände",
+        "passed": true
+      },
+      {
+        "test": "Spielstand exportiert gültiges Schema",
+        "passed": true
+      },
+      {
+        "test": "Spielstand nach Import erhalten",
+        "passed": true
+      },
+      {
+        "test": "Keine externen Webanfragen",
+        "passed": true
+      },
+      {
+        "test": "Keine Browser-Laufzeitfehler",
+        "passed": true
+      },
+      {
+        "test": "Mobilnavigation verfügbar",
+        "passed": true
+      },
+      {
+        "test": "Mobilansicht ohne horizontale Scrollleiste",
+        "passed": true
+      }
+    ],
+    "screenshots": [
+      {
+        "name": "05_Foerderanlage_live.png",
+        "bytes": 203767,
+        "sha256": "aaa6455b885273f8c9af7644b012dab7ce7b668110c03f7f81ea7e1db8044498"
+      },
+      {
+        "name": "02_Firmencomputer_live.png",
+        "bytes": 199091,
+        "sha256": "27b5ff60af4c184a58116193eca43c51dedb6cc8d610063eb63199eba5b62a4f"
+      },
+      {
+        "name": "08_Abrechnung_live.png",
+        "bytes": 182774,
+        "sha256": "e842ea542722231feedc743a828036690f7bd0d860e7b7b23af92a84b1a9608b"
+      },
+      {
+        "name": "04_Region_live.png",
+        "bytes": 196115,
+        "sha256": "dac3a344d946f866e62bb0c22717537c24b847386a97bb40ef9251d58dba4ee3"
+      },
+      {
+        "name": "09_Mobilansicht_live.png",
+        "bytes": 220443,
+        "sha256": "6537d8968eeafcc872023236804f5753ddc6898a8823a853467c4df6912fc709"
+      },
+      {
+        "name": "01_Buero_live.png",
+        "bytes": 1354715,
+        "sha256": "82662d6dc60a3b1d3e2b17eb776d588e2ea3d7d42eefda981b986af7124d20f1"
+      },
+      {
+        "name": "03_Deutschlandkarte_live.png",
+        "bytes": 216702,
+        "sha256": "8de7b50d8467cd0da764355589fb35c2c97b29f4e35d20df4f268133ae115187"
+      },
+      {
+        "name": "06_Tanks_live.png",
+        "bytes": 207650,
+        "sha256": "9f05b12c30c03abd7172c982ae380a99ceceea2c8a67ff2e428aa085d365e7ca"
+      },
+      {
+        "name": "07_Regionalmarkt_live.png",
+        "bytes": 220250,
+        "sha256": "98cce87c2fb3f406597c9082eb3b72daf61d68d3f6ecca2880f0927b308e725d"
+      }
+    ],
+    "pageerrors": [],
+    "network": []
+  },
+  "advanced": {
+    "passed": 13,
+    "tests": [
+      {
+        "name": "Zwei Menschen und zwei KI-Firmen starten",
+        "passed": true
+      },
+      {
+        "name": "Privater Spielerwechsel zeigt Übergabedialog",
+        "passed": true
+      },
+      {
+        "name": "Fremdes Bargeld während Übergabe verdeckt",
+        "passed": true
+      },
+      {
+        "name": "Zweite menschliche Firma aktiv",
+        "passed": true
+      },
+      {
+        "name": "Beträge erst nach bestätigter Übergabe sichtbar",
+        "passed": true
+      },
+      {
+        "name": "Mehrspielermonat wird nach beiden Menschen abgerechnet",
+        "passed": true
+      },
+      {
+        "name": "Kauf ohne Gutachten verändert keinen Spielzustand",
+        "passed": true
+      },
+      {
+        "name": "Eigenbohrung startet echtes Minispiel",
+        "passed": true
+      },
+      {
+        "name": "Minispielabschnitt aktiv",
+        "passed": true
+      },
+      {
+        "name": "Minispielabschnitt aktiv",
+        "passed": true
+      },
+      {
+        "name": "Minispielabschnitt aktiv",
+        "passed": true
+      },
+      {
+        "name": "Alle drei Bohr-Minispielabschnitte verändern echte Anlage",
+        "passed": true
+      },
+      {
+        "name": "Mehrspieler-Browserlauf ohne JS-Ausnahmen",
+        "passed": true
+      }
+    ]
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "gate_id": "SPE-01",
+  "related_gate_ids": [
+    "WIR-03",
+    "FEH-03"
+  ],
+  "date": "2026-10-28",
+  "result": "PARTIAL",
+  "tested_code_head": "5a27df95a37fea43096d8be3b67238a1109f48c1",
+  "command": "node project-c/pppoppi-imperium/quality_v194/test_contract_breach_roundtrip_v194.cjs",
+  "ci_step_result": "PASS",
+  "ci_run_url": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40627244010",
+  "ci_job": "chromium-roundtrip",
+  "ci_full_run_at_documentation": "IN_PROGRESS",
+  "tested_cases": {
+    "human_companies": 2,
+    "contracts_signed": 2,
+    "natural_breaches": 1,
+    "natural_fulfilments": 1,
+    "pre_due_json_roundtrips": 1,
+    "independent_settlements": 2,
+    "following_months": 1
+  },
+  "verified_properties": [
+    "two real contracts created via engine actions without fabricated cash or contract status",
+    "zero delivery triggers exactly one BREACH penalty with expected rounding",
+    "full delivery triggers exactly one DONE revenue and transport fee",
+    "identical month-two settlement with and without JSON restore before contract due date",
+    "wrong player action rejected without input-state mutation",
+    "duplicate end-turn request does not repeat booking or report",
+    "third month retains closed contracts and invoices without duplicates"
+  ],
+  "original_source_files_changed": 0,
+  "release_gate": "BLOCKED",
+  "limitations": [
+    "Node engine-level test; no live browser import or browser process restart for this contract path",
+    "partial delivery and contract breach during rescue not tested",
+    "no complete win/loss campaign and no historical C64 comparison"
+  ]
+}

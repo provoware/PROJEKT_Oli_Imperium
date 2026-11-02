@@ -1,0 +1,107 @@
+[
+  {
+    "id": "TST-STRUCT-01",
+    "title": "IDs eindeutig, Referenzen gültig",
+    "kind": "structural",
+    "status": "SPECIFIED",
+    "mandatory": true
+  },
+  {
+    "id": "TST-NAV-01",
+    "title": "Jede Ansicht hat Start- und Rückweg",
+    "kind": "structural",
+    "status": "SPECIFIED",
+    "mandatory": true
+  },
+  {
+    "id": "TST-NAV-02",
+    "title": "Navigation ohne Buchung",
+    "kind": "structural",
+    "status": "SPECIFIED",
+    "mandatory": true
+  },
+  {
+    "id": "TST-MARKET-01",
+    "title": "100 bbl Nachfrage, 90/60 -> 60/40",
+    "kind": "reference_formula",
+    "status": "SPECIFIED",
+    "mandatory": true
+  },
+  {
+    "id": "TST-MARKET-02",
+    "title": "Nachfragerest stabil verteilt",
+    "kind": "reference_formula",
+    "status": "SPECIFIED",
+    "mandatory": true
+  },
+  {
+    "id": "TST-PAY-01",
+    "title": "1000 EUR auf Klassen 600, 600, 300 -> 600,400,0",
+    "kind": "reference_formula",
+    "status": "SPECIFIED",
+    "mandatory": true
+  },
+  {
+    "id": "TST-PAY-02",
+    "title": "Innerhalb der Klasse proportional",
+    "kind": "reference_formula",
+    "status": "SPECIFIED",
+    "mandatory": true
+  },
+  {
+    "id": "TST-MILE-01",
+    "title": "Marktführer Schwelle, Null-Nenner, Volumen",
+    "kind": "reference_formula",
+    "status": "SPECIFIED",
+    "mandatory": true
+  },
+  {
+    "id": "TST-MILE-02",
+    "title": "Vertragsmeister 19/20 ergibt 95 %",
+    "kind": "reference_formula",
+    "status": "SPECIFIED",
+    "mandatory": true
+  },
+  {
+    "id": "TST-C64-01",
+    "title": "Echter C64 Büro-Karten-Rückweg",
+    "kind": "original_not_run",
+    "status": "NOT_RUN",
+    "mandatory": true
+  },
+  {
+    "id": "TST-E2E-01",
+    "title": "Kompletter Spielkreislauf",
+    "kind": "integration_not_run",
+    "status": "NOT_RUN",
+    "mandatory": true
+  },
+  {
+    "id": "TST-E2E-02",
+    "title": "Speichern während Monatsabschluss",
+    "kind": "integration_not_run",
+    "status": "NOT_RUN",
+    "mandatory": true
+  },
+  {
+    "id": "TST-E2E-03",
+    "title": "KI und Mensch nutzen gleiche Kernregeln",
+    "kind": "integration_not_run",
+    "status": "NOT_RUN",
+    "mandatory": true
+  },
+  {
+    "id": "TST-E2E-04",
+    "title": "Sanierungsneustart über mehrere Generationen",
+    "kind": "integration_not_run",
+    "status": "NOT_RUN",
+    "mandatory": true
+  },
+  {
+    "id": "TST-E2E-05",
+    "title": "10.000 Monate Langzeitlauf",
+    "kind": "integration_not_run",
+    "status": "NOT_RUN",
+    "mandatory": true
+  }
+]

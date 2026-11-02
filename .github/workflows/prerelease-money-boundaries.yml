@@ -1,0 +1,20 @@
+name: Projekt C – Geldgrenzen und sichere Sanierung
+on:
+  pull_request:
+    paths:
+      - 'project-c/pppoppi-imperium/quality_v194/test_money_boundaries_v194.cjs'
+      - '.github/workflows/prerelease-money-boundaries.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  money-boundaries:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Geldgrenzen und Sanierungsueberlauf testen
+        run: node project-c/pppoppi-imperium/quality_v194/test_money_boundaries_v194.cjs

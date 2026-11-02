@@ -1,0 +1,39 @@
+{
+  "gate_id": "SPE-01",
+  "date": "2026-10-28",
+  "result": "PARTIAL",
+  "tested_code_head": "8ec7a177313136cb040dfe26c833e09b392e6b2a",
+  "command": "python3 project-c/pppoppi-imperium/quality_v194/test_browser_complex_roundtrip_v194.py",
+  "ci_result": "PASS",
+  "ci_run_url": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40603795251",
+  "ci_job": "chromium-roundtrip",
+  "tested_cases": {
+    "human_companies": 2,
+    "ai_companies": 2,
+    "independent_regions": [
+      "BERLIN",
+      "NORD"
+    ],
+    "fulfilled_contracts": 2,
+    "settled_months": 2,
+    "browser_contexts": 4,
+    "independent_replays": 2,
+    "exact_import_roundtrips": 3
+  },
+  "verified_properties": [
+    "two independent regional claims acquired, drilled, pumped, shipped, offered and contracted through visible browser buttons",
+    "two contract revenues and transport invoices after second month, each contract fulfilled exactly once",
+    "full JSON state equality after imports in new browser contexts",
+    "same economic state after replay; timestamp-bearing processedIds normalized for cross-session comparison while counts and uniqueness checked",
+    "month three starts without duplicate contract revenue or report",
+    "800x600 without horizontal overflow, no external HTTP requests or JavaScript page errors"
+  ],
+  "original_source_files_changed": 0,
+  "release_gate": "BLOCKED",
+  "limitations": [
+    "four browser contexts are not four Chromium process restarts",
+    "not all valid nested states, loss scenarios or endgame rules tested",
+    "processedIds content differs because the UI uses Date.now()",
+    "C64 historical fidelity and personal end approval not established"
+  ]
+}

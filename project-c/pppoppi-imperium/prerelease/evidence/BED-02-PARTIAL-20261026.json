@@ -1,0 +1,27 @@
+{
+  "gate_id": "BED-02",
+  "result": "PARTIAL",
+  "date": "2026-10-26",
+  "commit": "8f98e7ed596b5aa6420211a4fb77d6e875a33b51",
+  "command": "python3 project-c/pppoppi-imperium/quality_v194/test_browser_keyboard_scenes_v194.py",
+  "ci_url": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40387673447",
+  "source_ci_url": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40387673468",
+  "checks": {
+    "scene_closures": 117,
+    "scene_total": 117,
+    "viewports": [
+      "800x600",
+      "457x343",
+      "400x300"
+    ],
+    "alt_left": true,
+    "keyboard_focus": true,
+    "unchanged_economy": true
+  },
+  "limits": [
+    "Szenen werden programmatisch geoeffnet; nicht alle Aktionen tastaturgeprueft.",
+    "CSS-Viewports sind kein nativer Browserzoom.",
+    "Berechnete Fokus-Umrisse sind keine menschliche Sicht- oder Kontrastabnahme.",
+    "Gate bleibt BLOCKED; keine Vorrelease-Freigabe."
+  ]
+}

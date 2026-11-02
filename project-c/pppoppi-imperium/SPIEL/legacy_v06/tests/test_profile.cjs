@@ -1,0 +1,20 @@
+'use strict';
+const fs=require('node:fs'),assert=require('node:assert/strict');
+const E=require('../src/engine.js');
+const a=JSON.parse(fs.readFileSync(__dirname+'/../config/profile_v04.json','utf8'));
+let checks=0;
+function eq(a,b,label){assert.equal(a,b,label+' Profil und Spielkern unterscheiden sich!');checks++;}
+eq(a.month_days,E.P.monthDays,'Spieltage');
+eq(a.financial.cash_start_cent,E.P.startCashCent,'Startgeld');
+eq(a.market.price_cent_per_bbl,E.P.priceCentPerBbl,'Preis');
+eq(a.market.demand_milli,E.P.marketDemandMilli,'Marktnachfrage');
+eq(a.market.rival_milli,E.P.rivalOfferMilli,'Gegnerangebot');
+eq(a.financial.rescue_loan_cent,E.P.rescueLoanCent,'Rettungskredit');
+eq(a.financial.restart_cash_cent,E.P.restartCashCent,'Sanierungsneustart');
+eq(a.financial.debt_interest_bps,E.P.interestBps,'Zins');
+eq(a.financial.debt_due_principal_bps,E.P.repaymentBps,'Tilgung');
+eq(a.milestones.marketleader.threshold_bps,6000,'Marktführerquote');
+eq(a.milestones.marketleader.months,6,'Marktführermonate');
+eq(a.milestones.marketleader.min_effective_demand_milli,100000,'Mindestmarkt');
+assert.equal(a.historical_reference,'NOT_VERIFIED');checks++;
+console.log(`OK: ${checks} Profilübereinstimmungen geprüft`);

@@ -1,0 +1,37 @@
+{
+  "package": "OLI_IMPERIUM_V04_V05_V06_Paket",
+  "date": "2026-10-20",
+  "status": "BERLIN_DEVELOPMENT_PROTOTYPE_NOT_C64_VERIFIED",
+  "tests": {
+    "engine": {
+      "passed": 37,
+      "total": 37
+    },
+    "navigation_structure_checks": 411,
+    "profile_consistency_checks": 13,
+    "browser_end_to_end": "PASSED_IN_CHROMIUM_INLINE_CONTEXT",
+    "browser_js_errors": 0
+  },
+  "navigation": {
+    "screens_planned": 32,
+    "transitions_planned": 62,
+    "transitions_pilot_marked": 34
+  },
+  "pilot_month": {
+    "start_cash_cent": 20000000,
+    "final_cash_cent": 13110000,
+    "extracted_milli_bbl": 100000,
+    "sold_milli_bbl": 80000,
+    "stock_milli_bbl": 20000,
+    "reserve_milli_bbl": 400000,
+    "action_days_used": 14
+  },
+  "not_verified": [
+    "C64 original emulator",
+    "multi-player",
+    "full AI",
+    "contracts",
+    "three mini-games",
+    "personal Kubuntu user test"
+  ]
+}

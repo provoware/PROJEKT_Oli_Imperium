@@ -1,0 +1,32 @@
+{
+  "gate_id": "BAR-01",
+  "result": "PARTIAL",
+  "date": "2026-10-26",
+  "commit": "d4550b598ccd930beb06d7d784582d6e6949a779",
+  "command": "python3 project-c/pppoppi-imperium/quality_v194/test_browser_dialog_focus_v194.py",
+  "ci_url": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40413530587",
+  "source_ci_url": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40413530363",
+  "checks": {
+    "full_browser_workflow": "PASS",
+    "source_workflow": "PASS",
+    "scenes_per_viewport": 39,
+    "viewports": [
+      "800x600",
+      "CSS-200"
+    ],
+    "focusable_controls_per_viewport": 463,
+    "tab_reached_per_viewport": 463,
+    "missing_per_viewport": 0,
+    "missing_focus_visible_per_viewport": 0,
+    "missing_computed_ring_per_viewport": 0,
+    "unnamed_by_heuristic_per_viewport": 0,
+    "unchanged_economic_state": true,
+    "offline_no_http": true
+  },
+  "limits": [
+    "Dialoge wurden per Navigations-API geoeffnet; die einzelnen Aktionen darin wurden nicht per Enter ausgeloest.",
+    "926 Pruefkontakte sind 463 wiederholte Bedienelemente in zwei CSS-Bildbereichen, keine 926 einzigartigen Funktionen.",
+    "CSS-200 ist kein nativer Browserzoom; sichtbarer Kontrast und Screenreader-Namen sind nicht vollstaendig bewertet.",
+    "Gate bleibt BLOCKED; keine persoenliche Sichtabnahme und keine Releasefreigabe."
+  ]
+}

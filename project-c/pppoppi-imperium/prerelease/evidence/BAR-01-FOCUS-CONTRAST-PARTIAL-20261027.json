@@ -1,0 +1,42 @@
+{
+  "gate_id": "BAR-01",
+  "result": "PARTIAL",
+  "date": "2026-10-27",
+  "implementation_commit": "55a7359da8986233992956f58296abe6f08117dc",
+  "test": "python3 project-c/pppoppi-imperium/quality_v194/test_browser_focus_contrast_v194.py",
+  "browser_ci": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40456804550",
+  "source_ci": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40456804591",
+  "release_matrix_ci": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40456804536",
+  "initial_failure": {
+    "commit": "fab7856bc7d78159ee43061f9d12145ae770898a",
+    "browser_ci": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40456568368",
+    "selects_without_adequate_focus": 9,
+    "outline_width_css_px": 0.571429,
+    "contrast_ratio": 1.176
+  },
+  "after_fix": {
+    "zoom_percent": [
+      175,
+      200
+    ],
+    "scenes_per_zoom": 39,
+    "controls_per_zoom": [
+      452,
+      451
+    ],
+    "reached": 903,
+    "no_ring": 0,
+    "below_3_to_1": 0,
+    "unknown_backgrounds": 0,
+    "min_contrast_ratio": 6.9,
+    "unchanged_game_state": true,
+    "js_errors": 0,
+    "external_http_requests": 0
+  },
+  "limits": [
+    "CSS-Kontrast, keine Pixel-Sichtpruefung",
+    "Szenen programmatisch geoeffnet, nicht alle Aktionen durchgespielt",
+    "Dynamische Ueberlagerungen und Endpartien offen",
+    "Persoenliche Endabnahme zurueckgestellt"
+  ]
+}

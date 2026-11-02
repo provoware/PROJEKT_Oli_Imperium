@@ -1,0 +1,504 @@
+{
+  "schema": "pppoppi.berlin.save/0.8.2",
+  "ruleset": "berlin-economy/0.8.2.0",
+  "seed": "PPPOPPI-2026",
+  "month": 1,
+  "phase": "TURN",
+  "turnIndex": 0,
+  "companies": [
+    {
+      "id": "H1",
+      "name": "PPPOPPI",
+      "type": "human",
+      "generation": 1,
+      "cashCent": 10050000,
+      "debtCent": 0,
+      "daysUsed": 11,
+      "contracts": [],
+      "obligations": [],
+      "ledger": [
+        {
+          "id": "B1-1-0",
+          "month": 1,
+          "deltaCent": -200000,
+          "code": "GUTACHTEN",
+          "info": "BERLIN-1"
+        },
+        {
+          "id": "B1-2-1",
+          "month": 1,
+          "deltaCent": -5000000,
+          "code": "FELDKAUF",
+          "info": "BERLIN-1"
+        },
+        {
+          "id": "B1-3-2",
+          "month": 1,
+          "deltaCent": -4000000,
+          "code": "MINISPIEL_DRILL",
+          "info": "BERLIN-1"
+        },
+        {
+          "id": "B1-34-3",
+          "month": 1,
+          "deltaCent": -250000,
+          "code": "MINISPIEL_PIPE",
+          "info": "BERLIN-1"
+        },
+        {
+          "id": "B1-51-4",
+          "month": 1,
+          "deltaCent": -500000,
+          "code": "MINISPIEL_FIRE",
+          "info": "BERLIN-1"
+        }
+      ],
+      "stats": {
+        "contractsDone": 0,
+        "contractsOnTime": 0,
+        "contractsProfitable": 0,
+        "contractsProfitCent": 0,
+        "marketStreak": 0,
+        "awards": [],
+        "rescues": 0
+      },
+      "loanUsed": false,
+      "monthRevenueCent": 0,
+      "monthSoldMilli": 0,
+      "monthProducedMilli": 0,
+      "monthContractMilli": 0
+    },
+    {
+      "id": "A1",
+      "name": "Milchmädchen Pete GmbH",
+      "type": "ai",
+      "generation": 1,
+      "cashCent": 20000000,
+      "debtCent": 0,
+      "daysUsed": 0,
+      "contracts": [],
+      "obligations": [],
+      "ledger": [],
+      "stats": {
+        "contractsDone": 0,
+        "contractsOnTime": 0,
+        "contractsProfitable": 0,
+        "contractsProfitCent": 0,
+        "marketStreak": 0,
+        "awards": [],
+        "rescues": 0
+      },
+      "loanUsed": false,
+      "monthRevenueCent": 0,
+      "monthSoldMilli": 0,
+      "monthProducedMilli": 0,
+      "monthContractMilli": 0
+    },
+    {
+      "id": "A2",
+      "name": "Edna Ruppen & Co.",
+      "type": "ai",
+      "generation": 1,
+      "cashCent": 20000000,
+      "debtCent": 0,
+      "daysUsed": 0,
+      "contracts": [],
+      "obligations": [],
+      "ledger": [],
+      "stats": {
+        "contractsDone": 0,
+        "contractsOnTime": 0,
+        "contractsProfitable": 0,
+        "contractsProfitCent": 0,
+        "marketStreak": 0,
+        "awards": [],
+        "rescues": 0
+      },
+      "loanUsed": false,
+      "monthRevenueCent": 0,
+      "monthSoldMilli": 0,
+      "monthProducedMilli": 0,
+      "monthContractMilli": 0
+    }
+  ],
+  "claims": {
+    "BERLIN-1": {
+      "id": "BERLIN-1",
+      "region": "BERLIN",
+      "name": "Berlin-Mitte (Satirezone) / Claim 1",
+      "owner": "H1",
+      "surveyedBy": [
+        "H1"
+      ],
+      "drilled": true,
+      "reserveMilli": 500000,
+      "inventoryMilli": 0,
+      "preparedMilli": 0,
+      "order": false,
+      "tankLevel": 1,
+      "tankMilli": 250000,
+      "pipeline": true,
+      "burning": false,
+      "damaged": false,
+      "securityUntil": 0
+    },
+    "BERLIN-2": {
+      "id": "BERLIN-2",
+      "region": "BERLIN",
+      "name": "Berlin-Mitte (Satirezone) / Claim 2",
+      "owner": null,
+      "surveyedBy": [],
+      "drilled": false,
+      "reserveMilli": 555000,
+      "inventoryMilli": 0,
+      "preparedMilli": 0,
+      "order": false,
+      "tankLevel": 1,
+      "tankMilli": 250000,
+      "pipeline": false,
+      "burning": false,
+      "damaged": false,
+      "securityUntil": 0
+    },
+    "BERLIN-3": {
+      "id": "BERLIN-3",
+      "region": "BERLIN",
+      "name": "Berlin-Mitte (Satirezone) / Claim 3",
+      "owner": null,
+      "surveyedBy": [],
+      "drilled": false,
+      "reserveMilli": 610000,
+      "inventoryMilli": 0,
+      "preparedMilli": 0,
+      "order": false,
+      "tankLevel": 1,
+      "tankMilli": 250000,
+      "pipeline": false,
+      "burning": false,
+      "damaged": false,
+      "securityUntil": 0
+    },
+    "BRANDENBURG-1": {
+      "id": "BRANDENBURG-1",
+      "region": "BRANDENBURG",
+      "name": "Brandenburg-Nord (fiktiv) / Claim 1",
+      "owner": null,
+      "surveyedBy": [],
+      "drilled": false,
+      "reserveMilli": 600000,
+      "inventoryMilli": 0,
+      "preparedMilli": 0,
+      "order": false,
+      "tankLevel": 1,
+      "tankMilli": 250000,
+      "pipeline": false,
+      "burning": false,
+      "damaged": false,
+      "securityUntil": 0
+    },
+    "BRANDENBURG-2": {
+      "id": "BRANDENBURG-2",
+      "region": "BRANDENBURG",
+      "name": "Brandenburg-Nord (fiktiv) / Claim 2",
+      "owner": null,
+      "surveyedBy": [],
+      "drilled": false,
+      "reserveMilli": 655000,
+      "inventoryMilli": 0,
+      "preparedMilli": 0,
+      "order": false,
+      "tankLevel": 1,
+      "tankMilli": 250000,
+      "pipeline": false,
+      "burning": false,
+      "damaged": false,
+      "securityUntil": 0
+    },
+    "BRANDENBURG-3": {
+      "id": "BRANDENBURG-3",
+      "region": "BRANDENBURG",
+      "name": "Brandenburg-Nord (fiktiv) / Claim 3",
+      "owner": null,
+      "surveyedBy": [],
+      "drilled": false,
+      "reserveMilli": 710000,
+      "inventoryMilli": 0,
+      "preparedMilli": 0,
+      "order": false,
+      "tankLevel": 1,
+      "tankMilli": 250000,
+      "pipeline": false,
+      "burning": false,
+      "damaged": false,
+      "securityUntil": 0
+    },
+    "NORD-1": {
+      "id": "NORD-1",
+      "region": "NORD",
+      "name": "Norddeutsche Küste (fiktiv) / Claim 1",
+      "owner": null,
+      "surveyedBy": [],
+      "drilled": false,
+      "reserveMilli": 420000,
+      "inventoryMilli": 0,
+      "preparedMilli": 0,
+      "order": false,
+      "tankLevel": 1,
+      "tankMilli": 250000,
+      "pipeline": false,
+      "burning": false,
+      "damaged": false,
+      "securityUntil": 0
+    },
+    "NORD-2": {
+      "id": "NORD-2",
+      "region": "NORD",
+      "name": "Norddeutsche Küste (fiktiv) / Claim 2",
+      "owner": null,
+      "surveyedBy": [],
+      "drilled": false,
+      "reserveMilli": 475000,
+      "inventoryMilli": 0,
+      "preparedMilli": 0,
+      "order": false,
+      "tankLevel": 1,
+      "tankMilli": 250000,
+      "pipeline": false,
+      "burning": false,
+      "damaged": false,
+      "securityUntil": 0
+    },
+    "NORD-3": {
+      "id": "NORD-3",
+      "region": "NORD",
+      "name": "Norddeutsche Küste (fiktiv) / Claim 3",
+      "owner": null,
+      "surveyedBy": [],
+      "drilled": false,
+      "reserveMilli": 530000,
+      "inventoryMilli": 0,
+      "preparedMilli": 0,
+      "order": false,
+      "tankLevel": 1,
+      "tankMilli": 250000,
+      "pipeline": false,
+      "burning": false,
+      "damaged": false,
+      "securityUntil": 0
+    }
+  },
+  "prices": {
+    "BERLIN": 70000,
+    "BRANDENBURG": 63000,
+    "NORD": 78000
+  },
+  "demand": {
+    "BERLIN": 120000,
+    "BRANDENBURG": 110000,
+    "NORD": 80000
+  },
+  "processedIds": [
+    "neo-1-1792513349784",
+    "neo-2-1792513349962",
+    "neo-3-1792513350079",
+    "arcade-adjust-4-1792513350458",
+    "arcade-adjust-5-1792513350458",
+    "arcade-adjust-6-1792513350458",
+    "arcade-adjust-7-1792513350458",
+    "arcade-adjust-8-1792513350459",
+    "neo-9-1792513350459",
+    "arcade-adjust-10-1792513350524",
+    "arcade-adjust-11-1792513350524",
+    "arcade-adjust-12-1792513350524",
+    "arcade-adjust-13-1792513350525",
+    "arcade-adjust-14-1792513350525",
+    "arcade-adjust-15-1792513350525",
+    "arcade-adjust-16-1792513350525",
+    "arcade-adjust-17-1792513350525",
+    "arcade-adjust-18-1792513350526",
+    "arcade-adjust-19-1792513350526",
+    "arcade-adjust-20-1792513350526",
+    "arcade-adjust-21-1792513350526",
+    "neo-22-1792513350532",
+    "arcade-adjust-23-1792513350635",
+    "arcade-adjust-24-1792513350635",
+    "arcade-adjust-25-1792513350636",
+    "arcade-adjust-26-1792513350636",
+    "arcade-adjust-27-1792513350636",
+    "arcade-adjust-28-1792513350636",
+    "arcade-adjust-29-1792513350636",
+    "arcade-adjust-30-1792513350636",
+    "neo-31-1792513350636",
+    "arcade-adjust-32-1792513350737",
+    "neo-33-1792513350738",
+    "neo-34-1792513351319",
+    "arcade-adjust-35-1792513353352",
+    "arcade-adjust-36-1792513353352",
+    "arcade-adjust-37-1792513353353",
+    "arcade-adjust-38-1792513353353",
+    "neo-39-1792513353353",
+    "arcade-adjust-40-1792513354848",
+    "arcade-adjust-41-1792513354848",
+    "arcade-adjust-42-1792513354848",
+    "arcade-adjust-43-1792513354848",
+    "arcade-adjust-44-1792513354848",
+    "arcade-adjust-45-1792513354849",
+    "arcade-adjust-46-1792513354849",
+    "neo-47-1792513354849",
+    "arcade-adjust-48-1792513356409",
+    "arcade-adjust-49-1792513356409",
+    "neo-50-1792513356409",
+    "neo-51-1792513356885",
+    "arcade-adjust-52-1792513357272",
+    "arcade-adjust-53-1792513357272",
+    "arcade-adjust-54-1792513357273",
+    "arcade-adjust-55-1792513357273",
+    "arcade-adjust-56-1792513357273",
+    "arcade-adjust-57-1792513357273",
+    "neo-58-1792513357273",
+    "arcade-adjust-59-1792513357382",
+    "arcade-adjust-60-1792513357382",
+    "arcade-adjust-61-1792513357382",
+    "arcade-adjust-62-1792513357383",
+    "arcade-adjust-63-1792513357383",
+    "arcade-adjust-64-1792513357383",
+    "arcade-adjust-65-1792513357383",
+    "neo-66-1792513357383",
+    "arcade-adjust-67-1792513357500",
+    "arcade-adjust-68-1792513357500",
+    "arcade-adjust-69-1792513357500",
+    "arcade-adjust-70-1792513357500",
+    "arcade-adjust-71-1792513357501",
+    "arcade-adjust-72-1792513357501",
+    "neo-73-1792513357501"
+  ],
+  "sequence": 73,
+  "reports": [],
+  "events": [
+    {
+      "month": 1,
+      "type": "MINI_START",
+      "kind": "DRILL",
+      "claimId": "BERLIN-1",
+      "company": "H1"
+    },
+    {
+      "month": 1,
+      "type": "MINI_FALSCHE_EINSTELLUNG",
+      "kind": "DRILL",
+      "claimId": "BERLIN-1",
+      "stage": 0,
+      "company": "H1"
+    },
+    {
+      "month": 1,
+      "type": "MINI_SUCCESS",
+      "kind": "DRILL",
+      "claimId": "BERLIN-1",
+      "company": "H1"
+    },
+    {
+      "month": 1,
+      "type": "MINI_START",
+      "kind": "PIPE",
+      "claimId": "BERLIN-1",
+      "company": "H1"
+    },
+    {
+      "month": 1,
+      "type": "MINI_SUCCESS",
+      "kind": "PIPE",
+      "claimId": "BERLIN-1",
+      "company": "H1"
+    },
+    {
+      "month": 1,
+      "type": "MINI_START",
+      "kind": "FIRE",
+      "claimId": "BERLIN-1",
+      "company": "H1"
+    },
+    {
+      "month": 1,
+      "type": "MINI_SUCCESS",
+      "kind": "FIRE",
+      "claimId": "BERLIN-1",
+      "company": "H1"
+    }
+  ],
+  "rescueIds": [],
+  "lastReport": null,
+  "minigame": null,
+  "lineage": null,
+  "refinery": {
+    "version": "pppoppi.refinery/1.0",
+    "plants": {
+      "H1": {
+        "BERLIN": {
+          "built": false,
+          "route": false,
+          "productMilli": 0,
+          "processedMilli": 0
+        },
+        "BRANDENBURG": {
+          "built": false,
+          "route": false,
+          "productMilli": 0,
+          "processedMilli": 0
+        },
+        "NORD": {
+          "built": false,
+          "route": false,
+          "productMilli": 0,
+          "processedMilli": 0
+        }
+      },
+      "A1": {
+        "BERLIN": {
+          "built": false,
+          "route": false,
+          "productMilli": 0,
+          "processedMilli": 0
+        },
+        "BRANDENBURG": {
+          "built": false,
+          "route": false,
+          "productMilli": 0,
+          "processedMilli": 0
+        },
+        "NORD": {
+          "built": false,
+          "route": false,
+          "productMilli": 0,
+          "processedMilli": 0
+        }
+      },
+      "A2": {
+        "BERLIN": {
+          "built": false,
+          "route": false,
+          "productMilli": 0,
+          "processedMilli": 0
+        },
+        "BRANDENBURG": {
+          "built": false,
+          "route": false,
+          "productMilli": 0,
+          "processedMilli": 0
+        },
+        "NORD": {
+          "built": false,
+          "route": false,
+          "productMilli": 0,
+          "processedMilli": 0
+        }
+      }
+    },
+    "salesMilli": {
+      "BERLIN": 0,
+      "BRANDENBURG": 0,
+      "NORD": 0
+    },
+    "story": []
+  }
+}

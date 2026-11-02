@@ -1,0 +1,236 @@
+#!/usr/bin/env python3
+"""Live-Endspieladapter mit sichtbarer Spielartwahl im Offline-Chromium; Enddialog folgt."""
+import json
+import subprocess
+import tempfile
+from pathlib import Path
+from playwright.sync_api import sync_playwright
+
+HERE = Path(__file__).resolve().parent
+
+def main():
+    with tempfile.TemporaryDirectory(prefix="pppoppi-live-") as tmp:
+        target = Path(tmp) / "preview"
+        subprocess.run(["node", str(HERE / "build.cjs"), str(target)],
+                       check=True, capture_output=True, text=True)
+        info = json.loads((target / "BUILD_INFO.json").read_text(encoding="utf-8"))
+        assert info["sourceFiles"] == 110, info
+        assert "src/endstate_live_v194.js" in info["generatedAddons"], info
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(headless=True)
+            page = browser.new_page(viewport={"width": 800, "height": 600})
+            errors = []
+            page.on("pageerror", lambda error: errors.append(str(error)))
+            page.goto((target / "index.html").as_uri())
+            page.wait_for_function("window.NeoEconomy && window.NeoEconomy.endstate")
+            result = page.evaluate("""() => {
+              const N = window.NeoEconomy, L = N.endstate;
+              N.start('1-2','free');
+              const first = N.getState();
+              N.send('END_TURN');
+              const report = N.getState();
+              const before = JSON.stringify(report);
+              const ended = L.finish().status;
+              N.send('NEXT_MONTH');
+              const blocked = JSON.stringify(N.getState()) === before;
+              const archive = L.archive();
+              const serialized = L.exportSession();
+              N.start('1-2','campaign:12');
+              const campaign = L.contract();
+              N.send('END_TURN');
+              const reportCampaign = N.getState();
+              const stillActive = L.status() === 'active';
+              return {firstMonth:first.month,reportPhase:report.phase,ended,
+                blocked,archiveMonth:archive.endMonth,
+                sessionSchema:JSON.parse(serialized).schema,
+                campaignMonths:campaign.months,stillActive,
+                campaignPhase:reportCampaign.phase,
+                originalEngine:N.engine.validate(N.getState())};
+            }""")
+            assert result["firstMonth"] == 1, result
+            assert result["reportPhase"] == "REPORT", result
+            assert result["ended"] == "finished", result
+            assert result["blocked"] is True, result
+            assert result["archiveMonth"] == 1, result
+            assert result["sessionSchema"] == "pppoppi.endstate.session.proposal/1", result
+            assert result["campaignMonths"] == 12, result
+            assert result["stillActive"] is True, result
+            assert result["campaignPhase"] == "REPORT", result
+            assert result["originalEngine"] is True, result
+            # Normale Bedienoberflaeche: Spielart sichtbar, beschriftet und per Tastatur erreichbar.
+            page.evaluate("window.NeoEconomy.open('startup')")
+            mode_select = page.get_by_label("Spielart", exact=True)
+            assert mode_select.count() == 1, "Spielart-Auswahl nicht sichtbar"
+            assert mode_select.is_visible()
+            assert mode_select.input_value() == "free"
+            assert page.locator("#econEndMode option").count() == 6
+            mode_select.focus()
+            mode_select.press("Tab")
+            assert page.evaluate("document.activeElement?.dataset?.ui") == "newgame", "Tab-Reihenfolge unterbrochen"
+            mode_select.select_option("campaign:12")
+            page.locator("#dialogContent button[data-ui='newgame']").click()
+            chosen = page.evaluate("""() => ({
+              mode: NeoEconomy.endstate.contract().mode,
+              months: NeoEconomy.endstate.contract().months,
+              status: NeoEconomy.endstate.status(),
+              month: NeoEconomy.getState().month
+            })""")
+            assert chosen == {"mode": "campaign", "months": 12, "status": "active", "month": 1}, chosen
+            page.evaluate("window.NeoEconomy.open('startup')")
+            page.get_by_label("Spielart", exact=True).select_option("free")
+            page.locator("#dialogContent button[data-ui='newgame']").click()
+            free = page.evaluate("""() => ({
+              mode: NeoEconomy.endstate.contract().mode,
+              status: NeoEconomy.endstate.status(),
+              month: NeoEconomy.getState().month
+            })""")
+            assert free == {"mode": "free", "status": "active", "month": 1}, free
+            # Echte Bedienfolge: freie Partie nicht versehentlich beenden, dann bestaetigen.
+            page.evaluate("window.NeoEconomy.open('computer')")
+            page.get_by_role("button", name="Spielende pruefen").click()
+            confirm = page.get_by_role("button", name="Ja, Partie endgueltig abschliessen")
+            assert confirm.is_visible(), "Bestaetigungsdialog fehlt"
+            confirm.focus()
+            confirm.press("Tab")
+            assert page.evaluate("document.activeElement?.dataset?.ui") == "finish-cancel", "Abbruch nicht per Tab erreichbar"
+            page.get_by_role("button", name="Nein, weiterspielen").click()
+            assert page.evaluate("NeoEconomy.endstate.status()") == "active", "Abbruch hat Partie beendet"
+            page.evaluate("window.NeoEconomy.open('computer')")
+            page.get_by_role("button", name="Spielende pruefen").click()
+            page.get_by_role("button", name="Ja, Partie endgueltig abschliessen").click()
+            archived = page.evaluate("""() => ({
+              status: NeoEconomy.endstate.status(),
+              archive: NeoEconomy.endstate.archive(),
+              text: document.getElementById('dialogContent').innerText,
+              state: JSON.stringify(NeoEconomy.getState())
+            })""")
+            assert archived["status"] == "finished", archived
+            assert archived["archive"]["reason"] == "voluntary-end", archived
+            assert archived["archive"]["endMonth"] == 1, archived
+            assert "NUR LESEN" in archived["text"], archived
+            assert "Weitere Wirtschaftsaktionen sind gesperrt" in archived["text"], archived
+            page.evaluate("window.NeoEconomy.send('END_TURN')")
+            assert page.evaluate("JSON.stringify(NeoEconomy.getState())") == archived["state"], "Archiv wurde veraendert"
+            page.evaluate("window.NeoEconomy.open('endstate')")
+            assert page.get_by_role("button", name="Neue Partie vorbereiten").is_visible()
+            assert not errors, errors
+            # Archivdatei ueber den sichtbaren Schalter speichern.
+            with page.expect_download() as pending:
+                page.get_by_role("button", name="Sitzung exportieren").click()
+            archived_file = Path(tmp) / "archiv-sitzung.json"
+            pending.value.save_as(archived_file)
+            archive_payload = json.loads(archived_file.read_text(encoding="utf-8"))
+            assert archive_payload["schema"] == "pppoppi.endstate.session.proposal/1"
+            assert archive_payload["state"] is None
+            assert archive_payload["archive"]["endMonth"] == 1
+            browser.close()
+
+            # Neuer echter Chromium-Prozess ohne uebernommenen Browser-Speicher.
+            browser = pw.chromium.launch(headless=True)
+            page = browser.new_page(viewport={"width": 800, "height": 600}, accept_downloads=True)
+            errors = []
+            page.on("pageerror", lambda error: errors.append(str(error)))
+            page.goto((target / "index.html").as_uri())
+            page.wait_for_function("window.NeoEconomy && window.NeoEconomy.endstate")
+            page.locator("#loadSessionFile").set_input_files(str(archived_file))
+            page.wait_for_function("NeoEconomy.endstate.status()==='finished'")
+            restored = page.evaluate("""() => ({
+                state: JSON.stringify(NeoEconomy.getState()),
+                mode: NeoEconomy.endstate.contract().mode,
+                archive: NeoEconomy.endstate.archive(),
+                text: document.getElementById('dialogContent').innerText
+            })""")
+            assert restored["mode"] == "free", restored
+            assert restored["archive"]["endMonth"] == 1, restored
+            assert "NUR LESEN" in restored["text"], restored
+            page.evaluate("NeoEconomy.send('END_TURN')")
+            assert page.evaluate("JSON.stringify(NeoEconomy.getState())") == restored["state"]
+
+            # Beschaedigtes Archiv darf die wiederhergestellte Partie nicht ersetzen.
+            tampered = json.loads(archived_file.read_text(encoding="utf-8"))
+            tampered["archive"]["endMonth"] = 999
+            tampered_file = Path(tmp) / "manipuliert.json"
+            tampered_file.write_text(json.dumps(tampered), encoding="utf-8")
+            page.on("dialog", lambda dialog: dialog.accept())
+            page.locator("#loadSessionFile").set_input_files(str(tampered_file))
+            page.wait_for_function("document.querySelector('#toast').textContent.includes('Sitzungsimport abgelehnt')")
+            assert page.evaluate("JSON.stringify(NeoEconomy.getState())") == restored["state"]
+            assert page.evaluate("NeoEconomy.endstate.status()") == "finished"
+
+            # Groessenfehler im neuen Sitzungsweg darf das Abschlussarchiv nicht ersetzen.
+            size_result = page.evaluate("""() => {
+                const input = document.getElementById('loadSessionFile');
+                const file = new File([new Uint8Array(5_000_001)],
+                                      'zu-gross.json', {type: 'application/json'});
+                const transfer = new DataTransfer();
+                transfer.items.add(file);
+                input.files = transfer.files;
+                input.dispatchEvent(new Event('change', {bubbles: true}));
+                return {size: file.size, status: NeoEconomy.endstate.status()};
+            }""")
+            assert size_result == {"size": 5_000_001, "status": "finished"}, size_result
+            page.wait_for_function(
+                "document.querySelector('#toast').textContent.includes('Sitzungsdatei zu gross')")
+            assert page.evaluate("JSON.stringify(NeoEconomy.getState())") == restored["state"]
+
+            # Ein spaet eintreffender Dateileser darf eine neu gestartete Partie
+            # nicht ueberschreiben. Der Test nutzt den echten Datei-Ereignispfad.
+            race = page.evaluate("""async (serialized) => {
+                const input = document.getElementById('loadSessionFile');
+                const file = new File([serialized], 'verzoegert.json',
+                                      {type: 'application/json'});
+                let resolveRead;
+                Object.defineProperty(file, 'text', {
+                    value: () => new Promise(resolve => { resolveRead = resolve; })
+                });
+                const transfer = new DataTransfer();
+                transfer.items.add(file);
+                input.files = transfer.files;
+                input.dispatchEvent(new Event('change', {bubbles: true}));
+                if (typeof resolveRead !== 'function') {
+                    throw Error('Asynchroner Dateileser wurde nicht gestartet');
+                }
+                NeoEconomy.start('1-2', 'campaign:24');
+                const expected = JSON.stringify(NeoEconomy.getState());
+                resolveRead(serialized);
+                await new Promise(resolve => setTimeout(resolve, 0));
+                return {
+                    unchanged: JSON.stringify(NeoEconomy.getState()) === expected,
+                    status: NeoEconomy.endstate.status(),
+                    months: NeoEconomy.endstate.contract().months,
+                    archive: NeoEconomy.endstate.archive()
+                };
+            }""", json.dumps(archive_payload))
+            assert race == {
+                "unchanged": True, "status": "active",
+                "months": 24, "archive": None
+            }, race
+            assert not errors, errors
+
+            # Auch ein aktiver Kampagnenvertrag muss einen Prozessneustart ueberleben.
+            page.evaluate("NeoEconomy.start('1-2','campaign:12')")
+            page.evaluate("NeoEconomy.open('computer')")
+            with page.expect_download() as pending:
+                page.get_by_role("button", name="Sitzung exportieren").click()
+            active_file = Path(tmp) / "kampagne-sitzung.json"
+            pending.value.save_as(active_file)
+            assert json.loads(active_file.read_text(encoding="utf-8"))["contract"]["months"] == 12
+            browser.close()
+            browser = pw.chromium.launch(headless=True)
+            page = browser.new_page(viewport={"width": 800, "height": 600})
+            errors = []
+            page.on("pageerror", lambda error: errors.append(str(error)))
+            page.goto((target / "index.html").as_uri())
+            page.wait_for_function("window.NeoEconomy && window.NeoEconomy.endstate")
+            page.locator("#loadSessionFile").set_input_files(str(active_file))
+            page.wait_for_function("NeoEconomy.endstate.status()==='active'")
+            assert page.evaluate("NeoEconomy.endstate.contract().months") == 12
+            assert page.evaluate("NeoEconomy.getState().month") == 1
+            assert not errors, errors
+            browser.close()
+            print("PASS: Offline-Chromium 800x600, Live-Spielaktion, freiwilliger "
+                  "Abschluss, Aktionssperre, Kampagnenvertrag, 110 Quellhashes")
+            print(json.dumps(result, ensure_ascii=False, sort_keys=True))
+
+if __name__ == "__main__":
+    main()

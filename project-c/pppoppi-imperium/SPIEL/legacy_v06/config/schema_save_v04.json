@@ -1,0 +1,230 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/oli/berlin/save/0.6",
+  "title": "PPPOPPI-Imperium Berlin-Spielstand V0.6",
+  "description": "Vertrag für die eigene Berliner Entwicklungsfassung; keine C64-Originalstruktur. Zur Laufzeit gelten strengere fachliche Grenzen.",
+  "type": "object",
+  "required": [
+    "schema",
+    "ruleset",
+    "seed",
+    "month",
+    "generation",
+    "phase",
+    "cashCent",
+    "debtCent",
+    "actionDaysUsed",
+    "field",
+    "tankCapacityMilli",
+    "inventoryMilli",
+    "preparedMilli",
+    "order",
+    "obligations",
+    "ledger",
+    "processedIds",
+    "sequence",
+    "loanUsed",
+    "rescuedGenerations",
+    "awards",
+    "marketStreak",
+    "contractsFinished",
+    "monthReport",
+    "history",
+    "message"
+  ],
+  "properties": {
+    "schema": {
+      "const": "pppoppi.berlin.save/0.6"
+    },
+    "ruleset": {
+      "const": "berlin-slice-0.4.0"
+    },
+    "seed": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80
+    },
+    "month": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "generation": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "phase": {
+      "enum": [
+        "TURN_ACTIVE",
+        "RESCUE",
+        "MONTH_REPORT"
+      ]
+    },
+    "field": {
+      "type": "object",
+      "required": [
+        "owned",
+        "surveyed",
+        "drilled",
+        "reserveMilli"
+      ],
+      "properties": {
+        "owned": {
+          "type": "boolean"
+        },
+        "surveyed": {
+          "type": "boolean"
+        },
+        "drilled": {
+          "type": "boolean"
+        },
+        "reserveMilli": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "order": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "required": [
+            "id",
+            "qtyMilli"
+          ],
+          "properties": {
+            "id": {
+              "const": "ORDER-SELF"
+            },
+            "qtyMilli": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "obligations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "priority",
+          "dueCent",
+          "paidCent",
+          "kind"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "priority": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 5
+          },
+          "dueCent": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "paidCent": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "kind": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "processedIds": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string"
+      }
+    },
+    "ledger": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "history": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "awards": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "loanUsed": {
+      "type": "boolean"
+    },
+    "monthReport": {
+      "type": [
+        "null",
+        "object"
+      ]
+    },
+    "message": {
+      "type": "string"
+    },
+    "cashCent": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "debtCent": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "actionDaysUsed": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "tankCapacityMilli": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "inventoryMilli": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "preparedMilli": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "sequence": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "rescuedGenerations": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "marketStreak": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "contractsFinished": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "lastProducedMilli": {
+      "type": "integer",
+      "minimum": 0
+    }
+  },
+  "additionalProperties": false
+}

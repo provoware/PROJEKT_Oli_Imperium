@@ -1,0 +1,57 @@
+{
+  "passed": 13,
+  "tests": [
+    {
+      "name": "Zwei Menschen und zwei KI-Firmen starten",
+      "passed": true
+    },
+    {
+      "name": "Privater Spielerwechsel zeigt Übergabedialog",
+      "passed": true
+    },
+    {
+      "name": "Fremdes Bargeld während Übergabe verdeckt",
+      "passed": true
+    },
+    {
+      "name": "Zweite menschliche Firma aktiv",
+      "passed": true
+    },
+    {
+      "name": "Beträge erst nach bestätigter Übergabe sichtbar",
+      "passed": true
+    },
+    {
+      "name": "Mehrspielermonat wird nach beiden Menschen abgerechnet",
+      "passed": true
+    },
+    {
+      "name": "Kauf ohne Gutachten verändert keinen Spielzustand",
+      "passed": true
+    },
+    {
+      "name": "Eigenbohrung startet echtes Minispiel",
+      "passed": true
+    },
+    {
+      "name": "Minispielabschnitt aktiv",
+      "passed": true
+    },
+    {
+      "name": "Minispielabschnitt aktiv",
+      "passed": true
+    },
+    {
+      "name": "Minispielabschnitt aktiv",
+      "passed": true
+    },
+    {
+      "name": "Alle drei Bohr-Minispielabschnitte verändern echte Anlage",
+      "passed": true
+    },
+    {
+      "name": "Mehrspieler-Browserlauf ohne JS-Ausnahmen",
+      "passed": true
+    }
+  ]
+}

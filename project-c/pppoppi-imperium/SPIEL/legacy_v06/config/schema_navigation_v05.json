@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NAV-V0.5: eindeutiger Navigationsvertrag",
+  "type": "array",
+  "minItems": 1,
+  "items": {
+    "type": "object",
+    "required": [
+      "id",
+      "from_screen",
+      "to_screen",
+      "event",
+      "guard",
+      "mutates_financial_state",
+      "time_cost_days",
+      "state",
+      "implemented",
+      "evidence_level",
+      "test_id",
+      "implementation",
+      "side_effect_policy"
+    ],
+    "properties": {
+      "id": {
+        "type": "string",
+        "pattern": "^NAV-[0-9]{3}$"
+      },
+      "from_screen": {
+        "type": "string",
+        "pattern": "^SCR-"
+      },
+      "to_screen": {
+        "type": "string",
+        "pattern": "^SCR-"
+      },
+      "event": {
+        "type": "string",
+        "minLength": 1
+      },
+      "guard": {
+        "type": "string",
+        "minLength": 1
+      },
+      "mutates_financial_state": {
+        "type": "boolean"
+      },
+      "time_cost_days": {
+        "const": 0
+      },
+      "state": {
+        "enum": [
+          "DESIGN"
+        ]
+      },
+      "implemented": {
+        "type": "boolean"
+      },
+      "evidence_level": {
+        "const": "BERLIN_DESIGN_NOT_C64"
+      },
+      "test_id": {
+        "type": "string",
+        "minLength": 1
+      },
+      "implementation": {
+        "enum": [
+          "PLANNED",
+          "V0.6"
+        ]
+      },
+      "side_effect_policy": {
+        "enum": [
+          "NONE",
+          "COMMAND_ONLY"
+        ]
+      }
+    },
+    "additionalProperties": false
+  }
+}

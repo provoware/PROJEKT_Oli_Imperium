@@ -1,0 +1,485 @@
+{
+  "version": "1.9.1",
+  "passed": 32,
+  "checks": [
+    {
+      "name": "V1.9.1-Navigation geladen",
+      "passed": true
+    },
+    {
+      "name": "Büro-Hotspots intakt",
+      "passed": true
+    },
+    {
+      "name": "Fachseite ohne Partie führt sicher zum Spielstart",
+      "passed": true
+    },
+    {
+      "name": "Neue Partie öffnet Computer",
+      "passed": true
+    },
+    {
+      "name": "Gemeinsame Navigation sichtbar",
+      "passed": true
+    },
+    {
+      "name": "Neue Partie hat keinen irreführenden Rückweg",
+      "passed": true
+    },
+    {
+      "name": "Bürocomputer erreicht Regionskarte",
+      "passed": true
+    },
+    {
+      "name": "Karte erreicht Region",
+      "passed": true
+    },
+    {
+      "name": "Region erreicht einzelnes Feld",
+      "passed": true
+    },
+    {
+      "name": "Zurück führt von Claim zur Region",
+      "passed": true
+    },
+    {
+      "name": "Alt+Pfeil links führt von Region zur Karte",
+      "passed": true
+    },
+    {
+      "name": "Navigation verändert weder Öl, Zeit noch Geld",
+      "passed": true
+    },
+    {
+      "name": "Navigation wird nicht mehrfach eingebaut",
+      "passed": true
+    },
+    {
+      "name": "Ungültiger Bildschirm fällt auf Hilfe zurück",
+      "passed": true
+    },
+    {
+      "name": "Alle Bereiche über Übersicht erreichbar",
+      "passed": true
+    },
+    {
+      "name": "Umfang des Szenenregisters ist vollständig",
+      "passed": true
+    },
+    {
+      "name": "Alle 39 registrierten Ansichten rendern ohne JavaScript-Ausnahme",
+      "passed": true
+    },
+    {
+      "name": "Berichtsphase bleibt bei reinem Bildschirmwechsel bestehen",
+      "passed": true
+    },
+    {
+      "name": "Zwei Menschen: vertrauliche Zugübergabe beginnt",
+      "passed": true
+    },
+    {
+      "name": "Finanzbildschirm während Zugübergabe blockiert",
+      "passed": true
+    },
+    {
+      "name": "Schnellübersicht bei Übergabe blockiert",
+      "passed": true
+    },
+    {
+      "name": "Speicherexport während Übergabe abgewiesen",
+      "passed": true
+    },
+    {
+      "name": "Vertraulicher Wechsel auch nach Fensterschließen geschützt",
+      "passed": true
+    },
+    {
+      "name": "Erst Bestätigung zeigt die nächste Firma",
+      "passed": true
+    },
+    {
+      "name": "Nach Übergabe öffnet neuer Firmencomputer",
+      "passed": true
+    },
+    {
+      "name": "Gültiger Rettungs-Spielstand wird geladen",
+      "passed": true
+    },
+    {
+      "name": "Sanierungsbildschirm bei Rettungsfall erreichbar",
+      "passed": true
+    },
+    {
+      "name": "Rettungskredit als echte Spielaktion verfügbar",
+      "passed": true
+    },
+    {
+      "name": "Büro-Schaltfläche schließt das Fenster",
+      "passed": true
+    },
+    {
+      "name": "Keine externen Netzwerkanfragen",
+      "passed": true
+    },
+    {
+      "name": "Keine unaufgefangenen Browserfehler",
+      "passed": true
+    },
+    {
+      "name": "Mobilansicht ohne horizontales Scrollen",
+      "passed": true
+    }
+  ],
+  "scenes": [
+    {
+      "requested": "help",
+      "scene": "help",
+      "title": "Kurze Spielanleitung",
+      "content": 368,
+      "toolbar": 1,
+      "new_errors": []
+    },
+    {
+      "requested": "computer",
+      "scene": "computer",
+      "title": "Oil Commander 3000",
+      "content": 808,
+      "toolbar": 1,
+      "new_errors": []
+    },
+    {
+      "requested": "map",
+      "scene": "map",
+      "title": "Deutschlandkarte · Förderregionen",
+      "content": 649,
+      "toolbar": 1,
+      "new_errors": []
+    },
+    {
+      "requested": "phone",
+      "scene": "phone",
+      "title": "Telefon, Edna & Pete",
+      "content": 394,
+      "toolbar": 1,
+      "new_errors": []
+    },
+    {
+      "requested": "case",
+      "scene": "case",
+      "title": "Werkstatt & Sicherheitskoffer",
+      "content": 733,
+      "toolbar": 1,
+      "new_errors": []
+    },
+    {
+      "requested": "calendar",
+      "scene": "calendar",
+      "title": "Spielkalender & Monatsabschluss",
+      "content": 372,
+      "toolbar": 1,
+      "new_errors": []
+    },
+    {
+      "requested": "newspaper",
+      "scene": "newspaper",
+      "title": "Berliner Öl-Blatt",
+      "content": 350,
+      "toolbar": 1,
+      "new_errors": []
+    },
+    {
+      "requested": "drawer",
+      "scene": "drawer",
+      "title": "Firmenakten & Pausenmodus",
+      "content": 191,
+      "toolbar": 1,
+      "new_errors": []
+    },
+    {
+      "requested": "plaque",
+      "scene": "plaque",
+      "title": "Provoware · Spielstand",
+      "content": 171,
+      "toolbar": 1,
+      "new_errors": []
+    },
+    {
+      "requested": "duck",
+      "scene": "duck",
+      "title": "Die Rendite-Ente",
+      "content": 184,
+      "toolbar": 1,
+      "new_errors": []
+    },
+    {
+      "requested": "bear",
+      "scene": "bear",
+      "title": "Der Bär mit den Börsentipps",
+      "content": 180,
+      "toolbar": 1,
+      "new_errors": []
+    },
+    {
+      "requested": "coffee",
+      "scene": "coffee",
+      "title": "Das elfte Grundrecht: Kaffee",
+      "content": 185,
+      "toolbar": 1,
+      "new_errors": []
+    },
+    {
+      "requested": "plant",
+      "scene": "plant",
+      "title": "Die Büropflanze",
+      "content": 155,
+      "toolbar": 1,
+      "new_errors": []
+    },
+    {
+      "requested": "lamp",
+      "scene": "lamp",
+      "title": "Die Messinglampe",
+      "content": 151,
+      "toolbar": 1,
+      "new_errors": []
+    },
+    {
+      "requested": "window",
+      "scene": "window",
+      "title": "Über den Dächern Berlins",
+      "content": 159,
+      "toolbar": 1,
+      "new_errors": []
+    },
+    {
+      "requested": "quick",
+      "scene": "quick",
+      "title": "Alle Spielbereiche",
+      "content": 330,
+      "toolbar": 1,
+      "new_errors": []
+    },
+    {
+      "requested": "minigame",
+      "scene": "minigame",
+      "title": "Papierkorb-Meisterschaft",
+      "content": 298,
+      "toolbar": 1,
+      "new_errors": []
+    },
+    {
+      "requested": "startup",
+      "scene": "startup",
+      "title": "PPPOPPI Imperium · Neue Partie",
+      "content": 640,
+      "toolbar": 1,
+      "new_errors": []
+    },
+    {
+      "requested": "region",
+      "scene": "region",
+      "title": "Regionale Förderlandschaft",
+      "content": 577,
+      "toolbar": 1,
+      "new_errors": []
+    },
+    {
+      "requested": "claim",
+      "scene": "claim",
+      "title": "Einzelnes Ölfeld",
+      "content": 812,
+      "toolbar": 1,
+      "new_errors": []
+    },
+    {
+      "requested": "field",
+      "scene": "field",
+      "title": "Bohrturm & Anlagen",
+      "content": 554,
+      "toolbar": 1,
+      "new_errors": []
+    },
+    {
+      "requested": "warehouse",
+      "scene": "warehouse",
+      "title": "Tanktechnik & Transport",
+      "content": 542,
+      "toolbar": 1,
+      "new_errors": []
+    },
+    {
+      "requested": "pipeline",
+      "scene": "pipeline",
+      "title": "Rohrnetz und Pipeline",
+      "content": 479,
+      "toolbar": 1,
+      "new_errors": []
+    },
+    {
+      "requested": "market",
+      "scene": "market",
+      "title": "Regionale Ölbörse",
+      "content": 849,
+      "toolbar": 1,
+      "new_errors": []
+    },
+    {
+      "requested": "contracts",
+      "scene": "contracts",
+      "title": "Edna Ruppen – Vertragsbüro",
+      "content": 426,
+      "toolbar": 1,
+      "new_errors": []
+    },
+    {
+      "requested": "newsroom",
+      "scene": "newsroom",
+      "title": "Nachrichten und Ereignisse",
+      "content": 309,
+      "toolbar": 1,
+      "new_errors": []
+    },
+    {
+      "requested": "boardroom",
+      "scene": "boardroom",
+      "title": "PPPOPPI, Edna und Pete",
+      "content": 496,
+      "toolbar": 1,
+      "new_errors": []
+    },
+    {
+      "requested": "chronicle",
+      "scene": "chronicle",
+      "title": "Firmenchronik",
+      "content": 253,
+      "toolbar": 1,
+      "new_errors": []
+    },
+    {
+      "requested": "factory",
+      "scene": "factory",
+      "title": "Fabrik und Logistik",
+      "content": 713,
+      "toolbar": 1,
+      "new_errors": []
+    },
+    {
+      "requested": "refinery",
+      "scene": "refinery",
+      "title": "Raffinerie und Vertriebsroute",
+      "content": 1500,
+      "toolbar": 1,
+      "new_errors": []
+    },
+    {
+      "requested": "transport",
+      "scene": "transport",
+      "title": "Transportleitstelle V1.7",
+      "content": 1137,
+      "toolbar": 1,
+      "new_errors": []
+    },
+    {
+      "requested": "publicNetwork",
+      "scene": "publicNetwork",
+      "title": "Öffentliche Verkehrswege V1.7.1",
+      "content": 1825,
+      "toolbar": 1,
+      "new_errors": []
+    },
+    {
+      "requested": "finance",
+      "scene": "finance",
+      "title": "Milchmädchen Pete – Finanzbüro",
+      "content": 241,
+      "toolbar": 1,
+      "new_errors": []
+    },
+    {
+      "requested": "workshop",
+      "scene": "workshop",
+      "title": "Bohrung · Pipeline · Brand",
+      "content": 733,
+      "toolbar": 1,
+      "new_errors": []
+    },
+    {
+      "requested": "security",
+      "scene": "security",
+      "title": "Objektschutz",
+      "content": 615,
+      "toolbar": 1,
+      "new_errors": []
+    },
+    {
+      "requested": "report",
+      "scene": "report",
+      "title": "Geschäftsbericht",
+      "content": 163,
+      "toolbar": 1,
+      "new_errors": []
+    },
+    {
+      "requested": "rescue",
+      "scene": "rescue",
+      "title": "Weiche Pleite mit Rettung",
+      "content": 244,
+      "toolbar": 1,
+      "new_errors": []
+    },
+    {
+      "requested": "handoff",
+      "scene": "handoff",
+      "title": "Verdeckter Spielerwechsel",
+      "content": 152,
+      "toolbar": 1,
+      "new_errors": []
+    },
+    {
+      "requested": "awards",
+      "scene": "awards",
+      "title": "Meilensteine und Endlosmodus",
+      "content": 223,
+      "toolbar": 1,
+      "new_errors": []
+    }
+  ],
+  "images": [
+    {
+      "name": "01_Computer_mit_Navigation.png",
+      "sha256": "70fdd400ac47adafee7b6b9b95906f69ef5d241b71584aee87a72bc8f7a60c4c",
+      "size": 184778
+    },
+    {
+      "name": "02_Claim_mit_Rueckweg.png",
+      "sha256": "f5d51de19729314917137ed0256465dc507af6f2506ffe1ece06828a6ef82c33",
+      "size": 202132
+    },
+    {
+      "name": "03_Spielbereiche_Uebersicht.png",
+      "sha256": "cc119674f1f292cadb48fd7eea766b0885703a75e92b18cbec67dd7db5d97fbc",
+      "size": 164602
+    },
+    {
+      "name": "04_Monatsbericht_Sperre.png",
+      "sha256": "f262fa1e02f017d864e7ef4509bdc21801d35a2b8ec2adf72590b3247acb0d94",
+      "size": 218977
+    },
+    {
+      "name": "06_Vertraulicher_Spielerwechsel.png",
+      "sha256": "0b3b92d190db45aef99ee19a157a8663614d45c5470e3489065fd11f1b53b961",
+      "size": 142917
+    },
+    {
+      "name": "05_Mobilnavigation.png",
+      "sha256": "2022f0329129e7d10ccf49db91ca7ed765e3108c3aae7939500b5cadde58fd86",
+      "size": 86665
+    }
+  ],
+  "errors": [],
+  "requests": [],
+  "browser": "Chromium headless (embedded offline HTML, CSS, JavaScript)",
+  "kubuntu_end_test": "deferred",
+  "c64_emulator_test": "not_performed"
+}

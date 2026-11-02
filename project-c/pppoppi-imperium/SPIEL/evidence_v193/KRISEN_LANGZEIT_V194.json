@@ -1,0 +1,46 @@
+{
+  "runs": [
+    {
+      "scenario": "Basis mit drei KI-Firmen",
+      "months": 48,
+      "completed": 48,
+      "valid": true,
+      "cashMinCent": 9510000,
+      "aiLogisticsActions": 217,
+      "aiBankruptcies": 0,
+      "humanRescues": 0
+    },
+    {
+      "scenario": "Monatlicher Nachfrageeinbruch",
+      "months": 36,
+      "completed": 36,
+      "valid": true,
+      "cashMinCent": 5766000,
+      "aiLogisticsActions": 219,
+      "aiBankruptcies": 0,
+      "humanRescues": 0
+    },
+    {
+      "scenario": "Preisverfall und Ressourcenknappheit",
+      "months": 36,
+      "completed": 36,
+      "valid": true,
+      "cashMinCent": 16760000,
+      "aiLogisticsActions": 0,
+      "aiBankruptcies": 0,
+      "humanRescues": 0
+    },
+    {
+      "scenario": "Erzwungener Forderungsausfall und Sanierung",
+      "months": 36,
+      "completed": 36,
+      "valid": true,
+      "cashMinCent": 10000,
+      "aiLogisticsActions": 0,
+      "aiBankruptcies": 0,
+      "humanRescues": 1
+    }
+  ],
+  "totalMonths": 156,
+  "note": "Technische Konsistenz, kein Beweis für Balance oder historische Originaltreue"
+}

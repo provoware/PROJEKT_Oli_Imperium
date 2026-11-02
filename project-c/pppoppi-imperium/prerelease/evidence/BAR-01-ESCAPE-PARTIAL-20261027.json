@@ -1,0 +1,27 @@
+{
+  "gate_id": "BAR-01",
+  "result": "PARTIAL",
+  "date": "2026-10-27",
+  "commit": "0ee7a8e027204ccb1464da6828d8c2c671947082",
+  "command": "python3 project-c/pppoppi-imperium/quality_v194/test_browser_keyboard_escape_v194.py",
+  "ci_url": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40427112310",
+  "source_ci_url": "https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/40427112286",
+  "checks": {
+    "full_browser_workflow": "PASS",
+    "source_workflow": "PASS",
+    "viewports": [
+      "800x600",
+      "CSS-200"
+    ],
+    "real_tab_enter_openers_per_viewport": 2,
+    "focus_restoration_total": 4,
+    "escape_closes_scenes_per_viewport": 39,
+    "keyboard_focus_visible_at_openers": true,
+    "unchanged_economic_state": true
+  },
+  "limits": [
+    "Die 39 Szenen wurden per API geoeffnet; nur Hilfe und Uebersicht wurden direkt per Tab/Enter geoeffnet.",
+    "Fokus-Rueckkehr nach Escape ist ein Teilaspekt; Fokuskontrast, Reihenfolge bei allen Spielzustaenden und native Zoom-Skalierung fehlen.",
+    "BAR-01 bleibt BLOCKED; keine Gesamtfreigabe."
+  ]
+}

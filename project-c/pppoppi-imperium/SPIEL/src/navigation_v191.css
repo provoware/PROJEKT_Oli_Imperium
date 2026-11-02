@@ -1,0 +1,11 @@
+/* V1.9.1: Scene navigation controls; no visual change to desk illustration */
+.v191-nav{display:flex;align-items:center;gap:9px;flex-wrap:wrap;padding:9px 18px 9px;border-bottom:1px solid rgba(211,186,132,.3);background:#14252a;color:#e2d2ac}
+.v191-nav button{background:#25403e;color:#f5e0af;border:1px solid #927b50;border-radius:5px;font-size:14px;font-weight:650;padding:9px 14px;cursor:pointer;min-height:38px}
+.v191-nav button:focus-visible{outline:3px solid #f0d38e;outline-offset:3px}
+.v191-nav button:hover:not(:disabled){background:#3c5d54}
+.v191-nav button:disabled{opacity:.4;cursor:not-allowed}
+#v191-location{margin-left:auto;min-width:180px;text-align:right;font-size:12px;opacity:.88;overflow-wrap:anywhere}
+@media(max-width:640px){.v191-nav{gap:6px;padding:8px}.v191-nav button{padding:8px;font-size:12px}#v191-location{width:100%;margin-left:0;text-align:left}}
+/* The dialog itself scrolls. Keep the route controls visible under its fixed heading. */
+.v191-nav{position:sticky;top:88px;z-index:2}
+@media(max-width:640px){.v191-nav{top:76px}}
