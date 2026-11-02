@@ -15,7 +15,8 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 from test_browser_campaign_24months_v194 import check, press_button, state
 from campaign_native_import_v194 import import_saved_session, require_two_imports
-from campaign_keyboard_audit_v194 import tab_to_target, press_tab_focused
+from campaign_keyboard_audit_v194 import (tab_to_target, press_tab_focused,
+                                         assert_computed_focus_indicator)
 from campaign_keyboard_reverse_v194 import verify_reverse_tab_roundtrip
 from test_browser_native_zoom_v194 import (extension_at, set_real_zoom,
                                           wait_for_zoom_worker)
@@ -115,6 +116,7 @@ def main(months, zoom_percent=100, native_import=False, keyboard_audit=False,
                 steps = tab_to_target(page, selector)
                 if reverse_tab_audit:
                     verify_reverse_tab_roundtrip(page, selector)
+                assert_computed_focus_indicator(page.locator(selector), selector)
                 keyboard_audit_hits.append({"selector": selector, "tabs": steps,
                                             "reverse_verified": reverse_tab_audit})
 

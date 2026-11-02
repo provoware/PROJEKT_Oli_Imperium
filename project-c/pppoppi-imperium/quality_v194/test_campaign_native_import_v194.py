@@ -87,6 +87,29 @@ class NativeImportTests(TestCase):
         self.page.keyboard.press.assert_not_called()
 
 
+    def test_audited_import_uses_three_real_page_keyboard_enters(self):
+        @contextmanager
+        def chooser(_page, timeout):
+            yield SimpleNamespace(value=self.files)
+        with patch("campaign_native_import_v194.ready_filechooser", chooser):
+            self.assertEqual(import_saved_session(
+                self.page, "save.json", native=True,
+                focus_by_tab=lambda _page, _selector: None), "NATIVE_FILECHOOSER")
+        self.assertEqual(self.page.keyboard.press.call_count, 3)
+        self.page.keyboard.press.assert_any_call("Enter")
+        self.page.locator.return_value.press.assert_not_called()
+        self.page.locator.return_value.focus.assert_not_called()
+
+    def test_audited_import_blocks_focus_loss_before_newgame(self):
+        self.page.locator.return_value.evaluate.side_effect = [True, False]
+        with patch("campaign_native_import_v194.ready_filechooser") as chooser:
+            with self.assertRaisesRegex(AssertionError, "Tastaturfokus vor Enter verloren"):
+                import_saved_session(self.page, "save.json", native=True,
+                                     focus_by_tab=lambda _page, _selector: None)
+        self.page.keyboard.press.assert_called_once_with("Enter")
+        chooser.assert_not_called()
+        self.page.locator.return_value.press.assert_not_called()
+
 class ImportEvidenceTests(TestCase):
     def test_two_native_imports_are_required(self):
         self.assertEqual(require_two_imports(

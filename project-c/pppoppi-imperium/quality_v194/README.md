@@ -109,3 +109,8 @@ Die [Rueckwaerts-Tab-Kampagne](REVERSE_TAB_CAMPAIGN_20261102.md) ergaenzt bei 17
 [CI #41422394500](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41422394500) auf HEAD `36edd26a55d411a6eaee06b6eb103ed05e98ab58`: **18/18 Kampagnenjobs SUCCESS**, einschliesslich 16/16 bisheriger Tastaturregressionen und der vier 175/200-%-Tab-/Rueckwaerts-Tab-Jobs. Der fruehere PENDING-Eintrag ist damit ueberholt.
 
 Der neue Pruefer verlangt zusaetzlich zu echtem Tab-Fokus und `:focus-visible` eine **berechnete CSS-Fokusmarkierung** (Outline oder Schatten). Ohne Nachweis wird vor Enter abgebrochen. Drei neue Negativtests ergaenzen den Satz auf **19**. Dies ist eine Pruefverschaerfung, keine Produkt-, Quell- oder Speicherformaenderung. **CI auf diesem neuen Commit: PENDING**, bis alle betroffenen Jobs tatsaechlich abgeschlossen sind. Die 14 Schluesselkontrollen decken noch nicht alle Dialoge und Minispiele ab. Matrix **6/52 PASS**; kein Merge, kein Release, persoenliche Endabnahme zuletzt.
+
+
+## Nachtrag 02.11.2026 – alle 14 Tab-Ziele und nativer Dateiimport
+
+Die CSS-Fokusmarkierung wird jetzt im gemeinsamen `audit()`-Pfad fuer **alle 14** Tab-Kontrollen einschliesslich der beiden Dateiimporte geprueft. Im auditierten Dateiimport verwenden Start und Neue Partie ausschliesslich `page.keyboard.press("Enter")` statt `locator.press("Enter")`, da letzteres unbemerkt automatisch fokussieren kann. Zwei weitere Negativ-/Regressionstests erhoehen die Importtests auf **10**. Die nicht auditierte Importvariante bleibt unveraendert. **CI auf diesem neuen HEAD: PENDING**; keine Behauptung einer abgeschlossenen Browserpruefung. Geschuetzte Quelldateien und Speicherformat bleiben unveraendert.

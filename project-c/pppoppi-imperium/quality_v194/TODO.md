@@ -53,3 +53,6 @@ Stand 02.11.2026. Dies ist die **auf PR #155 begrenzte Arbeitsliste**; die verbi
 - [ ] 2026-11-02 | BED-02/03 | Fehlende Dialog- und Minispielpfade inventarisieren, echten Tab-/Enter-Weg bei 800x600 und Zoom pruefen | ohne direkte Fokussetzung | fertig wenn alle vorgesehenen Bedienpfade belegt sind
 
 **Draft-Bestand vor dieser Iteration:** 4 (#141, #150, #154, #155). **Matrix:** 6 PASS / 39 BLOCKED / 4 OPEN / 3 DEFERRED. Keine persoenliche Endabnahme, kein Merge/Release.
+
+- [x] 2026-11-02 | BED-02/03 | CSS-Fokusring auf alle 14 Tab-Ziele einschliesslich nativer Importe ausdehnen; erzwungenes Locator-Fokussieren im auditierten Import vermeiden | zwei neue Importregressionen, 10 statt 8 | Code implementiert, CI auf neuem HEAD offen
+- [ ] 2026-11-02 | BED-02/03 | Zehn Importregressionen und 19 Fokusregressionen plus vier 175/200-%-Browserjobs auf finalem HEAD nachweisen | [GitHub Actions](https://github.com/provoware/PROJEKT_Oli_Imperium/actions) | fertig bei tatsaechlichem PASS

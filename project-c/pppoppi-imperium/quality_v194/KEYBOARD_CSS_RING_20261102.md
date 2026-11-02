@@ -22,3 +22,7 @@ python3 -m unittest discover -s project-c/pppoppi-imperium/quality_v194 -p 'test
 **Neuer HEAD / CI:** nach GitHub-Commit gesondert pruefen; vor Abschluss **PENDING**. Kein vorweggenommener PASS. **Matrix:** 6 PASS / 39 BLOCKED / 4 OPEN / 3 DEFERRED = 52. Keine Integration, kein Release, keine persoenliche Endabnahme.
 
 **Naechste Schritte:** (1) aktuelle 19 Regressionen und vier Browserjobs auswerten, (2) CSS-Fokusfehler gezielt beheben, (3) noch nicht abgedeckte Dialoge und Minispiele inventarisieren und testen.
+
+## Ergaenzung: Vollstaendigkeit der 14 Tab-Nachweise
+
+Die neue CSS-Ring-Pruefung ist auch im gemeinsamen Audit-Callback verankert, der fuer alle 14 Tab-Ziele einschliesslich `session-import` aufgerufen wird. Bei aktiviertem Audit verwendet der native Import fuer `#startGame` und `newgame` nun die Seiten-Tastatur statt `locator.press` mit moeglicher automatischer Fokussetzung. Zwei neue Importtests: drei echte Seiten-Enter ohne Locator-Press sowie Abbruch bei Fokusverlust vor Neue Partie. **10 Importregressionen**, **19 Fokusregressionen**; der neue CI-Abschluss ist noch offen.
