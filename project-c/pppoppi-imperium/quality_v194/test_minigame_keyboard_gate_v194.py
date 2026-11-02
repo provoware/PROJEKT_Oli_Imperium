@@ -13,8 +13,8 @@ class KeyboardGateContract:
         module = importlib.import_module(self.MODULE)
         page = Mock()
         page.evaluate.return_value = focus_visible
-        with patch(self.MODULE + ".tab_to", return_value=reachable) as tab, \\
-             patch(self.MODULE + ".assert_computed_focus_indicator") as ring, \\
+        with patch(self.MODULE + ".tab_to", return_value=reachable) as tab, \
+             patch(self.MODULE + ".assert_computed_focus_indicator") as ring, \
              patch(self.MODULE + ".press_tab_focused") as enter:
             if ring_error:
                 ring.side_effect = AssertionError(ring_error)

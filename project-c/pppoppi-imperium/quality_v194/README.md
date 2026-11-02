@@ -127,3 +127,7 @@ Der [Bewegungs-Pflichtbericht](MOTION_KEYBOARD_20261102.md) erweitert die Kopfze
 ## Minispiel-Tastaturgate (02.11.2026)
 
 Die [strenge Minispiel-Tastaturpruefung](MINIGAME_KEYBOARD_GATE_20261102.md) kontrolliert vor Enter in Bohrspiel, Rohrnetz und Feuerwehr den tatsaechlichen Tastaturfokus, eine berechnete CSS-Fokusmarkierung, die Sichtbarkeit und die Trefferflaeche. Zehn Negativtests sind in den Pflichtpruefablauf aufgenommen. **Erst ein erfolgreich abgeschlossener GitHub-CI-Lauf auf dem finalen Commit ist ein PASS-Nachweis.** Die Vorrelease-Matrix bleibt 6/52 PASS, keine Freigabe.
+
+## CI-Fehlerdiagnose 02.11.2026
+
+[Nachprüfbarer Pflichtbericht](CI_KEYBOARD_FAILURES_20261102.md): Der letzte GitHub-Lauf fand einen Python-Syntaxfehler in den zehn neuen Minispiel-Tastaturtests sowie zwei eigenständige Zoom-/Fokusfehler bei `#closeBtn` und `#startGame`. Syntax und frühe CI-Prüfung sind korrigiert, erneute Browserprüfung steht aus. **6/52 Pflichtpunkte PASS; kein Release.**

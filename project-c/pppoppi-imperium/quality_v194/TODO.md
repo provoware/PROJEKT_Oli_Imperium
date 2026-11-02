@@ -88,3 +88,11 @@ Stand 02.11.2026. Dies ist die **auf PR #155 begrenzte Arbeitsliste**; die verbi
 - [ ] 2026-11-02 | BED-03 Rest | Regler und dynamische Minispielphasen, weitere Claim-/Regionsvarianten mit Zustandsfolgen absichern | echte Tastatur, 800x600, 175/200 % | fertig wenn alle vorgesehenen Bedienwege fachlich belegt sind
 
 **Matrix:** 6 PASS / 39 BLOCKED / 4 OPEN / 3 DEFERRED (52). Kein Merge, kein Release, Endabnahme zuletzt.
+
+## Nachtrag 02.11.2026 – echte CI-Fehler, Syntaxkorrektur
+
+- [x] 2026-11-02 | BED-02/03 | Doppelte Zeilenfortsetzung in zehn Minispiel-Tastaturtests korrigieren und frühen Python-Syntaxcheck ergänzen | [CI-Befund](CI_KEYBOARD_FAILURES_20261102.md) | Implementierung fertig, GitHub-Nachweis auf neuem HEAD offen
+- [ ] 2026-11-02 | BED-02/03 | Zehn Minispiel-Regressionen und Rohrnetz-/Feuerwehr-Kampagne auf finalem HEAD ausführen | [Actions](https://github.com/provoware/PROJEKT_Oli_Imperium/actions) | fertig bei echten PASS-Ergebnissen
+- [ ] 2026-11-02 | BED-02/03 | #closeBtn nach Bohrstufe 3 wieder in sichtbaren Bereich bringen und #startGame mit berechneter CSS-Fokusmarkierung ausstatten | [Browser-CI #41473770623](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41473770623) | fertig bei grünen 175/200-%-Chromiumprüfungen
+
+**Gesamtmatrix unverändert:** 6/52 PASS. Kein Merge/Release, persönliche Endabnahme zuletzt.

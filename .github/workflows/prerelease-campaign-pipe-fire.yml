@@ -22,6 +22,7 @@ jobs:
       - name: Python-Syntax der betroffenen Browserprogramme pruefen
         run: |
           python3 -m py_compile project-c/pppoppi-imperium/quality_v194/test_browser_campaign_pipe_fire_recovery_v194.py
+          python3 -m py_compile project-c/pppoppi-imperium/quality_v194/test_minigame_keyboard_gate_v194.py
           python3 -m py_compile project-c/pppoppi-imperium/quality_v194/test_browser_keyboard_pipe_fire_v194.py
           python3 -m py_compile project-c/pppoppi-imperium/quality_v194/test_browser_campaign_lastmonth_rescue_v194.py
       - name: Chromium installieren
