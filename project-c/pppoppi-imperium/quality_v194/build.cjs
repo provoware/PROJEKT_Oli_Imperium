@@ -25,7 +25,7 @@ const changes = [
   // noch 0px breit sein. Fokus-Outline nie animieren, Hover bleibt animiert.
   ['index.html',
     '</head>',
-    '<style id="pppoppi-toolbar-focus-v194">.toolbar button:focus-visible{transition-property:background-color,border-color}</style>\\n</head>'],
+    '<style id="pppoppi-toolbar-focus-v194">.toolbar button:focus-visible{transition-property:background-color,border-color}</style>\n</head>'],
   // Browser-Standardfokus bei <select> war bei 175 % nur 0,57 CSS-Pixel
   // breit und hatte gegen den Dialoghintergrund nur 1,18:1 Kontrast.
   // Ausschliesslich in der abgeleiteten Technikvorschau korrigieren.
