@@ -32,6 +32,11 @@ const changes = [
   ['index.html',
     '</head>',
     '<style id="pppoppi-select-focus-v194">#dialog select:focus-visible{outline:3px solid #ffda8d;outline-offset:3px}</style>\n</head>'],
+  // Druckregler: sofort sichtbarer Tastaturfokus auch im schmalen Dialog.
+  // Nur abgeleitete Technikvorschau, keine Aenderung an geschuetzten Quellen.
+  ['index.html',
+    '</head>',
+    '<style id="pppoppi-pressure-focus-v194">#dialog[open] #skillPressure:focus-visible{outline:3px solid #ffda8d;outline-offset:3px;transition:none}</style>\n</head>'],
   // Die sechsspal­tige Monatsabrechnung ueberlief bei 200 % nativem Zoom
   // um 54 CSS-Pixel. Tabellenzellen nur im schmalen Technikdialog umbrechen.
   ['index.html',
