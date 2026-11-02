@@ -20,6 +20,12 @@ const changes = [
   ['index.html',
     '</head>',
     '<style id="pppoppi-zoom-overlap-v194">@media(max-width:620px){#dialog[open]{scroll-padding-top:84px}#dialog[open] .dhead{position:sticky;top:0;z-index:3;padding:10px 12px}#dialog[open] .dhead h2{font-size:18px}#dialog[open] .dcontent :is(button,select,input,textarea,a):focus-visible{scroll-margin-top:84px}#dialog[open] .v191-nav{position:static}#dialog[open] #pp-ai-button{position:static;display:block;margin:10px 12px 10px auto}#dialog[open] #pp-ai-drawer{position:static;width:calc(100% - 24px);max-height:none;margin:8px auto}}</style>\n</head>'],
+  // Die .toolbar-Buttons animieren mit transition:.16s auch outline-width.
+  // Direkt nach echtem Tab-Fokus kann der berechnete Fokusring deshalb
+  // noch 0px breit sein. Fokus-Outline nie animieren, Hover bleibt animiert.
+  ['index.html',
+    '</head>',
+    '<style id="pppoppi-toolbar-focus-v194">.toolbar button:focus-visible{transition-property:background-color,border-color}</style>\\n</head>'],
   // Browser-Standardfokus bei <select> war bei 175 % nur 0,57 CSS-Pixel
   // breit und hatte gegen den Dialoghintergrund nur 1,18:1 Kontrast.
   // Ausschliesslich in der abgeleiteten Technikvorschau korrigieren.
