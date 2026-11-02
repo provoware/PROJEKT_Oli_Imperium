@@ -113,3 +113,11 @@ Stand 02.11.2026. Dies ist die **auf PR #155 begrenzte Arbeitsliste**; die verbi
 - [ ] 2026-11-02 | BED-03 Rest | Dynamische Minispielphasen und verbleibende Dialogaktionen vollständig per Tab/Shift+Tab/Enter mit Zustandsprüfung absichern | echte Browserkampagne 800×600 und Zoom | fertig wenn gesamte Bedienmatrix geprüft ist
 
 **Gesamtmatrix unverändert:** 6/52 PASS; 39 BLOCKED, 4 OPEN, 3 DEFERRED. Keine Endabnahme, kein Merge, kein Release.
+
+## Nachtrag 02.11.2026 – BED-03 Druckregler und echter Tastaturfokus
+
+- [x] 2026-11-02 | BED-03 Teilpaket | Sichtbaren CSS-Fokusring im abgeleiteten Technikaufbau, echte Tab-/Geometrie-/Verdeckungspruefung vor Home/Pfeiltasten und Fokus nach Pfeiltasten ergaenzen | [Pflichtbericht](DRILL_PRESSURE_KEYBOARD_20261102.md); 5 neue Negativtests, Build-Sicherheitsregression, CI-Syntaxcheck | Code auf PR #155, **keine Gesamtfreigabe**
+- [ ] 2026-11-02 | BED-03 CI | 15 Minispiel-Vertragstests, Build-Sicherheit und echten Chromium-Bohrpfad auf endgueltigem HEAD nachweisen | GitHub Actions, getrennt PASS/FAIL/BLOCKED erfassen | fertig nur bei belegtem PASS
+- [ ] 2026-11-02 | BED-03 Zoom | Bohrregler-Fokus und Verdeckung auch bei echtem 175/200-%-Chromiumzoom mit 800x600 testen | keine direkte Fokussetzung | fertig wenn beide Zoomstufen reproduzierbar PASS
+
+**Gesamtmatrix unveraendert:** 6 PASS / 39 BLOCKED / 4 OPEN / 3 DEFERRED. Kein Merge, kein Release; persoenliche Endabnahme zuletzt.
