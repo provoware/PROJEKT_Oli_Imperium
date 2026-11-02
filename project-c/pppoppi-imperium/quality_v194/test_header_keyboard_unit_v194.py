@@ -3,7 +3,7 @@ import unittest
 from unittest.mock import Mock, patch
 
 from test_browser_header_keyboard_v194 import (require_toggle_change, require_motion_preference,
-                                               keyboard_activate, run)
+                                               require_focus_return, keyboard_activate, run)
 
 
 class HeaderKeyboardTests(unittest.TestCase):
@@ -59,6 +59,33 @@ class HeaderKeyboardTests(unittest.TestCase):
             with self.assertRaisesRegex(AssertionError, "nicht erreichbar"):
                 keyboard_activate(page, "#helpBtn")
             enter.assert_not_called()
+
+    def test_focus_returns_to_keyboard_opener(self):
+        page = Mock()
+        target = page.locator.return_value
+        target.count.return_value = 1
+        target.evaluate.return_value = {"active": True, "visible": True}
+        with patch("test_browser_header_keyboard_v194.assert_computed_focus_indicator") as ring:
+            require_focus_return(page, "#helpBtn")
+            ring.assert_called_once_with(target, "#helpBtn")
+        target.focus.assert_not_called()
+
+    def test_focus_return_rejects_wrong_or_invisible_focus(self):
+        page = Mock()
+        target = page.locator.return_value
+        target.count.return_value = 1
+        for evidence in ({"active": False, "visible": True},
+                         {"active": True, "visible": False}, None):
+            with self.subTest(evidence=evidence):
+                target.evaluate.return_value = evidence
+                with self.assertRaises(AssertionError):
+                    require_focus_return(page, "#helpBtn")
+
+    def test_focus_return_rejects_missing_opener(self):
+        page = Mock()
+        page.locator.return_value.count.return_value = 0
+        with self.assertRaisesRegex(AssertionError, "nicht eindeutig"):
+            require_focus_return(page, "#helpBtn")
 
     def test_rejects_unplanned_zoom(self):
         for value in (100, 150, 201):
