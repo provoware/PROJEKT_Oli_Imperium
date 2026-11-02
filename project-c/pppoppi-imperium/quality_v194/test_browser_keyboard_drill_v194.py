@@ -8,7 +8,7 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 
 from campaign_keyboard_audit_v194 import (
-    assert_computed_focus_indicator, press_tab_focused,
+    assert_computed_focus_indicator, assert_unobstructed_keyboard_target, press_tab_focused,
 )
 
 HERE = Path(__file__).resolve().parent
@@ -42,6 +42,18 @@ def activate(page, selector, label):
     # Verdeckung und Fokusverlust unmittelbar vor Enter streng pruefen.
     assert_computed_focus_indicator(page.locator(selector), selector)
     press_tab_focused(page, selector)
+
+
+def assert_pressure_keyboard_ready(page, label):
+    """Vor Pfeiltasten echten, sichtbaren und unverdeckten Reglerfokus belegen."""
+    selector = "#skillPressure"
+    check(label + ": Regler per Tab erreichbar", tab_to(page, selector))
+    target = page.locator(selector)
+    focused = "(el) => document.activeElement === el && el.matches(':focus-visible')"
+    check(label + ": echter sichtbarer Reglerfokus", target.evaluate(focused))
+    assert_computed_focus_indicator(target, selector)
+    assert_unobstructed_keyboard_target(target, selector, page)
+    check(label + ": Fokus vor Pfeiltasten erhalten", target.evaluate(focused))
 
 
 def state(page):
@@ -134,8 +146,7 @@ def main():
                             )
                             check(label + ": gueltiger Druckzielwert",
                                   isinstance(target, int) and 0 <= target <= 100)
-                            check(label + ": Schieberegler per Tab erreichbar",
-                                  tab_to(page, "#skillPressure"))
+                            assert_pressure_keyboard_ready(page, label + f": Abschnitt {stage + 1}")
                             page.keyboard.press("Home")
                             check(label + ": Home stellt Regler auf null",
                                   page.locator("#skillPressure").input_value() == "0")
@@ -143,6 +154,9 @@ def main():
                                 page.keyboard.press("ArrowRight")
                             check(label + f": Druck {target} nur per Pfeiltasten",
                                   page.locator("#skillPressure").input_value() == str(target))
+                            check(label + ": Reglerfokus nach Pfeiltasten erhalten",
+                                  page.locator("#skillPressure").evaluate(
+                                      "(el) => document.activeElement === el && el.matches(':focus-visible')"))
                             activate(page, '[data-arcade="drill-check"]',
                                      label + f": Abschnitt {stage + 1} bestaetigen")
                             after = state(page)
