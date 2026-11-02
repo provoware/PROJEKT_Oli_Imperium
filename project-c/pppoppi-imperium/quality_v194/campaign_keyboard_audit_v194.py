@@ -92,4 +92,10 @@ def press_tab_focused(page, selector):
     if not target.evaluate("(el) => el.matches(':focus-visible')"):
         raise AssertionError("Tab-Aktivierung ohne sichtbaren Fokus: " + selector)
     assert_unobstructed_keyboard_target(target, selector, page)
+    # Smooth scrolling or a dialog can move focus during the geometry check.
+    # Recheck immediately before Enter to avoid activating a different control.
+    if not target.evaluate("(el) => document.activeElement === el"):
+        raise AssertionError("Tab-Aktivierung: Fokus nach Sichtbarkeitspruefung verloren: " + selector)
+    if not target.evaluate("(el) => el.matches(':focus-visible')"):
+        raise AssertionError("Tab-Aktivierung: sichtbarer Fokus nach Sichtbarkeitspruefung verloren: " + selector)
     page.keyboard.press("Enter")

@@ -97,3 +97,8 @@ Die [Rueckwaerts-Tab-Kampagne](REVERSE_TAB_CAMPAIGN_20261102.md) ergaenzt bei 17
 ## Tastatur-Geometrie bei 175/200 % – CI-Korrekturlauf (02.11.2026)
 
 [CI #41400850616](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41400850616) auf `a820507d` endete mit **14 PASS / 4 FAIL**: die vier Tastatur-Langläufer scheiterten an `#startGame` außerhalb des sichtbaren Fensters. Die Prüfschicht wartet jetzt bei diesem Zustand höchstens 3 Sekunden auf den natürlichen, animierten Browserbildlauf und prüft danach unverändert streng. Keine künstliche Fokussetzung, kein Scroll-Befehl, keine Änderung am Spielkern. Die Wirksamkeit muss die neue GitHub-CI erst bestätigen; siehe [Fehlerbericht](KEYBOARD_TARGET_OCCLUSION_20261102.md). Vorrelease bleibt **BLOCKED**.
+
+
+## Tastatur-Fokus nach natuerlichem Bildlauf (02.11.2026)
+
+[Pflichtbericht](KEYBOARD_FOCUS_RACE_20261102.md): Der Tab-Pruefer kontrolliert nach dem Sichtbarkeits- und eventuellen Bildlauf-Warten den echten und sichtbaren Fokus unmittelbar vor Enter erneut. Zwei neue Negativtests, zusammen 16 isolierte Tastaturregressionen. Neuer GitHub-CI-Nachweis noch PENDING; BED-02/03 und die 6/52-Gesamtmatrix bleiben BLOCKED. Kein Merge/Release.

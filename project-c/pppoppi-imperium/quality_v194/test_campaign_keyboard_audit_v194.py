@@ -49,7 +49,7 @@ class TabReachabilityTests(TestCase):
         self.page.keyboard.press.assert_not_called()
 
     def test_real_tab_focus_activates_with_keyboard_enter(self):
-        self.target.evaluate.side_effect = [True, True, {"inViewport": True, "unobstructed": True}]
+        self.target.evaluate.side_effect = [True, True, {"inViewport": True, "unobstructed": True}, True, True]
         press_tab_focused(self.page, "#startGame")
         self.page.keyboard.press.assert_called_once_with("Enter")
         self.target.focus.assert_not_called()
@@ -85,7 +85,7 @@ class TabReachabilityTests(TestCase):
     def test_natural_tab_scroll_can_finish_before_enter(self):
         offscreen = {"inViewport": False, "unobstructed": False}
         visible = {"inViewport": True, "unobstructed": True}
-        self.target.evaluate.side_effect = [True, True, offscreen, visible]
+        self.target.evaluate.side_effect = [True, True, offscreen, visible, True, True]
         press_tab_focused(self.page, "#startGame")
         self.page.wait_for_function.assert_called_once()
         args, kwargs = self.page.wait_for_function.call_args
@@ -119,6 +119,22 @@ class TabReachabilityTests(TestCase):
                     press_tab_focused(self.page, "#startGame")
         self.page.keyboard.press.assert_not_called()
 
+
+    def test_activation_rejects_focus_stolen_after_geometry(self):
+        self.target.evaluate.side_effect = [
+            True, True, {"inViewport": True, "unobstructed": True}, False
+        ]
+        with self.assertRaisesRegex(AssertionError, "Fokus nach Sichtbarkeitspruefung verloren"):
+            press_tab_focused(self.page, "#startGame")
+        self.page.keyboard.press.assert_not_called()
+
+    def test_activation_rejects_focus_ring_lost_after_geometry(self):
+        self.target.evaluate.side_effect = [
+            True, True, {"inViewport": True, "unobstructed": True}, True, False
+        ]
+        with self.assertRaisesRegex(AssertionError, "sichtbarer Fokus nach Sichtbarkeitspruefung verloren"):
+            press_tab_focused(self.page, "#startGame")
+        self.page.keyboard.press.assert_not_called()
 
 if __name__ == "__main__":
     main()

@@ -36,3 +36,11 @@ Stand 02.11.2026. Dies ist die **auf PR #155 begrenzte Arbeitsliste**; die verbi
 - [ ] 2026-11-02 | BED-02/03 Rest | Bei erneutem FAIL reale Lage, Scroll-Container und CSS des Startknopfs untersuchen; anschließend alle Dialog-/Minispielpfade inventarisieren | Geometriediagnose und echte Browsernachweise | keine Fokus-/Sichtbarkeitsprüfung entfernen
 
 **Matrix unverändert:** 6/52 PASS; 39 BLOCKED, 4 OPEN, 3 DEFERRED. Keine Freigabe, kein Merge, keine persönliche Endabnahme.
+
+
+## Nachtrag 02.11.2026 – Fokusverlust nach natuerlichem Bildlauf
+
+- [x] 2026-11-02 | BED-02/03 Teilpaket | Echten Fokus und sichtbaren Fokus nach dem Geometrietest unmittelbar vor Enter erneut kontrollieren | drei isolierte Funktionstests PASS, neue Negativtests implementiert; [Bericht](KEYBOARD_FOCUS_RACE_20261102.md) | keine Aktivierung bei verlorenem Fokus, kein Gesamt-Gate-PASS
+- [ ] 2026-11-02 | BED-02/03 CI | 16 Python-Regressionen und 175/200-%-Browserpfade auf dem neuen HEAD abwarten | vorheriger Lauf #41421365543 war QUEUED | fertig nur mit nachgewiesenem PASS auf dem neuen HEAD
+
+**Matrix weiterhin 6/52 PASS; kein Merge, kein Release, Endabnahme zuletzt.**
