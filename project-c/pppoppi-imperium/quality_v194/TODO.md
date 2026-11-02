@@ -80,3 +80,11 @@ Stand 02.11.2026. Dies ist die **auf PR #155 begrenzte Arbeitsliste**; die verbi
 - [ ] 2026-11-02 | BED-02/03 Rest | Weitere Claim-/Regionsparameter und dynamische Minispielaktionen mit echten Tastaturpfaden und fachlichen Zustandsfolgen absichern | eigene reproduzierbare Browserfaelle | fertig wenn alle vorgesehenen Aktionsfolgen nachgewiesen sind
 
 **Matrix unveraendert:** 6/52 PASS, 39 BLOCKED, 4 OPEN, 3 DEFERRED. Keine Benutzerabnahme, kein Merge, kein Release.
+
+## Nachtrag 02.11.2026 – Minispiel-Tastaturgate
+
+- [x] 2026-11-02 | BED-03 Teilpaket | Bohr-, Rohr- und Feuerwehr-Tastaturaktionen vor Enter auf berechneten CSS-Fokusring, sichtbare Trefferflaeche, Verdeckung und Fokusverlust absichern | [Bericht](MINIGAME_KEYBOARD_GATE_20261102.md); zehn neue Negativ-/Vertragstests und Pflicht-CI-Schritt | Code implementiert, CI auf finalem HEAD noch offen
+- [ ] 2026-11-02 | BED-03 CI | Zehn neue Unit-Tests, Rohr-/Feuerwehr-Kampagne und Browser-/Zoom-Minispiele auf finalem HEAD auswerten; bei FAIL die reale Ursache korrigieren | GitHub Actions, Ergebnisse nach Abschluss dokumentieren | fertig wenn betroffene Jobs auf finalem HEAD PASS
+- [ ] 2026-11-02 | BED-03 Rest | Regler und dynamische Minispielphasen, weitere Claim-/Regionsvarianten mit Zustandsfolgen absichern | echte Tastatur, 800x600, 175/200 % | fertig wenn alle vorgesehenen Bedienwege fachlich belegt sind
+
+**Matrix:** 6 PASS / 39 BLOCKED / 4 OPEN / 3 DEFERRED (52). Kein Merge, kein Release, Endabnahme zuletzt.
