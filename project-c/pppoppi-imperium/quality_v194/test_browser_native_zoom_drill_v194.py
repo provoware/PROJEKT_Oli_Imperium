@@ -149,6 +149,9 @@ def main():
                               before == page.evaluate("JSON.stringify(NeoEconomy.getState())"))
                         targets, layouts = run_drill(page, label)
                         exported_state = state(page)
+                        check(label + ": kompakter Dialogkopf bleibt sticky",
+                              page.locator("#dialog .dhead").evaluate(
+                                  "(el) => getComputedStyle(el).position === 'sticky'"))
                         activate(page, "#closeBtn", label + ": Dialog schliessen")
                         with page.expect_download() as download:
                             activate(page, "#saveGame", label + ": Spielstand exportieren")

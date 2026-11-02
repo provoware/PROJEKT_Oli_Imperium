@@ -96,3 +96,12 @@ Stand 02.11.2026. Dies ist die **auf PR #155 begrenzte Arbeitsliste**; die verbi
 - [ ] 2026-11-02 | BED-02/03 | #closeBtn nach Bohrstufe 3 wieder in sichtbaren Bereich bringen und #startGame mit berechneter CSS-Fokusmarkierung ausstatten | [Browser-CI #41473770623](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41473770623) | fertig bei grünen 175/200-%-Chromiumprüfungen
 
 **Gesamtmatrix unverändert:** 6/52 PASS. Kein Merge/Release, persönliche Endabnahme zuletzt.
+
+
+## Nachtrag 02.11.2026 – Dialogkopf im nativen Zoom
+
+- [x] 2026-11-02 | BED-02/03 | Sticky-Dialogkopf im abgeleiteten Technikaufbau und Regression nach Bohrstufe 3 implementieren | Quellprüfung: eindeutiger CSS-Ersatz; echter Chromium-PASS auf neuem HEAD noch ausstehend | fertig als Codepaket, kein Gesamtgate
+- [ ] 2026-11-02 | BED-02/03 CI | Beide echten 175/200-%-Bohrtests auf neuem HEAD sowie Browser-Gesamtprüfung auswerten | Ausgangsfehler: [#41473770623](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41473770623) | fertig wenn #closeBtn sichtbar, unverdeckt und per Tab+Enter erreichbar bleibt
+- [ ] 2026-11-02 | BED-02/03 Fokus | Berechnete CSS-Werte bei erneutem #startGame-Fokusringfehler auswerten, Ursache korrigieren | keine Lockerung des CSS-Gates | fertig wenn betroffener Browserpfad auf endgültigem HEAD PASS ist
+
+[Nachweis und offene Risiken](ZOOM_DIALOG_FOCUS_FIX_20261102.md). Matrix unverändert 6/52 PASS, kein Merge/Release, Endabnahme zuletzt.

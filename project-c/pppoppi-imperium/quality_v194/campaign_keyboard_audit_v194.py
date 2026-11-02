@@ -91,7 +91,12 @@ def assert_computed_focus_indicator(target, selector):
             !['transparent', 'rgba(0, 0, 0, 0)'].includes(style.outlineColor);
         const shadow = style.boxShadow !== 'none' && style.boxShadow !== '';
         return {focusVisible: el.matches(':focus-visible'),
-                ring: Boolean(outline || shadow)};
+                ring: Boolean(outline || shadow),
+                active: document.activeElement === el,
+                outlineStyle: style.outlineStyle,
+                outlineWidth: style.outlineWidth,
+                outlineColor: style.outlineColor,
+                boxShadow: style.boxShadow};
     }""")
     if (not isinstance(evidence, dict) or
             evidence.get("focusVisible") is not True or
