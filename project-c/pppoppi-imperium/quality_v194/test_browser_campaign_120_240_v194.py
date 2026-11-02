@@ -14,6 +14,7 @@ from pathlib import Path
 
 from playwright.sync_api import sync_playwright
 from test_browser_campaign_24months_v194 import check, press_button, state
+from campaign_native_import_v194 import import_saved_session
 from test_browser_native_zoom_v194 import (extension_at, set_real_zoom,
                                           wait_for_zoom_worker)
 from performance_profile_v194 import (summarize_month_durations,
@@ -71,7 +72,7 @@ def play_month(page, month):
     return report, rescues
 
 
-def main(months, zoom_percent=100):
+def main(months, zoom_percent=100, native_import=False):
     campaign_started = time.monotonic()
     with tempfile.TemporaryDirectory(prefix="pppoppi-browser-%d-" % months) as tmp:
         root = Path(tmp)
@@ -199,7 +200,7 @@ def main(months, zoom_percent=100):
                             stop()
                             page = start()
                         with timed_phase("midpoint", "import"):
-                            page.locator("#loadSessionFile").set_input_files(str(saved))
+                            import_saved_session(page, saved, native=native_import)
                             page.wait_for_function(
                                 "(m) => NeoEconomy.getState()?.month===m && "
                                 "NeoEconomy.getState()?.phase==='REPORT'",
@@ -250,7 +251,7 @@ def main(months, zoom_percent=100):
                     stop()
                     page = start()
                 with timed_phase("archive", "import"):
-                    page.locator("#loadSessionFile").set_input_files(str(saved))
+                    import_saved_session(page, saved, native=native_import)
                     page.wait_for_function("NeoEconomy.endstate.status()==='finished'")
                     check("Archiv und Endstand nach zweitem Neustart identisch",
                           state(page) == final
@@ -272,6 +273,8 @@ def main(months, zoom_percent=100):
                     "natural_rescues": rescues, "chromium_processes": processes,
                     "viewport": "800x600", "keyboard": "Enter",
                     "native_zoom_percent": zoom_percent,
+                    "session_import_path": ("NATIVE_FILECHOOSER" if native_import
+                                            else "DIRECT_INPUT"),
                     "native_zoom_api": ("chrome.tabs.setZoom/getZoom"
                                         if zoom_percent != 100 else None),
                     "slowest_month_seconds": max(durations),
@@ -291,5 +294,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--months", type=int, choices=(120, 240), required=True)
     parser.add_argument("--zoom", type=int, choices=(100, 175, 200), default=100)
+    parser.add_argument("--native-import", action="store_true",
+                        help="Echte Enter-Dateiauswahl bei beiden Prozessneustarts")
     args = parser.parse_args()
-    main(args.months, args.zoom)
+    main(args.months, args.zoom, args.native_import)
