@@ -58,7 +58,7 @@ jobs:
         run: python3 -m unittest discover -s project-c/pppoppi-imperium/quality_v194 -p 'test_compare_campaign_repeats_v194.py' -v
       - name: Acht Fail-Closed-Regressionen fuer echten Datei-Auswahldialog
         run: python3 -m unittest discover -s project-c/pppoppi-imperium/quality_v194 -p 'test_campaign_native_import_v194.py' -v
-      - name: Sechzehn Negativ- und Regressionstests fuer Tab-Fokus, Sichtbarkeit und Enter
+      - name: Neunzehn Negativ- und Regressionstests fuer Tab-Fokus, CSS-Ring und Enter
         run: python3 -m unittest discover -s project-c/pppoppi-imperium/quality_v194 -p 'test_campaign_keyboard_audit_v194.py' -v
       - name: Sechs strikte Rueckwaerts-Tab-Regressionen
         run: python3 -m unittest discover -s project-c/pppoppi-imperium/quality_v194 -p 'test_campaign_keyboard_reverse_v194.py' -v

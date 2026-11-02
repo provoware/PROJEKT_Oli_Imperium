@@ -82,6 +82,25 @@ def assert_unobstructed_keyboard_target(target, selector, page):
                              selector + " " + repr(result))
 
 
+def assert_computed_focus_indicator(target, selector):
+    """Require an actual CSS focus marker, not only the :focus-visible pseudo-class."""
+    evidence = target.evaluate("""(el) => {
+        const style = getComputedStyle(el);
+        const outline = style.outlineStyle !== 'none' &&
+            Number.parseFloat(style.outlineWidth) > 0 &&
+            !['transparent', 'rgba(0, 0, 0, 0)'].includes(style.outlineColor);
+        const shadow = style.boxShadow !== 'none' && style.boxShadow !== '';
+        return {focusVisible: el.matches(':focus-visible'),
+                ring: Boolean(outline || shadow)};
+    }""")
+    if (not isinstance(evidence, dict) or
+            evidence.get("focusVisible") is not True or
+            evidence.get("ring") is not True):
+        raise AssertionError(
+            "Tab-Aktivierung ohne sichtbare CSS-Fokusmarkierung: " +
+            selector + " " + repr(evidence))
+
+
 def press_tab_focused(page, selector):
     """Activate only a real Tab-focused, visibly focused and unobstructed control."""
     target = page.locator(selector)
@@ -98,4 +117,5 @@ def press_tab_focused(page, selector):
         raise AssertionError("Tab-Aktivierung: Fokus nach Sichtbarkeitspruefung verloren: " + selector)
     if not target.evaluate("(el) => el.matches(':focus-visible')"):
         raise AssertionError("Tab-Aktivierung: sichtbarer Fokus nach Sichtbarkeitspruefung verloren: " + selector)
+    assert_computed_focus_indicator(target, selector)
     page.keyboard.press("Enter")

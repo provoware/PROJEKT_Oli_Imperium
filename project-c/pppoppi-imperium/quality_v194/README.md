@@ -102,3 +102,10 @@ Die [Rueckwaerts-Tab-Kampagne](REVERSE_TAB_CAMPAIGN_20261102.md) ergaenzt bei 17
 ## Tastatur-Fokus nach natuerlichem Bildlauf (02.11.2026)
 
 [Pflichtbericht](KEYBOARD_FOCUS_RACE_20261102.md): Der Tab-Pruefer kontrolliert nach dem Sichtbarkeits- und eventuellen Bildlauf-Warten den echten und sichtbaren Fokus unmittelbar vor Enter erneut. Zwei neue Negativtests, zusammen 16 isolierte Tastaturregressionen. Neuer GitHub-CI-Nachweis noch PENDING; BED-02/03 und die 6/52-Gesamtmatrix bleiben BLOCKED. Kein Merge/Release.
+
+
+## Nachtrag 02.11.2026 – echte CSS-Fokusmarkierung (technischer Teilnachweis)
+
+[CI #41422394500](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41422394500) auf HEAD `36edd26a55d411a6eaee06b6eb103ed05e98ab58`: **18/18 Kampagnenjobs SUCCESS**, einschliesslich 16/16 bisheriger Tastaturregressionen und der vier 175/200-%-Tab-/Rueckwaerts-Tab-Jobs. Der fruehere PENDING-Eintrag ist damit ueberholt.
+
+Der neue Pruefer verlangt zusaetzlich zu echtem Tab-Fokus und `:focus-visible` eine **berechnete CSS-Fokusmarkierung** (Outline oder Schatten). Ohne Nachweis wird vor Enter abgebrochen. Drei neue Negativtests ergaenzen den Satz auf **19**. Dies ist eine Pruefverschaerfung, keine Produkt-, Quell- oder Speicherformaenderung. **CI auf diesem neuen Commit: PENDING**, bis alle betroffenen Jobs tatsaechlich abgeschlossen sind. Die 14 Schluesselkontrollen decken noch nicht alle Dialoge und Minispiele ab. Matrix **6/52 PASS**; kein Merge, kein Release, persoenliche Endabnahme zuletzt.

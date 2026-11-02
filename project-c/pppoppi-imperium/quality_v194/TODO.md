@@ -44,3 +44,12 @@ Stand 02.11.2026. Dies ist die **auf PR #155 begrenzte Arbeitsliste**; die verbi
 - [ ] 2026-11-02 | BED-02/03 CI | 16 Python-Regressionen und 175/200-%-Browserpfade auf dem neuen HEAD abwarten | vorheriger Lauf #41421365543 war QUEUED | fertig nur mit nachgewiesenem PASS auf dem neuen HEAD
 
 **Matrix weiterhin 6/52 PASS; kein Merge, kein Release, Endabnahme zuletzt.**
+
+## Nachtrag 02.11.2026 – CSS-Fokusmarkierung als Pflichtbeleg
+
+- [x] 2026-11-02 | BED-02/03 | Vorherige 18 CI-Jobs auf `36edd26a55d411a6eaee06b6eb103ed05e98ab58` auswerten | [CI #41422394500](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41422394500): 18/18 PASS | technischer Teilnachweis
+- [x] 2026-11-02 | BED-02/03 | Tab-Enter nur bei berechneter CSS-Fokusmarkierung zulassen; drei Negativtests ergaenzen | Implementierung und CI-Anbindung im bestehenden PR #155 | fertig als Code, nicht als Release-Gate
+- [ ] 2026-11-02 | BED-02/03 | 19 isolierte Regressionen und vier 175/200-%-Browserjobs auf neuem HEAD auswerten | GitHub-CI auf neuem HEAD PENDING | fertig bei echtem PASS
+- [ ] 2026-11-02 | BED-02/03 | Fehlende Dialog- und Minispielpfade inventarisieren, echten Tab-/Enter-Weg bei 800x600 und Zoom pruefen | ohne direkte Fokussetzung | fertig wenn alle vorgesehenen Bedienpfade belegt sind
+
+**Draft-Bestand vor dieser Iteration:** 4 (#141, #150, #154, #155). **Matrix:** 6 PASS / 39 BLOCKED / 4 OPEN / 3 DEFERRED. Keine persoenliche Endabnahme, kein Merge/Release.

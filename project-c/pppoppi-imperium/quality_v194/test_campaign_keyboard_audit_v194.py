@@ -49,7 +49,7 @@ class TabReachabilityTests(TestCase):
         self.page.keyboard.press.assert_not_called()
 
     def test_real_tab_focus_activates_with_keyboard_enter(self):
-        self.target.evaluate.side_effect = [True, True, {"inViewport": True, "unobstructed": True}, True, True]
+        self.target.evaluate.side_effect = [True, True, {"inViewport": True, "unobstructed": True}, True, True, { "focusVisible": True, "ring": True }]
         press_tab_focused(self.page, "#startGame")
         self.page.keyboard.press.assert_called_once_with("Enter")
         self.target.focus.assert_not_called()
@@ -85,7 +85,7 @@ class TabReachabilityTests(TestCase):
     def test_natural_tab_scroll_can_finish_before_enter(self):
         offscreen = {"inViewport": False, "unobstructed": False}
         visible = {"inViewport": True, "unobstructed": True}
-        self.target.evaluate.side_effect = [True, True, offscreen, visible, True, True]
+        self.target.evaluate.side_effect = [True, True, offscreen, visible, True, True, { "focusVisible": True, "ring": True }]
         press_tab_focused(self.page, "#startGame")
         self.page.wait_for_function.assert_called_once()
         args, kwargs = self.page.wait_for_function.call_args
@@ -133,6 +133,33 @@ class TabReachabilityTests(TestCase):
             True, True, {"inViewport": True, "unobstructed": True}, True, False
         ]
         with self.assertRaisesRegex(AssertionError, "sichtbarer Fokus nach Sichtbarkeitspruefung verloren"):
+            press_tab_focused(self.page, "#startGame")
+        self.page.keyboard.press.assert_not_called()
+
+    def test_css_pseudo_without_real_focus_marker_fails(self):
+        self.target.evaluate.side_effect = [
+            True, True, {"inViewport": True, "unobstructed": True},
+            True, True, {"focusVisible": True, "ring": False}
+        ]
+        with self.assertRaisesRegex(AssertionError, "CSS-Fokusmarkierung"):
+            press_tab_focused(self.page, "#startGame")
+        self.page.keyboard.press.assert_not_called()
+
+    def test_css_ring_without_keyboard_pseudo_fails(self):
+        self.target.evaluate.side_effect = [
+            True, True, {"inViewport": True, "unobstructed": True},
+            True, True, {"focusVisible": False, "ring": True}
+        ]
+        with self.assertRaisesRegex(AssertionError, "CSS-Fokusmarkierung"):
+            press_tab_focused(self.page, "#startGame")
+        self.page.keyboard.press.assert_not_called()
+
+    def test_missing_css_evidence_fails_closed(self):
+        self.target.evaluate.side_effect = [
+            True, True, {"inViewport": True, "unobstructed": True},
+            True, True, None
+        ]
+        with self.assertRaisesRegex(AssertionError, "CSS-Fokusmarkierung"):
             press_tab_focused(self.page, "#startGame")
         self.page.keyboard.press.assert_not_called()
 
