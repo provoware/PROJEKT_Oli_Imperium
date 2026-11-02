@@ -119,3 +119,7 @@ Die CSS-Fokusmarkierung wird jetzt im gemeinsamen `audit()`-Pfad fuer **alle 14*
 ## Nachtrag 02.11.2026 – Bewegungsschalter mit echter Tastatur und dauerhafter Einstellung
 
 Der [Bewegungs-Pflichtbericht](MOTION_KEYBOARD_20261102.md) erweitert die Kopfzeilen-Pruefung um `#motionBtn`: zweimalige Aktivierung ausschliesslich per Tab/Shift+Tab/Enter, echte ARIA-Umschaltung, passende Beschriftung und lokale Speicherung sowie Wiederherstellung nach Seitenneustart. Drei neue Negativ-/Regressionstests. Die [vorherige Kopfzeilen-CI #41438727245](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41438727245) war **3/3 PASS** auf `8ad25061adbe425689c6b8169fbecaf4e5d104ce`. Die neue CI ist **PENDING** und kein Gesamt-Gate-PASS. Matrix unveraendert 6/52; kein Merge, kein Release, Endabnahme zuletzt.
+
+## Hilfedialog: Escape und sichtbarer Rueckkehrfokus (02.11.2026)
+
+[Pflichtbericht](HEADER_KEYBOARD_20261102.md): Die 800x600-Chromium-Pruefung bei 175/200 % verlangt jetzt auch nach Escape und nach dem Dialog-Schliessen-Schalter eine echte Rueckkehr des sichtbaren Tastaturfokus zum Hilfe-Ausloeser. Drei isolierte Negativ-/Regressionstests; neue GitHub-CI auf finalem HEAD **PENDING**. Die vorherige Kopfzeilen-CI #41445779151 war 3/3 PASS auf `8df37ba10d9f6051fc0d8d65263f73c866a1a223`. BED-02/03 und die Gesamtmatrix bleiben BLOCKED; kein Merge, Release oder persoenliche Abnahme.
