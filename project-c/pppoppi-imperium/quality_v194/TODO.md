@@ -10,3 +10,11 @@ Stand 02.11.2026. Dies ist die **auf PR #155 begrenzte Arbeitsliste**; die verbi
 - [ ] 2026-11-02 | RELEASE | Technischen Release-Kandidaten erst nach allen technischen Pflichten einfrieren | Matrix, Dokumentation und CI auf einem HEAD | fertig wenn Endabnahme zuletzt erfolgt und ausdrueckliche Nutzerfreigabe vorliegt
 
 **Nachweis:** [240-Monats-Dateidialogbericht](NATIVE_IMPORT_240_LONGRUN_20261102.md) und [Tab-Kampagne](KEYBOARD_TAB_CAMPAIGN_20261102.md). **Gesamtstatus:** 6/52 PASS, keine Freigabe. **PR-Entwuerfe:** vor der Iteration 4 offen; nach der Iteration erneut pruefen.
+
+## Nachtrag 02.11.2026 – Rueckwaerts-Tab-Pruefung
+
+- [x] 2026-11-02 | BED-02/03 Teilpaket | Echte Shift+Tab/Tab-Rueckwege und sechs Negativ-/Regressionstests implementieren | lokal isoliert **6/6 PASS**, Python-Syntax **PASS**; [Bericht](REVERSE_TAB_CAMPAIGN_20261102.md) | implementiert, kein Gesamtgate
+- [ ] 2026-11-02 | BED-02/03 CI | Neue 120-Monats-Chromium-Jobs bei 175/200 % samt 14 Rueckwegen und allgemeiner Regression auswerten | Ausgangs-CI [#41389498165](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41389498165) **16/16 PASS** auf HEAD `c7c1b9ad`; **neue CI PENDING** | fertig erst bei beiden neuen Jobs PASS auf finalem HEAD
+- [ ] 2026-11-02 | BED-02/03 Rest | Weitere Dialoge und Minispiele samt Vorwaerts-/Rueckwaerts-Tab, Enter und sichtbarem Fokus inventarisieren | echte Browserpfade | fertig wenn vollstaendige Szenenabdeckung nachgewiesen ist
+
+**PR-Draftbestand bei dieser Iteration:** 4 offen (PR #141, #150, #154, #155), danach erneut 4 erwartet, vor Abschluss live pruefen. **Matrix:** 6/52 PASS; kein Merge, kein Release, persoenliche Endabnahme weiterhin zuletzt.
