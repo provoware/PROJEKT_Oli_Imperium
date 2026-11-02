@@ -25,3 +25,9 @@ Die Original-CSS-Regel `button:focus-visible` definiert eine 3px-Outline. Gleich
 **Vorrelease-Pflichtmatrix unverändert:** 6 PASS / 39 BLOCKED / 4 OPEN / 3 DEFERRED = 52. Keine persönliche Sichtprüfung, kein Kubuntu-Endtest, kein Merge und kein Release.
 
 **Nächste konkrete Pflichtarbeit:** (1) aktuelle GitHub-Jobs für Build-Sicherheit und beide nativen Zoompfade auswerten; (2) bei erneutem FAIL die berechneten CSS-Werte und reale Geometrie am endgültigen HEAD untersuchen; (3) anschließend die noch ungetesteten dynamischen Minispielphasen und vollständigen Bedienpfade prüfen.
+
+## Zweiter unabhängiger Fehler im selben Ausgangslauf
+
+[GitHub-Quellnachweis #41492796772](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41492796772) war ebenfalls **FAIL**: Der statische Integritätstest `test_ui_integrity_v194.cjs` verlangte weiterhin `#dialog[open] .dhead{position:static}`, obwohl der Dialogkopf im vorherigen Pflichtpaket bewusst auf `position:sticky` umgestellt worden war. Der Test war veraltet, nicht der beabsichtigte Scrollschutz.
+
+**Korrektur:** Der Vertragstest verlangt jetzt ausdrücklich `position:sticky;top:0;z-index:3`, `scroll-padding-top:84px` und `scroll-margin-top:84px`; Navigation und KI bleiben nach wie vor statisch, die Originaldatei bleibt unverändert. Die drei neuen Muster wurden isoliert mit Node.js **3/3 PASS** gegen die tatsächlich eingebaute CSS-Regel geprüft. **Vollständiger Quellnachweis auf finalem GitHub-HEAD PENDING.** Die integrierte Release-Sperre bleibt absichtlich unverändert.
