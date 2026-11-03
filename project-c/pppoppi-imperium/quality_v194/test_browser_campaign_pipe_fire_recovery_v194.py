@@ -5,12 +5,14 @@ Echte Chromium-Prozessneustarts, Tastaturaktionen, versionierte Sitzungsdateien,
 natuerlicher Brand in Monat vier und unveraenderbares Abschlussarchiv.
 Technische PPPOPPI-Adaption; keine Aussage ueber historische C64-Regeln.
 """
+import argparse
 import json
 import subprocess
 import tempfile
 from pathlib import Path
 
 from playwright.sync_api import sync_playwright
+from test_browser_native_zoom_v194 import extension_at, set_real_zoom, wait_for_zoom_worker
 
 from test_browser_keyboard_pipe_fire_v194 import (
     CLAIM, FIRE_CHOICES, PIPE_PATHS, activate, check, state, tab_to, valid,
@@ -81,6 +83,10 @@ def finish_fire_stage(page, stage):
 
 
 def main():
+    parser = argparse.ArgumentParser(description="Rohrnetz-/Feuerwehr-Neustarts mit echtem Tab-Zoom")
+    parser.add_argument("--zoom", type=int, choices=(175, 200), default=None)
+    args = parser.parse_args()
+    factor = args.zoom / 100 if args.zoom else None
     with tempfile.TemporaryDirectory(prefix="pppoppi-campaign-pipe-fire-") as tmp:
         root = Path(tmp)
         preview = root / "preview"
@@ -90,16 +96,30 @@ def main():
         check("110 manifestgepruefte Originaldateien", build["sourceFiles"] == 110)
         errors, external = [], []
         processes = 0
+        if factor:
+            extension = root / "zoom-extension"
+            extension_at(extension)
         with sync_playwright() as playwright:
             browser = None
 
             def start_process():
                 nonlocal browser, processes
-                browser = playwright.chromium.launch(headless=True)
+                if factor:
+                    browser = playwright.chromium.launch_persistent_context(
+                        str(root / ("browser-profile-%d" % (processes + 1))),
+                        channel="chromium", headless=True,
+                        viewport={"width": 800, "height": 600},
+                        accept_downloads=True, reduced_motion="reduce",
+                        args=["--disable-extensions-except=" + str(extension),
+                              "--load-extension=" + str(extension)])
+                    context = browser
+                    worker = wait_for_zoom_worker(context)
+                else:
+                    browser = playwright.chromium.launch(headless=True)
+                    context = browser.new_context(
+                        viewport={"width": 800, "height": 600},
+                        accept_downloads=True, reduced_motion="reduce")
                 processes += 1
-                context = browser.new_context(
-                    viewport={"width": 800, "height": 600},
-                    accept_downloads=True, reduced_motion="reduce")
                 page = context.new_page()
                 page.set_default_timeout(15000)
                 page.on("pageerror", lambda err: errors.append(str(err)))
@@ -107,6 +127,14 @@ def main():
                         if req.url.startswith(("http://", "https://")) else None)
                 page.goto((preview / "index.html").as_uri(), wait_until="load")
                 page.wait_for_function("window.NeoEconomy && window.NeoEconomy.endstate")
+                if factor:
+                    zoom = set_real_zoom(worker, page.url, factor)
+                    check("Echter Tab-Zoom nach jedem Chromium-Neustart",
+                          abs(zoom["factor"] - factor) < 0.01)
+                    page.wait_for_function(
+                        "(f) => Math.abs(devicePixelRatio - f) < 0.1", arg=factor)
+                    check("CSS-Breite unter 500 bei echtem Zoom",
+                          page.evaluate("innerWidth < 500"))
                 check("Frischer Prozess ohne Spielstand", state(page) is None)
                 return page
 
@@ -247,6 +275,9 @@ def main():
                 page.evaluate("NeoEconomy.send('NEXT_MONTH')")
                 check("Archiv verhindert weitere Buchungen", state(page) == final)
                 check("Vier echte Chromium-Prozesse", processes == 4)
+                if factor:
+                    check("Echter Zoom auch nach drittem Prozessneustart aktiv",
+                          abs(page.evaluate("devicePixelRatio") - factor) < 0.1)
                 check("800x600 ohne horizontales Ueberlaufen",
                       page.evaluate("document.documentElement.scrollWidth <= innerWidth + 2"))
                 check("Offline ohne externe Netzwerkanfragen", not external)
@@ -255,7 +286,8 @@ def main():
                     "months": 12, "reports": 12, "pipe_stages": 3,
                     "pipe_rotations": rotations, "fire_stages": 3,
                     "fire_wrong_choices": 1, "chromium_processes": processes,
-                    "session_exports": 3, "historical_c64_verified": False,
+                    "session_exports": 3, "native_zoom_percent": args.zoom,
+                    "historical_c64_verified": False,
                     "prerelease_gate": "BLOCKED",
                 }, ensure_ascii=False, sort_keys=True), flush=True)
             finally:
