@@ -156,6 +156,28 @@ def main():
                       and payload["contract"]["months"] == 12)
                 return target, payload
 
+            def restart_midstage(page, kind, stage):
+                before = state(page)
+                check("Zwischenphase vor Export korrekt",
+                      before["minigame"] is not None
+                      and before["minigame"]["kind"] == kind
+                      and before["minigame"]["stage"] == stage + 1)
+                filename = "midstage-%s-%d.json" % (kind.lower(), stage + 1)
+                session_file, payload = export_session(page, filename)
+                check("Zwischenphase unveraendert exportiert",
+                      payload["state"] == before and payload["archive"] is None)
+                stop_process()
+                page = start_process()
+                page.locator("#loadSessionFile").set_input_files(str(session_file))
+                page.wait_for_function(
+                    "(expected) => { const m = NeoEconomy.getState()?.minigame; "
+                    "return m && m.kind === expected.kind && m.stage === expected.stage; }",
+                    arg={"kind": kind, "stage": stage + 1})
+                check("Zwischenphase nach echtem Chromium-Neustart identisch",
+                      state(page) == before
+                      and page.evaluate("NeoEconomy.endstate.status()") == "active")
+                return page
+
             try:
                 page = start_process()
                 page.locator("#startGame").click()
@@ -190,7 +212,11 @@ def main():
                 check("Rohrnetz nach Prozessneustart exakt erhalten",
                       state(page) == pipe_interrupted
                       and page.evaluate("NeoEconomy.endstate.status()") == "active")
-                rotations = sum(finish_pipe_stage(page, stage) for stage in range(3))
+                rotations = 0
+                for stage in range(3):
+                    rotations += finish_pipe_stage(page, stage)
+                    if stage < 2:
+                        page = restart_midstage(page, "PIPE", stage)
                 check("Rohrnetz nach drei Abschnitten fertig",
                       state(page)["claims"][CLAIM]["pipeline"])
                 for month in range(1, 4):
@@ -234,6 +260,8 @@ def main():
                       and page.evaluate("NeoEconomy.endstate.status()") == "active")
                 for stage in range(3):
                     finish_fire_stage(page, stage)
+                    if stage < 2:
+                        page = restart_midstage(page, "FIRE", stage)
                 check("Kein zweiter Brand im Abschlusszustand",
                       not state(page)["claims"][CLAIM]["burning"])
                 for month in range(4, 13):
@@ -269,12 +297,12 @@ def main():
                 page = start_process()
                 page.locator("#loadSessionFile").set_input_files(str(archive_file))
                 page.wait_for_function("NeoEconomy.endstate.status()==='finished'")
-                check("Archiv nach viertem Chromium-Prozess exakt",
+                check("Archiv nach achtem Chromium-Prozess exakt",
                       state(page) == final
                       and page.evaluate("NeoEconomy.endstate.archive()") == archive)
                 page.evaluate("NeoEconomy.send('NEXT_MONTH')")
                 check("Archiv verhindert weitere Buchungen", state(page) == final)
-                check("Vier echte Chromium-Prozesse", processes == 4)
+                check("Acht echte Chromium-Prozesse", processes == 8)
                 if factor:
                     check("Echter Zoom auch nach drittem Prozessneustart aktiv",
                           abs(page.evaluate("devicePixelRatio") - factor) < 0.1)
@@ -286,7 +314,7 @@ def main():
                     "months": 12, "reports": 12, "pipe_stages": 3,
                     "pipe_rotations": rotations, "fire_stages": 3,
                     "fire_wrong_choices": 1, "chromium_processes": processes,
-                    "session_exports": 3, "native_zoom_percent": args.zoom,
+                    "session_exports": 7, "midstage_restarts": 4, "native_zoom_percent": args.zoom,
                     "historical_c64_verified": False,
                     "prerelease_gate": "BLOCKED",
                 }, ensure_ascii=False, sort_keys=True), flush=True)
