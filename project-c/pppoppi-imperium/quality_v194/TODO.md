@@ -157,3 +157,12 @@ Stand 02.11.2026. Dies ist die **auf PR #155 begrenzte Arbeitsliste**; die verbi
 - [ ] 2026-11-03 | BED-03 Rest | Rohrnetz/Feuerwehr mit aktiver Zwischenphase, Prozessneustart und echtem Zoom pruefen | keine Spielstandinjektion | fertig wenn echte Browserpfade nachgewiesen sind
 
 **Matrix:** 6/52 PASS, 39 BLOCKED, 4 OPEN, 3 DEFERRED. Kein Merge, kein Release, Endabnahme erst am eingefrorenen Kandidaten.
+
+
+## Nachtrag 03.11.2026 – Rohrnetz und Feuerwehr bei echtem 175/200-%-Zoom
+
+- [x] 2026-11-03 | BED-03/SPE-01 Teilpaket | Bestehende 12-Monats-Rohrnetz-/Feuerwehr-Kampagne um echten Chromium-Tab-Zoom je vier getrennte Browserprozesse erweitern; eigene 175/200-%-CI anlegen | [Pflichtbericht](PIPE_FIRE_ZOOM_RESTART_20261103.md) | Code/CI-Anbindung implementiert, **kein** vorweggenommener Test-PASS
+- [ ] 2026-11-03 | BED-03/SPE-01 CI | Zwei echte Zoomjobs samt Python-Syntax und bisherigem 100-%-Pfad auf endgültigem HEAD prüfen, Fehler beheben | GitHub-Actions zu PR #155 | fertig erst bei nachgewiesenem PASS auf finalem HEAD
+- [ ] 2026-11-03 | SPE-01 Rest | Rohr- und Löschabschnitte 1/2 ebenfalls mit aktiver Unterbrechung, Sitzungsdatei und Prozessneustart prüfen | echte Browserkampagne mit Zustandsvergleich | fertig wenn alle Zwischenphasen abgedeckt sind
+
+**Matrix unverändert:** 6 PASS / 39 BLOCKED / 4 OPEN / 3 DEFERRED (52). **Draft-PRs zu Beginn:** 4 (#141, #150, #154, #155). Kein Merge/Release, persönliche Endabnahme zuletzt.
