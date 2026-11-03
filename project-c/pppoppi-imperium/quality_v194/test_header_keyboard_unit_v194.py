@@ -1,0 +1,99 @@
+"""Fail-closed unit tests for the new header keyboard evidence."""
+import unittest
+from unittest.mock import Mock, patch
+
+from test_browser_header_keyboard_v194 import (require_toggle_change, require_motion_preference,
+                                               require_focus_return, keyboard_activate, run)
+
+
+class HeaderKeyboardTests(unittest.TestCase):
+    def test_toggle_accepts_both_directions(self):
+        require_toggle_change("false", "true", "#zonesBtn")
+        require_toggle_change("true", "false", "#soundBtn")
+
+    def test_toggle_rejects_no_change(self):
+        for state in ("true", "false"):
+            with self.subTest(state=state), self.assertRaisesRegex(AssertionError, "nicht umgeschaltet"):
+                require_toggle_change(state, state, "#zonesBtn")
+
+    def test_toggle_rejects_missing_or_malformed_state(self):
+        for before, after in ((None, "true"), ("false", None),
+                              ("1", "true"), ("false", "TRUE")):
+            with self.subTest(before=before, after=after), self.assertRaisesRegex(AssertionError, "Ungueltiger"):
+                require_toggle_change(before, after, "#soundBtn")
+
+    def test_motion_preference_accepts_both_states(self):
+        require_motion_preference("true", "true", "✦ Bewegung an")
+        require_motion_preference("false", "false", "✦ Bewegung aus")
+
+    def test_motion_preference_rejects_missing_or_mismatched_storage(self):
+        for pressed, stored in (("true", None), ("false", "true"),
+                                ("true", "false"), ("TRUE", "TRUE")):
+            with self.subTest(pressed=pressed, stored=stored), self.assertRaises(AssertionError):
+                require_motion_preference(pressed, stored, "Bewegung an")
+
+    def test_motion_preference_rejects_wrong_label(self):
+        for pressed, stored, label in (("true", "true", "Bewegung aus"),
+                                       ("false", "false", "Bewegung an"),
+                                       ("true", "true", "")):
+            with self.subTest(label=label), self.assertRaisesRegex(AssertionError, "Schaltertext"):
+                require_motion_preference(pressed, stored, label)
+
+    def test_keyboard_path_never_uses_locator_focus(self):
+        page = Mock()
+        with patch("test_browser_header_keyboard_v194.tab_to_target", return_value=7) as tab, \
+             patch("test_browser_header_keyboard_v194.verify_reverse_tab_roundtrip") as reverse, \
+             patch("test_browser_header_keyboard_v194.assert_computed_focus_indicator") as ring, \
+             patch("test_browser_header_keyboard_v194.press_tab_focused") as enter:
+            self.assertEqual(keyboard_activate(page, "#helpBtn"), 7)
+            tab.assert_called_once_with(page, "#helpBtn")
+            reverse.assert_called_once_with(page, "#helpBtn")
+            ring.assert_called_once_with(page.locator.return_value, "#helpBtn")
+            enter.assert_called_once_with(page, "#helpBtn")
+            page.locator.return_value.focus.assert_not_called()
+
+    def test_keyboard_failure_does_not_activate(self):
+        page = Mock()
+        with patch("test_browser_header_keyboard_v194.tab_to_target", side_effect=AssertionError("nicht erreichbar")), \
+             patch("test_browser_header_keyboard_v194.press_tab_focused") as enter:
+            with self.assertRaisesRegex(AssertionError, "nicht erreichbar"):
+                keyboard_activate(page, "#helpBtn")
+            enter.assert_not_called()
+
+    def test_focus_returns_to_keyboard_opener(self):
+        page = Mock()
+        target = page.locator.return_value
+        target.count.return_value = 1
+        target.evaluate.return_value = {"active": True, "visible": True}
+        with patch("test_browser_header_keyboard_v194.assert_computed_focus_indicator") as ring:
+            require_focus_return(page, "#helpBtn")
+            ring.assert_called_once_with(target, "#helpBtn")
+        target.focus.assert_not_called()
+
+    def test_focus_return_rejects_wrong_or_invisible_focus(self):
+        page = Mock()
+        target = page.locator.return_value
+        target.count.return_value = 1
+        for evidence in ({"active": False, "visible": True},
+                         {"active": True, "visible": False}, None):
+            with self.subTest(evidence=evidence):
+                target.evaluate.return_value = evidence
+                with self.assertRaises(AssertionError):
+                    require_focus_return(page, "#helpBtn")
+
+    def test_focus_return_rejects_nonunique_opener(self):
+        page = Mock()
+        for count in (0, 2):
+            with self.subTest(count=count):
+                page.locator.return_value.count.return_value = count
+                with self.assertRaisesRegex(AssertionError, "nicht eindeutig"):
+                    require_focus_return(page, "#helpBtn")
+
+    def test_rejects_unplanned_zoom(self):
+        for value in (100, 150, 201):
+            with self.subTest(zoom=value), self.assertRaises(ValueError):
+                run(value)
+
+
+if __name__ == "__main__":
+    unittest.main()

@@ -1,0 +1,36 @@
+name: OLI Vorrelease - Rohrnetz und Feuerwehr bei echtem Zoom
+on:
+  pull_request:
+    paths:
+      - 'project-c/pppoppi-imperium/quality_v194/test_browser_campaign_pipe_fire_recovery_v194.py'
+      - '.github/workflows/prerelease-campaign-pipe-fire-zoom.yml'
+      - 'project-c/pppoppi-imperium/quality_v194/PIPE_FIRE_ZOOM_RESTART_20261103.md'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  pipe-fire-native-zoom:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        zoom: [175, 200]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Python-Syntax vor Chromium-Installation
+        run: |
+          python3 -m py_compile project-c/pppoppi-imperium/quality_v194/test_browser_campaign_pipe_fire_recovery_v194.py
+          python3 -m py_compile project-c/pppoppi-imperium/quality_v194/test_browser_native_zoom_v194.py
+          python3 -m py_compile project-c/pppoppi-imperium/quality_v194/test_browser_keyboard_pipe_fire_v194.py
+          python3 -m py_compile project-c/pppoppi-imperium/quality_v194/test_browser_campaign_lastmonth_rescue_v194.py
+      - name: Chromium und Playwright installieren
+        run: bash project-c/pppoppi-imperium/quality_v194/install_chromium_ci.sh
+      - name: Rohrnetz, Brand, vier Prozesse, drei Sitzungsdateien und Endarchiv
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_campaign_pipe_fire_recovery_v194.py --zoom ${{ matrix.zoom }}

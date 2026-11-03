@@ -28,9 +28,11 @@ check('Spielkern und Prüfschicht sind als zwei Versionen gekennzeichnet', () =>
   assert.match(bridge, /version:'1\.7\.1',gameVersion:'1\.9\.3',qaVersion:'1\.9\.4'/);
 });
 
-check('Klebende Navigation und KI-Knopf ueberdecken im Zoom keine Aktionen', () => {
+check('Sticky-Dialogkopf bleibt bedienbar, Navigation und KI bleiben im Fluss', () => {
   assert.match(html, /id="pppoppi-zoom-overlap-v194"/);
-  assert.match(html, /#dialog\[open\] \.dhead\{position:static\}/);
+  assert.match(html, /#dialog\[open\]\{scroll-padding-top:84px\}/);
+  assert.match(html, /#dialog\[open\] \.dhead\{position:sticky;top:0;z-index:3/);
+  assert.match(html, /#dialog\[open\] \.dcontent :is\(button,select,input,textarea,a\):focus-visible\{scroll-margin-top:84px\}/);
   assert.match(html, /#dialog\[open\] \.v191-nav\{position:static\}/);
   assert.match(html, /#dialog\[open\] #pp-ai-button\{position:static/);
   assert.match(html, /#dialog\[open\] #pp-ai-drawer\{position:static/);

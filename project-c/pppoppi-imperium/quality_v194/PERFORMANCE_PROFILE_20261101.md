@@ -1,0 +1,125 @@
+# OLI V1.9.4 – reproduzierbares Langzeit-Performanceprofil (01.11.2026)
+
+**Bereich:** eigenstaendige Offline-PPPOPPI-Adaption, Browserkampagnen 120/240 Monate. **PR:** [#155](https://github.com/provoware/PROJEKT_Oli_Imperium/pull/155). **Kein Release, kein Merge.**
+
+## Problem und Wirkung
+
+Die bisherigen Browserpruefungen haben die langsamsten Monatsdurchlaeufe gemessen, aber keine Verteilung oder Veraenderung ueber lange Kampagnen. Auf dem zuvor nachgewiesen erfolgreichen HEAD `73828f5358609b9f253f6f0a30181f415a99782b` wurden 3,794 Sekunden (120 Monate) und 10,511 Sekunden (240 Monate) als jeweiliger langsamster Monatsdurchlauf gemeldet. Das sind Einzelbeobachtungen, **keine verbindlichen Grenzwerte**. Ohne definierte Messumgebung, Wiederholungen und fachlich vereinbarte Zielwerte bleibt die Performance-Releasepflicht **BLOCKED**.
+
+## Neues technisches Pflichtpaket
+
+- `performance_profile_v194.py`: reine, deterministische Auswertung aller beobachteten Monatsdauern; Anzahl, Summe, Median, P95/P99 (Nearest-Rank), Maximum, Mittelwerte der ersten und zweiten Haelfte sowie der letzten zehn Monate.
+- `test_performance_profile_v194.py`: fuenf Regressionen fuer gerade/einzelne Stichproben, 120/240 Werte, Ausreisser und ungueltige Messwerte. Fehlerhafte oder leere Stichproben duerfen nicht als Messbeleg gelten.
+- `test_browser_campaign_120_240_v194.py`: schreibt das Profil als `month_step_profile` und die vollstaendige gemessene Laufzeit als `end_to_end_seconds` in den bestehenden JSON-Logeintrag. Die Anzahl gemessener Monatsdurchlaeufe muss mit der gewaehlten Spieldauer uebereinstimmen.
+- `.github/workflows/prerelease-campaign-duration.yml`: die fuenf Berechnungsregressionen sind ein verpflichtender Schritt vor den bestehenden Engine- und Browserkampagnen; Aenderungen an den Profildateien loesen die Pruefung aus.
+
+**Messgrenzen:** Monatsdauer umfasst Browserbedienung, Sanierungen und gegebenenfalls den Prozessneustart in der Kampagnenmitte; der abschliessende Archivneustart und der Aufbau der Vorschau gehoeren **nicht** zur Monatsdauer. `end_to_end_seconds` umfasst dagegen auch den Vorschauaufbau und die abschliessende Archivkontrolle bis zur Ergebnisausgabe. Diese zwei Messarten duerfen nicht miteinander verwechselt werden. GitHub-Runner und Browserinstallation beeinflussen die Werte. P95/P99 sind beschreibende Kennzahlen, kein automatischer Freigabebeweis.
+
+## Pruefstand
+
+- **Lokale, isolierte Berechnungspruefung:** 5/5 **PASS** mit Python-Unittest; Syntaxpruefung der beiden neuen Python-Dateien **PASS** (01.11.2026).
+- **GitHub-Engine-/Browserpruefung des ersten Profilerstands `4f63134`:** [CI #41317137253](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41317137253) **4/4 Jobs SUCCESS** (01.11.2026, 14:52 UTC), einschliesslich 120/240 Browsermonaten und 5/5 Berechnungsregressionen. **Die hier nachfolgenden Erweiterungen haben bis zu ihrem eigenen CI-Abschluss noch keinen PASS-Nachweis.**
+- **Vorgaenger-HEAD:** [Kampagnen-CI #41311750980](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41311750980), 4/4 Jobs **SUCCESS**; [weitere GitHub-Workflows](https://github.com/provoware/PROJEKT_Oli_Imperium/actions) auf diesem HEAD: sechs SUCCESS, eine erwartete harte Matrix-Sperre FAIL.
+- **Unveraenderte 52er-Vorrelease-Matrix:** 6 PASS / 39 BLOCKED / 4 OPEN / 3 DEFERRED. Kein Fortschritts-PASS allein durch zusaetzliche Messwerte.
+
+## Offene Freigabe- und Folgearbeiten
+
+1. Beide langen Browserkampagnen mit den neuen Profilfeldern auf dem finalen HEAD ausfuehren, Anzahl und Laufzeiten aus GitHub-Logs belegen; bei Fehlern korrigieren.
+2. Eine wiederholbare Leistungsanforderung mit Zielhardware, Testumgebung, maximaler Monatsreaktionszeit, Messwiederholungen und Grenzwerten vereinbaren; erst danach eine echte Performance-Freigabepruefung einrichten.
+3. Den 175/200-%-Langzeit-Browserpfad getrennt vom bestehenden Layout-PR #154 pruefen; offene Fragen zur 240-Monats-Archivierung, Bewertung, Rechten und Originalvergleich bleiben eigenstaendig.
+
+**Schutz:** Keine Produktdateien, Wirtschaftsregeln, Speicherformate, Originalquellen oder `main` veraendert. Keine Benutzer-/Kubuntu-Endabnahme vor einem eingefrorenen vollstaendigen Kandidaten. Ein Release bedarf ausdruecklicher Freigabe.
+
+## Nachtrag 01.11.2026 – echte Laufwerte und zeitliche Drift
+
+Die folgenden Werte stammen ausschliesslich aus dem abgeschlossenen GitHub-Lauf [#41317137253](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41317137253), HEAD `4f63134ad018da4314b5e3bcda28a669ea43e0c2`. Der Lauf hatte vier erfolgreiche Jobs und keine ausstehenden Jobs. Die beiden Browserjobs liefen auf GitHub Ubuntu 24.04/Chromium mit 800x600, Tastaturbedienung, Halbzeitimport und drei Browserprozessen. **Eine Messung pro Kampagnendauer ist noch kein reproduzierbarer Grenzwert.**
+
+| Messung | 120 Monate | 240 Monate |
+|---|---:|---:|
+| Erfasste Monate | 120 | 240 |
+| Summe Monatsschritte | 181,660 s | 769,069 s |
+| Gesamtzeit inkl. Aufbau/Archivkontrolle | 184,885 s | 773,408 s |
+| Median Monatsschritt | 1,509 s | 3,782 s |
+| P95 / P99 | 2,696 / 2,775 s | 4,705 / 4,829 s |
+| Langsamster Monat | 2,789 s | 12,239 s |
+| Mittelwert erste Haelfte | 0,879 s | 2,030 s |
+| Mittelwert zweite Haelfte | 2,149 s | 4,379 s |
+| Spaet/frueh-Verhaeltnis (aus gerundeten Werten) | 2,445 | 2,157 |
+| Natuerliche Sanierungen | 0 | 4 |
+| Detaillierte Monatsberichte im Endstand | 120 | 120 |
+
+**Befund:** Die spaeteren Spielmonate benoetigen in beiden Einzellaeufen im Mittel mehr als doppelt so lange. Ursache und Streuung sind nicht ermittelt. Die Halbzeit-Neustarts sind in den Monatsschritten enthalten und koennen einzelne Messwerte verzerren; ausserdem steigen die Spielzustandsdaten mit dem Fortschritt. Keine dieser Erklaerungen ist bislang kausal belegt.
+
+**Dieses Folgepaket:** Der bestehende Profiler liefert zusaetzlich Mittelwerte des ersten/letzten Viertels und deren Quotienten sowie das Verhaeltnis zweite/erste Haelfte. Division durch null und zu kurze Zeitreihen ergeben `null`, niemals einen erfundenen Wachstumswert. Die Berechnung erfolgt vor der Rundung; die Zeitreihe wird fuer diese Vergleiche nicht sortiert. Zwei neue Regressionen ergaenzen die bisherigen fuenf. Die Browserjobs schreiben die neuen Felder automatisch in ihr bestehendes JSON-Protokoll. **Keine automatische Releasefreigabe und keine frei erfundene Leistungsschwelle.**
+
+**Offene Pflichten (unveraendert):** 6 PASS / 39 BLOCKED / 4 OPEN / 3 DEFERRED = 52. Performance bleibt BLOCKED; 175/200-%-Langzeitzoom, 240-Monats-Archivierungsumfang, Vermoegensbewertung, Medienrechte und C64-Originalvergleich bleiben offen.
+
+**Naechste drei eigenstaendige Schritte:**
+1. CI auf dem neuen Entwicklungs-HEAD einschliesslich 7/7 Profilregressionen und beider Browserjobs pruefen; Fehler korrigieren.
+2. Neustart-/Importdauer getrennt von normalen Monatsaktionen messen, damit die zeitliche Drift nicht durch den Halbzeit-Neustart verdeckt wird.
+3. Mehrfachmessungen in einer definierten Umgebung durchfuehren und erst danach technisch begruendete Leistungsgrenzen vorschlagen.
+
+Keine Aenderung an Produktcode, Spielregeln, Speicherformaten, Hauptzweig oder fremden PR-Dateien. Kein Merge, kein Release und keine persoenliche Endabnahme.
+
+## Nachtrag 01.11.2026 – Halbzeitneustart und Archiv-Import getrennt erfassen
+
+**Verifizierter Ausgangsstand:** GitHub-[Prueflauf #41322137669](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41322137669) auf `c01c236bf13d81e51c1d5a05f1794def959b1473`: **4/4 Jobs SUCCESS**. Die vier Jobs einschliesslich der sieben Profilregressionen wurden einzeln mit erfolgreich abgeschlossenen Schritten kontrolliert.
+
+**Neues Paket:** Die 120-/240-Monats-Browserkampagnen messen jetzt Export, Chromium-Prozessneustart und Import sowohl zur Halbzeit als auch beim Abschluss **jeweils getrennt**. Die unveraenderten Rohzeiten enthalten weiterhin die Halbzeitoperationen; ein zusaetzliches Profil rechnet nur diese nachgewiesenen Halbzeit-I/O-Phasen heraus. Der Archiv-Neustart liegt ausserhalb der Monatsreihe und wird separat ausgewiesen. Die Profilfunktion prueft Vollstaendigkeit, nichtnegative endliche Messwerte und den Abgleich der Halbzeitphasen mit der beobachteten Monatsdauer. Drei neue Regressionen pruefen Trennung, ungueltige Phasen und ungerade Zeitreihen.
+
+**Grenze:** Die Werte belegen Messumfang, nicht die Ursache der Langzeitverlangsamung. Unterschiedliche GitHub-Maschinen, Datenmengen und Prozessstarts sind weiterhin Stoerfaktoren. Keine Performancefreigabe ohne Wiederholungsmessung und definierte Zielwerte.
+
+**CI dieses neuen Pakets:** Nach dem Commit erneut auszufuehren. Bis dahin **UNVERIFIED**; keine vorweggenommene Erfolgsmeldung. **Pflichtmatrix bleibt 6 PASS / 39 BLOCKED / 4 OPEN / 3 DEFERRED (52).**
+
+**Naechste Umsetzung:** (1) GitHub-Regressionen und beide Browserkampagnen auf dem neuen HEAD auswerten, (2) Halbzeit-I/O aus echten Laufprotokollen quantifizieren und bei Bedarf korrigieren, (3) wiederholte Leistungsprofile mit gleicher Umgebung vergleichen. Kein Merge, kein Release, keine persoenliche Endabnahme.
+
+
+## Nachtrag 01.11.2026, 18:38 MEZ – I/O-Auswertung und Zustandsgroesse als unabhaengige Beobachtung
+
+**Nachweis vor diesem Folgepaket:** [GitHub-Kampagnenlauf #41327064539](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41327064539), HEAD 4b337634d311a2128db921ff66719a10dde37124, **4/4 Jobs SUCCESS** (darunter **10/10** Profilregressionen und 24/120/240 Browsermonate). Die weiteren sieben Workflow-Laeufe auf demselben HEAD endeten mit sechs SUCCESS und einem erwarteten FAIL der harten Vorrelease-Sperre. Die Werte stammen aus den tatsaechlichen Jobprotokollen der beiden Langzeit-Browserjobs, nicht aus Schaetzungen.
+
+| GitHub-Beobachtung (ein Durchlauf pro Dauer) | 120 Monate | 240 Monate |
+|---|---:|---:|
+| Summe aller Monatsaktionen inkl. Halbzeit-I/O | 248,643 s | 824,605 s |
+| Halbzeit Export + Neustart + Import | 0,783 s | 1,162 s |
+| Anteil Halbzeit-I/O an Monatsschritten | ca. 0,315 % | ca. 0,141 % |
+| Rohes Spaet/Frueh-Verhaeltnis | 2,610 | 2,335 |
+| Nach Abzug der Halbzeit-I/O | 2,640 | 2,346 |
+| Archiv Export + Neustart + Import (ausserhalb Monatsschritten) | 1,863 s | 2,054 s |
+| Ende-zu-Ende inkl. Aufbau/Archivkontrolle | 253,183 s | 829,437 s |
+
+**Befund:** Die getrennt gemessenen Halbzeit-I/O-Phasen erklaeren die Verlangsamung innerhalb dieser zwei Laeufe nicht: Auch nach Abzug liegt die zweite Spielhaelfte bei mehr als dem Doppelten der ersten. Das belegt **keine Ursache** und noch keine reproduzierbare Leistungsgrenze; Unterschiede zu aelteren Laeufen koennen durch GitHub-Maschinen und Spielsituationen entstehen.
+
+**Neues unabhaengiges Pflichtpaket:** Der Langzeit-Browserpruefer erfasst nach jedem Monat ausserhalb des Monats-Zeitfensters die UTF-8-JSON-Bytezahl des bereits vorhandenen REPORT-Zustands. Das neue state_size_profile protokolliert erste/letzte Monatsgroesse, Maximum, erstes/letztes Viertel, Groessenverhaeltnis und eine deskriptive Pearson-Korrelation mit der Monatsdauer (bei konstanten Werten null). Die Funktion lehnt fehlende, nichtpositive oder ungueltige Groessen und unvollstaendige Reihen ab. Drei neue deterministische Regressionen ergaenzen die zehn bisherigen; der bestehende Kampagnen-Workflow fordert jetzt **13 Tests**. Die vollstaendigen Spielzustaende werden dafuer nicht zusaetzlich gespeichert oder in CI-Protokolle geschrieben. Keine Aenderung an Wirtschaftsregeln, Spielstandformaten oder Produktdateien.
+
+**Status der neuen Implementierung:** Drei isolierte Python-Funktionspruefungen lokal PASS vor dem GitHub-Schreibvorgang; **vollstaendiger GitHub-CI-Nachweis des neuen HEAD bis zum tatsaechlichen Abschluss PENDING**, nicht vorzeitig PASS. Die bestehende Vorrelease-Pflichtmatrix bleibt **6 PASS / 39 BLOCKED / 4 OPEN / 3 DEFERRED = 52**; insbesondere Performance weiterhin BLOCKED.
+
+**Naechste drei technische Schritte:**
+1. Neue 13 Profilregressionen und 120/240-Monats-Browserjobs auf dem endgueltigen HEAD kontrollieren; echte Fehler korrigieren.
+2. Beobachtete Zustandsgroessen und deren Korrelation mit Monatsdauer aus den GitHub-Protokollen vergleichen; Korrelation nicht als Kausalitaet ausgeben.
+3. Mehrere gleich konfigurierte Messlaeufe und Zielwerte definieren; erst danach ein reproduzierbares Performance-Gate vorschlagen.
+
+Kein Merge, kein Release, keine Benutzer- oder Kubuntu-Endabnahme. Der getrennte Layout-PR #154 und die Finanz-PR #150 bleiben unberuehrt.
+
+## Nachtrag 01.11.2026 – verifizierte Zustandsgroessen und Trendkontrolle
+
+**Ausgangs-HEAD:** [67e5dfbcaf2e802286daab4e0e83c73216cbbfaa](https://github.com/provoware/PROJEKT_Oli_Imperium/commit/67e5dfbcaf2e802286daab4e0e83c73216cbbfaa). [GitHub-Kampagnenlauf #41332701945](https://github.com/provoware/PROJEKT_Oli_Imperium/actions/runs/41332701945) mit **4/4 SUCCESS**: 13/13 Profilregressionen, 24-/120-/240-Monats-Browserpfade und Engine-Regressionen. Die weiteren sechs fachlichen Prueflaeufe waren SUCCESS, die harte Vorrelease-Sperre erwartungsgemaess FAIL. Quelle der Zahlen: tatsaechliche Jobprotokolle der 120-/240-Monats-Browserjobs.
+
+| Beobachtung | 120 Monate | 240 Monate |
+|---|---:|---:|
+| Zustand nach Monat 1 (UTF-8 JSON) | 15.233 Byte | 15.233 Byte |
+| Zustand im letzten Monat | 663.081 Byte | 643.191 Byte |
+| Groesster Zustand | 663.081 Byte | 786.239 Byte |
+| Mittlere Groesse erstes / letztes Viertel | 93.814,4 / 583.727,2 Byte | 175.418,6 / 722.920,4 Byte |
+| Letztes/erstes Viertel | 6,222 | 4,121 |
+| Pearson r: Monatsdauer gegen Zustandsgroesse | +0,988 | +0,930 |
+| Monatszeit erste / zweite Haelfte | 0,949 / 2,516 s | 1,737 / 3,510 s |
+| Gesamtzeit | 212,647 s | 635,429 s |
+
+**Interpretation:** Die sehr hohen positiven Korrelationen beschreiben zwei Zeitreihen, die beide mit der Spielzeit wachsen. Sie beweisen weder, dass die Datenmenge die Verlangsamung verursacht, noch dass die Datenmenge die einzige Ursache ist. Bei 240 Monaten ist die Endgroesse kleiner als das beobachtete Maximum: Die Zustandsgroesse ist nicht streng monoton. Einmalige Laeufe auf GitHub-Maschinen erlauben keine verlaessliche Leistungsfreigabe.
+
+**Neues Pflichtpaket:** Zusaetzlich zur bisherigen Korrelation der Niveaus wird die Pearson-Korrelation der *Monat-zu-Monat-Aenderungen* von Zeit und Zustandsgroesse berechnet. Konstante Differenzen liefern null statt eines Scheinbelegs. Zwei neue deterministische Regressionen pruefen den Fall eines gemeinsam linearen Trends und positiv/negativ gekoppelte Aenderungen. Die Zahl der Profilregressionen steigt von 13 auf **15**. Diese Trendkontrolle ist nur ein Diagnoseinstrument, kein Kausalnachweis. Produktdateien, Speicherformat und Spielregeln bleiben unveraendert.
+
+**Pruefstatus dieses neuen Pakets:** Bis zum Abschluss der GitHub-Pruefungen **PENDING**. Vorrelease-Matrix unveraendert **6 PASS / 39 BLOCKED / 4 OPEN / 3 DEFERRED (52)**. Performance weiterhin BLOCKED; kein Merge, kein Release, keine persoenliche Endabnahme.
+
+**Naechste Implementierung:** 15 Profilregressionen und beide Langzeit-Browserjobs auf dem neuen HEAD kontrollieren, die Differenzen-Korrelationen aus den neuen Logs auswerten und anschliessend wiederholte Messungen auf vergleichbarer Umgebung vorbereiten. Die 175/200-%-Langzeitvergroesserung und die weiteren offenen Pflichten bleiben getrennt.

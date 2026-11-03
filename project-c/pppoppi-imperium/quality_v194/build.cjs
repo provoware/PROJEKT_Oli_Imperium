@@ -13,18 +13,30 @@ const manifestPath = path.join(projectRoot, 'WIEDERHERSTELLUNG_MANIFEST.json');
 const expectedArchiveSha = '94f41725f1d1addaa07505302a4f448e3410df0bcebe68bfb24fc07b72d433ca';
 
 const changes = [
-  // Bei echtem Zoom werden die klebende Szenennavigation und der fixe
-  // KI-Knopf ueber Bedienelemente geschoben. Im schmalen Dialog bleiben
-  // beide im normalen Dokumentfluss, ohne Funktionen zu entfernen.
+  // Bei echtem Zoom bleiben Szenennavigation und KI im Dokumentfluss.
+  // Der kompakte Dialogkopf bleibt dagegen sticky: der Schliessen-Knopf
+  // darf nach langen Minispielen nicht aus dem Tab-Sichtfeld verschwinden.
+  // Scrollabstand verhindert, dass fokussierte Inhalte verdeckt werden.
   ['index.html',
     '</head>',
-    '<style id="pppoppi-zoom-overlap-v194">@media(max-width:620px){#dialog[open] .dhead{position:static}#dialog[open] .v191-nav{position:static}#dialog[open] #pp-ai-button{position:static;display:block;margin:10px 12px 10px auto}#dialog[open] #pp-ai-drawer{position:static;width:calc(100% - 24px);max-height:none;margin:8px auto}}</style>\n</head>'],
+    '<style id="pppoppi-zoom-overlap-v194">@media(max-width:620px){#dialog[open]{scroll-padding-top:84px}#dialog[open] .dhead{position:sticky;top:0;z-index:3;padding:10px 12px}#dialog[open] .dhead h2{font-size:18px}#dialog[open] .dcontent :is(button,select,input,textarea,a):focus-visible{scroll-margin-top:84px}#dialog[open] .v191-nav{position:static}#dialog[open] #pp-ai-button{position:static;display:block;margin:10px 12px 10px auto}#dialog[open] #pp-ai-drawer{position:static;width:calc(100% - 24px);max-height:none;margin:8px auto}}</style>\n</head>'],
+  // Die .toolbar-Buttons animieren mit transition:.16s auch outline-width.
+  // Direkt nach echtem Tab-Fokus kann der berechnete Fokusring deshalb
+  // noch 0px breit sein. Fokus-Outline nie animieren, Hover bleibt animiert.
+  ['index.html',
+    '</head>',
+    '<style id="pppoppi-toolbar-focus-v194">.toolbar button:focus-visible{transition-property:background-color,border-color}</style>\n</head>'],
   // Browser-Standardfokus bei <select> war bei 175 % nur 0,57 CSS-Pixel
   // breit und hatte gegen den Dialoghintergrund nur 1,18:1 Kontrast.
   // Ausschliesslich in der abgeleiteten Technikvorschau korrigieren.
   ['index.html',
     '</head>',
     '<style id="pppoppi-select-focus-v194">#dialog select:focus-visible{outline:3px solid #ffda8d;outline-offset:3px}</style>\n</head>'],
+  // Druckregler: sofort sichtbarer Tastaturfokus auch im schmalen Dialog.
+  // Nur abgeleitete Technikvorschau, keine Aenderung an geschuetzten Quellen.
+  ['index.html',
+    '</head>',
+    '<style id="pppoppi-pressure-focus-v194">#dialog[open] #skillPressure:focus-visible{outline:3px solid #ffda8d;outline-offset:3px;transition:none}</style>\n</head>'],
   // Die sechsspal­tige Monatsabrechnung ueberlief bei 200 % nativem Zoom
   // um 54 CSS-Pixel. Tabellenzellen nur im schmalen Technikdialog umbrechen.
   ['index.html',

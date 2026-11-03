@@ -1,0 +1,307 @@
+name: OLI Vorrelease - Kampagnen 24 und 60 Monate
+
+on:
+  pull_request:
+    branches:
+      - integration/oli-main-pr140-20261031
+    paths:
+      - project-c/pppoppi-imperium/quality_v194/test_endstate_long_campaign_v194.cjs
+      - project-c/pppoppi-imperium/quality_v194/test_browser_campaign_24months_v194.py
+      - project-c/pppoppi-imperium/quality_v194/test_browser_campaign_120_240_v194.py
+      - project-c/pppoppi-imperium/quality_v194/campaign_native_import_v194.py
+      - project-c/pppoppi-imperium/quality_v194/test_campaign_native_import_v194.py
+      - project-c/pppoppi-imperium/quality_v194/campaign_keyboard_audit_v194.py
+      - project-c/pppoppi-imperium/quality_v194/test_campaign_keyboard_audit_v194.py
+      - project-c/pppoppi-imperium/quality_v194/campaign_keyboard_reverse_v194.py
+      - project-c/pppoppi-imperium/quality_v194/test_campaign_keyboard_reverse_v194.py
+      - project-c/pppoppi-imperium/quality_v194/KEYBOARD_TAB_CAMPAIGN_20261102.md
+      - project-c/pppoppi-imperium/quality_v194/NATIVE_IMPORT_LONGRUN_20261102.md
+      - project-c/pppoppi-imperium/quality_v194/NATIVE_IMPORT_240_LONGRUN_20261102.md
+      - project-c/pppoppi-imperium/quality_v194/TODO.md
+      - project-c/pppoppi-imperium/quality_v194/README.md
+      - project-c/pppoppi-imperium/quality_v194/performance_profile_v194.py
+      - project-c/pppoppi-imperium/quality_v194/test_performance_profile_v194.py
+      - project-c/pppoppi-imperium/quality_v194/compare_campaign_repeats_v194.py
+      - project-c/pppoppi-imperium/quality_v194/test_compare_campaign_repeats_v194.py
+      - project-c/pppoppi-imperium/quality_v194/REPEATABILITY_20261101.md
+      - project-c/pppoppi-imperium/quality_v194/NATIVE_ZOOM_LONGRUN_20261102.md
+      - project-c/pppoppi-imperium/quality_v194/NATIVE_ZOOM_240_LONGRUN_20261102.md
+      - project-c/pppoppi-imperium/quality_v194/PERFORMANCE_PROFILE_20261101.md
+      - project-c/pppoppi-imperium/quality_v194/CAMPAIGN_DURATION_20261101.md
+      - .github/workflows/prerelease-campaign-duration.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  campaign-duration-regression:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Playwright-Python-Bibliothek fuer strikte Tastaturregressionen
+        run: |
+          timeout --signal=TERM --kill-after=10s 120s python -m pip install playwright==1.56.0
+          python -c "from playwright.sync_api import TimeoutError as PlaywrightTimeoutError; print('PASS: Playwright-TimeoutError importierbar')"
+      - name: Syntax des neuen Kampagnenpruefers
+        run: node --check project-c/pppoppi-imperium/quality_v194/test_endstate_long_campaign_v194.cjs
+      - name: Fuenfzehn Profilregressionen inklusive Trendkontrolle und Neustartmessung
+        run: python3 -m unittest discover -s project-c/pppoppi-imperium/quality_v194 -p 'test_performance_profile_v194.py' -v
+      - name: Elf strikte Wiederholungsmessungs-Regressionen einschliesslich Datenintegritaet
+        run: python3 -m unittest discover -s project-c/pppoppi-imperium/quality_v194 -p 'test_compare_campaign_repeats_v194.py' -v
+      - name: Zehn Fail-Closed-Regressionen fuer echten Datei-Auswahldialog
+        run: python3 -m unittest discover -s project-c/pppoppi-imperium/quality_v194 -p 'test_campaign_native_import_v194.py' -v
+      - name: Neunzehn Negativ- und Regressionstests fuer Tab-Fokus, CSS-Ring und Enter
+        run: python3 -m unittest discover -s project-c/pppoppi-imperium/quality_v194 -p 'test_campaign_keyboard_audit_v194.py' -v
+      - name: Sechs strikte Rueckwaerts-Tab-Regressionen
+        run: python3 -m unittest discover -s project-c/pppoppi-imperium/quality_v194 -p 'test_campaign_keyboard_reverse_v194.py' -v
+      - name: Bisherige 12-Monats-Enginepruefung als Referenz
+        run: node --test project-c/pppoppi-imperium/quality_v194/test_endstate_live_v194.cjs
+      - name: Echte 24- und 60-Monats-Kampagnen mit Zwischenimport und Endarchiv
+        run: node --test project-c/pppoppi-imperium/quality_v194/test_endstate_long_campaign_v194.cjs
+      - name: Grundlegende Projektstruktur pruefen
+        run: python3 tools/validate_project.py
+
+  browser-campaign-24-months:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Chromium installieren und Browserstart pruefen
+        run: bash project-c/pppoppi-imperium/quality_v194/install_chromium_ci.sh
+      - name: Python-Syntax der 24-Monats-Browserkampagne
+        run: python3 -m py_compile project-c/pppoppi-imperium/quality_v194/test_browser_campaign_24months_v194.py
+      - name: 24 echte Spielmonate, 96 Tastatur-Zuege, zwei Prozessneustarts, Archiv
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_campaign_24months_v194.py
+
+  browser-campaign-120-months:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Chromium installieren
+        run: bash project-c/pppoppi-imperium/quality_v194/install_chromium_ci.sh
+      - name: Python-Syntax der 120/240-Monats-Pruefung
+        run: python3 -m py_compile project-c/pppoppi-imperium/quality_v194/test_browser_campaign_120_240_v194.py
+      - name: 120 echte Monate, Tastatur, Sanierung, Archiv und Prozessneustarts
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_campaign_120_240_v194.py --months 120
+
+  browser-campaign-240-months:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Chromium installieren
+        run: bash project-c/pppoppi-imperium/quality_v194/install_chromium_ci.sh
+      - name: Python-Syntax der 120/240-Monats-Pruefung
+        run: python3 -m py_compile project-c/pppoppi-imperium/quality_v194/test_browser_campaign_120_240_v194.py
+      - name: 240 echte Monate, Tastatur, Sanierung, Archiv und Prozessneustarts
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_campaign_120_240_v194.py --months 240
+
+  browser-campaign-120-repeatability:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Chromium installieren
+        run: bash project-c/pppoppi-imperium/quality_v194/install_chromium_ci.sh
+      - name: Zwei 120-Monats-Browserkampagnen auf demselben Runner
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 project-c/pppoppi-imperium/quality_v194/test_browser_campaign_120_240_v194.py --months 120 | tee "$RUNNER_TEMP/oli-repeat-120-a.log"
+          python3 project-c/pppoppi-imperium/quality_v194/test_browser_campaign_120_240_v194.py --months 120 | tee "$RUNNER_TEMP/oli-repeat-120-b.log"
+          python3 project-c/pppoppi-imperium/quality_v194/compare_campaign_repeats_v194.py "$RUNNER_TEMP/oli-repeat-120-a.log" "$RUNNER_TEMP/oli-repeat-120-b.log" --months 120
+
+  browser-campaign-240-repeatability:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Chromium installieren
+        run: bash project-c/pppoppi-imperium/quality_v194/install_chromium_ci.sh
+      - name: Zwei 240-Monats-Browserkampagnen auf demselben Runner
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 project-c/pppoppi-imperium/quality_v194/test_browser_campaign_120_240_v194.py --months 240 | tee "$RUNNER_TEMP/oli-repeat-240-a.log"
+          python3 project-c/pppoppi-imperium/quality_v194/test_browser_campaign_120_240_v194.py --months 240 | tee "$RUNNER_TEMP/oli-repeat-240-b.log"
+          python3 project-c/pppoppi-imperium/quality_v194/compare_campaign_repeats_v194.py "$RUNNER_TEMP/oli-repeat-240-a.log" "$RUNNER_TEMP/oli-repeat-240-b.log" --months 240
+
+  browser-campaign-120-native-zoom:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        zoom: [175, 200]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Chromium samt echtem Tab-Zoom installieren
+        run: bash project-c/pppoppi-imperium/quality_v194/install_chromium_ci.sh
+      - name: Python-Syntax des nativen Langzeit-Zoompfads
+        run: python3 -m py_compile project-c/pppoppi-imperium/quality_v194/test_browser_campaign_120_240_v194.py
+      - name: 120 Monate bei echtem 175/200-Prozent-Zoom mit zwei Prozessneustarts
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_campaign_120_240_v194.py --months 120 --zoom ${{ matrix.zoom }}
+
+  browser-campaign-240-native-zoom:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 55
+    strategy:
+      fail-fast: false
+      matrix:
+        zoom: [175, 200]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Chromium samt echtem Tab-Zoom installieren
+        run: bash project-c/pppoppi-imperium/quality_v194/install_chromium_ci.sh
+      - name: Python-Syntax des 240-Monats-Zoompfads
+        run: python3 -m py_compile project-c/pppoppi-imperium/quality_v194/test_browser_campaign_120_240_v194.py
+      - name: 240 Monate mit 175/200-Prozent-Zoom, drei Prozessen und Archiv
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_campaign_120_240_v194.py --months 240 --zoom ${{ matrix.zoom }}
+
+  browser-campaign-120-native-filechooser:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        zoom: [175, 200]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Chromium und Playwright 1.56.0 installieren
+        run: bash project-c/pppoppi-imperium/quality_v194/install_chromium_ci.sh
+      - name: Syntax und strikte Datei-Import-Regressionen
+        run: |
+          python3 -m py_compile project-c/pppoppi-imperium/quality_v194/campaign_native_import_v194.py project-c/pppoppi-imperium/quality_v194/test_browser_campaign_120_240_v194.py
+          python3 -m unittest discover -s project-c/pppoppi-imperium/quality_v194 -p 'test_campaign_native_import_v194.py' -v
+      - name: 120 Monate mit zwei echten Enter-Dateidialogen bei nativem Zoom
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_campaign_120_240_v194.py --months 120 --zoom ${{ matrix.zoom }} --native-import
+
+  browser-campaign-240-native-filechooser:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 55
+    strategy:
+      fail-fast: false
+      matrix:
+        zoom: [175, 200]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Chromium und Playwright 1.56.0 installieren
+        run: bash project-c/pppoppi-imperium/quality_v194/install_chromium_ci.sh
+      - name: Syntax und sieben strikte Datei-Import-Regressionen
+        run: |
+          python3 -m py_compile project-c/pppoppi-imperium/quality_v194/campaign_native_import_v194.py project-c/pppoppi-imperium/quality_v194/test_browser_campaign_120_240_v194.py
+          python3 -m unittest discover -s project-c/pppoppi-imperium/quality_v194 -p 'test_campaign_native_import_v194.py' -v
+      - name: 240 Monate und zwei echte Enter-Dateidialoge bei nativem Zoom
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_campaign_120_240_v194.py --months 240 --zoom ${{ matrix.zoom }} --native-import
+
+  browser-campaign-120-tab-navigation:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        zoom: [175, 200]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Chromium mit echtem Tab-Zoom installieren
+        run: bash project-c/pppoppi-imperium/quality_v194/install_chromium_ci.sh
+      - name: Tab-Pruefer und nativen Import vorab isoliert testen
+        run: |
+          python3 -m py_compile project-c/pppoppi-imperium/quality_v194/campaign_keyboard_audit_v194.py project-c/pppoppi-imperium/quality_v194/test_browser_campaign_120_240_v194.py
+          python3 -m unittest discover -s project-c/pppoppi-imperium/quality_v194 -p 'test_campaign_keyboard_audit_v194.py' -v
+          python3 -m unittest discover -s project-c/pppoppi-imperium/quality_v194 -p 'test_campaign_native_import_v194.py' -v
+      - name: 120 Monate, 14 echte Tab-Nachweise und echte Enter-Aktivierung
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_campaign_120_240_v194.py --months 120 --zoom ${{ matrix.zoom }} --native-import --keyboard-audit
+
+  browser-campaign-120-reverse-tab:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        zoom: [175, 200]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Chromium mit echtem Tab-Zoom installieren
+        run: bash project-c/pppoppi-imperium/quality_v194/install_chromium_ci.sh
+      - name: Strikte Rueckwaerts-Tab-Regressionen und Syntax
+        run: |
+          python3 -m py_compile project-c/pppoppi-imperium/quality_v194/campaign_keyboard_reverse_v194.py project-c/pppoppi-imperium/quality_v194/test_browser_campaign_120_240_v194.py
+          python3 -m unittest discover -s project-c/pppoppi-imperium/quality_v194 -p 'test_campaign_keyboard_reverse_v194.py' -v
+      - name: 120 Monate mit 14 echten Shift-Tab-Rueckwegen und Enter
+        run: python3 project-c/pppoppi-imperium/quality_v194/test_browser_campaign_120_240_v194.py --months 120 --zoom ${{ matrix.zoom }} --native-import --keyboard-audit --reverse-tab-audit
